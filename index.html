@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameFlex Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e31825;
+            --ps5-blue: #1f6aff;
+            --dark-bg: #0b0c10;
+            --text-light: #ffffff;
+            --text-gray: #a3a3a3;
+            --card-bg: #12141a;
+            --border-dark: #2a2a30;
+        }
+
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
+
+        .top-bar { background-color: #000; color: var(--text-gray); font-size: 12px; text-align: center; padding: 8px 0; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .top-bar i { color: var(--primary-red); }
+        .top-bar a { color: var(--primary-red); text-decoration: none; font-weight: 600; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; }
+        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, #e31825 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--primary-red); }
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
+        .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); }
+        .nav-links li.active a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); }
+        
+        .nav-actions { display: flex; align-items: center; gap: 20px; position: relative; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; }
+        .icon-btn:hover { color: var(--primary-red); }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
+        .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .login-btn:hover { background: #c1121d; }
+
+        /* --- SMART SEARCH BAR STYLES --- */
+        .search-container { position: relative; display: flex; align-items: center; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
+        .search-input::placeholder { color: var(--text-gray); }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-input:focus + .search-icon { color: var(--primary-red); }
+        
+        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
+        .search-dropdown::-webkit-scrollbar { width: 5px; }
+        .search-dropdown::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 5px; }
+        
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background: rgba(227, 24, 37, 0.15); padding-left: 20px; }
+        .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
+        .search-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
+        .search-item-price { font-size: 12px; font-weight: 800; color: var(--primary-red); }
+        .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
+        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
+
+        /* --- CART SIDEBAR STYLES --- */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .cart-header h2 { font-size: 18px; font-weight: 800; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
+        .cart-header h2 i { color: var(--primary-red); }
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .close-cart:hover { color: var(--primary-red); transform: rotate(90deg); }
+        
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-items::-webkit-scrollbar { width: 5px; }
+        .cart-items::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 5px; }
+        
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); align-items: center; position: relative; }
+        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; border: 1px solid var(--border-dark); }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; line-height: 1.3; }
+        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--primary-red); }
+        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; transition: 0.3s; position: absolute; right: 12px; top: 12px; }
+        .remove-item:hover { color: var(--primary-red); }
+        .empty-cart-msg { text-align: center; color: var(--text-gray); font-size: 14px; margin-top: 50px; font-weight: 600; }
+        
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+        .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; color: var(--text-light); margin-bottom: 15px; }
+        .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .checkout-btn:hover { background: #c1121d; box-shadow: 0 5px 15px rgba(227, 24, 37, 0.4); transform: translateY(-2px); }
+
+
+        /* Baki Layout Styles */
+        .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
+        .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2; }
+        .hero-content { position: relative; z-index: 3; max-width: 600px; }
+        .hero-content h1 { font-size: 48px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; text-transform: uppercase; }
+        .hero-content h1 span { color: var(--primary-red); }
+        .hero-content p { font-size: 16px; color: var(--text-gray); margin-bottom: 30px; line-height: 1.5; }
+        .hero-btns { display: flex; gap: 15px; }
+        .btn-primary { background: var(--primary-red); color: white; padding: 12px 30px; border-radius: 5px; font-weight: 700; text-decoration: none; transition: 0.3s; display: inline-block; cursor: pointer; }
+        .btn-primary:hover { background: #c1121d; }
+        .btn-outline { background: transparent; color: white; border: 2px solid white; padding: 12px 30px; border-radius: 5px; font-weight: 700; text-decoration: none; transition: 0.3s; display: inline-block; cursor: pointer; }
+        .btn-outline:hover { background: white; color: black; }
+
+        .features { display: flex; justify-content: space-between; background: rgba(20, 22, 28, 0.8); margin: -30px 5% 50px 5%; padding: 30px; border-radius: 10px; position: relative; z-index: 10; border: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
+        .feature-item { display: flex; align-items: center; gap: 15px; flex: 1; border-right: 1px solid var(--border-dark); padding-left: 20px; }
+        .feature-item:last-child { border-right: none; }
+        .feature-icon { font-size: 24px; color: var(--primary-red); }
+        .feature-text h4 { font-size: 14px; font-weight: 600; }
+        .feature-text p { font-size: 12px; color: var(--text-gray); margin-top: 5px; }
+
+        .categories-section { padding: 50px 5%; text-align: center; }
+        .section-header { margin-bottom: 40px; }
+        .section-header h5 { color: var(--primary-red); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .section-header h5::before, .section-header h5::after { content: ""; width: 50px; height: 1px; background: var(--primary-red); }
+        .section-header h2 { font-size: 28px; font-weight: 700; }
+        .category-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        
+        .cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; width: 250px; padding: 30px 20px; text-align: center; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; display: block; color: inherit; text-decoration: none; }
+        .cat-card:hover { border-color: var(--primary-red); box-shadow: 0 0 20px rgba(227, 24, 37, 0.15); transform: translateY(-5px); }
+        
+        .cat-img { height: 120px; width: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; margin-bottom: 20px; border-radius: 5px; }
+        .cat-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
+        .cat-arrow { width: 30px; height: 30px; border: 1px solid var(--text-gray); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-gray); transition: 0.3s; }
+        .cat-card:hover .cat-arrow { background: var(--primary-red); border-color: var(--primary-red); color: white; }
+
+        .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
+        .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
+        
+        .sec-title-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-dark); }
+        .title-left { font-size: 22px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
+        .title-left.red-title span { width: 5px; height: 22px; background: var(--primary-red); border-radius: 3px; display: inline-block; }
+        .title-left.blue-title span { width: 5px; height: 22px; background: var(--ps5-blue); border-radius: 3px; display: inline-block; }
+        .view-all { font-size: 14px; font-weight: 600; text-decoration: none; transition: 0.3s; }
+        .view-all.red-link { color: var(--primary-red); }
+        .view-all.blue-link { color: var(--ps5-blue); }
+        .view-all:hover { text-decoration: underline; }
+
+        .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+        .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; }
+        .prod-card.pc-theme:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(227, 24, 37, 0.15); }
+        .prod-card.ps5-theme:hover { border-color: var(--ps5-blue); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(31, 106, 255, 0.15); }
+
+        .badge { position: absolute; top: 12px; left: 12px; color: white; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2; }
+        .badge.red-bg { background: var(--primary-red); }
+        .badge.blue-bg { background: var(--ps5-blue); }
+
+        .prod-img { height: 180px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
+        .prod-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-light); }
+
+        .prod-price-red { font-size: 18px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
+        .buy-btn-red { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.3s; }
+        .buy-btn-red:hover { background: #c1121d; }
+
+        .price-flex { display: flex; justify-content: space-between; align-items: flex-end; }
+        .price-details { display: flex; gap: 8px; align-items: center; }
+        .curr-price { font-size: 16px; font-weight: 800; color: var(--ps5-blue); }
+        .old-price { font-size: 12px; font-weight: 600; color: var(--text-gray); text-decoration: line-through; }
+        .cart-btn-blue { background: var(--ps5-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .cart-btn-blue:hover { background: #0051ed; box-shadow: 0 0 10px rgba(31, 106, 255, 0.5); }
+
+        /* ========================================= */
+        /* --- MOBILE OPTIMIZATION (PHONE SCREEN) --- */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            .top-bar { font-size: 10px; flex-direction: column; padding: 8px 5%; gap: 5px; }
+            .navbar { padding: 15px 5%; flex-wrap: wrap; gap: 15px; }
+            .nav-links { display: none; }
+            .login-btn { display: none; }
+            
+            .search-input { width: 130px; padding: 8px 30px 8px 10px; font-size: 12px; }
+            .search-input:focus { width: 200px; }
+            .search-dropdown { width: 250px; right: -50px; }
+
+            .hero { height: 450px; text-align: center; }
+            .hero-content { margin: 0 auto; }
+            .hero-content h1 { font-size: 32px; margin-bottom: 15px; }
+            .hero-content p { font-size: 14px; margin-bottom: 20px; }
+            .hero-btns { flex-direction: column; gap: 12px; }
+            .btn-primary, .btn-outline { width: 100%; }
+
+            .features { flex-direction: column; margin: -20px 5% 40px 5%; padding: 20px; gap: 15px; }
+            .feature-item { border-right: none; border-bottom: 1px solid var(--border-dark); padding-left: 0; padding-bottom: 15px; }
+            .feature-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+            .category-grid { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 15px; scroll-behavior: smooth; }
+            .category-grid::-webkit-scrollbar { height: 4px; }
+            .category-grid::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 4px; }
+            .cat-card { min-width: 220px; }
+
+            .home-products-section { padding: 40px 5%; }
+            .sec-title-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .title-left { font-size: 18px; }
+            .prod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .prod-img { height: 120px; }
+            .prod-title { font-size: 12px; margin-bottom: 8px; }
+            .prod-price-red, .curr-price { font-size: 14px; }
+            .old-price { font-size: 10px; }
+            .buy-btn-red { padding: 8px; font-size: 12px; }
+
+            .cart-sidebar { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <i class="fa-solid fa-fire"></i>
+        <span>Limited Time Offer! Get up to 30% OFF on selected games.</span>
+        <a href="#">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+            <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
+        </div>
+        <ul class="nav-links">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#pc-section">PC Games</a></li>
+            <li><a href="#ps5-section">PS5 Games</a></li>
+            <li><a href="#">Bundles</a></li>
+            <li><a href="#">Pre-Orders</a></li>
+            <li><a href="#">Offers</a></li>
+        </ul>
+        <div class="nav-actions">
+            
+            <!-- SMART SEARCH BAR -->
+            <div class="search-container">
+                <input type="text" id="gameSearch" class="search-input" placeholder="Search God of War..." autocomplete="off">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <div class="search-dropdown" id="searchDropdown"></div>
+            </div>
+
+            <!-- CART ICON (onclick toggleCart) -->
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-badge" id="cartBadgeCount">0</span>
+            </button>
+            <button class="login-btn">Login / Sign Up</button>
+        </div>
+    </nav>
+
+    <!-- Cart Overlay & Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotalPrice">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToPayment()">Proceed to Payment</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <video autoplay loop muted playsinline class="hero-bg-video">
+            <source src="GAMEFLEX_STORE (1).mov" type="video/quicktime">
+            <source src="GAMEFLEX_STORE (1).mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Level Up Your <span>Gaming Experience</span></h1>
+            <p>Discover the biggest titles, instant digital delivery, exclusive bundles, and unbeatable prices on PC & PlayStation games.</p>
+            <div class="hero-btns">
+                <a href="#pc-section" class="btn-primary">Explore Games</a>
+                <a href="#ps5-section" class="btn-outline">View PS5 Offers</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-item">
+            <i class="fa-solid fa-shield-check feature-icon"></i>
+            <div class="feature-text"><h4>100% Genuine</h4><p>Original & Trusted</p></div>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-bolt feature-icon"></i>
+            <div class="feature-text"><h4>Instant Delivery</h4><p>Quick & Easy</p></div>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-headset feature-icon"></i>
+            <div class="feature-text"><h4>24/7 Support</h4><p>We're Here to Help</p></div>
+        </div>
+        <div class="feature-item">
+            <i class="fa-solid fa-tags feature-icon"></i>
+            <div class="feature-text"><h4>Best Prices</h4><p>Affordable Always</p></div>
+        </div>
+    </section>
+
+    <!-- Category Section -->
+    <section class="categories-section">
+        <div class="section-header">
+            <h5>BROWSE CATEGORIES</h5>
+            <h2>Find Your Next Game</h2>
+            <i class="fa-solid fa-gamepad" style="color: var(--primary-red); margin-top: 10px;"></i>
+        </div>
+        <div class="category-grid">
+            <a href="#pc-section" class="cat-card">
+                <div class="cat-img" style="background-image: url('image1.png.png');"></div>
+                <h3>PC Games</h3>
+                <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+            <a href="#ps5-section" class="cat-card">
+                <div class="cat-img" style="background-image: url('PS5.png');"></div>
+                <h3>PS5 Games</h3>
+                <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+            <div class="cat-card">
+                <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Bundle+Image');"></div>
+                <h3>Bundles</h3>
+                <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Gift+Card+Image');"></div>
+                <h3>Gift Cards</h3>
+                <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="cat-card">
+                <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Pre-Orders+Image');"></div>
+                <h3>Pre-Orders</h3>
+                <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PC Games Section -->
+    <section id="pc-section" class="home-products-section">
+        <div class="sec-title-bar">
+            <div class="title-left red-title"><span></span> POPULAR PC GAMES</div>
+            <a href="pc.html" class="view-all red-link">View PC Store &rarr;</a>
+        </div>
+        <div class="prod-grid">
+            <div class="prod-card pc-theme">
+                <span class="badge red-bg">-30%</span>
+                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">Elden Ring</div>
+                    <div class="prod-price-red">₹2,499</div>
+                    <button class="buy-btn-red" onclick="addToCart('Elden Ring', 2499, 'image1.png.png')">Add to Cart</button>
+                </div>
+            </div>
+            <div class="prod-card pc-theme">
+                <span class="badge red-bg">-25%</span>
+                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">Red Dead Redemption 2</div>
+                    <div class="prod-price-red">₹1,599</div>
+                    <button class="buy-btn-red" onclick="addToCart('Red Dead Redemption 2', 1599, 'image1.png.png')">Add to Cart</button>
+                </div>
+            </div>
+            <div class="prod-card pc-theme">
+                <span class="badge red-bg">-20%</span>
+                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">God of War Ragnarok</div>
+                    <div class="prod-price-red">₹2,999</div>
+                    <button class="buy-btn-red" onclick="addToCart('God of War Ragnarok', 2999, 'image1.png.png')">Add to Cart</button>
+                </div>
+            </div>
+            <div class="prod-card pc-theme">
+                <span class="badge red-bg">-25%</span>
+                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">Forza Horizon 5</div>
+                    <div class="prod-price-red">₹1,999</div>
+                    <button class="buy-btn-red" onclick="addToCart('Forza Horizon 5', 1999, 'image1.png.png')">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PS5 Games Section -->
+    <section id="ps5-section" class="home-products-section ps5-bg">
+        <div class="sec-title-bar">
+            <div class="title-left blue-title"><span></span> FEATURED PS5 GAMES</div>
+            <a href="ps5.html" class="view-all blue-link">View PS5 Store &rarr;</a>
+        </div>
+        <div class="prod-grid">
+            <div class="prod-card ps5-theme">
+                <span class="badge blue-bg">-20%</span>
+                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=God+of+War');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">God of War Ragnarök</div>
+                    <div class="price-flex">
+                        <div class="price-details"><span class="curr-price">₹2,799</span><span class="old-price">₹3,499</span></div>
+                        <button class="cart-btn-blue" onclick="addToCart('God of War Ragnarök (PS5)', 2799, 'https://via.placeholder.com/300x400/12141a/fff?text=God+of+War')"><i class="fa-solid fa-cart-shopping"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="prod-card ps5-theme">
+                <span class="badge blue-bg">-25%</span>
+                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=Spider-Man+2');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">Marvel's Spider-Man 2</div>
+                    <div class="price-flex">
+                        <div class="price-details"><span class="curr-price">₹2,999</span><span class="old-price">₹3,999</span></div>
+                        <button class="cart-btn-blue" onclick="addToCart('Marvel\\'s Spider-Man 2', 2999, 'https://via.placeholder.com/300x400/12141a/fff?text=Spider-Man+2')"><i class="fa-solid fa-cart-shopping"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="prod-card ps5-theme">
+                <span class="badge blue-bg">-30%</span>
+                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=Horizon');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">Horizon Forbidden West</div>
+                    <div class="price-flex">
+                        <div class="price-details"><span class="curr-price">₹2,599</span><span class="old-price">₹3,699</span></div>
+                        <button class="cart-btn-blue" onclick="addToCart('Horizon Forbidden West', 2599, 'https://via.placeholder.com/300x400/12141a/fff?text=Horizon')"><i class="fa-solid fa-cart-shopping"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="prod-card ps5-theme">
+                <span class="badge blue-bg">-25%</span>
+                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=TLOU');"></div>
+                <div class="prod-info">
+                    <div class="prod-title">The Last of Us Part I</div>
+                    <div class="price-flex">
+                        <div class="price-details"><span class="curr-price">₹2,249</span><span class="old-price">₹2,999</span></div>
+                        <button class="cart-btn-blue" onclick="addToCart('The Last of Us Part I', 2249, 'https://via.placeholder.com/300x400/12141a/fff?text=TLOU')"><i class="fa-solid fa-cart-shopping"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRIPTS (Search & Cart Logic) -->
+    <script>
+        // 1. SMART SEARCH SCRIPT
+        const gamesDatabase = [
+            { title: "God of War Ragnarok", price: "₹2,999", platform: "PC / PS5", img: "image1.png.png", link: "#pc-section" },
+            { title: "God of War (2018)", price: "₹1,499", platform: "PC", img: "image1.png.png", link: "#pc-section" },
+            { title: "Marvel's Spider-Man 2", price: "₹2,999", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=Spider-Man", link: "#ps5-section" },
+            { title: "Elden Ring", price: "₹2,499", platform: "PC", img: "image1.png.png", link: "#pc-section" },
+            { title: "Red Dead Redemption 2", price: "₹1,599", platform: "PC", img: "image1.png.png", link: "#pc-section" },
+            { title: "Horizon Forbidden West", price: "₹2,599", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=Horizon", link: "#ps5-section" },
+            { title: "The Last of Us Part I", price: "₹2,249", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=TLOU", link: "#ps5-section" },
+            { title: "Ghost of Tsushima DC", price: "₹2,499", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=Ghost", link: "#ps5-section" },
+            { title: "Forza Horizon 5", price: "₹1,999", platform: "PC", img: "image1.png.png", link: "#pc-section" },
+            { title: "Cyberpunk 2077", price: "₹1,999", platform: "PC", img: "image1.png.png", link: "#pc-section" }
+        ];
+
+        const searchInput = document.getElementById('gameSearch');
+        const searchDropdown = document.getElementById('searchDropdown');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            searchDropdown.innerHTML = ''; 
+
+            if (query.length > 0) {
+                const filteredGames = gamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                searchDropdown.style.display = 'block';
+
+                if (filteredGames.length > 0) {
+                    filteredGames.forEach(game => {
+                        const gameItem = document.createElement('a');
+                        gameItem.href = game.link;
+                        gameItem.className = 'search-item';
+                        gameItem.innerHTML = `
+                            <div class="search-item-img" style="background-image: url('${game.img}');"></div>
+                            <div class="search-item-info">
+                                <span class="search-item-title">${game.title}</span>
+                                <span class="search-platform">${game.platform}</span>
+                                <span class="search-item-price">${game.price}</span>
+                            </div>
+                        `;
+                        searchDropdown.appendChild(gameItem);
+                    });
+                } else {
+                    searchDropdown.innerHTML = `<div class="no-results">No games found for "${this.value}"</div>`;
+                }
+            } else {
+                searchDropdown.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) {
+                searchDropdown.style.display = 'none';
+            }
+        });
+
+        // 2. ADD TO CART SYSTEM
+        let cartArray = [];
+
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('active');
+        }
+
+        function addToCart(title, price, imgUrl) {
+            const existingItem = cartArray.find(item => item.title === title);
+            
+            if(existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cartArray.push({ title: title, price: price, img: imgUrl, qty: 1 });
+            }
+            
+            updateCartUI();
+            toggleCart(); 
+        }
+
+        function removeFromCart(index) {
+            cartArray.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cartItemsContainer');
+            const totalElement = document.getElementById('cartTotalPrice');
+            const badgeCount = document.getElementById('cartBadgeCount');
+            
+            itemsContainer.innerHTML = '';
+            let totalAmount = 0;
+            let totalQty = 0;
+
+            if (cartArray.length === 0) {
+                itemsContainer.innerHTML = '<div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>';
+            } else {
+                cartArray.forEach((item, index) => {
+                    totalAmount += (item.price * item.qty);
+                    totalQty += item.qty;
+                    
+                    itemsContainer.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-title">${item.title} (x${item.qty})</div>
+                                <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            }
+            
+            badgeCount.innerText = totalQty;
+            totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
+        }
+
+        function proceedToPayment() {
+            if (cartArray.length === 0) {
+                alert("Bhai pehle koi game toh add kar le cart mein!");
+            } else {
+                const total = document.getElementById('cartTotalPrice').innerText;
+                alert("Payment of " + total + " will be processed later.\n\n(Yeh feature baad mein activate hoga!)");
+            }
+        }
+    </script>
+</body>
+</html>

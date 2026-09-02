@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Games - GameFlex Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e31825;
+            --dark-bg: #0b0c10;
+            --card-bg: #12141a;
+            --text-light: #ffffff;
+            --text-gray: #a3a3a3;
+            --border-dark: #2a2a30;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
+
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
+        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, #e31825 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--primary-red); }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
+        .nav-links li a:hover, .nav-links li a.active { color: var(--primary-red); }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; }
+
+        /* PC Hero Banner (Exact Reference Match) */
+        .pc-hero { display: flex; justify-content: space-between; align-items: center; padding: 50px 5%; background: #0b0c10; border-bottom: 1px solid var(--border-dark); gap: 40px; flex-wrap: wrap; }
+        .pc-hero-content { flex: 1; min-width: 300px; }
+        .pc-subtitle { color: var(--primary-red); font-size: 13px; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 12px; }
+        .pc-title { font-size: 46px; font-weight: 800; line-height: 1.15; margin-bottom: 15px; text-transform: uppercase; }
+        .pc-title span { color: var(--primary-red); display: block; }
+        .pc-desc { color: var(--text-gray); font-size: 15px; margin-bottom: 25px; line-height: 1.6; }
+        
+        .pc-features { display: flex; gap: 20px; flex-wrap: wrap; }
+        .pc-feat-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-light); }
+        .pc-feat-item i { color: var(--primary-red); font-size: 16px; }
+
+        /* Banner Image Box */
+        .pc-hero-img { flex: 1.2; min-width: 350px; height: 350px; background-image: url('image1.png.png'); background-size: cover; background-position: center; border-radius: 12px; border: 1px solid var(--border-dark); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(227, 24, 37, 0.2); }
+
+        /* Shop by Category Section (Exact 6 Cards Row) */
+        .category-section { padding: 40px 5%; }
+        .section-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title span { color: var(--primary-red); width: 4px; height: 18px; background: var(--primary-red); display: inline-block; border-radius: 2px; }
+        .view-all-link { color: var(--primary-red); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .view-all-link:hover { text-decoration: underline; }
+        
+        .cat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        .sub-cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .sub-cat-card.active, .sub-cat-card:hover { border-color: var(--primary-red); transform: translateY(-4px); box-shadow: 0 8px 20px rgba(227, 24, 37, 0.25); background: linear-gradient(145deg, #12141a, #1a1d26); }
+        .sub-cat-card i { font-size: 26px; color: var(--primary-red); margin-bottom: 12px; }
+        .sub-cat-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+        .sub-cat-card p { font-size: 11px; color: var(--text-gray); }
+
+        /* Popular Games Grid */
+        .products-section { padding: 20px 5% 60px 5%; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+        .product-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .product-card:hover { border-color: var(--primary-red); transform: translateY(-6px); box-shadow: 0 12px 30px rgba(227, 24, 37, 0.25); }
+        
+        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--primary-red); color: white; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; z-index: 2; box-shadow: 0 2px 8px rgba(227, 24, 37, 0.4); }
+        .product-img { height: 180px; width: 100%; background-size: cover; background-position: center; transition: transform 0.5s ease; }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        
+        .product-info { padding: 18px; }
+        .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+        .product-price { font-size: 17px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
+        
+        .buy-btn { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 12px rgba(227, 24, 37, 0.3); }
+        .buy-btn:hover { background: #c1121d; box-shadow: 0 6px 15px rgba(227, 24, 37, 0.5); }
+        
+        .back-link { display: inline-block; margin-bottom: 15px; color: var(--text-gray); text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; }
+        .back-link:hover { color: var(--primary-red); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+            <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pc.html" class="active">PC Games</a></li>
+            <li><a href="#">PS5 Games</a></li>
+            <li><a href="#">Bundles</a></li>
+            <li><a href="#">Offers</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="icon-btn"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge">2</span></button>
+        </div>
+    </nav>
+
+    <header class="pc-hero">
+        <div class="pc-hero-content">
+            <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+            <div class="pc-subtitle">PC GAMES</div>
+            <h1 class="pc-title">The Ultimate <span>PC Gaming Experience</span></h1>
+            <p class="pc-desc">Explore top-rated titles, new releases & best deals all in one place.</p>
+            <div class="pc-features">
+                <div class="pc-feat-item"><i class="fa-solid fa-gamepad"></i> 1000+ Games</div>
+                <div class="pc-feat-item"><i class="fa-solid fa-bolt"></i> Instant Delivery</div>
+                <div class="pc-feat-item"><i class="fa-solid fa-shield-check"></i> 100% Genuine</div>
+            </div>
+        </div>
+        <div class="pc-hero-img"></div>
+    </header>
+
+    <section class="category-section">
+        <div class="section-header-flex">
+            <div class="section-title"><span></span> Shop By Category</div>
+        </div>
+        <div class="cat-row">
+            <div class="sub-cat-card active">
+                <i class="fa-solid fa-fire"></i>
+                <h4>NEW RELEASES</h4>
+                <p>Fresh Arrivals</p>
+            </div>
+            <div class="sub-cat-card">
+                <i class="fa-solid fa-trophy"></i>
+                <h4>BEST SELLERS</h4>
+                <p>Top Rated Games</p>
+            </div>
+            <div class="sub-cat-card">
+                <i class="fa-solid fa-tag"></i>
+                <h4>UNDER ₹500</h4>
+                <p>Budget Friendly</p>
+            </div>
+            <div class="sub-cat-card">
+                <i class="fa-solid fa-gamepad"></i>
+                <h4>ACTION</h4>
+                <p>Adventure & Action</p>
+            </div>
+            <div class="sub-cat-card">
+                <i class="fa-solid fa-crosshairs"></i>
+                <h4>SHOOTER</h4>
+                <p>FPS / TPS Games</p>
+            </div>
+            <div class="sub-cat-card">
+                <i class="fa-solid fa-flag-checkered"></i>
+                <h4>RACING</h4>
+                <p>Speed & Thrill</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="section-header-flex">
+            <div class="section-title"><span></span> Popular PC Games</div>
+            <a href="#" class="view-all-link">View All &rarr;</a>
+        </div>
+        <div class="products-grid">
+            
+            <div class="product-card">
+                <span class="discount-badge">-30%</span>
+                <div class="product-img" style="background-image: url('image1.png.png');"></div>
+                <div class="product-info">
+                    <div class="product-title">Elden Ring</div>
+                    <div class="product-price">₹2,499</div>
+                    <a href="#" class="buy-btn">Add to Cart</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="discount-badge">-25%</span>
+                <div class="product-img" style="background-image: url('image1.png.png');"></div>
+                <div class="product-info">
+                    <div class="product-title">Red Dead Redemption 2</div>
+                    <div class="product-price">₹1,599</div>
+                    <a href="#" class="buy-btn">Add to Cart</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="discount-badge">-20%</span>
+                <div class="product-img" style="background-image: url('image1.png.png');"></div>
+                <div class="product-info">
+                    <div class="product-title">God of War Ragnarok</div>
+                    <div class="product-price">₹2,999</div>
+                    <a href="#" class="buy-btn">Add to Cart</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="discount-badge">-25%</span>
+                <div class="product-img" style="background-image: url('image1.png.png');"></div>
+                <div class="product-info">
+                    <div class="product-title">Forza Horizon 5</div>
+                    <div class="product-price">₹1,999</div>
+                    <a href="#" class="buy-btn">Add to Cart</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</body>
+</html>
