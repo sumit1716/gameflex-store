@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - GameFlex Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e31825;
+            --dark-bg: #0b0c10;
+            --card-bg: #12141a;
+            --border-dark: #2a2a30;
+            --text-light: #ffffff;
+            --text-gray: #a3a3a3;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); }
+
+        /* Login Screen */
+        #loginScreen { display: flex; height: 100vh; justify-content: center; align-items: center; flex-direction: column; gap: 20px; }
+        .admin-login-btn { background: var(--primary-red); color: white; border: none; padding: 15px 30px; font-size: 16px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .admin-login-btn:hover { background: #c1121d; }
+
+        /* Admin Dashboard (Hidden by default) */
+        #adminDashboard { display: none; }
+        
+        /* Navbar */
+        .admin-nav { display: flex; justify-content: space-between; padding: 20px 5%; background: var(--card-bg); border-bottom: 1px solid var(--border-dark); align-items: center; }
+        .admin-nav h2 { color: var(--primary-red); font-weight: 800; }
+        .logout-btn { background: transparent; border: 1px solid var(--text-gray); color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .logout-btn:hover { border-color: var(--primary-red); color: var(--primary-red); }
+
+        /* Layout */
+        .container { padding: 40px 5%; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+        
+        .panel { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; padding: 20px; max-height: 500px; overflow-y: auto; }
+        .panel h3 { margin-bottom: 20px; border-bottom: 1px solid var(--border-dark); padding-bottom: 10px; display: flex; justify-content: space-between; }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th { color: var(--primary-red); padding: 12px 10px; border-bottom: 1px solid var(--border-dark); }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border-dark); color: var(--text-gray); }
+        
+        /* Manual Booking Form */
+        .booking-form { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; padding: 20px; margin-top: 30px; }
+        .form-group { display: flex; gap: 15px; margin-bottom: 15px; }
+        input { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 5px; outline: none; }
+        input:focus { border-color: var(--primary-red); }
+        .submit-btn { background: var(--primary-red); color: white; border: none; padding: 12px 25px; border-radius: 5px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- Admin Login Screen -->
+    <div id="loginScreen">
+        <h1 style="color: var(--primary-red);">GAMEFLEX ADMIN</h1>
+        <p>Restricted Area. Authorized Personnel Only.</p>
+        <button class="admin-login-btn" id="adminLoginBtn"><i class="fa-brands fa-google"></i> Login as Admin</button>
+        <p id="errorMsg" style="color: red; margin-top: 10px; display: none;">Access Denied: You are not an admin.</p>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard">
+        <nav class="admin-nav">
+            <h2><i class="fa-solid fa-shield-halved"></i> Admin Portal</h2>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span id="adminName"></span>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="grid-layout">
+                <!-- Registered Users List -->
+                <div class="panel">
+                    <h3>Registered Members <span><i class="fa-solid fa-users"></i></span></h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will load here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bookings List -->
+                <div class="panel">
+                    <h3>Recent Bookings <span><i class="fa-solid fa-receipt"></i></span></h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <!-- Bookings will load here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Manual Booking -->
+            <div class="booking-form">
+                <h3><i class="fa-solid fa-plus"></i> Add Manual Booking (Admin Override)</h3>
+                <br>
+                <form id="manualBookingForm">
+                    <div class="form-group">
+                        <input type="text" id="m_email" placeholder="Customer Email" required>
+                        <input type="text" id="m_game" placeholder="Game Name (e.g. GTA V)" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="m_price" placeholder="Total Price (₹)" required>
+                        <button type="submit" class="submit-btn" id="m_submitBtn">Create Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, serverTimestamp, orderBy, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
+            authDomain: "gameflexstore-d20da.firebaseapp.com",
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // ⚠️ TERA EMAIL YAHAN DAAL (Jo Admin Hoga)
+        const ADMIN_EMAIL = "sumitroman198@gmail.com"; 
+
+        const loginScreen = document.getElementById('loginScreen');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Auth State Tracker
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Check if the logged-in user is the Admin
+                if (user.email === ADMIN_EMAIL) {
+                    loginScreen.style.display = "none";
+                    adminDashboard.style.display = "block";
+                    document.getElementById('adminName').innerText = "Admin: " + user.displayName;
+                    
+                    // Load Data
+                    fetchUsers();
+                    fetchBookings();
+                } else {
+                    // Not Admin
+                    signOut(auth);
+                    errorMsg.style.display = "block";
+                    errorMsg.innerText = `Access Denied: ${user.email} is not an admin.`;
+                }
+            } else {
+                loginScreen.style.display = "flex";
+                adminDashboard.style.display = "none";
+            }
+        });
+
+        // Admin Login
+        document.getElementById('adminLoginBtn').onclick = () => {
+            errorMsg.style.display = "none";
+            signInWithPopup(auth, provider).catch(err => alert(err.message));
+        };
+
+        // Admin Logout
+        document.getElementById('logoutBtn').onclick = () => {
+            signOut(auth);
+        };
+
+        // Fetch Users from Firestore
+        async function fetchUsers() {
+            const table = document.getElementById('usersTableBody');
+            table.innerHTML = "<tr><td colspan='3'>Loading users...</td></tr>";
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                table.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const dateStr = data.lastLogin ? data.lastLogin.toDate().toLocaleDateString() : "N/A";
+                    table.innerHTML += `
+                        <tr>
+                            <td style="color: white; font-weight: 600;">${data.name || 'Unknown'}</td>
+                            <td>${data.email}</td>
+                            <td>${dateStr}</td>
+                        </tr>
+                    `;
+                });
+            } catch (e) {
+                table.innerHTML = "<tr><td colspan='3' style='color:red;'>Error loading data</td></tr>";
+            }
+        }
+
+        // Fetch Bookings from Firestore
+        async function fetchBookings() {
+            const table = document.getElementById('bookingsTableBody');
+            table.innerHTML = "<tr><td colspan='4'>Loading bookings...</td></tr>";
+            try {
+                // Fetch bookings sorted by newest first
+                const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                table.innerHTML = "";
+                
+                if(querySnapshot.empty) {
+                    table.innerHTML = "<tr><td colspan='4'>No bookings yet.</td></tr>";
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleString() : "Manual Entry";
+                    
+                    // Extract items string if it's an array
+                    let itemsString = "Manual Item";
+                    if(data.items && Array.isArray(data.items)) {
+                        itemsString = data.items.map(i => `${i.title} (x${i.qty})`).join(', ');
+                    } else if (data.manualGameName) {
+                        itemsString = data.manualGameName;
+                    }
+
+                    table.innerHTML += `
+                        <tr>
+                            <td style="color: white;">${data.userEmail || data.customerEmail}</td>
+                            <td>${itemsString}</td>
+                            <td style="color: var(--primary-red); font-weight: 800;">₹${data.totalAmount}</td>
+                            <td>${dateStr}</td>
+                        </tr>
+                    `;
+                });
+            } catch (e) {
+                console.error(e);
+                table.innerHTML = "<tr><td colspan='4' style='color:red;'>Error loading data (Check console)</td></tr>";
+            }
+        }
+
+        // Add Manual Booking
+        document.getElementById('manualBookingForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('m_submitBtn');
+            btn.innerText = "Adding...";
+            btn.disabled = true;
+
+            const email = document.getElementById('m_email').value;
+            const game = document.getElementById('m_game').value;
+            const price = document.getElementById('m_price').value;
+
+            try {
+                await addDoc(collection(db, "bookings"), {
+                    customerEmail: email,
+                    manualGameName: game,
+                    totalAmount: Number(price),
+                    status: "Manual Booking",
+                    createdAt: serverTimestamp()
+                });
+                alert("Manual booking added successfully!");
+                document.getElementById('manualBookingForm').reset();
+                fetchBookings(); // Refresh table
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.innerText = "Create Booking";
+                btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
