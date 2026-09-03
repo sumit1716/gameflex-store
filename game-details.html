@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Details - GameFlex</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e31825;
+            --ps5-blue: #1f6aff;
+            --dark-bg: #05070c;
+            --text-light: #ffffff;
+            --text-gray: #a3a3a3;
+            --card-bg: #12141a;
+            --border-dark: #2a2a30;
+        }
+
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
+
+        /* Navbar Styles */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
+        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, #e31825 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--primary-red); }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 15px; }
+        .icon-btn:hover { color: var(--primary-red); }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
+        .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .login-btn:hover { background: #c1121d; }
+
+        /* Cart Sidebar */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); position: relative; }
+        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 5px; }
+        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--primary-red); }
+        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; position: absolute; right: 12px; top: 12px; }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+        .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+
+        /* PDP Container */
+        .pdp-container { max-width: 1200px; margin: 40px auto; padding: 0 5%; }
+        .pdp-breadcrumb { font-size: 12px; color: var(--text-gray); margin-bottom: 25px; display: flex; gap: 8px; align-items: center; }
+        .pdp-breadcrumb a { color: var(--text-gray); text-decoration: none; transition: 0.3s; }
+        .pdp-breadcrumb a:hover { color: white; }
+        .pdp-breadcrumb span { color: #fff; }
+
+        .pdp-hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr 1fr; gap: 35px; align-items: start; margin-bottom: 60px; }
+
+        /* Left Column: Info */
+        .pdp-platform-tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; margin-bottom: 12px; }
+        .theme-ps5 .pdp-platform-tag { color: var(--ps5-blue); }
+        .theme-pc .pdp-platform-tag { color: var(--primary-red); }
+
+        .pdp-title { font-size: 38px; font-weight: 800; line-height: 1.15; margin-bottom: 15px; color: #fff; }
+        .pdp-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; font-size: 13px; font-weight: 600; color: var(--text-gray); }
+        .pdp-rating .stars { color: #ffb703; font-size: 14px; }
+        .pdp-desc { font-size: 14px; color: #b3b7c2; line-height: 1.65; margin-bottom: 25px; }
+
+        .pdp-feature-pills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+        .pdp-pill { background: rgba(255,255,255,0.04); border: 1px solid var(--border-dark); padding: 10px 14px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; color: #e0e0e0; }
+        .theme-ps5 .pdp-pill i { color: var(--ps5-blue); }
+        .theme-pc .pdp-pill i { color: var(--primary-red); }
+
+        .pdp-badges-row { display: flex; gap: 10px; }
+        .pdp-badge-mini { background: rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 5px; font-size: 11px; font-weight: 700; }
+        .theme-ps5 .pdp-badge-mini.active-badge { background: var(--ps5-blue); color: #fff; }
+        .theme-pc .pdp-badge-mini.active-badge { background: var(--primary-red); color: #fff; }
+
+        /* Center Column: Box Art Card (FIXED NO-ZOOM FRAME) */
+        .pdp-center-col { display: flex; justify-content: center; align-items: flex-start; }
+        .pdp-image-card { 
+            position: relative; 
+            width: 100%; 
+            max-width: 320px; 
+            height: 420px; /* Standard Game Box Height */
+            border-radius: 12px; 
+            overflow: hidden; 
+            background: rgba(0, 0, 0, 0.4); /* Soft dark background to fill empty space nicely */
+            border: 2px solid var(--border-dark); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
+            margin: 0 auto; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-ps5 .pdp-image-card { border-color: rgba(31, 106, 255, 0.4); box-shadow: 0 10px 40px rgba(31, 106, 255, 0.25); }
+        .theme-pc .pdp-image-card { border-color: rgba(227, 24, 37, 0.4); box-shadow: 0 10px 40px rgba(227, 24, 37, 0.25); }
+        .pdp-image-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; /* PERFECT FIX: Shows full image exactly as uploaded without any zoom or cropping */
+            display: block; 
+        }
+        .pdp-image-overlay-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); z-index: 5; }
+
+        /* Right Column: Checkout Card */
+        .pdp-action-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 28px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .pdp-action-card .price-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 6px; text-transform: uppercase; }
+        .pdp-price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+        .pdp-current-price { font-size: 34px; font-weight: 800; }
+        .theme-ps5 .pdp-current-price { color: var(--ps5-blue); }
+        .theme-pc .pdp-current-price { color: var(--primary-red); }
+        .pdp-old-price { font-size: 16px; color: var(--text-gray); text-decoration: line-through; font-weight: 600; }
+        .pdp-discount-pill { background: var(--ps5-blue); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; display:none; }
+        .theme-pc .pdp-discount-pill { background: var(--primary-red); }
+
+        .pdp-checklist { list-style: none; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--border-dark); }
+        .pdp-checklist li { font-size: 12px; color: #cfcfcf; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .theme-ps5 .pdp-checklist li i { color: var(--ps5-blue); }
+        .theme-pc .pdp-checklist li i { color: var(--primary-red); }
+
+        .pdp-section-label { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+        .pdp-edition-tabs { display: flex; gap: 10px; margin-bottom: 22px; }
+        .pdp-tab-btn { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: var(--text-gray); padding: 12px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center; }
+        .pdp-tab-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+        .theme-ps5 .pdp-tab-btn.active-tab { border-color: var(--ps5-blue); background: rgba(31, 106, 255, 0.15); color: #fff; }
+        .theme-pc .pdp-tab-btn.active-tab { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.15); color: #fff; }
+
+        .pdp-qty-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+        .pdp-qty-box { display: flex; align-items: center; border: 1px solid var(--border-dark); border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.03); }
+        .pdp-qty-btn { background: none; border: none; color: #fff; width: 34px; height: 34px; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .pdp-qty-btn:hover { background: rgba(255,255,255,0.1); }
+        .pdp-qty-num { width: 36px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; }
+
+        .pdp-main-btn { width: 100%; border: none; padding: 14px; border-radius: 8px; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .theme-ps5 .pdp-btn-cart { background: var(--ps5-blue); color: #fff; }
+        .theme-pc .pdp-btn-cart { background: var(--primary-red); color: #fff; }
+        .pdp-btn-buy { background: transparent; border: 1px solid var(--border-dark); color: #fff; }
+        .pdp-btn-buy:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+
+        /* Recommendations */
+        .pdp-rec-section { margin-top: 20px; padding-top: 40px; border-top: 1px solid var(--border-dark); }
+        .pdp-rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .pdp-rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+        .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; position: relative; }
+        .prod-card:hover { transform: translateY(-5px); }
+        .prod-img { height: 140px; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
+        
+        @media (max-width: 992px) {
+            .pdp-hero-grid { grid-template-columns: 1fr; gap: 30px; }
+            .pdp-image-card { max-width: 420px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body id="pageBody">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+            <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
+        </a>
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-badge" id="cartBadgeCount">0</span>
+            </button>
+            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-store"></i> <span>Back to Store</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer"></div>
+        <div class="cart-footer">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:bold;"><span>Total:</span> <span id="cartTotalPrice">₹0</span></div>
+            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Main Store</button>
+        </div>
+    </div>
+
+    <!-- MAIN PRODUCT DETAILS CONTENT -->
+    <div class="pdp-container">
+        <div class="pdp-breadcrumb">
+            <a href="index.html">Home</a> &nbsp;&gt;&nbsp; <span id="pdpBreadcrumbCategory">Loading...</span> &nbsp;&gt;&nbsp; <span id="pdpBreadcrumbTitle" style="font-weight: 600;">...</span>
+        </div>
+
+        <div class="pdp-hero-grid" id="pdpGrid">
+            <!-- Left Info -->
+            <div class="pdp-left-col">
+                <div class="pdp-platform-tag" id="pdpPlatformBadge">
+                    <i class="fa-solid fa-spinner fa-spin"></i> <span>Loading...</span>
+                </div>
+                <h1 class="pdp-title" id="pdpMainTitle">Loading Game Details...</h1>
+                
+                <div class="pdp-rating">
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <span>4.8 (Verified)</span>
+                </div>
+
+                <p class="pdp-desc" id="pdpMainDesc">Please wait while we load the game details from the database.</p>
+
+                <div class="pdp-feature-pills">
+                    <div class="pdp-pill"><i class="fa-solid fa-user"></i> Single Player</div>
+                    <div class="pdp-pill"><i class="fa-solid fa-gamepad"></i> Offline Play</div>
+                    <div class="pdp-pill"><i class="fa-solid fa-bolt"></i> Instant Key</div>
+                    <div class="pdp-pill"><i class="fa-solid fa-shield-check"></i> 100% Genuine</div>
+                </div>
+
+                <div class="pdp-badges-row">
+                    <span class="pdp-badge-mini active-badge">Standard Edition</span>
+                    <span class="pdp-badge-mini">Digital Delivery</span>
+                </div>
+            </div>
+
+            <!-- Center Image (NO ZOOM FIXED CONTAINER) -->
+            <div class="pdp-center-col">
+                <div class="pdp-image-card">
+                    <div class="pdp-image-overlay-badge" id="pdpCardOverlayBadge">OFFICIAL</div>
+                    <img id="pdpMainImage" src="https://via.placeholder.com/400x500/12141a/fff?text=Loading..." alt="Game Poster">
+                </div>
+            </div>
+
+            <!-- Right Action/Pricing -->
+            <div class="pdp-right-col">
+                <div class="pdp-action-card">
+                    <div class="price-label">Price</div>
+                    <div class="pdp-price-row">
+                        <span class="pdp-current-price" id="pdpDisplayPrice">₹0</span>
+                        <span class="pdp-old-price" id="pdpDisplayOldPrice" style="display:none;"></span>
+                        <span class="pdp-discount-pill" id="pdpDisplayDiscount"></span>
+                    </div>
+
+                    <ul class="pdp-checklist">
+                        <li><i class="fa-solid fa-check"></i> Instant Automated Delivery</li>
+                        <li><i class="fa-solid fa-check"></i> 24/7 Verified Customer Support</li>
+                    </ul>
+
+                    <div class="pdp-section-label" id="pdpSelectorTitle">Edition</div>
+                    <div class="pdp-edition-tabs" id="pdpOptionTabs">
+                        <!-- JS WILL INJECT RENT OR BUY BUTTONS HERE -->
+                    </div>
+
+                    <div class="pdp-qty-row">
+                        <span class="pdp-section-label" style="margin: 0;">Quantity</span>
+                        <div class="pdp-qty-box">
+                            <button class="pdp-qty-btn" onclick="adjustPdpQty(-1)">-</button>
+                            <span class="pdp-qty-num" id="pdpQtyVal">1</span>
+                            <button class="pdp-qty-btn" onclick="adjustPdpQty(1)">+</button>
+                        </div>
+                    </div>
+
+                    <button class="pdp-main-btn pdp-btn-cart" onclick="pdpAddToCart()">
+                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                    </button>
+                    <button class="pdp-main-btn pdp-btn-buy" onclick="pdpAddToCart(true)">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="pdp-rec-section">
+            <div class="pdp-rec-header">
+                <div style="font-size: 18px; font-weight: 800;"><i class="fa-solid fa-fire" style="color: #ffb703; margin-right: 8px;"></i> YOU MAY ALSO LIKE</div>
+            </div>
+            <div class="pdp-rec-grid" id="pdpRecommendationsGrid">
+                <!-- JS will load more games here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
+            authDomain: "gameflexstore-d20da.firebaseapp.com",
+            projectId: "gameflexstore-d20da"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global Variables
+        window.activeGameData = null;
+        window.activeOption = 'standard';
+        window.activeBasePrice = 0;
+        window.activeQty = 1;
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
+
+        // Load Game Data from URL Parameter
+        async function loadGameDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const gameId = urlParams.get('id');
+
+            if (!gameId) {
+                alert("Game not found!");
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                const gameSnap = await getDoc(doc(db, "games", gameId));
+                if (gameSnap.exists()) {
+                    window.activeGameData = { id: gameSnap.id, ...gameSnap.data() };
+                    renderGameUI();
+                    loadRecommendations(gameId);
+                } else {
+                    window.location.href = "index.html";
+                }
+            } catch (e) {
+                console.error("Error loading game:", e);
+            }
+        }
+
+        function renderGameUI() {
+            const game = window.activeGameData;
+            const isPs5 = game.platform === 'PS5';
+            
+            // Set Theme
+            const pageBody = document.getElementById('pageBody');
+            pageBody.className = isPs5 ? 'theme-ps5' : 'theme-pc';
+
+            // Set Text & Images
+            document.getElementById('pdpBreadcrumbCategory').innerText = isPs5 ? 'PS5 Games' : 'PC Games';
+            document.getElementById('pdpBreadcrumbTitle').innerText = game.title;
+            document.getElementById('pdpMainTitle').innerText = game.title;
+            document.getElementById('pdpMainDesc').innerText = game.desc || 'Experience authentic gaming with instant digital delivery and 24/7 verified support.';
+            document.getElementById('pdpMainImage').src = game.image;
+            
+            document.getElementById('pdpPlatformBadge').innerHTML = isPs5 ? `<i class="fa-brands fa-playstation"></i> <span>PlayStation 5</span>` : `<i class="fa-solid fa-desktop"></i> <span>PC Digital Key</span>`;
+            document.getElementById('pdpCardOverlayBadge').innerText = isPs5 ? 'PS5 OFFICIAL' : 'PC DIGITAL';
+
+            // Discount Tags
+            const oldEl = document.getElementById('pdpDisplayOldPrice');
+            const discEl = document.getElementById('pdpDisplayDiscount');
+            if (game.oldPrice) { oldEl.style.display = 'inline'; oldEl.innerText = '₹' + game.oldPrice; } else { oldEl.style.display = 'none'; }
+            if (game.discount) { discEl.style.display = 'inline-block'; discEl.innerText = game.discount; } else { discEl.style.display = 'none'; }
+
+            // Set Options (Rent/Buy vs PC Standard)
+            const optionTabs = document.getElementById('pdpOptionTabs');
+            if (isPs5) {
+                document.getElementById('pdpSelectorTitle').innerText = "Choose Access Type";
+                window.activeOption = 'rent';
+                window.activeBasePrice = Number(game.rentPrice || 0);
+                optionTabs.innerHTML = `
+                    <button class="pdp-tab-btn active-tab" id="tabRent" onclick="changeOption('rent', ${game.rentPrice})">1 Month Rental</button>
+                    <button class="pdp-tab-btn" id="tabPerm" onclick="changeOption('permanent', ${game.permPrice})">Permanent Buy</button>
+                `;
+            } else {
+                document.getElementById('pdpSelectorTitle').innerText = "Edition";
+                window.activeOption = 'standard';
+                window.activeBasePrice = Number(game.price || 0);
+                optionTabs.innerHTML = `<button class="pdp-tab-btn active-tab">Standard Edition</button>`;
+            }
+
+            updatePriceUI();
+            window.updateCartUI(); 
+        }
+
+        async function loadRecommendations(excludeId) {
+            const recGrid = document.getElementById('pdpRecommendationsGrid');
+            const q = query(collection(db, "games"), limit(5));
+            const querySnapshot = await getDocs(q);
+            
+            recGrid.innerHTML = '';
+            querySnapshot.forEach((doc) => {
+                if (doc.id === excludeId) return;
+                const g = doc.data();
+                const displayPrice = g.platform === 'PC' ? g.price : g.rentPrice;
+                const badge = g.discount ? `<span style="position:absolute; top:8px; left:8px; background:var(--primary-red); color:white; font-size:9px; padding:2px 5px; border-radius:3px; font-weight:bold;">${g.discount}</span>` : '';
+                
+                recGrid.innerHTML += `
+                    <div class="prod-card" style="border-radius:8px; cursor:pointer;" onclick="window.location.href='game-details.html?id=${doc.id}'">
+                        ${badge}
+                        <div class="prod-img" style="height:120px; background-image:url('${g.image}'); border-bottom:1px solid var(--border-dark);"></div>
+                        <div style="padding:10px;">
+                            <div style="font-size:12px; font-weight:700; margin-bottom:5px; color:white;">${g.title}</div>
+                            <div style="font-size:13px; font-weight:800; color:${g.platform === 'PC' ? 'var(--primary-red)' : 'var(--ps5-blue)'};">₹${displayPrice}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Global functions for HTML access
+        window.changeOption = function(type, price) {
+            window.activeOption = type;
+            window.activeBasePrice = Number(price);
+            document.querySelectorAll('.pdp-tab-btn').forEach(b => b.classList.remove('active-tab'));
+            if(type === 'rent') document.getElementById('tabRent').classList.add('active-tab');
+            if(type === 'permanent') document.getElementById('tabPerm').classList.add('active-tab');
+            updatePriceUI();
+        };
+
+        window.adjustPdpQty = function(delta) {
+            let q = window.activeQty + delta;
+            if (q < 1) q = 1; if (q > 10) q = 10;
+            window.activeQty = q;
+            document.getElementById('pdpQtyVal').innerText = q;
+            updatePriceUI();
+        };
+
+        function updatePriceUI() {
+            document.getElementById('pdpDisplayPrice').innerText = '₹' + (window.activeBasePrice * window.activeQty).toLocaleString('en-IN');
+        }
+
+        window.pdpAddToCart = function(redirect = false) {
+            const game = window.activeGameData;
+            let cartTitle = game.title;
+            if (game.platform === 'PS5') {
+                cartTitle += window.activeOption === 'rent' ? ' (1 Mo. Rental)' : ' (Permanent Buy)';
+            } else { cartTitle += ' (PC)'; }
+
+            const existing = window.cartArray.find(i => i.title === cartTitle);
+            if (existing) { existing.qty += window.activeQty; } 
+            else { window.cartArray.push({ title: cartTitle, price: window.activeBasePrice, img: game.image, qty: window.activeQty }); }
+
+            // SAVE TO LOCAL STORAGE SO INDEX.HTML CAN SEE IT
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray));
+            
+            if (redirect) {
+                window.location.href = 'index.html'; // Buy Now takes to main page for checkout
+            } else {
+                window.updateCartUI();
+                window.toggleCart();
+            }
+        };
+
+        loadGameDetails();
+    </script>
+
+    <!-- Cart Rendering Script -->
+    <script>
+        window.toggleCart = function() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('active');
+        };
+
+        window.removeFromCart = function(index) {
+            window.cartArray.splice(index, 1);
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray));
+            window.updateCartUI();
+        };
+
+        window.updateCartUI = function() {
+            const itemsContainer = document.getElementById('cartItemsContainer');
+            itemsContainer.innerHTML = '';
+            let totalAmount = 0; let totalQty = 0;
+
+            if (window.cartArray.length === 0) {
+                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Cart is empty.</div>';
+            } else {
+                window.cartArray.forEach((item, index) => {
+                    totalAmount += (item.price * item.qty);
+                    totalQty += item.qty;
+                    itemsContainer.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-title">${item.title} (x${item.qty})</div>
+                                <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('cartBadgeCount').innerText = totalQty;
+            document.getElementById('cartTotalPrice').innerText = '₹' + totalAmount.toLocaleString('en-IN');
+        };
+    </script>
+</body>
+</html>

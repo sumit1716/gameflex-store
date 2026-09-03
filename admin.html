@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - GameFlex</title>
-    <!-- CSS WAHI RAKHNA HAI JO PICHLE CODE MEIN THA -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* KEEP ALL PREVIOUS ADMIN CSS HERE */
         :root { --primary-red: #e31825; --dark-bg: #0b0c10; --card-bg: #12141a; --border-dark: #2a2a30; --text-light: #ffffff; --text-gray: #a3a3a3; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: var(--dark-bg); color: var(--text-light); }
@@ -26,10 +24,33 @@
         .graph-panel { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; padding: 20px; margin-bottom: 40px; }
         .graph-container { position: relative; height: 300px; width: 100%; }
         .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
-        .panel { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; padding: 20px; max-height: 400px; overflow-y: auto; }
+        .panel { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; padding: 20px; max-height: 500px; overflow-y: auto; }
+        .panel::-webkit-scrollbar { width: 5px; } .panel::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 5px; }
+        
         table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-        th { color: var(--primary-red); padding: 12px 10px; border-bottom: 1px solid var(--border-dark); position: sticky; top: 0; background: var(--card-bg); }
+        th { color: var(--primary-red); padding: 12px 10px; border-bottom: 1px solid var(--border-dark); position: sticky; top: 0; background: var(--card-bg); z-index: 10;}
         td { padding: 12px 10px; border-bottom: 1px solid var(--border-dark); color: var(--text-gray); }
+        
+        .form-group { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        input, select { flex: 1; min-width: 150px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 5px; outline: none; font-family: 'Montserrat', sans-serif;}
+        textarea { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 5px; outline: none; font-family: 'Montserrat', sans-serif; resize: vertical; min-height: 80px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-red); }
+        
+        /* NEW DRAG AND DROP CSS */
+        .drop-zone { width: 100%; height: 130px; border: 2px dashed var(--border-dark); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-gray); cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); text-align: center; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.05); color: white; }
+        .drop-zone img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; display: none; background: #000; }
+        .drop-zone i { font-size: 35px; margin-bottom: 8px; color: var(--primary-red); transition: 0.3s; }
+        .drop-zone:hover i { transform: translateY(-5px); }
+        .drop-zone input { display: none; }
+        
+        .pricing-box { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border-dark); margin-bottom: 15px; width: 100%; }
+        .pricing-box h4 { color: var(--primary-red); margin-bottom: 10px; font-size: 13px; }
+        
+        .submit-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px 25px; border-radius: 5px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px;}
+        .submit-btn:hover { background: #c1121d; box-shadow: 0 5px 15px rgba(227, 24, 37, 0.3); }
+        .delete-btn { background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s;}
+        .delete-btn:hover { background: #ff4444; color: white; }
     </style>
 </head>
 <body>
@@ -65,8 +86,72 @@
                 </div>
             </div>
 
+            <!-- INVENTORY MANAGEMENT SECTION -->
+            <div class="panel" style="margin-bottom: 40px; border-color: var(--primary-red); box-shadow: 0 0 15px rgba(227, 24, 37, 0.1);">
+                <h3 style="margin-bottom: 20px; font-size: 18px; color: white;"><i class="fa-solid fa-boxes-stacked" style="color: var(--primary-red);"></i> Advanced Game Inventory Manager</h3>
+                
+                <form id="addGameForm" style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-dark);">
+                    
+                    <!-- Basic Info -->
+                    <div class="form-group">
+                        <input type="text" id="g_title" placeholder="Game Title (e.g. GTA VI)" style="flex: 2;" required>
+                        <select id="g_platform" onchange="togglePlatformFields()" style="flex: 1;" required>
+                            <option value="PC">PC Game</option>
+                            <option value="PS5">PS5 Game</option>
+                        </select>
+                    </div>
+
+                    <!-- NEW: Drag & Drop Image Zone -->
+                    <div class="drop-zone" id="dropZone">
+                        <i class="fa-solid fa-cloud-arrow-up" id="dropIcon"></i>
+                        <span id="dropText" style="font-size: 12px; font-weight: 600;">Drag & Drop Game Image Here<br><small style="font-weight: normal; color: gray;">or click to browse from computer</small></span>
+                        <img id="previewImage" src="" alt="Preview">
+                        <input type="file" id="g_image_file" accept="image/png, image/jpeg, image/jpg, image/webp">
+                    </div>
+
+                    <!-- Game Description -->
+                    <div class="form-group">
+                        <textarea id="g_desc" placeholder="Game Description (Features, Story, etc.)" required></textarea>
+                    </div>
+
+                    <!-- Pricing & Marketing -->
+                    <div class="pricing-box">
+                        <h4><i class="fa-solid fa-tag"></i> Pricing & Marketing</h4>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <!-- Marketing Tags -->
+                            <input type="number" id="g_old_price" placeholder="Crossed-out Price (e.g. 3999)">
+                            <input type="text" id="g_discount" placeholder="Discount Label (e.g. -30% OFF)">
+                            
+                            <!-- PC ONLY: Single Price -->
+                            <input type="number" id="g_pc_price" class="pc-field" placeholder="Final PC Selling Price (₹)" required>
+                            
+                            <!-- PS5 ONLY: Split Prices -->
+                            <input type="number" id="g_ps5_rent" class="ps5-field" placeholder="1 Month Rental Price (₹)" style="display: none;">
+                            <input type="number" id="g_ps5_perm" class="ps5-field" placeholder="Permanent Buy Price (₹)" style="display: none;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="addGameBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Game to Live Store</button>
+                </form>
+
+                <table style="max-height: 400px; display: block; overflow-y: auto;">
+                    <thead style="display: table; width: 100%; table-layout: fixed;">
+                        <tr>
+                            <th style="width: 10%;">Image</th>
+                            <th style="width: 40%;">Game Details</th>
+                            <th style="width: 10%;">Platform</th>
+                            <th style="width: 25%;">Pricing & Marketing</th>
+                            <th style="width: 15%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody" style="display: table; width: 100%; table-layout: fixed;">
+                        <!-- Games Will Load Here -->
+                    </tbody>
+                </table>
+            </div>
+
             <div class="graph-panel">
-                <h3 style="margin-bottom:10px;"><i class="fa-solid fa-chart-line" style="color: var(--primary-red);"></i> Real-Time Store Activity</h3>
+                <h3 style="margin-bottom:10px;"><i class="fa-solid fa-chart-line" style="color: var(--primary-red);"></i> Store Activity</h3>
                 <div class="graph-container"><canvas id="reachChart"></canvas></div>
             </div>
 
@@ -75,12 +160,7 @@
                     <h3>Registered Members</h3>
                     <table>
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <!-- NEW COLUMN -->
-                                <th>Tokens</th>
-                            </tr>
+                            <tr><th>Name</th><th>Email</th><th>Tokens</th></tr>
                         </thead>
                         <tbody id="usersTableBody"></tbody>
                     </table>
@@ -90,11 +170,7 @@
                     <h3>Recent Bookings</h3>
                     <table>
                         <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                            </tr>
+                            <tr><th>User</th><th>Items</th><th>Total</th></tr>
                         </thead>
                         <tbody id="bookingsTableBody"></tbody>
                     </table>
@@ -103,10 +179,11 @@
         </div>
     </div>
 
+    <!-- FIREBASE MODULE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -125,6 +202,74 @@
         const ADMIN_EMAIL = "sumitroman198@gmail.com"; 
         Chart.defaults.color = '#a3a3a3'; Chart.defaults.borderColor = '#2a2a30';
         let myChart = null;
+
+        // DRAG AND DROP IMAGE LOGIC WITH AUTO-COMPRESSION
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('g_image_file');
+        const previewImage = document.getElementById('previewImage');
+        const dropIcon = document.getElementById('dropIcon');
+        const dropText = document.getElementById('dropText');
+        let selectedBase64Image = "";
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault(); dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) handleFile(fileInput.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) { alert("Please select a valid image file."); return; }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Auto-Compress image so it doesn't break Firebase limits
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    let width = img.width; let height = img.height;
+                    const max_size = 800; // max resolution
+                    if(width > height && width > max_size) { height *= max_size / width; width = max_size; }
+                    else if(height > max_size) { width *= max_size / height; height = max_size; }
+                    canvas.width = width; canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convert compressed image to Base64 String
+                    selectedBase64Image = canvas.toDataURL('image/jpeg', 0.8); 
+                    
+                    previewImage.src = selectedBase64Image;
+                    previewImage.style.display = 'block';
+                    dropIcon.style.display = 'none';
+                    dropText.style.display = 'none';
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // UI Toggler logic specific to PC/PS5 fields
+        window.togglePlatformFields = function() {
+            const plat = document.getElementById('g_platform').value;
+            const pcField = document.getElementById('g_pc_price');
+            const ps5Rent = document.getElementById('g_ps5_rent');
+            const ps5Perm = document.getElementById('g_ps5_perm');
+            
+            if(plat === 'PS5') {
+                pcField.style.display = 'none'; pcField.removeAttribute('required');
+                ps5Rent.style.display = 'block'; ps5Rent.setAttribute('required', 'true');
+                ps5Perm.style.display = 'block'; ps5Perm.setAttribute('required', 'true');
+            } else {
+                ps5Rent.style.display = 'none'; ps5Rent.removeAttribute('required');
+                ps5Perm.style.display = 'none'; ps5Perm.removeAttribute('required');
+                pcField.style.display = 'block'; pcField.setAttribute('required', 'true');
+            }
+        };
+        setTimeout(() => window.togglePlatformFields(), 100);
 
         function renderChart(labels, dataPoints) {
             const ctx = document.getElementById('reachChart').getContext('2d');
@@ -158,23 +303,57 @@
         document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
         function startRealtimeListeners() {
-            // USERS LISTENER (Updated for Tokens)
+            // INVENTORY LISTENER
+            onSnapshot(query(collection(db, "games"), orderBy("createdAt", "desc")), (snapshot) => {
+                const table = document.getElementById('inventoryTableBody');
+                table.innerHTML = "";
+                
+                if(snapshot.empty) {
+                    table.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Inventory is empty. Add your first game above!</td></tr>";
+                }
+
+                snapshot.forEach((gameDoc) => {
+                    const data = gameDoc.data();
+                    
+                    let pricingHTML = "";
+                    if(data.platform === 'PC') {
+                        pricingHTML = `<span style="font-weight:800; font-size:14px;">₹${data.price}</span>`;
+                    } else {
+                        pricingHTML = `<span style="font-size:11px; color:#ccc;">Rent:</span> <b style="font-size:13px;">₹${data.rentPrice}</b><br>
+                                       <span style="font-size:11px; color:#ccc;">Perm:</span> <b style="font-size:13px;">₹${data.permPrice}</b>`;
+                    }
+
+                    let marketingHTML = "";
+                    if(data.oldPrice) marketingHTML += `<span style="text-decoration:line-through; color:gray; font-size:11px; margin-right:6px;">₹${data.oldPrice}</span>`;
+                    if(data.discount) marketingHTML += `<span style="background:var(--primary-red); color:white; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:bold;">${data.discount}</span>`;
+
+                    let imgSrc = data.image && data.image.startsWith('data:image') ? data.image : 'https://via.placeholder.com/45x55/000/fff?text=No+Img';
+
+                    table.innerHTML += `
+                        <tr>
+                            <td style="width: 10%;"><img src="${imgSrc}" style="width: 45px; height: 55px; border-radius:4px; object-fit:cover; border:1px solid var(--border-dark);"></td>
+                            <td style="width: 40%;">
+                                <div style="color: white; font-weight:700; font-size:14px; margin-bottom:4px;">${data.title}</div>
+                                <div style="color: var(--text-gray); font-size:11px; max-height: 30px; overflow: hidden; text-overflow: ellipsis;">${data.desc}</div>
+                            </td>
+                            <td style="width: 10%;"><span style="background:rgba(255,255,255,0.1); padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold;">${data.platform}</span></td>
+                            <td style="width: 25%; color: var(--primary-red);">
+                                ${pricingHTML}<br><div style="margin-top:5px;">${marketingHTML}</div>
+                            </td>
+                            <td style="width: 15%;"><button class="delete-btn" onclick="deleteGame('${gameDoc.id}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                        </tr>`;
+                });
+            });
+
+            // USERS LISTENER
             onSnapshot(query(collection(db, "users")), (snapshot) => {
                 const table = document.getElementById('usersTableBody');
                 table.innerHTML = "";
                 let liveCount = 0; const now = new Date();
-
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
+                snapshot.forEach((userDoc) => {
+                    const data = userDoc.data();
                     if(data.lastLogin && Math.abs(now - data.lastLogin.toDate()) / 36e5 <= 24) liveCount++;
-                    
-                    // Display Tokens dynamically
-                    table.innerHTML += `
-                        <tr>
-                            <td style="color: white; font-weight: 600;">${data.name || 'Unknown'}</td>
-                            <td>${data.email}</td>
-                            <td style="color: gold; font-weight: 800;"><i class="fa-solid fa-coins"></i> ${data.tokens || 0}</td>
-                        </tr>`;
+                    table.innerHTML += `<tr><td style="color: white; font-weight: 600;">${data.name || 'Unknown'}</td><td>${data.email}</td><td style="color: gold; font-weight: 800;"><i class="fa-solid fa-coins"></i> ${data.tokens || 0}</td></tr>`;
                 });
                 document.getElementById('liveUserCount').innerText = liveCount > 0 ? liveCount : 1;
             });
@@ -186,10 +365,10 @@
                 let totalRev = 0, totalOrders = 0;
                 let graphData = { labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep"], dataPoints: [0,0,0,0,0,0] };
 
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
+                snapshot.forEach((bookDoc) => {
+                    const data = bookDoc.data();
                     totalOrders++; totalRev += Number(data.totalAmount || 0);
-                    if(data.createdAt) graphData.dataPoints[5] += 1; // Simplification for demo
+                    if(data.createdAt) graphData.dataPoints[5] += 1; 
                     
                     let itemsString = data.items ? data.items.map(i => `${i.title}`).join(', ') : "Manual";
                     table.innerHTML += `<tr><td style="color: white;">${data.userEmail}</td><td>${itemsString}</td><td style="color: var(--primary-red); font-weight: 800;">₹${data.totalAmount}</td></tr>`;
@@ -199,6 +378,67 @@
                 renderChart(graphData.labels, graphData.dataPoints);
             });
         }
+
+        // UPLOAD NEW GAME TO FIREBASE
+        document.getElementById('addGameForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            if(!selectedBase64Image) {
+                alert("Please drag & drop or select an image for the game!");
+                return;
+            }
+
+            const btn = document.getElementById('addGameBtn');
+            btn.innerHTML = "Uploading..."; btn.disabled = true;
+
+            const platform = document.getElementById('g_platform').value;
+            let gameData = {
+                title: document.getElementById('g_title').value,
+                platform: platform,
+                image: selectedBase64Image, // SAVING COMPRESSED IMAGE DATA URL
+                desc: document.getElementById('g_desc').value,
+                oldPrice: document.getElementById('g_old_price').value || null,
+                discount: document.getElementById('g_discount').value || null,
+                createdAt: serverTimestamp()
+            };
+
+            if (platform === 'PC') {
+                gameData.price = Number(document.getElementById('g_pc_price').value);
+            } else {
+                gameData.rentPrice = Number(document.getElementById('g_ps5_rent').value);
+                gameData.permPrice = Number(document.getElementById('g_ps5_perm').value);
+            }
+
+            try {
+                await addDoc(collection(db, "games"), gameData);
+                
+                // Reset Form
+                document.getElementById('addGameForm').reset();
+                selectedBase64Image = "";
+                previewImage.src = "";
+                previewImage.style.display = "none";
+                dropIcon.style.display = "block";
+                dropText.style.display = "block";
+                window.togglePlatformFields(); 
+
+            } catch (error) {
+                alert("Error adding game: " + error.message);
+            } finally {
+                btn.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Upload Game to Live Store"; 
+                btn.disabled = false;
+            }
+        };
+
+        // DELETE GAME LOGIC
+        window.deleteGame = async function(gameId) {
+            if(confirm("Warning: Are you sure you want to permanently delete this game from the store?")) {
+                try {
+                    await deleteDoc(doc(db, "games", gameId));
+                } catch (error) {
+                    alert("Error deleting game: " + error.message);
+                }
+            }
+        };
     </script>
 </body>
 </html>

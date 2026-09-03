@@ -48,6 +48,25 @@
         .claim-btn { display: none; width: 100%; background: linear-gradient(45deg, #00C9FF, #92FE9D); color: #000; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 201, 255, 0.5); }
         .claim-btn:hover { transform: scale(1.02); }
 
+        /* Onboarding Modal Popup CSS */
+        .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .onboarding-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 400px; max-width: 90%; box-shadow: 0 10px 30px rgba(227, 24, 37, 0.3); text-align: center; }
+        .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; }
+        .onboarding-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
+        .onboarding-group { margin-bottom: 15px; text-align: left; }
+        .onboarding-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
+        .onboarding-input { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 6px; outline: none; font-size: 14px; font-family: 'Montserrat', sans-serif; }
+        .onboarding-input:focus { border-color: var(--primary-red); }
+        
+        .radio-group { display: flex; gap: 10px; margin-top: 5px; }
+        .radio-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.3s; color: var(--text-gray); }
+        .radio-card input { display: none; }
+        .radio-card:hover { border-color: var(--primary-red); color: white; }
+        .radio-card.selected { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.2); color: white; box-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
+        
+        .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .onboarding-submit:hover { background: #c1121d; }
+
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
         .icon-btn:hover { color: var(--primary-red); }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
@@ -170,18 +189,46 @@
         .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-light); }
 
         .prod-price-red { font-size: 18px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
-        .buy-btn-red { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.3s; }
+        .buy-btn-red { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5;}
         .buy-btn-red:hover { background: #c1121d; }
 
         .price-flex { display: flex; justify-content: space-between; align-items: flex-end; }
         .price-details { display: flex; gap: 8px; align-items: center; }
         .curr-price { font-size: 16px; font-weight: 800; color: var(--ps5-blue); }
         .old-price { font-size: 12px; font-weight: 600; color: var(--text-gray); text-decoration: line-through; }
-        .cart-btn-blue { background: var(--ps5-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .cart-btn-blue { background: var(--ps5-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; position: relative; z-index: 5;}
         .cart-btn-blue:hover { background: #0051ed; box-shadow: 0 0 10px rgba(31, 106, 255, 0.5); }
     </style>
 </head>
 <body>
+
+    <div id="onboardingOverlay" class="onboarding-overlay">
+        <div class="onboarding-modal">
+            <h2>Welcome to GameFlex!</h2>
+            <p>Please complete your profile to continue.</p>
+            <form id="onboardingForm">
+                <div class="onboarding-group">
+                    <label>Your Full Name</label>
+                    <input type="text" id="obName" class="onboarding-input" placeholder="Enter your name" required>
+                </div>
+                <div class="onboarding-group">
+                    <label>What kind of gamer are you?</label>
+                    <div class="radio-group">
+                        <label class="radio-card" onclick="selectGamerType(this)">
+                            <input type="radio" name="gamerType" value="PC Gamer" required> PC Gamer
+                        </label>
+                        <label class="radio-card" onclick="selectGamerType(this)">
+                            <input type="radio" name="gamerType" value="PlayStation Gamer"> PlayStation
+                        </label>
+                        <label class="radio-card" onclick="selectGamerType(this)">
+                            <input type="radio" name="gamerType" value="Both"> Both
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="onboarding-submit">Save & Start Gaming</button>
+            </form>
+        </div>
+    </div>
 
     <div class="top-bar">
         <i class="fa-solid fa-fire"></i>
@@ -189,7 +236,6 @@
         <a href="#">Shop Now &rarr;</a>
     </div>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
             <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
@@ -216,7 +262,6 @@
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
             
-            <!-- DOMINOS STYLE TOKEN TRACKER -->
             <div id="tokenTracker" class="token-tracker-container" title="Collect 500 to get a Free Game!" style="display: none;">
                 <div class="circular-progress">
                     <svg viewBox="0 0 44 44">
@@ -241,7 +286,6 @@
         </div>
     </nav>
 
-    <!-- Cart Overlay & Sidebar -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
@@ -256,7 +300,6 @@
                 <span>Total:</span>
                 <span id="cartTotalPrice">₹0</span>
             </div>
-            <!-- CLAIM FREE GAME BUTTON -->
             <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> CLAIM FREE GAME (500 Tokens)</button>
             
             <button class="checkout-btn" id="checkoutBtn" onclick="proceedToPayment()">Proceed to Payment</button>
@@ -264,7 +307,6 @@
         </div>
     </div>
 
-    <!-- Hero Section -->
     <header class="hero">
         <video autoplay loop muted playsinline class="hero-bg-video">
             <source src="GAMEFLEX_STORE (1).mov" type="video/quicktime">
@@ -281,7 +323,6 @@
         </div>
     </header>
 
-    <!-- Features Section -->
     <section class="features">
         <div class="feature-item">
             <i class="fa-solid fa-shield-check feature-icon"></i>
@@ -301,7 +342,6 @@
         </div>
     </section>
 
-    <!-- Category Section -->
     <section class="categories-section">
         <div class="section-header">
             <h5>BROWSE CATEGORIES</h5>
@@ -337,111 +377,35 @@
         </div>
     </section>
 
-    <!-- PC Games Section -->
     <section id="pc-section" class="home-products-section">
         <div class="sec-title-bar">
             <div class="title-left red-title"><span></span> POPULAR PC GAMES</div>
             <a href="pc.html" class="view-all red-link">View PC Store &rarr;</a>
         </div>
-        <div class="prod-grid">
-            <div class="prod-card pc-theme">
-                <span class="badge red-bg">-30%</span>
-                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">Elden Ring</div>
-                    <div class="prod-price-red">₹2,499</div>
-                    <button class="buy-btn-red" onclick="addToCart('Elden Ring', 2499, 'image1.png.png')">Add to Cart</button>
-                </div>
-            </div>
-            <div class="prod-card pc-theme">
-                <span class="badge red-bg">-25%</span>
-                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">Red Dead Redemption 2</div>
-                    <div class="prod-price-red">₹1,599</div>
-                    <button class="buy-btn-red" onclick="addToCart('Red Dead Redemption 2', 1599, 'image1.png.png')">Add to Cart</button>
-                </div>
-            </div>
-            <div class="prod-card pc-theme">
-                <span class="badge red-bg">-20%</span>
-                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">God of War Ragnarok</div>
-                    <div class="prod-price-red">₹2,999</div>
-                    <button class="buy-btn-red" onclick="addToCart('God of War Ragnarok', 2999, 'image1.png.png')">Add to Cart</button>
-                </div>
-            </div>
-            <div class="prod-card pc-theme">
-                <span class="badge red-bg">-25%</span>
-                <div class="prod-img" style="background-image: url('image1.png.png');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">Forza Horizon 5</div>
-                    <div class="prod-price-red">₹1,999</div>
-                    <button class="buy-btn-red" onclick="addToCart('Forza Horizon 5', 1999, 'image1.png.png')">Add to Cart</button>
-                </div>
-            </div>
+        <div class="prod-grid" id="pcGamesGrid">
+            <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live PC games from database...</p>
         </div>
     </section>
 
-    <!-- PS5 Games Section -->
     <section id="ps5-section" class="home-products-section ps5-bg">
         <div class="sec-title-bar">
             <div class="title-left blue-title"><span></span> FEATURED PS5 GAMES</div>
             <a href="ps5.html" class="view-all blue-link">View PS5 Store &rarr;</a>
         </div>
-        <div class="prod-grid">
-            <div class="prod-card ps5-theme">
-                <span class="badge blue-bg">-20%</span>
-                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=God+of+War');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">God of War Ragnarök</div>
-                    <div class="price-flex">
-                        <div class="price-details"><span class="curr-price">₹2,799</span><span class="old-price">₹3,499</span></div>
-                        <button class="cart-btn-blue" onclick="addToCart('God of War Ragnarök (PS5)', 2799, 'https://via.placeholder.com/300x400/12141a/fff?text=God+of+War')"><i class="fa-solid fa-cart-shopping"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="prod-card ps5-theme">
-                <span class="badge blue-bg">-25%</span>
-                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=Spider-Man+2');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">Marvel's Spider-Man 2</div>
-                    <div class="price-flex">
-                        <div class="price-details"><span class="curr-price">₹2,999</span><span class="old-price">₹3,999</span></div>
-                        <button class="cart-btn-blue" onclick="addToCart('Marvel\\'s Spider-Man 2', 2999, 'https://via.placeholder.com/300x400/12141a/fff?text=Spider-Man+2')"><i class="fa-solid fa-cart-shopping"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="prod-card ps5-theme">
-                <span class="badge blue-bg">-30%</span>
-                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=Horizon');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">Horizon Forbidden West</div>
-                    <div class="price-flex">
-                        <div class="price-details"><span class="curr-price">₹2,599</span><span class="old-price">₹3,699</span></div>
-                        <button class="cart-btn-blue" onclick="addToCart('Horizon Forbidden West', 2599, 'https://via.placeholder.com/300x400/12141a/fff?text=Horizon')"><i class="fa-solid fa-cart-shopping"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="prod-card ps5-theme">
-                <span class="badge blue-bg">-25%</span>
-                <div class="prod-img" style="background-image: url('https://via.placeholder.com/300x400/12141a/fff?text=TLOU');"></div>
-                <div class="prod-info">
-                    <div class="prod-title">The Last of Us Part I</div>
-                    <div class="price-flex">
-                        <div class="price-details"><span class="curr-price">₹2,249</span><span class="old-price">₹2,999</span></div>
-                        <button class="cart-btn-blue" onclick="addToCart('The Last of Us Part I', 2249, 'https://via.placeholder.com/300x400/12141a/fff?text=TLOU')"><i class="fa-solid fa-cart-shopping"></i></button>
-                    </div>
-                </div>
-            </div>
+        <div class="prod-grid" id="ps5GamesGrid">
+            <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live PS5 games from database...</p>
         </div>
     </section>
 
-    <!-- FIREBASE MODULE & LOGIC -->
+    <script>
+        window.liveGamesDatabase = [];
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; // CHANGED: Load shared cart from Local Storage
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -460,7 +424,87 @@
         let currentUser = null;
         let currentTokens = 0;
 
-        // User Auth State Tracker (No forced popups, runs quietly in background)
+        // --- 1. REAL-TIME GAMES FETCHING (LIVE INVENTORY) ---
+        const qGames = query(collection(db, "games"), orderBy("createdAt", "desc"));
+        onSnapshot(qGames, (snapshot) => {
+            const pcGrid = document.getElementById('pcGamesGrid');
+            const ps5Grid = document.getElementById('ps5GamesGrid');
+            
+            pcGrid.innerHTML = '';
+            ps5Grid.innerHTML = '';
+            window.liveGamesDatabase = []; 
+
+            if(snapshot.empty) {
+                pcGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PC games found in database.</p>`;
+                ps5Grid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PS5 games found in database.</p>`;
+                return;
+            }
+
+            snapshot.forEach((gameDoc) => {
+                const game = gameDoc.data();
+                
+                // Add to Global Search Array - CHANGED link to new details page
+                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${game.rentPrice} (Rent) / ₹${game.permPrice} (Buy)`;
+                window.liveGamesDatabase.push({
+                    title: game.title,
+                    price: searchPrice,
+                    platform: game.platform,
+                    img: game.image,
+                    link: `game-details.html?id=${gameDoc.id}` 
+                });
+
+                // Generate UI elements for badges and old prices
+                let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
+                let oldPrice = game.oldPrice ? `<span class="old-price" style="margin-left:5px; font-size:12px; color:gray; text-decoration:line-through;">₹${game.oldPrice}</span>` : '';
+                let descText = game.desc ? game.desc.substring(0, 55) + '...' : '';
+                
+                // Escape quotes in titles to prevent broken HTML buttons
+                let escapedTitle = game.title.replace(/'/g, "\\'");
+
+                // Build HTML Card based on Platform Category - CHANGED: added onclick for details page and stopPropagation for buttons
+                if (game.platform === 'PC') {
+                    pcGrid.innerHTML += `
+                    <div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
+                        ${badgeHTML}
+                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
+                        <div class="prod-info">
+                            <div class="prod-title">${game.title}</div>
+                            <div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div>
+                            <div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div>
+                            <button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button>
+                        </div>
+                    </div>`;
+                } else {
+                    ps5Grid.innerHTML += `
+                    <div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
+                        ${badgeHTML}
+                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
+                        <div class="prod-info">
+                            <div class="prod-title">${game.title}</div>
+                            <div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div>
+                            
+                            <div class="price-flex" style="margin-bottom:10px; align-items:center;">
+                                <div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;">
+                                    <span style="font-size:10px; color:#ccc;">1 Month Rent:</span>
+                                    <div><span class="curr-price" style="font-size:14px;">₹${game.rentPrice}</span> ${oldPrice}</div>
+                                </div>
+                                <button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${game.rentPrice}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button>
+                            </div>
+                            
+                            <div class="price-flex" style="align-items:center;">
+                                <div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;">
+                                    <span style="font-size:10px; color:#ccc;">Permanent Buy:</span>
+                                    <div><span class="curr-price" style="font-size:14px;">₹${game.permPrice}</span></div>
+                                </div>
+                                <button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${game.permPrice}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            });
+        });
+
+        // --- 2. AUTHENTICATION & LOGIN LOGIC ---
         onAuthStateChanged(auth, async (user) => {
             const authBtn = document.getElementById('authBtn');
             if (user) {
@@ -513,7 +557,7 @@
             }
         }
 
-        // Proceed to Payment triggers login ONLY when clicked and user is not logged in
+        // --- 3. CHECKOUT & PAYMENT ---
         window.proceedToPayment = async function() {
             if (window.cartArray.length === 0) {
                 alert("Bhai pehle koi game toh add kar le cart mein!");
@@ -553,6 +597,7 @@
                 alert(`Booking Successful!\nYou earned ${earnedTokens} GameFlex-Tokens! 🪙`);
                 
                 window.cartArray = [];
+                localStorage.removeItem('gf_cart'); // CHANGED: Clear cart from local storage
                 window.updateCartUI();
                 window.toggleCart();
             } catch (error) {
@@ -590,30 +635,17 @@
         window.currentTokensGlobal = () => currentTokens;
     </script>
 
-    <!-- SEARCH & CART FRONTEND UI LOGIC -->
     <script>
-        const gamesDatabase = [
-            { title: "God of War Ragnarok", price: "₹2,999", platform: "PC / PS5", img: "image1.png.png", link: "#pc-section" },
-            { title: "God of War (2018)", price: "₹1,499", platform: "PC", img: "image1.png.png", link: "#pc-section" },
-            { title: "Marvel's Spider-Man 2", price: "₹2,999", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=Spider-Man", link: "#ps5-section" },
-            { title: "Elden Ring", price: "₹2,499", platform: "PC", img: "image1.png.png", link: "#pc-section" },
-            { title: "Red Dead Redemption 2", price: "₹1,599", platform: "PC", img: "image1.png.png", link: "#pc-section" },
-            { title: "Horizon Forbidden West", price: "₹2,599", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=Horizon", link: "#ps5-section" },
-            { title: "The Last of Us Part I", price: "₹2,249", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=TLOU", link: "#ps5-section" },
-            { title: "Ghost of Tsushima DC", price: "₹2,499", platform: "PS5", img: "https://via.placeholder.com/100x120/12141a/fff?text=Ghost", link: "#ps5-section" },
-            { title: "Forza Horizon 5", price: "₹1,999", platform: "PC", img: "image1.png.png", link: "#pc-section" },
-            { title: "Cyberpunk 2077", price: "₹1,999", platform: "PC", img: "image1.png.png", link: "#pc-section" }
-        ];
-
         const searchInput = document.getElementById('gameSearch');
         const searchDropdown = document.getElementById('searchDropdown');
 
+        // Search Bar Logic connected to LIVE Database Array
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             searchDropdown.innerHTML = ''; 
 
             if (query.length > 0) {
-                const filteredGames = gamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
                 searchDropdown.style.display = 'block';
 
                 if (filteredGames.length > 0) {
@@ -645,8 +677,6 @@
             }
         });
 
-        window.cartArray = [];
-
         window.toggleCart = function() {
             document.getElementById('cartSidebar').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('active');
@@ -658,15 +688,17 @@
             if(existingItem) {
                 existingItem.qty += 1;
             } else {
-                window.cartArray.push({ title: title, price: price, img: imgUrl, qty: 1 });
+                window.cartArray.push({ title: title, price: Number(price), img: imgUrl, qty: 1 });
             }
             
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); // CHANGED: Update shared local storage
             window.updateCartUI();
             window.toggleCart(); 
         };
 
         window.removeFromCart = function(index) {
             window.cartArray.splice(index, 1);
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); // CHANGED: Update shared local storage
             window.updateCartUI();
         };
 
@@ -713,6 +745,9 @@
                 claimBtn.style.display = "none";
             }
         };
+
+        // Initialize UI on load
+        window.updateCartUI();
     </script>
 </body>
 </html>
