@@ -460,29 +460,39 @@
         window.updateCartUI = function() {
             const itemsContainer = document.getElementById('cartItemsContainer');
             itemsContainer.innerHTML = '';
-            let totalAmount = 0; let totalQty = 0;
+            let subtotal = 0; 
+    let totalQty = 0;
 
-            if (window.cartArray.length === 0) {
-                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Cart is empty.</div>';
-            } else {
-                window.cartArray.forEach((item, index) => {
-                    totalAmount += (item.price * item.qty);
-                    totalQty += item.qty;
-                    itemsContainer.innerHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
-                            <div class="cart-item-details">
-                                <div class="cart-item-title">${item.title} (x${item.qty})</div>
-                                <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
-                            </div>
-                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    `;
-                });
-            }
-            document.getElementById('cartBadgeCount').innerText = totalQty;
-            document.getElementById('cartTotalPrice').innerText = '₹' + totalAmount.toLocaleString('en-IN');
-        };
+    if (window.cartArray.length === 0) {
+        itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Cart is empty.<br>Start adding games!</div>';
+        subtotal = 0;
+    } else {
+        window.cartArray.forEach((item, index) => {
+            subtotal += (item.price * item.qty);
+            totalQty += item.qty;
+            itemsContainer.innerHTML += `
+                <div class="cart-item">
+                    <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.title} (x${item.qty})</div>
+                        <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `;
+        });
+    }
+
+    // Apply Coupon Discount Calculation
+    const discount = window.appliedDiscount || 0;
+    const finalTotal = Math.max(0, subtotal - discount);
+
+    // Update the UI elements for total price
+    document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
+        
+            
+}      
+
     </script>
 </body>
 </html>

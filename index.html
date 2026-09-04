@@ -238,20 +238,19 @@
     </div>
 
     <!-- NEW PAYMENT MODAL -->
-    <div class="payment-overlay" id="paymentOverlay">
-        <div class="payment-modal">
-            <button class="close-payment" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color: var(--text-light); margin-bottom: 10px;"><i class="fa-solid fa-qrcode" style="color: var(--primary-red);"></i> Scan to Pay</h2>
-            <p style="color: var(--text-gray); font-size: 14px;">Total Amount: <span id="paymentTotalAmount" style="color: var(--primary-red); font-weight: bold; font-size: 18px;">₹0</span></p>
+    <div class="payment-overlay" id="paymentOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="payment-modal" style="background: #12141a; border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; position: relative;">
+            <button class="close-payment" onclick="closePaymentModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 18px; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color: white; margin-bottom: 10px; font-size: 20px;"><i class="fa-solid fa-qrcode" style="color: #ff3333;"></i> Scan & Pay Exact Amount</h2>
+            <p style="color: gray; font-size: 14px; margin-bottom: 15px;">Total Amount: <span id="paymentTotalAmount" style="color: #ff3333; font-weight: bold; font-size: 18px;">₹0</span></p>
             
-            <div class="qr-container">
-                <!-- EXACT IMAGE REQUESTED -->
-                <img src="qr.png" alt="Payment QR Code">
+            <div class="qr-container" style="background: white; padding: 10px; border-radius: 8px; margin: 15px auto; width: 180px; height: 180px; display: flex; justify-content: center; align-items: center;">
+                <img id="dynamicQRCode" src="" alt="Scan & Pay UPI QR" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
             
-            <p style="font-size: 11px; color: gray; margin-bottom: 15px; line-height: 1.4;">Please scan the QR code above using any UPI app (GPay, PhonePe, Paytm). After successful payment, click the button below to confirm.</p>
+            <p style="font-size: 11px; color: gray; margin-bottom: 20px; line-height: 1.4;">Scan using any UPI app. Amount is locked. Click below after payment.</p>
             
-            <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndPlaceOrder()">I HAVE PAID</button>
+            <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndSendWhatsApp()" style="width: 100%; background: #ff3333; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">I HAVE PAID (Notify on WhatsApp)</button>
         </div>
     </div>
 
@@ -323,6 +322,14 @@
         <div class="cart-items" id="cartItemsContainer">
             <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
+        <!-- COUPON CODE SECTION INSIDE CART -->
+<div class="coupon-section" style="margin: 15px 0; padding: 10px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 6px;">
+    <div style="display: flex; gap: 8px;">
+        <input type="text" id="couponInput" placeholder="Enter Coupon Code" style="flex: 1; padding: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 4px; font-size: 12px; outline: none; text-transform: uppercase;">
+        <button onclick="applyCoupon()" style="background: var(--primary-red); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; cursor: pointer;">Apply</button>
+    </div>
+    <p id="couponMsg" style="font-size: 11px; margin-top: 5px; color: gray;"></p>
+</div>
         <div class="cart-footer">
             <div class="cart-total">
                 <span>Total:</span>
@@ -574,62 +581,83 @@
         };
 
         // --- NEW CHECKOUT & PAYMENT LOGIC (QR CODE MODAL) ---
-        window.proceedToPayment = async function() {
-            if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
-            if (!currentUser) { alert("Please login first!"); await loginUser(); return; }
+       // --- DYNAMIC UPI QR & WHATSAPP CHECKOUT LOGIC ---
+const MY_WHATSAPP_NUMBER = "9310885368"; // <-- Yahan apna WhatsApp number daal lena (Country code ke sath)
+const MY_UPI_ID = "8307105368@fam";             // <-- Yahan apni asli UPI ID daal dena
 
-            const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            
-            // Set Total Amount in Payment Modal
-            document.getElementById('paymentTotalAmount').innerText = '₹' + total.toLocaleString('en-IN');
-            
-            // Close Cart & Open Payment Popup
-            window.toggleCart();
-            document.getElementById('paymentOverlay').style.display = 'flex';
-        };
+window.proceedToPayment = async function() {
+    if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
+    if (!currentUser) { alert("Please login first!"); await loginUser(); return; }
 
-        window.closePaymentModal = function() {
-            document.getElementById('paymentOverlay').style.display = 'none';
-        };
+    const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    
+    // Set Total Amount in Modal
+    document.getElementById('paymentTotalAmount').innerText = '₹' + total.toLocaleString('en-IN');
+    
+    // Generate Dynamic UPI String with locked amount
+    const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${total}&cu=INR`;
+    
+    // Generate live dynamic QR code based on cart amount
+    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+    document.getElementById('dynamicQRCode').src = qrApiUrl;
 
-        window.confirmAndPlaceOrder = async function() {
-            const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            const earnedTokens = Math.floor(total / 100) * 10; 
-            
-            const confirmBtn = document.getElementById('confirmPaymentBtn');
-            confirmBtn.disabled = true;
-            confirmBtn.innerText = "Verifying & Booking...";
+    // Close Cart & Open Payment Modal
+    window.toggleCart();
+    document.getElementById('paymentOverlay').style.display = 'flex';
+};
 
-            try {
-                // Sent to Firebase with "Pending Verification" Status
-                await addDoc(collection(db, "bookings"), {
-                    userId: currentUser.uid, 
-                    userName: currentUser.displayName, 
-                    userEmail: currentUser.email,
-                    items: window.cartArray, 
-                    totalAmount: total, 
-                    status: "Pending Verification", 
-                    createdAt: serverTimestamp()
-                });
+window.closePaymentModal = function() {
+    document.getElementById('paymentOverlay').style.display = 'none';
+};
 
-                if (earnedTokens > 0) {
-                    await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
-                }
+window.confirmAndSendWhatsApp = async function() {
+    const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    const earnedTokens = Math.floor(total / 100) * 10; 
+    
+    const confirmBtn = document.getElementById('confirmPaymentBtn');
+    confirmBtn.disabled = true;
+    confirmBtn.innerText = "Processing Order...";
 
-                alert(`Payment Confirmed & Booking Successful!\nOur team will verify the payment shortly.\nYou earned ${earnedTokens} GameFlex-Tokens! 🪙`);
-                
-                window.cartArray = []; 
-                localStorage.removeItem('gf_cart'); 
-                window.updateCartUI(); 
-                closePaymentModal();
-            } catch (error) { 
-                console.error("Booking Error: ", error);
-                alert("Failed to save booking"); 
-            } finally { 
-                confirmBtn.disabled = false; 
-                confirmBtn.innerText = "I HAVE PAID"; 
-            }
-        };
+    let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
+
+    try {
+        // 1. Save Booking in Firebase with Pending Verification status
+        await addDoc(collection(db, "bookings"), {
+            userId: currentUser.uid, 
+            userName: currentUser.displayName, 
+            userEmail: currentUser.email,
+            items: window.cartArray, 
+            totalAmount: total, 
+            status: "Pending Verification", 
+            createdAt: serverTimestamp()
+        });
+
+        // 2. Add tokens to user profile
+        if (earnedTokens > 0) {
+            await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
+        }
+
+        // 3. Construct WhatsApp Message URL
+        const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
+        const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+        // Clear cart locally
+        window.cartArray = []; 
+        localStorage.removeItem('gf_cart'); 
+        window.updateCartUI(); 
+        closePaymentModal();
+
+        // Open WhatsApp chat automatically with pre-filled message
+        window.open(whatsappUrl, '_blank');
+
+    } catch (error) { 
+        console.error("Booking Error: ", error);
+        alert("Failed to save booking"); 
+    } finally { 
+        confirmBtn.disabled = false; 
+        confirmBtn.innerText = "I HAVE PAID (Notify on WhatsApp)"; 
+    }
+};
 
         window.claimFreeGame = async function() {
             if (!currentUser) return;
@@ -647,6 +675,41 @@
     </script>
 
     <script>
+        // --- COUPON SYSTEM LOGIC ---
+let appliedDiscount = 0; 
+let activeCouponCode = "";
+
+window.applyCoupon = function() {
+    const code = document.getElementById('couponInput').value.trim().toUpperCase();
+    const msg = document.getElementById('couponMsg');
+    
+    const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    
+    if (subtotal === 0) {
+        msg.style.color = "#ff3333";
+        msg.innerText = "Cart is empty!";
+        return;
+    }
+
+    if (code === "GAMEFLEX10") {
+        appliedDiscount = Math.round(subtotal * 0.10); 
+        activeCouponCode = code;
+        msg.style.color = "#4BB543";
+        msg.innerText = `🎉 Coupon applied! You saved ₹${appliedDiscount}`;
+    } else if (code === "FLAT50") {
+        appliedDiscount = 50; 
+        activeCouponCode = code;
+        msg.style.color = "#4BB543";
+        msg.innerText = `🎉 Coupon applied! Flat ₹50 off.`;
+    } else {
+        appliedDiscount = 0;
+        activeCouponCode = "";
+        msg.style.color = "#ff3333";
+        msg.innerText = "❌ Invalid coupon code.";
+    }
+
+    window.updateCartUI();
+};
         const searchInput = document.getElementById('gameSearch');
         const searchDropdown = document.getElementById('searchDropdown');
 
