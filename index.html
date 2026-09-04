@@ -26,7 +26,7 @@
         .top-bar a { color: var(--primary-red); text-decoration: none; font-weight: 600; }
 
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; color: white; text-decoration: none; }
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
         .nav-links { display: flex; gap: 25px; list-style: none; }
@@ -66,7 +66,6 @@
         .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .onboarding-submit:hover { background: #c1121d; }
 
-        /* NEW PAYMENT MODAL CSS */
         .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .payment-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 350px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .close-payment { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-gray); font-size: 20px; cursor: pointer; transition: 0.3s; }
@@ -171,14 +170,22 @@
 
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
         .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
+        .home-products-section.offers-bg { background: linear-gradient(to bottom, #180505, #0b0c10); } 
+        .home-products-section.reviews-bg { background: #0b0c10; border-top: 1px solid var(--border-dark); }
         
         .sec-title-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border-dark); }
         .title-left { font-size: 22px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; gap: 12px; }
         .title-left.red-title span { width: 5px; height: 22px; background: var(--primary-red); border-radius: 3px; display: inline-block; }
         .title-left.blue-title span { width: 5px; height: 22px; background: var(--ps5-blue); border-radius: 3px; display: inline-block; }
+        .title-left.gold-title span { width: 5px; height: 22px; background: #FFD700; border-radius: 3px; display: inline-block; }
+        .title-left.white-title span { width: 5px; height: 22px; background: white; border-radius: 3px; display: inline-block; }
+        
         .view-all { font-size: 14px; font-weight: 600; text-decoration: none; transition: 0.3s; }
         .view-all.red-link { color: var(--primary-red); }
         .view-all.blue-link { color: var(--ps5-blue); }
+        .view-all.gold-link { color: #FFD700; }
+        .view-all.white-link { color: var(--text-gray); }
+        .view-all.white-link:hover { color: white; }
         .view-all:hover { text-decoration: underline; }
 
         .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
@@ -204,11 +211,20 @@
         .old-price { font-size: 12px; font-weight: 600; color: var(--text-gray); text-decoration: line-through; }
         .cart-btn-blue { background: var(--ps5-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; position: relative; z-index: 5;}
         .cart-btn-blue:hover { background: #0051ed; box-shadow: 0 0 10px rgba(31, 106, 255, 0.5); }
+        
+        /* COMMUNITY REVIEWS CSS */
+        .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .review-card { background: var(--card-bg); border: 1px solid var(--border-dark); padding: 25px; border-radius: 12px; transition: 0.3s; }
+        .review-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .reviewer-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .reviewer-avatar { width: 45px; height: 45px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; border: 1px solid #444; }
+        .stars { color: #FFD700; font-size: 12px; margin-top: 5px; }
+        .review-text { font-size: 14px; color: var(--text-gray); line-height: 1.6; font-style: italic; }
     </style>
 </head>
 <body>
 
-    <!-- Onboarding Modal (Appears only after login if profile is incomplete) -->
+    <!-- Onboarding Modal -->
     <div id="onboardingOverlay" class="onboarding-overlay">
         <div class="onboarding-modal">
             <h2>Welcome to GameFlex!</h2>
@@ -237,7 +253,7 @@
         </div>
     </div>
 
-    <!-- NEW PAYMENT MODAL -->
+    <!-- PAYMENT MODAL -->
     <div class="payment-overlay" id="paymentOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
         <div class="payment-modal" style="background: #12141a; border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; position: relative;">
             <button class="close-payment" onclick="closePaymentModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 18px; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
@@ -257,9 +273,10 @@
     <div class="top-bar">
         <i class="fa-solid fa-fire"></i>
         <span>Limited Time Offer! Get up to 30% OFF on selected games.</span>
-        <a href="#">Shop Now &rarr;</a>
+        <a href="offer.html">Shop Now &rarr;</a>
     </div>
 
+    <!-- NAVBAR -->
     <nav class="navbar">
         <a href="index.html" class="logo">
             <div class="logo-icon">
@@ -268,26 +285,23 @@
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
         </a>
         <ul class="nav-links">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
-            <li><a href="ps5.html">PS5 Games</a></li>
-            <li><a href="#">Bundles</a></li>
+            <li><a href="ps5.html">PlayStation Games</a></li>
+            <li><a href="offer.html">Offers</a></li>
             <li><a href="#">Pre-Orders</a></li>
-            <li><a href="#">Offers</a></li>
+            <li><a href="#reviews-section">Community Reviews</a></li>
         </ul>
         <div class="nav-actions">
-            
             <div class="search-container">
                 <input type="text" id="gameSearch" class="search-input" placeholder="Search God of War..." autocomplete="off">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <div class="search-dropdown" id="searchDropdown"></div>
             </div>
-
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
-            
             <div id="tokenTracker" class="token-tracker-container" title="Collect 500 to get a Free Game!" style="display: none;">
                 <div class="circular-progress">
                     <svg viewBox="0 0 44 44">
@@ -301,12 +315,9 @@
                     <span id="tokenFraction">0 / 500</span>
                 </div>
             </div>
-
             <a href="admin.html" class="admin-link-btn" title="Admin Portal">
                 <i class="fa-solid fa-shield-halved"></i> <span class="hide-mobile">Admin</span>
             </a>
-
-            <!-- User Login/Profile Button -->
             <button class="login-btn" id="authBtn">
                 <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
             </button>
@@ -322,22 +333,19 @@
         <div class="cart-items" id="cartItemsContainer">
             <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
-        <!-- COUPON CODE SECTION INSIDE CART -->
-<div class="coupon-section" style="margin: 15px 0; padding: 10px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 6px;">
-    <div style="display: flex; gap: 8px;">
-        <input type="text" id="couponInput" placeholder="Enter Coupon Code" style="flex: 1; padding: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 4px; font-size: 12px; outline: none; text-transform: uppercase;">
-        <button onclick="applyCoupon()" style="background: var(--primary-red); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; cursor: pointer;">Apply</button>
-    </div>
-    <p id="couponMsg" style="font-size: 11px; margin-top: 5px; color: gray;"></p>
-</div>
+        <div class="coupon-section" style="margin: 15px 0; padding: 10px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 6px;">
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="couponInput" placeholder="Enter Coupon Code" style="flex: 1; padding: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 4px; font-size: 12px; outline: none; text-transform: uppercase;">
+                <button onclick="applyCoupon()" style="background: var(--primary-red); color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; cursor: pointer;">Apply</button>
+            </div>
+            <p id="couponMsg" style="font-size: 11px; margin-top: 5px; color: gray;"></p>
+        </div>
         <div class="cart-footer">
             <div class="cart-total">
                 <span>Total:</span>
                 <span id="cartTotalPrice">₹0</span>
             </div>
             <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> CLAIM FREE GAME (500 Tokens)</button>
-            
-            <!-- CHANGED TO TRIGGER PAYMENT MODAL -->
             <button class="checkout-btn" id="checkoutBtn" onclick="proceedToPayment()">Proceed to Payment</button>
             <p id="tokenEarnText" style="text-align:center; font-size:12px; color:#FFD700; margin-top:10px; font-weight:600;"></p>
         </div>
@@ -354,7 +362,7 @@
             <p>Discover the biggest titles, instant digital delivery, exclusive bundles, and unbeatable prices on PC & PlayStation games.</p>
             <div class="hero-btns">
                 <a href="pc.html" class="btn-primary">Explore Games</a>
-                <a href="ps5.html" class="btn-outline">View PS5 Offers</a>
+                <a href="offer.html" class="btn-outline">View Offers</a>
             </div>
         </div>
     </header>
@@ -392,19 +400,15 @@
             </a>
             <a href="ps5.html" class="cat-card">
                 <div class="cat-img" style="background-image: url('PS5.png');"></div>
-                <h3>PS5 Games</h3>
+                <h3>PlayStation Games</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <div class="cat-card">
-                <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Bundle+Image');"></div>
-                <h3>Bundles</h3>
+            <a href="offer.html" class="cat-card">
+                <!-- SPECIAL OFFERS IMAGE YAHAN LAGA DI HAI -->
+                <div class="cat-img" style="background-image: url('offers.png');"></div>
+                <h3>Special Offers</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-            </div>
-            <div class="cat-card">
-                <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Gift+Card+Image');"></div>
-                <h3>Gift Cards</h3>
-                <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-            </div>
+            </a>
             <div class="cat-card">
                 <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Pre-Orders+Image');"></div>
                 <h3>Pre-Orders</h3>
@@ -413,6 +417,7 @@
         </div>
     </section>
 
+    <!-- 1. PC GAMES SECTION -->
     <section id="pc-section" class="home-products-section">
         <div class="sec-title-bar">
             <div class="title-left red-title"><span></span> POPULAR PC GAMES</div>
@@ -423,19 +428,65 @@
         </div>
     </section>
 
+    <!-- 2. PLAYSTATION GAMES SECTION -->
     <section id="ps5-section" class="home-products-section ps5-bg">
         <div class="sec-title-bar">
-            <div class="title-left blue-title"><span></span> FEATURED PS5 GAMES</div>
-            <a href="ps5.html" class="view-all blue-link">View PS5 Store &rarr;</a>
+            <div class="title-left blue-title"><span></span> PLAYSTATION GAMES</div>
+            <a href="ps5.html" class="view-all blue-link">View PlayStation Store &rarr;</a>
         </div>
         <div class="prod-grid" id="ps5GamesGrid">
-            <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live PS5 games from database...</p>
+            <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live Console games from database...</p>
+        </div>
+    </section>
+
+    <!-- 3. SPECIAL OFFERS SECTION -->
+    <section id="offers-home-section" class="home-products-section offers-bg">
+        <div class="sec-title-bar">
+            <div class="title-left gold-title"><span></span> 🔥 SPECIAL OFFERS & DEALS</div>
+            <a href="offer.html" class="view-all gold-link">View All Offers &rarr;</a>
+        </div>
+        <div class="prod-grid" id="offersGamesGridHome">
+            <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading special offers from database...</p>
+        </div>
+    </section>
+
+    <!-- 4. COMMUNITY REVIEWS SECTION -->
+    <section id="reviews-section" class="home-products-section reviews-bg">
+        <div class="sec-title-bar">
+            <div class="title-left white-title"><span></span> 💬 COMMUNITY REVIEWS</div>
+            <a href="#" class="view-all white-link">View All Reviews &rarr;</a>
+        </div>
+        <div class="review-grid">
+            <!-- Review 1 -->
+            <div class="review-card">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">R</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 700; color: white;">Rahul Sharma</div>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    </div>
+                </div>
+                <div class="review-text">"Got my PS5 game within 2 minutes of payment! The WhatsApp delivery is super fast and the price is unbeatable. Highly recommended."</div>
+            </div>
+            <!-- Review 2 -->
+            <div class="review-card">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">A</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 700; color: white;">Aman Gupta</div>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                    </div>
+                </div>
+                <div class="review-text">"Used the GAMEFLEX10 coupon and saved extra money on Red Dead Redemption 2. The admin support is really helpful if you have any doubts."</div>
+            </div>
         </div>
     </section>
 
     <script>
         window.liveGamesDatabase = [];
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
+        window.appliedDiscount = 0; 
+        window.activeCouponCode = "";
     </script>
 
     <script type="module">
@@ -460,53 +511,70 @@
         let currentUser = null;
         let currentTokens = 0;
 
-        // Fetch Games
-        const qGames = query(collection(db, "games"), orderBy("createdAt", "desc"));
+        const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             const pcGrid = document.getElementById('pcGamesGrid');
             const ps5Grid = document.getElementById('ps5GamesGrid');
+            const offersGrid = document.getElementById('offersGamesGridHome');
             
             pcGrid.innerHTML = '';
             ps5Grid.innerHTML = '';
+            offersGrid.innerHTML = '';
             window.liveGamesDatabase = []; 
 
             if(snapshot.empty) {
                 pcGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PC games found in database.</p>`;
-                ps5Grid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PS5 games found in database.</p>`;
+                ps5Grid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PlayStation games found in database.</p>`;
+                offersGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No special offers active right now.</p>`;
                 return;
             }
 
             snapshot.forEach((gameDoc) => {
                 const game = gameDoc.data();
-                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${game.rentPrice} (Rent) / ₹${game.permPrice} (Buy)`;
+                
+                let rent = game.rentalPrice || game.rentPrice || 0;
+                let perm = game.permanentPrice || game.permPrice || 0;
+                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
+                
                 window.liveGamesDatabase.push({
                     title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
                 });
 
                 let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
-                let oldPrice = game.oldPrice ? `<span class="old-price" style="margin-left:5px; font-size:12px; color:gray; text-decoration:line-through;">₹${game.oldPrice}</span>` : '';
-                let descText = game.desc ? game.desc.substring(0, 55) + '...' : '';
+                let oldPrice = game.originalPrice ? `<span class="old-price" style="margin-left:5px; font-size:12px; color:gray; text-decoration:line-through;">₹${game.originalPrice}</span>` : '';
+                
+                let descText = (game.description || game.desc || '').substring(0, 55) + '...';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
 
+                let isOffer = (game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%" && game.discount !== "");
+                let cardHTML = '';
+
                 if (game.platform === 'PC') {
-                    pcGrid.innerHTML += `<div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
+                    cardHTML = `<div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
+                    
+                    pcGrid.innerHTML += cardHTML;
+                    if(isOffer) offersGrid.innerHTML += cardHTML;
                 } else {
-                    ps5Grid.innerHTML += `<div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex" style="margin-bottom:10px; align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">1 Month Rent:</span><div><span class="curr-price" style="font-size:14px;">₹${game.rentPrice}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${game.rentPrice}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">Permanent Buy:</span><div><span class="curr-price" style="font-size:14px;">₹${game.permPrice}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${game.permPrice}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
+                    cardHTML = `<div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex" style="margin-bottom:10px; align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">1 Month Rent:</span><div><span class="curr-price" style="font-size:14px;">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">Permanent Buy:</span><div><span class="curr-price" style="font-size:14px;">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
+                    
+                    ps5Grid.innerHTML += cardHTML;
+                    if(isOffer) offersGrid.innerHTML += cardHTML;
                 }
             });
+
+            if(offersGrid.innerHTML === '') {
+                offersGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No special offers active right now.</p>`;
+            }
         });
 
-        // --- AUTHENTICATION & ONBOARDING ---
         onAuthStateChanged(auth, async (user) => {
             const authBtn = document.getElementById('authBtn');
             if (user) {
                 currentUser = user;
-                
                 authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${user.displayName.split(' ')[0]}</span>`;
                 authBtn.onclick = () => { window.location.href = "profile.html"; };
                 
                 const userRef = doc(db, "users", user.uid);
-                
                 const userSnap = await getDoc(userRef);
                 if (!userSnap.exists() || !userSnap.data().gamerType) {
                     document.getElementById('obName').value = user.displayName || '';
@@ -542,29 +610,20 @@
             catch (err) { alert("Login failed: " + err.message); }
         }
 
-        // --- SUBMITTING ONBOARDING FORM ---
         document.getElementById('onboardingForm').onsubmit = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
-
             const name = document.getElementById('obName').value;
             const selectedRadio = document.querySelector('input[name="gamerType"]:checked');
-            
             if (!selectedRadio) { alert("Please select your gamer type!"); return; }
-
             const submitBtn = document.querySelector('.onboarding-submit');
             submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
 
             try {
                 await setDoc(doc(db, "users", currentUser.uid), {
-                    name: name, 
-                    email: currentUser.email, 
-                    gamerType: selectedRadio.value,
-                    tokens: currentTokens || 0, 
-                    lastLogin: serverTimestamp(),
-                    createdAt: serverTimestamp() 
+                    name: name, email: currentUser.email, gamerType: selectedRadio.value, tokens: currentTokens || 0, 
+                    lastLogin: serverTimestamp(), createdAt: serverTimestamp() 
                 }, { merge: true });
-
                 document.getElementById('onboardingOverlay').style.display = 'none';
                 alert(`Welcome aboard, ${name}! Your profile is ready.`);
             } catch (err) { 
@@ -580,84 +639,64 @@
             element.querySelector('input').checked = true;
         };
 
-        // --- NEW CHECKOUT & PAYMENT LOGIC (QR CODE MODAL) ---
-       // --- DYNAMIC UPI QR & WHATSAPP CHECKOUT LOGIC ---
-const MY_WHATSAPP_NUMBER = "9310885368"; // <-- Yahan apna WhatsApp number daal lena (Country code ke sath)
-const MY_UPI_ID = "8307105368@fam";             // <-- Yahan apni asli UPI ID daal dena
+        const MY_WHATSAPP_NUMBER = "9310885368"; 
+        const MY_UPI_ID = "8307105368@fam"; 
 
-window.proceedToPayment = async function() {
-    if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
-    if (!currentUser) { alert("Please login first!"); await loginUser(); return; }
+        window.proceedToPayment = async function() {
+            if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
+            if (!currentUser) { alert("Please login first!"); await loginUser(); return; }
 
-    const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
-    
-    // Set Total Amount in Modal
-    document.getElementById('paymentTotalAmount').innerText = '₹' + total.toLocaleString('en-IN');
-    
-    // Generate Dynamic UPI String with locked amount
-    const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${total}&cu=INR`;
-    
-    // Generate live dynamic QR code based on cart amount
-    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
-    document.getElementById('dynamicQRCode').src = qrApiUrl;
+            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
+            document.getElementById('paymentTotalAmount').innerText = '₹' + total.toLocaleString('en-IN');
+            
+            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${total}&cu=INR`;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('dynamicQRCode').src = qrApiUrl;
 
-    // Close Cart & Open Payment Modal
-    window.toggleCart();
-    document.getElementById('paymentOverlay').style.display = 'flex';
-};
+            window.toggleCart();
+            document.getElementById('paymentOverlay').style.display = 'flex';
+        };
 
-window.closePaymentModal = function() {
-    document.getElementById('paymentOverlay').style.display = 'none';
-};
+        window.closePaymentModal = function() {
+            document.getElementById('paymentOverlay').style.display = 'none';
+        };
 
-window.confirmAndSendWhatsApp = async function() {
-    const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
-    const earnedTokens = Math.floor(total / 100) * 10; 
-    
-    const confirmBtn = document.getElementById('confirmPaymentBtn');
-    confirmBtn.disabled = true;
-    confirmBtn.innerText = "Processing Order...";
+        window.confirmAndSendWhatsApp = async function() {
+            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
+            const earnedTokens = Math.floor(total / 100) * 10; 
+            
+            const confirmBtn = document.getElementById('confirmPaymentBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerText = "Processing Order...";
 
-    let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
+            let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
 
-    try {
-        // 1. Save Booking in Firebase with Pending Verification status
-        await addDoc(collection(db, "bookings"), {
-            userId: currentUser.uid, 
-            userName: currentUser.displayName, 
-            userEmail: currentUser.email,
-            items: window.cartArray, 
-            totalAmount: total, 
-            status: "Pending Verification", 
-            createdAt: serverTimestamp()
-        });
+            try {
+                await addDoc(collection(db, "bookings"), {
+                    userId: currentUser.uid, userName: currentUser.displayName, userEmail: currentUser.email,
+                    items: window.cartArray, totalAmount: total, discountApplied: window.appliedDiscount || 0,
+                    status: "Pending Verification", createdAt: serverTimestamp()
+                });
 
-        // 2. Add tokens to user profile
-        if (earnedTokens > 0) {
-            await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
-        }
+                if (earnedTokens > 0) {
+                    await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
+                }
 
-        // 3. Construct WhatsApp Message URL
-        const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
-        const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
+                const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-        // Clear cart locally
-        window.cartArray = []; 
-        localStorage.removeItem('gf_cart'); 
-        window.updateCartUI(); 
-        closePaymentModal();
-
-        // Open WhatsApp chat automatically with pre-filled message
-        window.open(whatsappUrl, '_blank');
-
-    } catch (error) { 
-        console.error("Booking Error: ", error);
-        alert("Failed to save booking"); 
-    } finally { 
-        confirmBtn.disabled = false; 
-        confirmBtn.innerText = "I HAVE PAID (Notify on WhatsApp)"; 
-    }
-};
+                window.cartArray = []; localStorage.removeItem('gf_cart'); 
+                window.appliedDiscount = 0; document.getElementById('couponMsg').innerText = ""; document.getElementById('couponInput').value = "";
+                window.updateCartUI(); closePaymentModal();
+                window.open(whatsappUrl, '_blank');
+            } catch (error) { 
+                console.error("Booking Error: ", error); alert("Failed to save booking"); 
+            } finally { 
+                confirmBtn.disabled = false; confirmBtn.innerText = "I HAVE PAID (Notify on WhatsApp)"; 
+            }
+        };
 
         window.claimFreeGame = async function() {
             if (!currentUser) return;
@@ -675,52 +714,37 @@ window.confirmAndSendWhatsApp = async function() {
     </script>
 
     <script>
-        // --- COUPON SYSTEM LOGIC ---
-let appliedDiscount = 0; 
-let activeCouponCode = "";
+        window.applyCoupon = function() {
+            const code = document.getElementById('couponInput').value.trim().toUpperCase();
+            const msg = document.getElementById('couponMsg');
+            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            
+            if (subtotal === 0) {
+                msg.style.color = "#ff3333"; msg.innerText = "Cart is empty!"; window.appliedDiscount = 0; return;
+            }
 
-window.applyCoupon = function() {
-    const code = document.getElementById('couponInput').value.trim().toUpperCase();
-    const msg = document.getElementById('couponMsg');
-    
-    const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
-    
-    if (subtotal === 0) {
-        msg.style.color = "#ff3333";
-        msg.innerText = "Cart is empty!";
-        return;
-    }
+            if (code === "GAMEFLEX10") {
+                window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
+                msg.style.color = "#4BB543"; msg.innerText = `🎉 Coupon applied! You saved ₹${window.appliedDiscount}`;
+            } else if (code === "FLAT50") {
+                window.appliedDiscount = 50; window.activeCouponCode = code;
+                msg.style.color = "#4BB543"; msg.innerText = `🎉 Coupon applied! Flat ₹50 off.`;
+            } else {
+                window.appliedDiscount = 0; window.activeCouponCode = "";
+                msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid coupon code.";
+            }
+            window.updateCartUI();
+        };
 
-    if (code === "GAMEFLEX10") {
-        appliedDiscount = Math.round(subtotal * 0.10); 
-        activeCouponCode = code;
-        msg.style.color = "#4BB543";
-        msg.innerText = `🎉 Coupon applied! You saved ₹${appliedDiscount}`;
-    } else if (code === "FLAT50") {
-        appliedDiscount = 50; 
-        activeCouponCode = code;
-        msg.style.color = "#4BB543";
-        msg.innerText = `🎉 Coupon applied! Flat ₹50 off.`;
-    } else {
-        appliedDiscount = 0;
-        activeCouponCode = "";
-        msg.style.color = "#ff3333";
-        msg.innerText = "❌ Invalid coupon code.";
-    }
-
-    window.updateCartUI();
-};
         const searchInput = document.getElementById('gameSearch');
         const searchDropdown = document.getElementById('searchDropdown');
 
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             searchDropdown.innerHTML = ''; 
-
             if (query.length > 0) {
                 const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
                 searchDropdown.style.display = 'block';
-
                 if (filteredGames.length > 0) {
                     filteredGames.forEach(game => {
                         const gameItem = document.createElement('a'); gameItem.href = game.link; gameItem.className = 'search-item';
@@ -753,13 +777,15 @@ window.applyCoupon = function() {
                     itemsContainer.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`;
                 });
             }
-            badgeCount.innerText = totalQty; totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
-            const earned = Math.floor(totalAmount / 100) * 10; document.getElementById('tokenEarnText').innerText = earned > 0 ? `+ Earn ${earned} GameFlex-Tokens` : '';
+            badgeCount.innerText = totalQty; 
+            const finalTotal = Math.max(0, totalAmount - (window.appliedDiscount || 0));
+            totalElement.innerText = '₹' + finalTotal.toLocaleString('en-IN');
+            
+            const earned = Math.floor(finalTotal / 100) * 10; document.getElementById('tokenEarnText').innerText = earned > 0 ? `+ Earn ${earned} GameFlex-Tokens` : '';
             const claimBtn = document.getElementById('claimBtn');
             if(typeof window.currentTokensGlobal === 'function' && window.currentTokensGlobal() >= 500) { claimBtn.style.display = "block"; } else { claimBtn.style.display = "none"; }
         };
 
-        // Initialize UI on load
         window.updateCartUI();
     </script>
 </body>
