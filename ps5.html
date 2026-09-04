@@ -24,7 +24,10 @@
         /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(5, 8, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
-        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, var(--logo-red) 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--logo-red); }
+        /* FIXED LOGO */
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        
         .logo-tagline { font-size: 9px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-top: 3px; }
         
         .nav-links { display: flex; gap: 30px; list-style: none; }
@@ -35,7 +38,9 @@
         .nav-actions { display: flex; align-items: center; gap: 20px; }
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--ps5-blue); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; }
-        .login-btn { background: var(--ps5-blue); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(31, 106, 255, 0.3); }
+        
+        /* LOGIN BUTTON */
+        .login-btn { background: var(--ps5-blue); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(31, 106, 255, 0.3); display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #0051ed; box-shadow: 0 4px 20px rgba(31, 106, 255, 0.5); }
 
         /* Breadcrumb */
@@ -90,9 +95,10 @@
         .product-card:hover { border-color: var(--ps5-blue); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(31, 106, 255, 0.15); }
         
         .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--ps5-blue); color: white; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2; }
-        .product-img { height: 240px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
+        .product-img { height: 240px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); transition: transform 0.5s ease;}
+        .product-card:hover .product-img { transform: scale(1.03); }
         
-        .product-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        .product-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; z-index: 5; background: var(--card-bg); }
         .product-title { font-size: 13px; font-weight: 600; margin-bottom: 15px; color: var(--text-light); line-height: 1.4; }
         
         .card-genre-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--ps5-blue); }
@@ -150,22 +156,27 @@
     <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">
-            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+            <!-- FIXED LOGO -->
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex" style="width: 100%; height: 100%; object-fit: contain;"></div>
             <div>
                 GAMEFLEX<br><span style="color: var(--logo-red); font-size: 14px;">_STORE</span>
                 <div class="logo-tagline">PLAY MORE. PAY LESS.</div>
             </div>
         </a>
         <ul class="nav-links">
+            <!-- FIXED LINKS -->
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
-            <li><a href="ps5.html" class="active">PS5 Games</a></li>
-            <li><a href="#">Bundles</a></li>
-            <li><a href="#">Offers</a></li>
+            <li><a href="ps5.html" class="active">PlayStation</a></li>
+            <li><a href="offer.html">Offers</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
         </ul>
         <div class="nav-actions">
             <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
-            <a href="admin.html" class="icon-btn" title="Admin Portal" style="font-size: 15px;"><i class="fa-solid fa-shield-halved"></i></a>
+            <!-- AUTH BUTTON FOR PS5 -->
+            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-user"></i> <span>Login</span>
+            </button>
         </div>
     </nav>
 
@@ -225,7 +236,7 @@
                     <p>Explore All</p>
                 </div>
             </div>
-            <div class="sub-cat-card" onclick="setCategoryFilter('New Arrival', this)">
+            <div class="sub-cat-card" onclick="setCategoryFilter('New Arrivals', this)">
                 <i class="fa-regular fa-star"></i>
                 <div class="sub-cat-card-text">
                     <h4>New Arrivals</h4>
@@ -314,16 +325,56 @@
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
     </script>
 
-    <!-- FIREBASE MODULE -->
+    <!-- FIREBASE MODULE & LOGIC WITH AUTHENTICATION -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0", authDomain: "gameflexstore-d20da.firebaseapp.com", projectId: "gameflexstore-d20da" };
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0", 
+            authDomain: "gameflexstore-d20da.firebaseapp.com", 
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
+        };
+        const app = initializeApp(firebaseConfig); 
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+        let currentUser = null;
 
-        // Fetch PS4, PS5, and PS4/PS5 GAMES
-        onSnapshot(query(collection(db, "games"), orderBy("createdAt", "desc")), (snapshot) => {
+        // INSTANT LOGIN UI UPDATE
+        const savedUserName = localStorage.getItem('gf_logged_in_user');
+        if(savedUserName) {
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+        }
+
+        // AUTHENTICATION LOGIC
+        setPersistence(auth, browserLocalPersistence).then(() => {
+            onAuthStateChanged(auth, (user) => {
+                const authBtn = document.getElementById('authBtn');
+                if (user) {
+                    currentUser = user;
+                    const firstName = user.displayName.split(' ')[0];
+                    localStorage.setItem('gf_logged_in_user', firstName); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${firstName}</span>`;
+                    authBtn.onclick = () => { window.location.href = "profile.html"; };
+                } else {
+                    currentUser = null;
+                    localStorage.removeItem('gf_logged_in_user'); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login</span>`;
+                    authBtn.onclick = async () => {
+                        try { await signInWithPopup(auth, provider); } 
+                        catch (err) { alert("Login failed: " + err.message); }
+                    };
+                }
+            });
+        });
+
+        // FIXED QUERY: Fetch using 'addedOn'
+        onSnapshot(query(collection(db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
             window.allLivePsGames = [];
             snapshot.forEach((gameDoc) => {
                 const game = { id: gameDoc.id, ...gameDoc.data() };
@@ -342,8 +393,9 @@
             
             if (window.activeCategoryFilter !== 'All') {
                 filtered = filtered.filter(g => {
-                    if (g.genres && Array.isArray(g.genres)) return g.genres.includes(window.activeCategoryFilter);
-                    return g.genre === window.activeCategoryFilter;
+                    // Check categories array from DB
+                    if (g.categories && Array.isArray(g.categories)) return g.categories.includes(window.activeCategoryFilter);
+                    return false;
                 });
             }
 
@@ -353,12 +405,14 @@
             }
 
             filtered.forEach(game => {
-                let badgeHTML = game.discount ? `<span class="discount-badge">${game.discount}</span>` : '';
-                let oldPriceHTML = game.oldPrice ? `<span class="old-price">₹${game.oldPrice}</span>` : '';
+                let badgeHTML = (game.discount && game.discount !== "0%") ? `<span class="discount-badge">${game.discount}</span>` : '';
+                let oldPriceHTML = game.originalPrice ? `<span class="old-price">₹${game.originalPrice}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-                let genresText = game.genres ? game.genres.join(' • ') : (game.genre || 'Action');
+                let genresText = game.categories ? game.categories.join(' • ') : 'Action';
+                
+                let pRent = game.rentalPrice || game.rentPrice || 0;
+                let pPerm = game.permanentPrice || game.permPrice || 0;
 
-                // Render matching the exact CSS provided by user
                 psGrid.innerHTML += `
                 <div class="product-card" onclick="window.location.href='game-details.html?id=${game.id}'">
                     ${badgeHTML}
@@ -374,20 +428,20 @@
                             <div class="price-col">
                                 <div style="display:flex; flex-direction:column; gap:2px;">
                                     <span style="font-size:9px; color:#ccc;">RENT (1M):</span>
-                                    <div><span class="current-price" style="font-size:14px;">₹${game.rentPrice}</span></div>
+                                    <div><span class="current-price" style="font-size:14px;">₹${pRent}</span></div>
                                 </div>
                             </div>
-                            <button class="cart-btn" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${game.rentPrice}, '${game.image}')"><i class="fa-solid fa-clock"></i></button>
+                            <button class="cart-btn" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${pRent}, '${game.image}')"><i class="fa-solid fa-clock"></i></button>
                         </div>
                         
                         <div class="price-row" style="margin-bottom:0;">
                             <div class="price-col">
                                 <div style="display:flex; flex-direction:column; gap:2px;">
                                     <span style="font-size:9px; color:#ccc;">PERMANENT BUY:</span>
-                                    <div><span class="current-price" style="font-size:14px;">₹${game.permPrice}</span> ${oldPriceHTML}</div>
+                                    <div><span class="current-price" style="font-size:14px;">₹${pPerm}</span> ${oldPriceHTML}</div>
                                 </div>
                             </div>
-                            <button class="cart-btn" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${game.permPrice}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i></button>
+                            <button class="cart-btn" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i></button>
                         </div>
                     </div>
                 </div>`;
@@ -405,16 +459,22 @@
     <!-- CART LOGIC -->
     <script>
         window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
+        
         window.addToCart = (title, price, imgUrl) => {
             const ex = window.cartArray.find(i => i.title === title); if(ex) ex.qty += 1; else window.cartArray.push({ title, price: Number(price), img: imgUrl, qty: 1 });
             localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); window.toggleCart(); 
         };
+        
         window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
+        
         window.updateCartUI = () => {
             const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
-            if (window.cartArray.length === 0) container.innerHTML = '<div class="empty-cart-msg">Your cart is empty.</div>';
+            if (window.cartArray.length === 0) container.innerHTML = '<div class="empty-cart-msg" style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>';
             else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price" style="color:var(--logo-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`; });
-            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + tot.toLocaleString('en-IN');
+            
+            // Note: Applying discount globally if passed from index.html (fallback 0)
+            const finalTotal = Math.max(0, tot - (window.appliedDiscount || 0));
+            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
         };
         window.updateCartUI();
     </script>

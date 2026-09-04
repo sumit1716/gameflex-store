@@ -23,7 +23,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
 
-        /* NAVBAR (Reused) */
+        /* NAVBAR */
         .top-bar { background-color: #000; color: var(--text-gray); font-size: 12px; text-align: center; padding: 8px 0; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(7, 9, 14, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; color: white; text-decoration: none; }
@@ -36,18 +36,64 @@
         .login-btn { background: var(--ps5-light-blue); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #005bb5; }
 
-        /* REVIEWS HEADER */
-        .reviews-header-section { padding: 60px 5% 30px 5%; position: relative; overflow: hidden; background: radial-gradient(circle at right top, rgba(0, 112, 204, 0.15), transparent 50%); }
+        /* UPGRADED REVIEWS HEADER - SEAMLESS BANNER */
+        .reviews-header-section { 
+            padding: 50px 5% 30px 5%; 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* SEAMLESS FADING IMAGE TRICK */
+        .header-bg-image {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background-image: url('review_photo.png'); /* Add .jpg if needed */
+            background-size: cover;
+            background-position: center right;
+            background-repeat: no-repeat;
+            z-index: 0;
+            /* Fades the left side into the dark background */
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
+            mask-image: linear-gradient(to right, transparent 0%, black 40%);
+            opacity: 0.95;
+            animation: floatGently 6s ease-in-out infinite;
+        }
+
+        @keyframes floatGently {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .rh-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
         .rh-subtitle { color: var(--ps5-light-blue); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
         .rh-title { font-size: 50px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
         .rh-title span { color: var(--ps5-light-blue); }
-        .rh-desc { color: var(--text-gray); font-size: 16px; max-width: 500px; margin-bottom: 40px; }
+        .rh-desc { color: var(--text-gray); font-size: 16px; margin-bottom: 20px; line-height: 1.5; }
 
-        /* SLANTED TEXT DECORATION */
-        .slanted-text { position: absolute; right: 20%; top: 50px; transform: rotate(-10deg); font-family: 'Brush Script MT', cursive, sans-serif; font-size: 40px; color: rgba(255,255,255,0.8); line-height: 1; text-align: center; text-shadow: 0 0 20px rgba(0, 112, 204, 0.5); pointer-events: none; }
-
-        /* STATS BAR */
-        .stats-bar { display: flex; gap: 40px; align-items: center; border-top: 1px solid var(--border-dark); border-bottom: 1px solid var(--border-dark); padding: 20px 0; margin-bottom: 40px; flex-wrap: wrap; }
+        /* FULL WIDTH STATS BAR */
+        .stats-bar { 
+            position: relative;
+            z-index: 2;
+            display: flex; 
+            gap: 60px; 
+            align-items: center; 
+            border-top: 1px solid var(--border-dark); 
+            border-bottom: 1px solid var(--border-dark); 
+            padding: 25px 0; 
+            margin-bottom: 40px; 
+            flex-wrap: wrap; 
+        }
         .stat-item { display: flex; align-items: center; gap: 15px; }
         .stat-icon { font-size: 30px; color: var(--ps5-light-blue); }
         .stat-icon.star { color: var(--star-gold); }
@@ -55,7 +101,7 @@
         .stat-lbl { font-size: 12px; color: var(--text-gray); }
 
         /* REVIEWS SLIDER */
-        .reviews-slider-wrapper { position: relative; padding-bottom: 50px; }
+        .reviews-slider-wrapper { position: relative; z-index: 2; padding-bottom: 30px; }
         .reviews-container { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 20px; scrollbar-width: none; }
         .reviews-container::-webkit-scrollbar { display: none; }
         
@@ -101,6 +147,11 @@
         .submit-btn { width: 100%; background: var(--ps5-light-blue); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .submit-btn:hover { background: #005bb5; }
         .submit-btn:disabled { background: gray; cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            .header-bg-image { width: 100%; opacity: 0.3; -webkit-mask-image: none; mask-image: none; }
+            .stats-bar { justify-content: center; gap: 30px; }
+        }
     </style>
 </head>
 <body>
@@ -119,18 +170,24 @@
             <li class="active"><a href="reviews.html">Reviews</a></li>
         </ul>
         <div class="nav-actions">
+            <!-- Auth Button Sync -->
             <button class="login-btn" id="authBtn"><i class="fa-solid fa-user"></i> <span>Login</span></button>
         </div>
     </nav>
 
     <!-- HEADER SECTION -->
     <section class="reviews-header-section">
-        <div class="slanted-text">Gamers<br>Trust<br>GameFlex</div>
-        <div class="rh-subtitle">Our Community</div>
-        <h1 class="rh-title">CUSTOMER <span>REVIEWS</span></h1>
-        <p class="rh-desc">Real Gamers. Real Feedback.<br>See what our customers say about their experience with GameFlex_Store.</p>
+        
+        <!-- SEAMLESS BACKGROUND IMAGE -->
+        <div class="header-bg-image"></div>
 
-        <!-- STATS BAR -->
+        <div class="rh-content">
+            <div class="rh-subtitle">Our Community</div>
+            <h1 class="rh-title">CUSTOMER <span>REVIEWS</span></h1>
+            <p class="rh-desc">Real Gamers. Real Feedback.<br>See what our customers say about their experience with GameFlex_Store.</p>
+        </div>
+
+        <!-- FULL WIDTH STATS BAR -->
         <div class="stats-bar">
             <div class="stat-item">
                 <i class="fa-solid fa-star stat-icon star"></i>
@@ -158,7 +215,7 @@
         <!-- REVIEWS SLIDER -->
         <div class="reviews-slider-wrapper">
             <div class="reviews-container" id="reviewsGrid">
-                <!-- Reviews will load here via JS -->
+                <!-- Data loads here from Firebase -->
                 <p style="color:gray; width: 100%; text-align: center;"><i class="fa-solid fa-spinner fa-spin"></i> Loading community feedback...</p>
             </div>
         </div>
@@ -212,16 +269,17 @@
     <!-- FIREBASE & JS LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // IMPORTANT: YAHAN APNI REAL FIREBASE CONFIG DAALNA
+        // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
             projectId: "gameflexstore-d20da",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -231,24 +289,34 @@
 
         let currentUser = null;
 
+        // INSTANT LOGIN UI UPDATE
+        const savedUserName = localStorage.getItem('gf_logged_in_user');
+        if(savedUserName) {
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+        }
+
         // AUTHENTICATION LOGIC
-        onAuthStateChanged(auth, (user) => {
-            const authBtn = document.getElementById('authBtn');
-            if (user) {
-                currentUser = user;
-                authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${user.displayName.split(' ')[0]}</span>`;
-                authBtn.onclick = () => { window.location.href = "profile.html"; };
-            } else {
-                currentUser = null;
-                authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login to Review</span>`;
-                authBtn.onclick = async () => {
-                    try { await signInWithPopup(auth, provider); } 
-                    catch (err) { alert("Login failed: " + err.message); }
-                };
-            }
+        setPersistence(auth, browserLocalPersistence).then(() => {
+            onAuthStateChanged(auth, (user) => {
+                const authBtn = document.getElementById('authBtn');
+                if (user) {
+                    currentUser = user;
+                    const firstName = user.displayName.split(' ')[0];
+                    localStorage.setItem('gf_logged_in_user', firstName); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${firstName}</span>`;
+                    authBtn.onclick = () => { window.location.href = "profile.html"; };
+                } else {
+                    currentUser = null;
+                    localStorage.removeItem('gf_logged_in_user'); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login</span>`;
+                    authBtn.onclick = async () => {
+                        try { await signInWithPopup(auth, provider); } 
+                        catch (err) { alert("Login failed: " + err.message); }
+                    };
+                }
+            });
         });
 
-        // TIME FORMATTER HELPER
         function timeAgo(date) {
             const seconds = Math.floor((new Date() - date) / 1000);
             let interval = seconds / 31536000;
@@ -261,10 +329,9 @@
             if (interval > 1) return Math.floor(interval) + " hours ago";
             interval = seconds / 60;
             if (interval > 1) return Math.floor(interval) + " mins ago";
-            return Math.floor(seconds) + " seconds ago";
+            return "Just now";
         }
 
-        // GENERATE STARS HTML
         function generateStars(rating) {
             let html = '';
             for(let i=1; i<=5; i++) {
@@ -274,7 +341,7 @@
             return html;
         }
 
-        // FETCH REVIEWS & UPDATE STATS
+        // FETCH REVIEWS FROM FIREBASE
         const qReviews = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
         onSnapshot(qReviews, (snapshot) => {
             const grid = document.getElementById('reviewsGrid');
@@ -295,10 +362,7 @@
                 reviewCount++;
                 totalScore += Number(data.rating || 5);
                 
-                // Get First Letter for Avatar
                 const firstLetter = (data.userName || 'G').charAt(0).toUpperCase();
-                
-                // Process Date
                 let dateStr = "Just now";
                 if(data.createdAt) dateStr = timeAgo(data.createdAt.toDate());
 
@@ -319,7 +383,6 @@
                 `;
             });
 
-            // Update Header Stats Real-Time
             const avg = (totalScore / reviewCount).toFixed(1);
             document.getElementById('avgRatingDisplay').innerText = `${avg}/5`;
             document.getElementById('totalReviewsDisplay').innerText = `${reviewCount}+`;
@@ -327,7 +390,7 @@
 
         // MODAL LOGIC
         window.openReviewModal = function() {
-            if(!currentUser) {
+            if(!currentUser && !localStorage.getItem('gf_logged_in_user')) {
                 alert("Please login first to write a review!");
                 document.getElementById('authBtn').click();
                 return;
@@ -338,10 +401,9 @@
         window.closeReviewModal = function() {
             document.getElementById('reviewModal').style.display = 'none';
             document.getElementById('reviewForm').reset();
-            setStar(5); // default reset to 5
+            setStar(5); 
         };
 
-        // STAR SELECTION LOGIC
         const stars = document.querySelectorAll('#starInput i');
         const ratingInput = document.getElementById('selectedRating');
         
@@ -363,6 +425,12 @@
         // SUBMIT REVIEW TO FIREBASE
         document.getElementById('reviewForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if(!currentUser) {
+                alert("Session expired. Please login again.");
+                return;
+            }
+
             const btn = document.getElementById('submitReviewBtn');
             btn.innerText = "Posting..."; btn.disabled = true;
 

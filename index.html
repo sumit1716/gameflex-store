@@ -290,7 +290,7 @@
             <li><a href="ps5.html">PlayStation Games</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="#">Pre-Orders</a></li>
-            <li><a href="#reviews-section">Community Reviews</a></li>
+            <li><a href="reviews.html">Community Reviews</a></li>
         </ul>
         <div class="nav-actions">
             <div class="search-container">
@@ -404,7 +404,6 @@
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
             <a href="offer.html" class="cat-card">
-                <!-- SPECIAL OFFERS IMAGE YAHAN LAGA DI HAI -->
                 <div class="cat-img" style="background-image: url('offers.png');"></div>
                 <h3>Special Offers</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
@@ -417,7 +416,6 @@
         </div>
     </section>
 
-    <!-- 1. PC GAMES SECTION -->
     <section id="pc-section" class="home-products-section">
         <div class="sec-title-bar">
             <div class="title-left red-title"><span></span> POPULAR PC GAMES</div>
@@ -428,7 +426,6 @@
         </div>
     </section>
 
-    <!-- 2. PLAYSTATION GAMES SECTION -->
     <section id="ps5-section" class="home-products-section ps5-bg">
         <div class="sec-title-bar">
             <div class="title-left blue-title"><span></span> PLAYSTATION GAMES</div>
@@ -439,7 +436,6 @@
         </div>
     </section>
 
-    <!-- 3. SPECIAL OFFERS SECTION -->
     <section id="offers-home-section" class="home-products-section offers-bg">
         <div class="sec-title-bar">
             <div class="title-left gold-title"><span></span> 🔥 SPECIAL OFFERS & DEALS</div>
@@ -450,35 +446,13 @@
         </div>
     </section>
 
-    <!-- 4. COMMUNITY REVIEWS SECTION -->
     <section id="reviews-section" class="home-products-section reviews-bg">
         <div class="sec-title-bar">
             <div class="title-left white-title"><span></span> 💬 COMMUNITY REVIEWS</div>
-            <a href="#" class="view-all white-link">View All Reviews &rarr;</a>
+            <a href="reviews.html" class="view-all white-link">View All Reviews &rarr;</a>
         </div>
-        <div class="review-grid">
-            <!-- Review 1 -->
-            <div class="review-card">
-                <div class="reviewer-info">
-                    <div class="reviewer-avatar">R</div>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 700; color: white;">Rahul Sharma</div>
-                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    </div>
-                </div>
-                <div class="review-text">"Got my PS5 game within 2 minutes of payment! The WhatsApp delivery is super fast and the price is unbeatable. Highly recommended."</div>
-            </div>
-            <!-- Review 2 -->
-            <div class="review-card">
-                <div class="reviewer-info">
-                    <div class="reviewer-avatar">A</div>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 700; color: white;">Aman Gupta</div>
-                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
-                    </div>
-                </div>
-                <div class="review-text">"Used the GAMEFLEX10 coupon and saved extra money on Red Dead Redemption 2. The admin support is really helpful if you have any doubts."</div>
-            </div>
+        <div class="review-grid" id="homeReviewsGrid">
+            <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live reviews from database...</p>
         </div>
     </section>
 
@@ -492,8 +466,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // REAL FIREBASE CONFIGURATION ADDED HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
@@ -511,6 +486,42 @@
         let currentUser = null;
         let currentTokens = 0;
 
+        // FETCH REVIEWS FOR HOME PAGE
+        const qReviews = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(2));
+        onSnapshot(qReviews, (snapshot) => {
+            const reviewsGrid = document.getElementById('homeReviewsGrid');
+            reviewsGrid.innerHTML = '';
+            
+            if(snapshot.empty) {
+                reviewsGrid.innerHTML = '<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No community reviews yet.</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const firstLetter = (data.userName || 'G').charAt(0).toUpperCase();
+                let starsHTML = '';
+                for(let i=1; i<=5; i++) {
+                    if(i <= (data.rating || 5)) starsHTML += '<i class="fa-solid fa-star"></i>';
+                    else starsHTML += '<i class="fa-regular fa-star" style="color:#444;"></i>';
+                }
+                
+                reviewsGrid.innerHTML += `
+                    <div class="review-card">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">${firstLetter}</div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 700; color: white;">${data.userName}</div>
+                                <div class="stars">${starsHTML}</div>
+                            </div>
+                        </div>
+                        <div class="review-text">"${data.reviewText}"</div>
+                    </div>
+                `;
+            });
+        });
+
+        // FETCH GAMES
         const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             const pcGrid = document.getElementById('pcGamesGrid');

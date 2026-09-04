@@ -22,13 +22,21 @@
         /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
-        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, #e31825 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--primary-red); }
+        /* FIXED LOGO HERE */
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        
         .nav-links { display: flex; gap: 30px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
         .nav-links li a:hover, .nav-links li a.active { color: var(--primary-red); }
         .nav-actions { display: flex; align-items: center; gap: 20px; }
+        
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; }
+        
+        /* ADDED LOGIN BUTTON CSS */
+        .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .login-btn:hover { background: #c1121d; }
 
         /* PC Hero Banner (Exact Reference Match) */
         .pc-hero { display: flex; justify-content: space-between; align-items: center; padding: 50px 5%; background: #0b0c10; border-bottom: 1px solid var(--border-dark); gap: 40px; flex-wrap: wrap; }
@@ -108,18 +116,21 @@
 
     <nav class="navbar">
         <a href="index.html" class="logo">
-            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
         </a>
         <ul class="nav-links">
+            <!-- FIXED ALL LINKS HERE -->
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html" class="active">PC Games</a></li>
-            <li><a href="#">PS5 Games</a></li>
-            <li><a href="#">Bundles</a></li>
-            <li><a href="#">Offers</a></li>
+            <li><a href="ps5.html">PlayStation</a></li>
+            <li><a href="offer.html">Offers</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
         </ul>
         <div class="nav-actions">
             <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
+            <!-- LOGIN BUTTON ADDED -->
+            <button class="login-btn" id="authBtn"><i class="fa-solid fa-user"></i> <span>Login</span></button>
         </div>
     </nav>
 
@@ -162,7 +173,6 @@
             <div class="section-title"><span></span> Shop By Category</div>
         </div>
         <div class="cat-row">
-            <!-- Added onclick events to trigger filter -->
             <div class="sub-cat-card active" onclick="setCategoryFilter('All', this)">
                 <i class="fa-solid fa-fire"></i>
                 <h4>NEW RELEASES</h4>
@@ -201,7 +211,6 @@
             <div class="section-title"><span></span> Popular PC Games</div>
             <a href="#" class="view-all-link">View All &rarr;</a>
         </div>
-        <!-- Grid will be populated from Firebase -->
         <div class="products-grid" id="pcGamesGrid">
             <p style="color: gray; text-align: center; grid-column: 1 / -1;">Loading live PC games from database...</p>
         </div>
@@ -213,22 +222,59 @@
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
     </script>
 
-    <!-- FIREBASE MODULE & LOGIC -->
+    <!-- FIREBASE MODULE & LOGIC WITH AUTHENTICATION ADDED -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
-            projectId: "gameflexstore-d20da"
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+        
+        let currentUser = null;
 
-        // Fetch ONLY PC GAMES from Firestore
-        const qGames = query(collection(db, "games"), orderBy("createdAt", "desc"));
+        // INSTANT LOGIN UI UPDATE
+        const savedUserName = localStorage.getItem('gf_logged_in_user');
+        if(savedUserName) {
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+        }
+
+        // AUTHENTICATION LOGIC
+        setPersistence(auth, browserLocalPersistence).then(() => {
+            onAuthStateChanged(auth, (user) => {
+                const authBtn = document.getElementById('authBtn');
+                if (user) {
+                    currentUser = user;
+                    const firstName = user.displayName.split(' ')[0];
+                    localStorage.setItem('gf_logged_in_user', firstName); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${firstName}</span>`;
+                    authBtn.onclick = () => { window.location.href = "profile.html"; };
+                } else {
+                    currentUser = null;
+                    localStorage.removeItem('gf_logged_in_user'); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login</span>`;
+                    authBtn.onclick = async () => {
+                        try { await signInWithPopup(auth, provider); } 
+                        catch (err) { alert("Login failed: " + err.message); }
+                    };
+                }
+            });
+        });
+
+        // FETCH ONLY PC GAMES FROM FIRESTORE (FIXED 'addedOn' Query)
+        const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             window.allLivePcGames = [];
             snapshot.forEach((gameDoc) => {
@@ -247,15 +293,16 @@
 
             let filtered = window.allLivePcGames;
 
-            // Apply Filters
+            // Apply Filters (Fixed g.categories Bug)
             if (window.activeCategoryFilter === 'Under 500') {
                 filtered = filtered.filter(g => Number(g.price) < 500);
             } else if (window.activeCategoryFilter === 'Best Sellers') {
-                filtered = filtered.filter(g => g.discount); // Example: items with discounts
+                filtered = filtered.filter(g => g.discount); 
             } else if (window.activeCategoryFilter !== 'All') {
                 filtered = filtered.filter(g => {
-                    if (g.genres && Array.isArray(g.genres)) return g.genres.includes(window.activeCategoryFilter);
-                    return g.genre === window.activeCategoryFilter;
+                    // Using g.categories array as saved from admin panel
+                    if (g.categories && Array.isArray(g.categories)) return g.categories.includes(window.activeCategoryFilter);
+                    return false;
                 });
             }
 
@@ -266,11 +313,12 @@
 
             filtered.forEach(game => {
                 let badgeHTML = game.discount ? `<span class="discount-badge">${game.discount}</span>` : '';
-                let oldPriceHTML = game.oldPrice ? `<span style="font-size:12px; color:var(--text-gray); text-decoration:line-through; margin-left:5px;">₹${game.oldPrice}</span>` : '';
+                let oldPriceHTML = game.originalPrice ? `<span style="font-size:12px; color:var(--text-gray); text-decoration:line-through; margin-left:5px;">₹${game.originalPrice}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-                let genresText = game.genres ? game.genres.join(' • ') : (game.genre || 'Action');
+                
+                // Get genres/categories text for UI
+                let genresText = game.categories ? game.categories.join(' • ') : 'Action';
 
-                // Render matching the exact CSS provided by user
                 pcGrid.innerHTML += `
                 <div class="product-card" onclick="window.location.href='game-details.html?id=${game.id}'">
                     ${badgeHTML}

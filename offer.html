@@ -51,7 +51,7 @@
         .slide-subtitle { color: var(--text-gray); font-size: 16px; margin-bottom: 25px; }
         .slide-features { display: flex; gap: 20px; font-size: 12px; color: #ddd; margin-bottom: 30px; }
         .slide-features i { color: var(--primary-red); margin-right: 5px; }
-        .shop-btn { background: var(--primary-red); color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .shop-btn { background: var(--primary-red); color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; transition: 0.3s; border: none; cursor: pointer;}
         .shop-btn:hover { background: #c1121d; transform: translateX(5px); }
 
         /* Slider Controls */
@@ -78,16 +78,18 @@
         .t-lbl { font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; }
 
         /* FILTERS */
-        .filters-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .filters-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 15px; }
         .filter-tags { display: flex; gap: 10px; flex-wrap: wrap; }
         .f-tag { background: transparent; border: 1px solid var(--border-dark); color: var(--text-gray); padding: 8px 15px; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .f-tag:hover { border-color: white; color: white; }
         .f-tag.active { background: var(--primary-red); border-color: var(--primary-red); color: white; }
         .sort-select { background: var(--card-bg); border: 1px solid var(--border-dark); color: white; padding: 8px 15px; border-radius: 5px; font-size: 13px; outline: none; cursor: pointer; }
 
+        .banner-msg { font-size: 13px; font-weight: 600; color: var(--primary-red); margin-bottom: 25px; display: none; cursor: pointer; }
+
         /* GAMES GRID */
         .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 50px; }
-        .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
+        .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: 0.3s; position: relative; display: flex; flex-direction: column; cursor: pointer; }
         .prod-card:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(227, 24, 37, 0.15); }
         .badge-discount { position: absolute; top: 12px; left: 12px; background: var(--primary-red); color: white; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2; }
         .badge-platform { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; z-index: 2; text-transform: uppercase;}
@@ -105,6 +107,15 @@
         .wishlist-btn { background: transparent; border: 1px solid var(--border-dark); color: var(--text-gray); width: 40px; border-radius: 6px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; }
         .wishlist-btn:hover { border-color: white; color: white; }
 
+        /* OVERLAYS (Cart) */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-dark); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+        
         /* BOTTOM PROMO BANNER */
         .promo-banner { background: #12141a; border: 1px solid var(--border-dark); border-radius: 12px; padding: 40px; display: flex; justify-content: space-between; align-items: center; margin: 0 5% 50px 5%; position: relative; overflow: hidden; }
         .promo-banner::before { content: ''; position: absolute; left: 0; top: 0; width: 5px; height: 100%; background: var(--primary-red); }
@@ -115,27 +126,16 @@
         .coupon-code { color: var(--primary-red); font-size: 18px; font-weight: 800; letter-spacing: 2px; }
         .copy-btn { background: none; border: none; color: white; cursor: pointer; font-size: 16px; transition: 0.3s; }
         .copy-btn:hover { color: var(--primary-red); }
-        
         .promo-action { text-align: right; }
         .promo-action h3 { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: white; }
-        .promo-action .shop-btn { padding: 15px 40px; font-size: 16px; }
+        .promo-action .shop-btn { padding: 15px 40px; font-size: 16px; display:inline-block; }
 
-        /* FOOTER FEATURES */
         .features { display: flex; justify-content: space-between; background: rgba(20, 22, 28, 0.8); margin: 0 5% 50px 5%; padding: 30px; border-radius: 10px; border: 1px solid var(--border-dark); }
         .feature-item { display: flex; align-items: center; gap: 15px; flex: 1; border-right: 1px solid var(--border-dark); padding-left: 20px; }
         .feature-item:last-child { border-right: none; }
         .feature-icon { font-size: 24px; color: var(--primary-red); }
         .feature-text h4 { font-size: 14px; font-weight: 600; }
         .feature-text p { font-size: 12px; color: var(--text-gray); margin-top: 5px; }
-        
-        /* OVERLAYS (Cart & Payment) */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
-        .cart-overlay.active { display: block; opacity: 1; }
-        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
-        .cart-sidebar.open { right: 0; }
-        .cart-header { padding: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-dark); }
-        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
     </style>
 </head>
 <body>
@@ -152,8 +152,9 @@
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
-            <li><a href="ps5.html">Console Games</a></li>
+            <li><a href="ps5.html">PlayStation</a></li>
             <li class="active"><a href="offer.html">Offers</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
         </ul>
         <div class="nav-actions">
             <button class="icon-btn" onclick="toggleCart()">
@@ -163,52 +164,54 @@
         </div>
     </nav>
 
-    <!-- CART SIDEBAR (Reused Structure) -->
+    <!-- CART SIDEBAR -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2 style="font-size:18px; font-weight:800;"><i class="fa-solid fa-cart-shopping" style="color:var(--primary-red);"></i> Your Cart</h2>
+            <h2 style="font-size:18px; font-weight:800; color:white;"><i class="fa-solid fa-cart-shopping" style="color:var(--primary-red);"></i> Your Cart</h2>
             <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer"></div>
         <div class="cart-footer">
-            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px; color:white;">
                 <span>Total:</span><span id="cartTotalPrice">₹0</span>
             </div>
-            <button onclick="proceedToPayment()" style="width:100%; background:var(--primary-red); color:white; border:none; padding:14px; border-radius:6px; font-weight:800; cursor:pointer;">Proceed to Payment</button>
+            <button onclick="window.location.href='index.html'" style="width:100%; background:var(--primary-red); color:white; border:none; padding:14px; border-radius:6px; font-weight:800; cursor:pointer;">Checkout in Main Store</button>
         </div>
     </div>
 
-    <!-- HERO SLIDER -->
+    <!-- DYNAMIC HERO SLIDER (Connects to Admin Banner 1, 2, 3) -->
     <div class="slider-container" id="offerSlider">
         <!-- Slide 1 -->
-        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2070&auto=format&fit=crop');">
+        <div class="slide active" id="slide1" style="background-image: url('https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2070&auto=format&fit=crop');">
             <div class="slide-overlay"></div>
             <div class="slide-content">
                 <div class="tagline">LIMITED TIME ONLY</div>
                 <h1 class="slide-title">BIGGEST<br><span style="color:var(--primary-red);">GAMING DEALS</span></h1>
                 <p class="slide-subtitle">Same Games. Lower Prices. More Playtime.</p>
-                <div class="slide-features">
-                    <span><i class="fa-solid fa-tag"></i> Huge Discounts</span>
-                    <span><i class="fa-solid fa-shield-check"></i> 100% Genuine</span>
-                    <span><i class="fa-solid fa-bolt"></i> Instant Delivery</span>
-                </div>
-                <a href="#offersGrid" class="shop-btn">SHOP OFFERS <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#offersGrid" class="shop-btn" onclick="filterByBanner('offerBanner1')">SHOP OFFERS <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
         
         <!-- Slide 2 -->
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop');">
+        <div class="slide" id="slide2" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop');">
             <div class="slide-overlay"></div>
             <div class="slide-content">
                 <div class="tagline">WEEKEND MADNESS</div>
                 <h1 class="slide-title">UP TO 80% OFF<br><span style="color:var(--primary-red);">ON TOP TITLES</span></h1>
                 <p class="slide-subtitle">Grab the best PC & Console games before the sale ends.</p>
-                <div class="slide-features">
-                    <span><i class="fa-solid fa-gamepad"></i> Action & RPG</span>
-                    <span><i class="fa-solid fa-headset"></i> 24/7 Support</span>
-                </div>
-                <a href="#offersGrid" class="shop-btn">BROWSE CATALOG <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#offersGrid" class="shop-btn" onclick="filterByBanner('offerBanner2')">SHOP OFFERS <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" id="slide3" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="tagline">SPECIAL EVENT</div>
+                <h1 class="slide-title">EXCLUSIVE<br><span style="color:var(--primary-red);">GAMING COLLECTION</span></h1>
+                <p class="slide-subtitle">Discover games handpicked just for you.</p>
+                <a href="#offersGrid" class="shop-btn" onclick="filterByBanner('offerBanner3')">SHOP OFFERS <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
 
@@ -218,6 +221,7 @@
         <div class="dots-container">
             <div class="dot active" onclick="goToSlide(0)"></div>
             <div class="dot" onclick="goToSlide(1)"></div>
+            <div class="dot" onclick="goToSlide(2)"></div>
         </div>
     </div>
 
@@ -225,24 +229,31 @@
     <section class="offers-section" id="offersGrid">
         <div class="offers-header-bar">
             <div class="title-area">
-                <h2><i class="fa-solid fa-gamepad"></i> All Game Offers</h2>
+                <h2><i class="fa-solid fa-gamepad"></i> Game Offers</h2>
                 <p>Top deals on the best games. Don't miss out!</p>
             </div>
+            <!-- DYNAMIC TIMER -->
             <div class="timer-area">
                 <div class="timer-label"><i class="fa-solid fa-bolt"></i> Offer Ends In</div>
                 <div class="time-blocks">
-                    <div class="time-box"><span class="t-val" id="t-days">02</span><span class="t-lbl">Days</span></div>
-                    <div class="time-box"><span class="t-val" id="t-hours">14</span><span class="t-lbl">Hours</span></div>
-                    <div class="time-box"><span class="t-val" id="t-mins">26</span><span class="t-lbl">Mins</span></div>
-                    <div class="time-box"><span class="t-val" id="t-secs">18</span><span class="t-lbl">Secs</span></div>
+                    <div class="time-box"><span class="t-val" id="t-days">00</span><span class="t-lbl">Days</span></div>
+                    <div class="time-box"><span class="t-val" id="t-hours">00</span><span class="t-lbl">Hours</span></div>
+                    <div class="time-box"><span class="t-val" id="t-mins">00</span><span class="t-lbl">Mins</span></div>
+                    <div class="time-box"><span class="t-val" id="t-secs">00</span><span class="t-lbl">Secs</span></div>
                 </div>
             </div>
         </div>
 
+        <!-- Reset Banner Filter Notification -->
+        <div id="bannerFilterMsg" class="banner-msg" onclick="clearBannerFilter()">
+            <i class="fa-solid fa-xmark" style="margin-right: 5px;"></i> Viewing games for a specific banner. Click here to View All Store Offers.
+        </div>
+
         <div class="filters-row">
             <div class="filter-tags" id="filterTags">
+                <!-- Filter category clicks -->
                 <button class="f-tag active" data-filter="All">All</button>
-                <button class="f-tag" data-filter="PS5">PS5 Games</button>
+                <button class="f-tag" data-filter="PS5">PlayStation</button>
                 <button class="f-tag" data-filter="PC">PC Games</button>
                 <button class="f-tag" data-filter="Action">Action</button>
                 <button class="f-tag" data-filter="Adventure">Adventure</button>
@@ -276,7 +287,7 @@
         </div>
         <div class="promo-action">
             <h3>GOOD GAMES<br>BETTER PRICES</h3>
-            <a href="#offersGrid" class="shop-btn">SHOP NOW <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#" class="shop-btn" onclick="clearBannerFilter(); window.scrollTo({top: document.getElementById('offersGrid').offsetTop, behavior: 'smooth'}); return false;">SHOP NOW <i class="fa-solid fa-arrow-right"></i></a>
         </div>
     </div>
 
@@ -300,7 +311,201 @@
         </div>
     </section>
 
-    <!-- SCRIPTS -->
+    <!-- Global Variables -->
+    <script>
+        window.targetEndTime = null; 
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
+        window.currentBannerFilter = null; // null = View all offers in store
+        window.bannersData = {};
+    </script>
+
+    <!-- FIREBASE MODULE & LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
+            authDomain: "gameflexstore-d20da.firebaseapp.com",
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // 1. SYNC AUTH & LOGIN
+        const savedUserName = localStorage.getItem('gf_logged_in_user');
+        if(savedUserName) {
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+        }
+
+        setPersistence(auth, browserLocalPersistence).then(() => {
+            onAuthStateChanged(auth, (user) => {
+                const authBtn = document.getElementById('authBtn');
+                if (user) {
+                    const firstName = user.displayName.split(' ')[0];
+                    localStorage.setItem('gf_logged_in_user', firstName); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${firstName}</span>`;
+                    authBtn.onclick = () => { window.location.href = "profile.html"; };
+                } else {
+                    localStorage.removeItem('gf_logged_in_user'); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login</span>`;
+                    authBtn.onclick = async () => {
+                        try { await signInWithPopup(auth, provider); } 
+                        catch (err) { alert("Login failed: " + err.message); }
+                    };
+                }
+            });
+        });
+
+        // 2. FETCH ADMIN BANNERS (1, 2, 3) DYNAMICALLY
+        const bannerSlots = ['offerBanner1', 'offerBanner2', 'offerBanner3'];
+        
+        bannerSlots.forEach((slot, index) => {
+            onSnapshot(doc(db, "settings", slot), (docSnap) => {
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    window.bannersData[slot] = data;
+                    
+                    const slideEl = document.getElementById('slide' + (index + 1));
+                    if(slideEl && data.image && data.image !== "") {
+                        slideEl.style.backgroundImage = `url('${data.image}')`;
+                    }
+
+                    // Set global timer to the first available banner's timer initially
+                    if(slot === 'offerBanner1' && data.endTime && !window.targetEndTime) {
+                        window.targetEndTime = data.endTime;
+                    }
+                }
+            });
+        });
+
+        // 3. FETCH & RENDER GAMES
+        let allOfferGames = [];
+        let currentFilter = 'All'; // Global category filter
+
+        const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
+        onSnapshot(qGames, (snapshot) => {
+            allOfferGames = [];
+            snapshot.forEach((docSnap) => {
+                const game = docSnap.data();
+                // Pick games that have "Offer" category OR a discount set
+                if ((game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%")) {
+                    allOfferGames.push({ id: docSnap.id, ...game });
+                }
+            });
+            renderGames();
+        });
+
+        // Click on "SHOP OFFERS" in a banner slide
+        window.filterByBanner = function(slotId) {
+            const data = window.bannersData[slotId];
+            
+            if(data && data.featuredGames && data.featuredGames.length > 0) {
+                window.currentBannerFilter = data.featuredGames; // Show only these game IDs
+                if(data.endTime) window.targetEndTime = data.endTime; // Sync timer to this banner
+            } else {
+                window.currentBannerFilter = []; // Empty
+            }
+            
+            // Show clear filter message
+            document.getElementById('bannerFilterMsg').style.display = 'block';
+
+            // Visually Reset Category Filter to "All"
+            document.querySelectorAll('.f-tag').forEach(b => b.classList.remove('active'));
+            document.querySelector('.f-tag[data-filter="All"]').classList.add('active');
+            currentFilter = 'All';
+            
+            renderGames();
+        };
+
+        // Clear Banner Filter (View all offers)
+        window.clearBannerFilter = function() {
+            window.currentBannerFilter = null;
+            document.getElementById('bannerFilterMsg').style.display = 'none';
+            renderGames();
+        };
+
+        // Render the Grid
+        window.renderGames = function() {
+            const grid = document.getElementById('offerGamesGrid');
+            grid.innerHTML = '';
+            
+            let filtered = allOfferGames;
+            
+            // A. Apply Admin Banner Specific Filter (if active)
+            if(window.currentBannerFilter !== null) {
+                filtered = filtered.filter(g => window.currentBannerFilter.includes(g.id));
+            }
+
+            // B. Apply User Category Filter (PC, PS5, Action, etc.)
+            if(currentFilter !== 'All') {
+                if(currentFilter === 'PS5' || currentFilter === 'PC') {
+                    filtered = filtered.filter(g => g.platform && g.platform.includes(currentFilter));
+                } else {
+                    filtered = filtered.filter(g => g.categories && g.categories.includes(currentFilter));
+                }
+            }
+
+            // C. Apply Sort
+            const sortVal = document.getElementById('sortSelect').value;
+            if(sortVal === 'priceLow') filtered.sort((a,b) => (a.price || a.permanentPrice || 0) - (b.price || b.permanentPrice || 0));
+            if(sortVal === 'priceHigh') filtered.sort((a,b) => (b.price || b.permanentPrice || 0) - (a.price || a.permanentPrice || 0));
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No offers found for your selection.</p>`;
+                return;
+            }
+
+            filtered.forEach(game => {
+                let badge = game.discount ? `<div class="badge-discount">${game.discount}</div>` : '';
+                let platformBadge = `<div class="badge-platform">${game.platform}</div>`;
+                let oldP = game.originalPrice ? `<span class="old-price">₹${game.originalPrice}</span>` : '';
+                let finalPrice = game.platform === 'PC' ? game.price : (game.permanentPrice || game.rentPrice || 0);
+                let escapedTitle = game.title.replace(/'/g, "\\'");
+
+                grid.innerHTML += `
+                    <div class="prod-card" onclick="window.location.href='game-details.html?id=${game.id}'">
+                        ${badge} ${platformBadge}
+                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
+                        <div class="prod-info">
+                            <div class="prod-title">${game.title}</div>
+                            <div class="price-row">
+                                <span class="curr-price">₹${finalPrice}</span>
+                                ${oldP}
+                            </div>
+                            <div class="card-actions">
+                                <button class="add-cart-btn" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${finalPrice}, '${game.image}')">
+                                    <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                                </button>
+                                <button class="wishlist-btn" onclick="event.stopPropagation();"><i class="fa-regular fa-heart"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Handle Category Tag Clicks
+        document.querySelectorAll('.f-tag').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.f-tag').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.getAttribute('data-filter');
+                // Don't reset banner filter here, so "Action" works INSIDE the specific banner's games.
+                window.renderGames();
+            });
+        });
+
+        document.getElementById('sortSelect').addEventListener('change', () => window.renderGames());
+    </script>
+
+    <!-- UTILITY SCRIPTS (Slider, Timer, Cart) -->
     <script>
         // --- SLIDER LOGIC ---
         let currentSlide = 0;
@@ -321,14 +526,21 @@
         function resetInterval() { clearInterval(slideInterval); slideInterval = setInterval(nextSlide, 5000); }
         slideInterval = setInterval(nextSlide, 5000);
 
-        // --- COUNTDOWN TIMER LOGIC (Loops every 3 days) ---
+        // --- DYNAMIC COUNTDOWN TIMER ---
         function updateTimer() {
-            const now = new Date();
-            // Calculate a fake end time (e.g., next Sunday or fixed 3 days cycle)
-            // For visual effect, let's just make it loop from 2 Days 14 Hours downward continuously based on timestamp
-            const cycleDuration = 3 * 24 * 60 * 60 * 1000; // 3 Days
-            const timeElapsed = now.getTime() % cycleDuration;
-            const timeLeft = cycleDuration - timeElapsed;
+            if(!window.targetEndTime) return; 
+
+            const now = new Date().getTime();
+            const target = new Date(window.targetEndTime).getTime();
+            const timeLeft = target - now;
+
+            if(timeLeft <= 0) {
+                document.getElementById('t-days').innerText = "00";
+                document.getElementById('t-hours').innerText = "00";
+                document.getElementById('t-mins').innerText = "00";
+                document.getElementById('t-secs').innerText = "00";
+                return;
+            }
 
             const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -341,139 +553,47 @@
             document.getElementById('t-secs').innerText = String(secs).padStart(2, '0');
         }
         setInterval(updateTimer, 1000);
-        updateTimer();
 
-        // --- COPY COUPON LOGIC ---
         function copyCode() {
             const code = document.getElementById('promoCode').innerText;
             navigator.clipboard.writeText(code);
             alert("Coupon Code GAMEFLEX10 copied to clipboard!");
         }
 
-        // --- CART LOGIC (Basic Shell for page functionality) ---
-        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
+        // --- CART LOGIC ---
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); }
+        
         function updateCartUI() {
             const container = document.getElementById('cartItemsContainer');
             let total = 0, qty = 0; container.innerHTML = '';
-            if(window.cartArray.length === 0) { container.innerHTML = '<p style="color:gray;text-align:center;margin-top:20px;">Cart is empty.</p>'; }
-            else {
+            
+            if(window.cartArray.length === 0) { 
+                container.innerHTML = '<p style="color:gray;text-align:center;margin-top:20px;">Your cart is empty.</p>'; 
+            } else {
                 window.cartArray.forEach((item, i) => {
                     total += item.price * item.qty; qty += item.qty;
-                    container.innerHTML += `<div style="display:flex;gap:10px;margin-bottom:15px;background:#1a1d24;padding:10px;border-radius:6px;position:relative;"><img src="${item.img}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"><div style="font-size:12px;"><strong>${item.title} (x${item.qty})</strong><br><span style="color:var(--primary-red);">₹${item.price}</span></div><button onclick="removeFromCart(${i})" style="position:absolute;right:10px;top:10px;background:none;border:none;color:gray;cursor:pointer;"><i class="fa-solid fa-trash"></i></button></div>`;
+                    container.innerHTML += `<div style="display:flex;gap:10px;margin-bottom:15px;background:#1a1d24;padding:10px;border-radius:6px;position:relative;"><img src="${item.img}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"><div style="font-size:12px; color:white;"><strong>${item.title} (x${item.qty})</strong><br><span style="color:var(--primary-red);">₹${item.price}</span></div><button onclick="removeFromCart(${i})" style="position:absolute;right:10px;top:10px;background:none;border:none;color:gray;cursor:pointer;"><i class="fa-solid fa-trash"></i></button></div>`;
                 });
             }
             document.getElementById('cartTotalPrice').innerText = '₹' + total;
             document.getElementById('cartBadgeCount').innerText = qty;
         }
-        function removeFromCart(i) { window.cartArray.splice(i, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); updateCartUI(); }
+
+        function removeFromCart(i) { 
+            window.cartArray.splice(i, 1); 
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); 
+            updateCartUI(); 
+        }
+
         window.addToCart = function(title, price, imgUrl) {
             const exist = window.cartArray.find(i => i.title === title);
             if(exist) exist.qty += 1; else window.cartArray.push({title, price:Number(price), img:imgUrl, qty:1});
-            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); updateCartUI(); toggleCart();
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); 
+            updateCartUI(); 
+            toggleCart();
         }
+        
         updateCartUI();
-        function proceedToPayment() { alert("Implement main checkout logic or redirect to index.html"); }
-    </script>
-
-    <!-- FIREBASE FETCH LOGIC -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // YAHAN APNI REAL CONFIG DAALNA
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "gameflexstore-d20da.firebaseapp.com",
-            projectId: "gameflexstore-d20da",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let allOfferGames = [];
-        let currentFilter = 'All';
-
-        const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
-        onSnapshot(qGames, (snapshot) => {
-            allOfferGames = [];
-            snapshot.forEach((doc) => {
-                const game = doc.data();
-                // Check if game has "Offer" category OR a discount string
-                if ((game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%")) {
-                    allOfferGames.push({ id: doc.id, ...game });
-                }
-            });
-            renderGames();
-        });
-
-        function renderGames() {
-            const grid = document.getElementById('offerGamesGrid');
-            grid.innerHTML = '';
-            
-            // Apply Filters
-            let filtered = allOfferGames;
-            if(currentFilter !== 'All') {
-                if(currentFilter === 'PS5' || currentFilter === 'PC') {
-                    filtered = filtered.filter(g => g.platform.includes(currentFilter));
-                } else {
-                    filtered = filtered.filter(g => g.categories && g.categories.includes(currentFilter));
-                }
-            }
-
-            // Apply Sort
-            const sortVal = document.getElementById('sortSelect').value;
-            if(sortVal === 'priceLow') filtered.sort((a,b) => (a.price || a.permanentPrice || 0) - (b.price || b.permanentPrice || 0));
-            if(sortVal === 'priceHigh') filtered.sort((a,b) => (b.price || b.permanentPrice || 0) - (a.price || a.permanentPrice || 0));
-            // For 'discount' it stays as default order (newest first) since parsing "% OFF" string accurately requires regex
-
-            if(filtered.length === 0) {
-                grid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No offers found in this category.</p>`;
-                return;
-            }
-
-            filtered.forEach(game => {
-                let badge = game.discount ? `<div class="badge-discount">${game.discount}</div>` : '';
-                let platformBadge = `<div class="badge-platform">${game.platform}</div>`;
-                let oldP = game.originalPrice ? `<span class="old-price">₹${game.originalPrice}</span>` : '';
-                let finalPrice = game.platform === 'PC' ? game.price : (game.permanentPrice || game.rentPrice || 0);
-                let escapedTitle = game.title.replace(/'/g, "\\'");
-
-                grid.innerHTML += `
-                    <div class="prod-card">
-                        ${badge} ${platformBadge}
-                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                        <div class="prod-info">
-                            <div class="prod-title">${game.title}</div>
-                            <div class="price-row">
-                                <span class="curr-price">₹${finalPrice}</span>
-                                ${oldP}
-                            </div>
-                            <div class="card-actions">
-                                <button class="add-cart-btn" onclick="addToCart('${escapedTitle}', ${finalPrice}, '${game.image}')">
-                                    <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-                                </button>
-                                <button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // Filter Clicks
-        document.querySelectorAll('.f-tag').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.f-tag').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.getAttribute('data-filter');
-                renderGames();
-            });
-        });
-
-        // Sort Change
-        document.getElementById('sortSelect').addEventListener('change', renderGames);
     </script>
 </body>
 </html>

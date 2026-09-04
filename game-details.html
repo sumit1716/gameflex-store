@@ -24,7 +24,9 @@
         /* Navbar Styles */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
-        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, #e31825 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--primary-red); }
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        
         .nav-actions { display: flex; align-items: center; gap: 15px; }
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 15px; }
         .icon-btn:hover { color: var(--primary-red); }
@@ -78,16 +80,16 @@
         .theme-ps5 .pdp-badge-mini.active-badge { background: var(--ps5-blue); color: #fff; }
         .theme-pc .pdp-badge-mini.active-badge { background: var(--primary-red); color: #fff; }
 
-        /* Center Column: Box Art Card (FIXED NO-ZOOM FRAME) */
+        /* Center Column: Box Art Card */
         .pdp-center-col { display: flex; justify-content: center; align-items: flex-start; }
         .pdp-image-card { 
             position: relative; 
             width: 100%; 
             max-width: 320px; 
-            height: 420px; /* Standard Game Box Height */
+            height: 420px; 
             border-radius: 12px; 
             overflow: hidden; 
-            background: rgba(0, 0, 0, 0.4); /* Soft dark background to fill empty space nicely */
+            background: rgba(0, 0, 0, 0.4); 
             border: 2px solid var(--border-dark); 
             box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
             margin: 0 auto; 
@@ -100,7 +102,7 @@
         .pdp-image-card img { 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* PERFECT FIX: Shows full image exactly as uploaded without any zoom or cropping */
+            object-fit: contain; 
             display: block; 
         }
         .pdp-image-overlay-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); z-index: 5; }
@@ -145,7 +147,7 @@
         .pdp-rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .pdp-rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
         .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; position: relative; }
-        .prod-card:hover { transform: translateY(-5px); }
+        .prod-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
         .prod-img { height: 140px; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
         
         @media (max-width: 992px) {
@@ -154,12 +156,13 @@
         }
     </style>
 </head>
-<body id="pageBody">
+<body id="pageBody" class="theme-pc"> <!-- default class -->
 
     <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">
-            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+            <!-- FIXED LOGO -->
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex" style="width: 100%; height: 100%; object-fit: contain;"></div>
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
         </a>
         <div class="nav-actions">
@@ -167,8 +170,9 @@
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
+            <!-- AUTH BUTTON FOR PDP -->
             <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
-                <i class="fa-solid fa-store"></i> <span>Back to Store</span>
+                <i class="fa-solid fa-user"></i> <span>Login</span>
             </button>
         </div>
     </nav>
@@ -208,6 +212,7 @@
                     <span>4.8 (Verified)</span>
                 </div>
 
+                <!-- DESCRIPTION BUG FIXED: Searching for 'description' AND 'desc' -->
                 <p class="pdp-desc" id="pdpMainDesc">Please wait while we load the game details from the database.</p>
 
                 <div class="pdp-feature-pills">
@@ -218,12 +223,12 @@
                 </div>
 
                 <div class="pdp-badges-row">
-                    <span class="pdp-badge-mini active-badge">Standard Edition</span>
+                    <span class="pdp-badge-mini active-badge" id="editionBadge">Standard Edition</span>
                     <span class="pdp-badge-mini">Digital Delivery</span>
                 </div>
             </div>
 
-            <!-- Center Image (NO ZOOM FIXED CONTAINER) -->
+            <!-- Center Image -->
             <div class="pdp-center-col">
                 <div class="pdp-image-card">
                     <div class="pdp-image-overlay-badge" id="pdpCardOverlayBadge">OFFICIAL</div>
@@ -270,13 +275,13 @@
             </div>
         </div>
 
-        <!-- Recommendations -->
+        <!-- Recommendations Section -->
         <div class="pdp-rec-section">
             <div class="pdp-rec-header">
                 <div style="font-size: 18px; font-weight: 800;"><i class="fa-solid fa-fire" style="color: #ffb703; margin-right: 8px;"></i> YOU MAY ALSO LIKE</div>
             </div>
             <div class="pdp-rec-grid" id="pdpRecommendationsGrid">
-                <!-- JS will load more games here -->
+                <p style="color: gray;">Finding top picks...</p>
             </div>
         </div>
     </div>
@@ -284,16 +289,29 @@
     <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
-            projectId: "gameflexstore-d20da"
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+
+        // LOGIN SYNC UI
+        const savedUserName = localStorage.getItem('gf_logged_in_user');
+        if(savedUserName) {
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+            document.getElementById('authBtn').onclick = () => { window.location.href = "profile.html"; };
+        }
 
         // Global Variables
         window.activeGameData = null;
@@ -320,49 +338,64 @@
                     renderGameUI();
                     loadRecommendations(gameId);
                 } else {
+                    alert("Game no longer exists!");
                     window.location.href = "index.html";
                 }
             } catch (e) {
                 console.error("Error loading game:", e);
+                alert("Error loading data from Database.");
             }
         }
 
         function renderGameUI() {
             const game = window.activeGameData;
-            const isPs5 = game.platform === 'PS5';
+            // Check if it's PS4, PS5, or PS4/PS5
+            const isConsole = (game.platform !== 'PC');
             
             // Set Theme
             const pageBody = document.getElementById('pageBody');
-            pageBody.className = isPs5 ? 'theme-ps5' : 'theme-pc';
+            pageBody.className = isConsole ? 'theme-ps5' : 'theme-pc';
 
             // Set Text & Images
-            document.getElementById('pdpBreadcrumbCategory').innerText = isPs5 ? 'PS5 Games' : 'PC Games';
+            document.getElementById('pdpBreadcrumbCategory').innerText = isConsole ? 'PlayStation Games' : 'PC Games';
             document.getElementById('pdpBreadcrumbTitle').innerText = game.title;
             document.getElementById('pdpMainTitle').innerText = game.title;
-            document.getElementById('pdpMainDesc').innerText = game.desc || 'Experience authentic gaming with instant digital delivery and 24/7 verified support.';
+            
+            // 🔥 FIX: Check both 'description' and 'desc' keys 
+            const finalDesc = game.description || game.desc || 'Experience authentic gaming with instant digital delivery and 24/7 verified support.';
+            document.getElementById('pdpMainDesc').innerText = finalDesc;
+            
             document.getElementById('pdpMainImage').src = game.image;
             
-            document.getElementById('pdpPlatformBadge').innerHTML = isPs5 ? `<i class="fa-brands fa-playstation"></i> <span>PlayStation 5</span>` : `<i class="fa-solid fa-desktop"></i> <span>PC Digital Key</span>`;
-            document.getElementById('pdpCardOverlayBadge').innerText = isPs5 ? 'PS5 OFFICIAL' : 'PC DIGITAL';
+            document.getElementById('pdpPlatformBadge').innerHTML = isConsole ? `<i class="fa-brands fa-playstation"></i> <span>${game.platform}</span>` : `<i class="fa-solid fa-desktop"></i> <span>PC Digital Key</span>`;
+            document.getElementById('pdpCardOverlayBadge').innerText = isConsole ? 'CONSOLE OFFICIAL' : 'PC DIGITAL';
 
             // Discount Tags
             const oldEl = document.getElementById('pdpDisplayOldPrice');
             const discEl = document.getElementById('pdpDisplayDiscount');
-            if (game.oldPrice) { oldEl.style.display = 'inline'; oldEl.innerText = '₹' + game.oldPrice; } else { oldEl.style.display = 'none'; }
-            if (game.discount) { discEl.style.display = 'inline-block'; discEl.innerText = game.discount; } else { discEl.style.display = 'none'; }
+            if (game.originalPrice) { oldEl.style.display = 'inline'; oldEl.innerText = '₹' + game.originalPrice; } else { oldEl.style.display = 'none'; }
+            if (game.discount && game.discount !== "0%") { discEl.style.display = 'inline-block'; discEl.innerText = game.discount; } else { discEl.style.display = 'none'; }
 
             // Set Options (Rent/Buy vs PC Standard)
             const optionTabs = document.getElementById('pdpOptionTabs');
-            if (isPs5) {
+            if (isConsole) {
                 document.getElementById('pdpSelectorTitle').innerText = "Choose Access Type";
-                window.activeOption = 'rent';
-                window.activeBasePrice = Number(game.rentPrice || 0);
+                document.getElementById('editionBadge').innerText = "Console Edition";
+                
+                // Defaults to Permanent Buy for consoles unless only Rent exists
+                let pRent = Number(game.rentalPrice || game.rentPrice || 0);
+                let pPerm = Number(game.permanentPrice || game.permPrice || 0);
+
+                window.activeOption = 'permanent';
+                window.activeBasePrice = pPerm > 0 ? pPerm : pRent;
+                
                 optionTabs.innerHTML = `
-                    <button class="pdp-tab-btn active-tab" id="tabRent" onclick="changeOption('rent', ${game.rentPrice})">1 Month Rental</button>
-                    <button class="pdp-tab-btn" id="tabPerm" onclick="changeOption('permanent', ${game.permPrice})">Permanent Buy</button>
+                    <button class="pdp-tab-btn" id="tabRent" onclick="changeOption('rent', ${pRent})">1 Month Rental (₹${pRent})</button>
+                    <button class="pdp-tab-btn active-tab" id="tabPerm" onclick="changeOption('permanent', ${pPerm})">Permanent Buy (₹${pPerm})</button>
                 `;
             } else {
                 document.getElementById('pdpSelectorTitle').innerText = "Edition";
+                document.getElementById('editionBadge').innerText = "Standard Edition";
                 window.activeOption = 'standard';
                 window.activeBasePrice = Number(game.price || 0);
                 optionTabs.innerHTML = `<button class="pdp-tab-btn active-tab">Standard Edition</button>`;
@@ -372,29 +405,51 @@
             window.updateCartUI(); 
         }
 
+        // RANDOMIZED RECOMMENDATION SYSTEM
         async function loadRecommendations(excludeId) {
             const recGrid = document.getElementById('pdpRecommendationsGrid');
-            const q = query(collection(db, "games"), limit(5));
-            const querySnapshot = await getDocs(q);
-            
-            recGrid.innerHTML = '';
-            querySnapshot.forEach((doc) => {
-                if (doc.id === excludeId) return;
-                const g = doc.data();
-                const displayPrice = g.platform === 'PC' ? g.price : g.rentPrice;
-                const badge = g.discount ? `<span style="position:absolute; top:8px; left:8px; background:var(--primary-red); color:white; font-size:9px; padding:2px 5px; border-radius:3px; font-weight:bold;">${g.discount}</span>` : '';
+            try {
+                // Fetch a batch of games
+                const q = query(collection(db, "games"), limit(15));
+                const querySnapshot = await getDocs(q);
                 
-                recGrid.innerHTML += `
-                    <div class="prod-card" style="border-radius:8px; cursor:pointer;" onclick="window.location.href='game-details.html?id=${doc.id}'">
-                        ${badge}
-                        <div class="prod-img" style="height:120px; background-image:url('${g.image}'); border-bottom:1px solid var(--border-dark);"></div>
-                        <div style="padding:10px;">
-                            <div style="font-size:12px; font-weight:700; margin-bottom:5px; color:white;">${g.title}</div>
-                            <div style="font-size:13px; font-weight:800; color:${g.platform === 'PC' ? 'var(--primary-red)' : 'var(--ps5-blue)'};">₹${displayPrice}</div>
+                let allGamesArray = [];
+                querySnapshot.forEach((doc) => {
+                    if (doc.id !== excludeId) allGamesArray.push({id: doc.id, ...doc.data()});
+                });
+
+                // Shuffle Array for Randomization
+                allGamesArray = allGamesArray.sort(() => 0.5 - Math.random());
+                
+                // Pick top 5
+                const selectedGames = allGamesArray.slice(0, 5);
+
+                recGrid.innerHTML = '';
+                if(selectedGames.length === 0) {
+                    recGrid.innerHTML = '<p style="color:gray;">No recommendations available.</p>';
+                    return;
+                }
+
+                selectedGames.forEach((g) => {
+                    let displayPrice = g.platform === 'PC' ? g.price : (g.permanentPrice || g.permPrice || g.rentalPrice || 0);
+                    let badge = (g.discount && g.discount !== "0%") ? `<span style="position:absolute; top:8px; left:8px; background:var(--primary-red); color:white; font-size:9px; padding:2px 5px; border-radius:3px; font-weight:bold;">${g.discount}</span>` : '';
+                    let platformColor = g.platform === 'PC' ? 'var(--primary-red)' : 'var(--ps5-blue)';
+
+                    recGrid.innerHTML += `
+                        <div class="prod-card" style="border-radius:8px; cursor:pointer;" onclick="window.location.href='game-details.html?id=${g.id}'">
+                            ${badge}
+                            <div class="prod-img" style="height:120px; background-image:url('${g.image}'); border-bottom:1px solid var(--border-dark);"></div>
+                            <div style="padding:10px;">
+                                <div style="font-size:12px; font-weight:700; margin-bottom:5px; color:white;">${g.title}</div>
+                                <div style="font-size:13px; font-weight:800; color:${platformColor};">₹${displayPrice}</div>
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            } catch (error) {
+                console.error("Recommendations error: ", error);
+                recGrid.innerHTML = '';
+            }
         }
 
         // Global functions for HTML access
@@ -422,7 +477,7 @@
         window.pdpAddToCart = function(redirect = false) {
             const game = window.activeGameData;
             let cartTitle = game.title;
-            if (game.platform === 'PS5') {
+            if (game.platform !== 'PC') {
                 cartTitle += window.activeOption === 'rent' ? ' (1 Mo. Rental)' : ' (Permanent Buy)';
             } else { cartTitle += ' (PC)'; }
 
@@ -430,7 +485,7 @@
             if (existing) { existing.qty += window.activeQty; } 
             else { window.cartArray.push({ title: cartTitle, price: window.activeBasePrice, img: game.image, qty: window.activeQty }); }
 
-            // SAVE TO LOCAL STORAGE SO INDEX.HTML CAN SEE IT
+            // SAVE TO LOCAL STORAGE
             localStorage.setItem('gf_cart', JSON.stringify(window.cartArray));
             
             if (redirect) {
@@ -441,6 +496,7 @@
             }
         };
 
+        // RUN INIT
         loadGameDetails();
     </script>
 
@@ -461,38 +517,40 @@
             const itemsContainer = document.getElementById('cartItemsContainer');
             itemsContainer.innerHTML = '';
             let subtotal = 0; 
-    let totalQty = 0;
+            let totalQty = 0;
 
-    if (window.cartArray.length === 0) {
-        itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Cart is empty.<br>Start adding games!</div>';
-        subtotal = 0;
-    } else {
-        window.cartArray.forEach((item, index) => {
-            subtotal += (item.price * item.qty);
-            totalQty += item.qty;
-            itemsContainer.innerHTML += `
-                <div class="cart-item">
-                    <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
-                    <div class="cart-item-details">
-                        <div class="cart-item-title">${item.title} (x${item.qty})</div>
-                        <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
-                    </div>
-                    <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `;
-        });
-    }
+            if (window.cartArray.length === 0) {
+                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Cart is empty.<br>Start adding games!</div>';
+                subtotal = 0;
+            } else {
+                window.cartArray.forEach((item, index) => {
+                    subtotal += (item.price * item.qty);
+                    totalQty += item.qty;
+                    itemsContainer.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-title">${item.title} (x${item.qty})</div>
+                                <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            }
 
-    // Apply Coupon Discount Calculation
-    const discount = window.appliedDiscount || 0;
-    const finalTotal = Math.max(0, subtotal - discount);
+            const discount = window.appliedDiscount || 0;
+            const finalTotal = Math.max(0, subtotal - discount);
 
-    // Update the UI elements for total price
-    document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
-        
+            document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
             
-}      
+            // Badge Update if element exists
+            const badgeCount = document.getElementById('cartBadgeCount');
+            if(badgeCount) badgeCount.innerText = totalQty;
+        }      
 
+        // First render
+        window.updateCartUI();
     </script>
 </body>
 </html>

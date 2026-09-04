@@ -45,11 +45,13 @@
         .btn-primary:hover { background: #cc0000; }
         .btn-pdf { background: #4BB543; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
-        /* Edit & Delete Buttons */
         .btn-edit { background: #00d2ff; color: black; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; margin-right: 5px; }
         .btn-delete { background: #ff3333; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
         
         .month-filter { background: #1a1d24; border: 1px solid #1f222b; color: white; padding: 10px; border-radius: 8px; outline: none; }
+        
+        .game-list-scroll::-webkit-scrollbar { width: 6px; }
+        .game-list-scroll::-webkit-scrollbar-thumb { background: #1f222b; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -60,6 +62,8 @@
             <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard & Report</li>
             <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
             <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Manage Games</li>
+            <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Manage Reviews</li>
+            <li onclick="switchTab('offerbanner', this)"><i class="fa-solid fa-bullhorn"></i> Manage Offer Banner</li>
         </ul>
     </div>
 
@@ -154,6 +158,7 @@
                             <label><input type="checkbox" value="Horror" class="cat-check"> Horror</label>
                             <label><input type="checkbox" value="Open-World" class="cat-check"> Open-World</label>
                             <label><input type="checkbox" value="Multiplayer" class="cat-check"> Multiplayer</label>
+                            <label><input type="checkbox" value="Racing" class="cat-check"> Racing</label> <!-- NEW RACING CATEGORY -->
                         </div>
                     </div>
 
@@ -203,7 +208,6 @@
                 </form>
             </div>
 
-            <!-- Database List -->
             <div class="card">
                 <h3 style="margin-top: 0; color: gray;">Uploaded Games Database</h3>
                 <table>
@@ -214,26 +218,114 @@
                 </table>
             </div>
         </div>
+
+        <!-- 4. MANAGE REVIEWS SECTION -->
+        <div id="reviewsSection" class="section" style="display: none;">
+            <div class="card">
+                <h3 style="margin-top: 0; color: gray;">Community Reviews Moderation</h3>
+                <table>
+                    <thead><tr><th>Customer</th><th>Rating</th><th>Game / Context</th><th>Review Comment</th><th>Action</th></tr></thead>
+                    <tbody id="adminReviewsTable">
+                        <tr><td colspan="5" style="text-align: center; color: gray;">Loading reviews...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. MANAGE OFFERS BANNER SECTION (UPGRADED) -->
+        <div id="offerbannerSection" class="section" style="display: none;">
+            
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: gray;">Live Offer Banner, Timer & Game Discounts</h3>
+                    
+                    <!-- MULTIPLE BANNERS SELECTOR -->
+                    <select id="obBannerSlot" onchange="loadBannerSettings()" style="padding: 10px; border-radius: 8px; border: 1px solid #1f222b; background: #1a1d24; color: white; outline: none; font-weight: bold;">
+                        <option value="offerBanner1">Slide 1 (Main Offer Banner)</option>
+                        <option value="offerBanner2">Slide 2 (Secondary Banner)</option>
+                        <option value="offerBanner3">Slide 3 (Event Banner)</option>
+                    </select>
+                </div>
+
+                <form id="offerBannerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Offer End Date & Time (For Countdown Timer)</label>
+                            <input type="datetime-local" id="obTimer" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Hero Banner Image (Choose ONE option)</label>
+                        <div class="drop-zone" id="obDropZone">
+                            <span id="obDropZoneText">Option 1: Drag & Drop Image File Here (Max 800KB)</span>
+                            <input type="file" id="obImageFile" accept="image/*">
+                        </div>
+                        <div style="text-align: center; margin: 10px 0; color: gray; font-size: 12px;">--- OR ---</div>
+                        <input type="url" id="obImageUrlFallback" placeholder="Option 2: Paste Image URL Directly (e.g., https://...)">
+                    </div>
+
+                    <!-- SELECT GAMES AND SET CUSTOM SALE PRICES -->
+                    <div style="margin-top: 30px; margin-bottom: 20px;">
+                        <label style="color: white; font-size: 15px; font-weight:bold; margin-bottom: 10px; display: block;">Select Games & Apply Sale Price for this Banner:</label>
+                        <p style="font-size: 12px; color: gray; margin-bottom: 15px;">Tick the checkbox to feature the game. Enter a <b>Sale Price</b> to automatically calculate and apply the discount tag.</p>
+                        
+                        <div style="display: flex; gap: 20px;">
+                            <!-- PC Games List -->
+                            <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid #1f222b;">
+                                <h4 style="color: var(--primary-red); margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-solid fa-desktop"></i> PC Games</h4>
+                                <div id="obPcGamesList" class="game-list-scroll" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                                    <span style="color:gray; font-size:12px;">Loading PC games...</span>
+                                </div>
+                            </div>
+                            <!-- PS Games List -->
+                            <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid #1f222b;">
+                                <h4 style="color: #00d2ff; margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-brands fa-playstation"></i> PlayStation Games</h4>
+                                <div id="obPsGamesList" class="game-list-scroll" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                                    <span style="color:gray; font-size:12px;">Loading PS games...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="updateBannerBtn" style="width: 100%; margin-top: 10px; padding: 15px; font-size: 16px;">Update Selected Banner & Discounts</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-top: 0; color: gray;">Preview Current Settings</h3>
+                <div style="display:flex; gap:20px; align-items:center;">
+                    <img id="currentBannerImg" src="" alt="No Image Set" style="width:200px; height:120px; object-fit:cover; border-radius:8px; border:1px solid #1f222b; display:none;">
+                    <div>
+                        <p style="color:gray; margin-bottom:5px;">Offer Ends On:</p>
+                        <h2 id="currentBannerTime" style="color:var(--primary-red); margin:0;">Not Set</h2>
+                        <p id="currentFeaturedCount" style="color:#4BB543; font-size: 13px; margin-top: 5px;">0 Games Featured</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- FIREBASE SCRIPTS (ONLY FIRESTORE NOW) -->
+    <!-- FIREBASE SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        // Added deleteDoc here
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // IMPORTANT: YAHAN APNI FIRESTORE KEYS DAALNA (Storage Bucket zaruri nahi hai ab)
+        // YAHAN APNI REAL CONFIG DAALNA
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
             projectId: "gameflexstore-d20da",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
         let allOrders = [], allUsers = [], allGames = [];
+        window.currentFeaturedGames = []; 
+        let bannerUnsubscribe = null;
         
         const today = new Date();
         document.getElementById('monthPicker').value = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
@@ -243,7 +335,13 @@
             document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
             document.getElementById(tabId + 'Section').style.display = 'block';
             element.classList.add('active');
-            const titles = { 'dashboard': 'Dashboard & Report', 'orders': 'Live Orders', 'manage': 'Manage Games Database' };
+            const titles = { 
+                'dashboard': 'Dashboard & Report', 
+                'orders': 'Live Orders', 
+                'manage': 'Manage Games Database',
+                'reviews': 'Manage Community Reviews',
+                'offerbanner': 'Manage Banners & Discounts'
+            };
             document.getElementById('pageTitle').innerText = titles[tabId];
         };
 
@@ -269,12 +367,13 @@
             if(fileInput.files.length > 0) document.getElementById('dropZoneText').innerHTML = `<span style="color:#4BB543;"><i class="fa-solid fa-check"></i> File Ready (${(fileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
         });
 
-        // FETCH DATA
+        // FETCH USERS
         onSnapshot(collection(db, "users"), (snapshot) => {
             allUsers = []; snapshot.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
             filterDashboardData();
         });
 
+        // FETCH ORDERS
         onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snapshot) => {
             allOrders = [];
             snapshot.forEach(doc => {
@@ -283,6 +382,79 @@
             renderAllOrdersTable(); filterDashboardData();
         });
 
+        // FETCH REVIEWS
+        onSnapshot(query(collection(db, "reviews"), orderBy("createdAt", "desc")), (snapshot) => {
+            const tbody = document.getElementById('adminReviewsTable');
+            tbody.innerHTML = '';
+            if(snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: gray;">No reviews found</td></tr>';
+                return;
+            }
+            snapshot.forEach((docSnap) => {
+                const rev = docSnap.data();
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${rev.userName || 'Anonymous'}</strong></td>
+                        <td style="color: #FFD700; font-weight: bold;">${rev.rating || 5} / 5 ⭐</td>
+                        <td>${rev.gameName || 'General Store'}</td>
+                        <td style="max-width: 300px; word-break: break-word;">"${rev.reviewText}"</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteReview('${docSnap.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        window.deleteReview = async function(reviewId) {
+            if(confirm("Are you sure you want to delete this customer review?")) {
+                try {
+                    await deleteDoc(doc(db, "reviews", reviewId));
+                    alert("✅ Review Deleted Successfully!");
+                } catch(err) {
+                    console.error("Delete error: ", err);
+                    alert("❌ Failed to delete review.");
+                }
+            }
+        };
+
+        // RENDER CHECKBOXES AND SALE PRICE INPUTS
+        function renderOfferGameSelection() {
+            const pcList = document.getElementById('obPcGamesList');
+            const psList = document.getElementById('obPsGamesList');
+            pcList.innerHTML = ''; psList.innerHTML = '';
+            
+            let pcCount = 0; let psCount = 0;
+
+            allGames.forEach(game => {
+                let displayPrice = game.price || game.permanentPrice || game.rentPrice || 0;
+                let origPrice = game.originalPrice || displayPrice;
+                const isChecked = window.currentFeaturedGames.includes(game.id) ? "checked" : "";
+                
+                const cbHtml = `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px; border:1px solid #1f222b;">
+                    <label style="font-size:12px; color:white; display:flex; align-items:center; gap:8px; cursor:pointer; flex: 1;">
+                        <input type="checkbox" value="${game.id}" class="offer-game-cb" style="accent-color:var(--primary-red);" ${isChecked}> 
+                        <img src="${game.image}" style="width:24px; height:24px; object-fit:cover; border-radius:4px;">
+                        ${game.title} <span style="color:gray;">(Current: ₹${displayPrice})</span>
+                    </label>
+                    <input type="number" id="salePrice_${game.id}" placeholder="Sale Price ₹" title="Original: ₹${origPrice}" style="width:100px; padding:6px; border-radius:4px; border:1px solid #2a2a30; background:#0b0c10; color:white; font-size:12px; outline:none; text-align:center;">
+                </div>`;
+                
+                if(game.platform === 'PC') {
+                    pcList.innerHTML += cbHtml;
+                    pcCount++;
+                } else {
+                    psList.innerHTML += cbHtml;
+                    psCount++;
+                }
+            });
+
+            if(pcCount === 0) pcList.innerHTML = '<span style="color:gray; font-size:12px;">No PC games found</span>';
+            if(psCount === 0) psList.innerHTML = '<span style="color:gray; font-size:12px;">No PS games found</span>';
+        }
+
+        // FETCH GAMES
         onSnapshot(query(collection(db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
             allGames = [];
             const tbody = document.getElementById('gamesTableBody'); tbody.innerHTML = '';
@@ -293,13 +465,14 @@
                     <td><img src="${game.image}" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover;"></td>
                     <td><strong>${game.title}</strong></td>
                     <td>${game.platform}</td>
-                    <td>₹${game.price}</td>
+                    <td>₹${game.price || game.permanentPrice || game.rentPrice || 0}</td>
                     <td>
                         <button class="btn-edit" onclick="editGame('${game.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
                         <button class="btn-delete" onclick="deleteGame('${game.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
                     </td>
                 </tr>`;
             });
+            renderOfferGameSelection();
         });
 
         window.filterDashboardData = function() {
@@ -357,8 +530,8 @@
 
             document.getElementById('gTitle').value = game.title;
             document.getElementById('gPlatform').value = game.platform;
-            document.getElementById('gOriginalPrice').value = game.originalPrice;
-            document.getElementById('gSellingPrice').value = game.price;
+            document.getElementById('gOriginalPrice').value = game.originalPrice || '';
+            document.getElementById('gSellingPrice').value = game.price || game.permanentPrice || '';
             document.getElementById('gDesc').value = game.description;
             document.getElementById('gImageUrlFallback').value = ""; 
             calculateDiscount(); togglePS5Fields();
@@ -383,17 +556,12 @@
             document.getElementById('ps5PricingBlock').style.display = 'none';
         };
 
-        // ====== DELETE GAME LOGIC ======
         window.deleteGame = async function(gameId) {
             if (confirm("Are you sure you want to delete this game? This action cannot be undone.")) {
                 try {
                     await deleteDoc(doc(db, "games", gameId));
                     alert("✅ Game Deleted Successfully!");
-                    
-                    // Agar delete ki hui game edit mode mein khuli thi, toh form reset kar de
-                    if(document.getElementById('editGameId').value === gameId) {
-                        cancelEdit();
-                    }
+                    if(document.getElementById('editGameId').value === gameId) cancelEdit();
                 } catch (error) {
                     console.error("Delete Error: ", error);
                     alert("❌ Delete Failed! Kuch issue aaya hai.");
@@ -401,7 +569,6 @@
             }
         };
 
-        // ====== FIXED UPLOAD LOGIC (BASE64 + URL) ======
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -411,6 +578,7 @@
             });
         }
 
+        // GAME UPLOAD LOGIC
         document.getElementById('gameForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('uploadBtn');
@@ -425,18 +593,16 @@
 
                 if (file) {
                     if(file.size > 800 * 1024) { 
-                        alert("❌ Error: Image size is too large (max 800KB). Please compress it or use Option 2 (Image URL).");
+                        alert("❌ Error: Image size is too large (max 800KB).");
                         btn.innerHTML = editId ? "Update Game in Database" : "Upload Game to Database";
-                        btn.disabled = false;
-                        return;
+                        btn.disabled = false; return;
                     }
                     imageUrl = await getBase64(file);
                 } else if (fallbackUrl !== "") {
                     imageUrl = fallbackUrl;
                 } else if (!editId) {
                     alert("⚠️ Please either upload a file OR paste an Image URL!");
-                    btn.innerHTML = 'Upload Game to Database'; btn.disabled = false;
-                    return;
+                    btn.innerHTML = 'Upload Game to Database'; btn.disabled = false; return;
                 }
 
                 const selectedCategories = [];
@@ -467,13 +633,149 @@
                     await addDoc(collection(db, "games"), gameData);
                     alert("✅ New Game Uploaded Successfully to Database!");
                 }
-                
                 cancelEdit();
             } catch (error) {
                 console.error("Database Error: ", error);
-                alert("❌ Upload Failed! Kuch database error aaya hai.");
+                alert("❌ Upload Failed!");
             } finally {
                 btn.innerHTML = editId ? "Update Game in Database" : "Upload Game to Database"; 
+                btn.disabled = false;
+            }
+        });
+
+        // ============================================
+        // OFFER BANNER & DISCOUNT SYNC LOGIC (UPGRADED)
+        // ============================================
+
+        // Function to load settings for the selected banner slot
+        window.loadBannerSettings = function() {
+            const slot = document.getElementById('obBannerSlot').value;
+            
+            // Unsubscribe from previous listener if exists
+            if(bannerUnsubscribe) bannerUnsubscribe();
+            
+            bannerUnsubscribe = onSnapshot(doc(db, "settings", slot), (docSnap) => {
+                const imgPreview = document.getElementById('currentBannerImg');
+                const timePreview = document.getElementById('currentBannerTime');
+                const featCount = document.getElementById('currentFeaturedCount');
+                
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    if(data.image) { imgPreview.src = data.image; imgPreview.style.display = 'block'; }
+                    else { imgPreview.style.display = 'none'; }
+                    
+                    if(data.endTime) timePreview.innerText = new Date(data.endTime).toLocaleString();
+                    else timePreview.innerText = "Not Set";
+                    
+                    if(data.featuredGames) {
+                        window.currentFeaturedGames = data.featuredGames;
+                        featCount.innerText = `${data.featuredGames.length} Games Featured`;
+                    } else {
+                        window.currentFeaturedGames = [];
+                        featCount.innerText = `0 Games Featured`;
+                    }
+                } else {
+                    imgPreview.style.display = 'none';
+                    timePreview.innerText = "Not Set";
+                    window.currentFeaturedGames = [];
+                    featCount.innerText = `0 Games Featured`;
+                }
+                // Refresh checkboxes
+                renderOfferGameSelection(); 
+            });
+        };
+
+        // Load default banner 1 on start
+        setTimeout(loadBannerSettings, 1000);
+
+        const obFileInput = document.getElementById('obImageFile');
+        obFileInput.addEventListener('change', () => {
+            if(obFileInput.files.length > 0) {
+                document.getElementById('obDropZoneText').innerHTML = `<span style="color:#4BB543;"><i class="fa-solid fa-check"></i> File Ready (${(obFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
+            }
+        });
+
+        // Handle Offer Banner Update & Game Discounts
+        document.getElementById('offerBannerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('updateBannerBtn');
+            const slot = document.getElementById('obBannerSlot').value;
+            const file = obFileInput.files[0];
+            const fallbackUrl = document.getElementById('obImageUrlFallback').value.trim();
+            const endTime = document.getElementById('obTimer').value;
+            
+            btn.innerHTML = 'Applying Discounts & Updating...'; 
+            btn.disabled = true;
+
+            try {
+                let imageUrl = document.getElementById('currentBannerImg').src || "";
+
+                if (file) {
+                    if(file.size > 800 * 1024) { 
+                        alert("❌ Error: Image size is too large (max 800KB).");
+                        btn.innerHTML = "Update Selected Banner & Discounts"; btn.disabled = false; return;
+                    }
+                    imageUrl = await getBase64(file);
+                } else if (fallbackUrl !== "") {
+                    imageUrl = fallbackUrl;
+                } else if (imageUrl === "" || imageUrl.includes(window.location.host)) {
+                    alert("⚠️ Please either upload a file OR paste an Image URL for the banner!");
+                    btn.innerHTML = "Update Selected Banner & Discounts"; btn.disabled = false; return;
+                }
+
+                // GATHER SELECTED GAMES & NEW SALE PRICES
+                const selectedGames = [];
+                const gameUpdates = [];
+                
+                document.querySelectorAll('.offer-game-cb:checked').forEach(cb => {
+                    selectedGames.push(cb.value);
+                    const salePriceInput = document.getElementById('salePrice_' + cb.value).value;
+                    if(salePriceInput && salePriceInput.trim() !== "") {
+                        gameUpdates.push({ id: cb.value, salePrice: Number(salePriceInput) });
+                    }
+                });
+
+                // UPDATE THE SETTINGS DOCUMENT FOR THIS BANNER
+                await setDoc(doc(db, "settings", slot), {
+                    image: imageUrl,
+                    endTime: endTime,
+                    featuredGames: selectedGames,
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                // AUTOMATICALLY UPDATE GAME PRICES IN DATABASE
+                for(let update of gameUpdates) {
+                    const game = allGames.find(g => g.id === update.id);
+                    if(game) {
+                        const orig = game.originalPrice || game.price || game.permanentPrice || 1;
+                        const discountPct = Math.round(((orig - update.salePrice) / orig) * 100);
+                        const discountTag = discountPct > 0 ? `${discountPct}% OFF` : "";
+                        
+                        let updatedGameData = { 
+                            discount: discountTag,
+                            categories: game.categories ? [...new Set([...game.categories, "Offer"])] : ["Offer"]
+                        };
+                        
+                        if (game.platform === 'PC') {
+                            updatedGameData.price = update.salePrice;
+                        } else {
+                            updatedGameData.permanentPrice = update.salePrice; // For consoles, applying discount to perm price
+                        }
+                        
+                        await updateDoc(doc(db, "games", update.id), updatedGameData);
+                    }
+                }
+                
+                alert(`✅ Banner (${slot}) Updated & Sale Prices Applied!`);
+                document.getElementById('offerBannerForm').reset();
+                document.getElementById('obDropZoneText').innerText = "Option 1: Drag & Drop Image File Here (Max 800KB)";
+                
+            } catch (error) {
+                console.error("Banner Update Error: ", error);
+                alert("❌ Update Failed! Check console for details.");
+            } finally {
+                btn.innerHTML = "Update Selected Banner & Discounts"; 
                 btn.disabled = false;
             }
         });
