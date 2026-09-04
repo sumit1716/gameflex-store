@@ -27,10 +27,8 @@
 
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; }
-        
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
-        
         .nav-links { display: flex; gap: 25px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); }
@@ -67,6 +65,16 @@
         
         .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         .onboarding-submit:hover { background: #c1121d; }
+
+        /* NEW PAYMENT MODAL CSS */
+        .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .payment-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 350px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .close-payment { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-gray); font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .close-payment:hover { color: var(--primary-red); }
+        .qr-container { background: white; padding: 10px; border-radius: 8px; margin: 15px auto; width: 220px; height: 220px; border: 2px solid var(--border-dark); }
+        .qr-container img { width: 100%; height: 100%; object-fit: contain; }
+        .confirm-pay-btn { width: 100%; background: #00c853; color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; }
+        .confirm-pay-btn:hover { background: #00e676; box-shadow: 0 5px 15px rgba(0, 200, 83, 0.3); }
 
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
         .icon-btn:hover { color: var(--primary-red); }
@@ -229,6 +237,24 @@
         </div>
     </div>
 
+    <!-- NEW PAYMENT MODAL -->
+    <div class="payment-overlay" id="paymentOverlay">
+        <div class="payment-modal">
+            <button class="close-payment" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color: var(--text-light); margin-bottom: 10px;"><i class="fa-solid fa-qrcode" style="color: var(--primary-red);"></i> Scan to Pay</h2>
+            <p style="color: var(--text-gray); font-size: 14px;">Total Amount: <span id="paymentTotalAmount" style="color: var(--primary-red); font-weight: bold; font-size: 18px;">₹0</span></p>
+            
+            <div class="qr-container">
+                <!-- EXACT IMAGE REQUESTED -->
+                <img src="qr.png" alt="Payment QR Code">
+            </div>
+            
+            <p style="font-size: 11px; color: gray; margin-bottom: 15px; line-height: 1.4;">Please scan the QR code above using any UPI app (GPay, PhonePe, Paytm). After successful payment, click the button below to confirm.</p>
+            
+            <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndPlaceOrder()">I HAVE PAID</button>
+        </div>
+    </div>
+
     <div class="top-bar">
         <i class="fa-solid fa-fire"></i>
         <span>Limited Time Offer! Get up to 30% OFF on selected games.</span>
@@ -303,6 +329,8 @@
                 <span id="cartTotalPrice">₹0</span>
             </div>
             <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> CLAIM FREE GAME (500 Tokens)</button>
+            
+            <!-- CHANGED TO TRIGGER PAYMENT MODAL -->
             <button class="checkout-btn" id="checkoutBtn" onclick="proceedToPayment()">Proceed to Payment</button>
             <p id="tokenEarnText" style="text-align:center; font-size:12px; color:#FFD700; margin-top:10px; font-weight:600;"></p>
         </div>
@@ -467,20 +495,17 @@
             if (user) {
                 currentUser = user;
                 
-                // Show Hi [Name] and link directly to profile page
                 authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${user.displayName.split(' ')[0]}</span>`;
                 authBtn.onclick = () => { window.location.href = "profile.html"; };
                 
                 const userRef = doc(db, "users", user.uid);
                 
-                // Check if user is fully registered, if not show the onboarding overlay
                 const userSnap = await getDoc(userRef);
                 if (!userSnap.exists() || !userSnap.data().gamerType) {
                     document.getElementById('obName').value = user.displayName || '';
                     document.getElementById('onboardingOverlay').style.display = 'flex';
                 }
 
-                // Listen for tokens updating live
                 onSnapshot(userRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
@@ -500,7 +525,6 @@
                 document.getElementById('tokenTracker').style.display = 'none';
                 document.getElementById('onboardingOverlay').style.display = 'none';
                 
-                // Show Login Button
                 authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>`;
                 authBtn.onclick = loginUser;
             }
@@ -531,7 +555,7 @@
                     gamerType: selectedRadio.value,
                     tokens: currentTokens || 0, 
                     lastLogin: serverTimestamp(),
-                    createdAt: serverTimestamp() // Only recorded once
+                    createdAt: serverTimestamp() 
                 }, { merge: true });
 
                 document.getElementById('onboardingOverlay').style.display = 'none';
@@ -549,30 +573,62 @@
             element.querySelector('input').checked = true;
         };
 
-        // --- CHECKOUT & CLAIM LOGIC ---
+        // --- NEW CHECKOUT & PAYMENT LOGIC (QR CODE MODAL) ---
         window.proceedToPayment = async function() {
             if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
             if (!currentUser) { alert("Please login first!"); await loginUser(); return; }
 
             const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            
+            // Set Total Amount in Payment Modal
+            document.getElementById('paymentTotalAmount').innerText = '₹' + total.toLocaleString('en-IN');
+            
+            // Close Cart & Open Payment Popup
+            window.toggleCart();
+            document.getElementById('paymentOverlay').style.display = 'flex';
+        };
+
+        window.closePaymentModal = function() {
+            document.getElementById('paymentOverlay').style.display = 'none';
+        };
+
+        window.confirmAndPlaceOrder = async function() {
+            const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
             const earnedTokens = Math.floor(total / 100) * 10; 
-            const checkoutBtn = document.getElementById('checkoutBtn');
-            checkoutBtn.disabled = true; checkoutBtn.innerText = "Creating Booking...";
+            
+            const confirmBtn = document.getElementById('confirmPaymentBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerText = "Verifying & Booking...";
 
             try {
+                // Sent to Firebase with "Pending Verification" Status
                 await addDoc(collection(db, "bookings"), {
-                    userId: currentUser.uid, userName: currentUser.displayName, userEmail: currentUser.email,
-                    items: window.cartArray, totalAmount: total, status: "Paid", createdAt: serverTimestamp()
+                    userId: currentUser.uid, 
+                    userName: currentUser.displayName, 
+                    userEmail: currentUser.email,
+                    items: window.cartArray, 
+                    totalAmount: total, 
+                    status: "Pending Verification", 
+                    createdAt: serverTimestamp()
                 });
 
                 if (earnedTokens > 0) {
                     await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
                 }
 
-                alert(`Booking Successful!\nYou earned ${earnedTokens} GameFlex-Tokens! 🪙`);
-                window.cartArray = []; localStorage.removeItem('gf_cart'); window.updateCartUI(); window.toggleCart();
-            } catch (error) { alert("Failed to save booking"); } 
-            finally { checkoutBtn.disabled = false; checkoutBtn.innerText = "Proceed to Payment"; }
+                alert(`Payment Confirmed & Booking Successful!\nOur team will verify the payment shortly.\nYou earned ${earnedTokens} GameFlex-Tokens! 🪙`);
+                
+                window.cartArray = []; 
+                localStorage.removeItem('gf_cart'); 
+                window.updateCartUI(); 
+                closePaymentModal();
+            } catch (error) { 
+                console.error("Booking Error: ", error);
+                alert("Failed to save booking"); 
+            } finally { 
+                confirmBtn.disabled = false; 
+                confirmBtn.innerText = "I HAVE PAID"; 
+            }
         };
 
         window.claimFreeGame = async function() {
@@ -615,12 +671,15 @@
         document.addEventListener('click', function(event) { if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; });
 
         window.toggleCart = function() { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
+        
         window.addToCart = function(title, price, imgUrl) {
             const existingItem = window.cartArray.find(item => item.title === title);
             if(existingItem) existingItem.qty += 1; else window.cartArray.push({ title: title, price: Number(price), img: imgUrl, qty: 1 });
             localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); window.toggleCart(); 
         };
+        
         window.removeFromCart = function(index) { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
+        
         window.updateCartUI = function() {
             const itemsContainer = document.getElementById('cartItemsContainer'); const totalElement = document.getElementById('cartTotalPrice'); const badgeCount = document.getElementById('cartBadgeCount');
             itemsContainer.innerHTML = ''; let totalAmount = 0; let totalQty = 0;
@@ -636,6 +695,8 @@
             const claimBtn = document.getElementById('claimBtn');
             if(typeof window.currentTokensGlobal === 'function' && window.currentTokensGlobal() >= 500) { claimBtn.style.display = "block"; } else { claimBtn.style.display = "none"; }
         };
+
+        // Initialize UI on load
         window.updateCartUI();
     </script>
 </body>
