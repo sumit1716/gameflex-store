@@ -64,22 +64,44 @@
         .products-section { padding: 20px 5% 60px 5%; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
-        .product-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .product-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer;}
         .product-card:hover { border-color: var(--primary-red); transform: translateY(-6px); box-shadow: 0 12px 30px rgba(227, 24, 37, 0.25); }
         
         .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--primary-red); color: white; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; z-index: 2; box-shadow: 0 2px 8px rgba(227, 24, 37, 0.4); }
-        .product-img { height: 180px; width: 100%; background-size: cover; background-position: center; transition: transform 0.5s ease; }
+        .product-img { height: 180px; width: 100%; background-size: cover; background-position: center; transition: transform 0.5s ease; border-bottom: 1px solid var(--border-dark);}
         .product-card:hover .product-img { transform: scale(1.05); }
         
-        .product-info { padding: 18px; }
+        .product-info { padding: 18px; position: relative; background: var(--card-bg); z-index: 5;}
         .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
         .product-price { font-size: 17px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
         
-        .buy-btn { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 12px rgba(227, 24, 37, 0.3); }
+        .buy-btn { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 12px rgba(227, 24, 37, 0.3); cursor: pointer;}
         .buy-btn:hover { background: #c1121d; box-shadow: 0 6px 15px rgba(227, 24, 37, 0.5); }
         
         .back-link { display: inline-block; margin-bottom: 15px; color: var(--text-gray); text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; }
         .back-link:hover { color: var(--primary-red); }
+
+        /* Cart Sidebar Styles */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .cart-header h2 { font-size: 18px; font-weight: 800; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .close-cart:hover { color: var(--primary-red); transform: rotate(90deg); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); align-items: center; position: relative; }
+        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; border: 1px solid var(--border-dark); }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; line-height: 1.3; }
+        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--primary-red); }
+        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; transition: 0.3s; position: absolute; right: 12px; top: 12px; }
+        .remove-item:hover { color: var(--primary-red); }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+        .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; color: var(--text-light); margin-bottom: 15px; }
+        .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .checkout-btn:hover { background: #c1121d; }
     </style>
 </head>
 <body>
@@ -97,15 +119,34 @@
             <li><a href="#">Offers</a></li>
         </ul>
         <div class="nav-actions">
-            <button class="icon-btn"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge">2</span></button>
+            <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
         </div>
     </nav>
+
+    <!-- Cart Overlay & Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <div style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotalPrice">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Main Store</button>
+        </div>
+    </div>
 
     <header class="pc-hero">
         <div class="pc-hero-content">
             <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
             <div class="pc-subtitle">PC GAMES</div>
-            <h1 class="pc-title">The Ultimate <span>PC Gaming Experience</span></h1>
+            <h1 class="pc-title">The Ultimate<br><span>PC Gaming Experience</span></h1>
             <p class="pc-desc">Explore top-rated titles, new releases & best deals all in one place.</p>
             <div class="pc-features">
                 <div class="pc-feat-item"><i class="fa-solid fa-gamepad"></i> 1000+ Games</div>
@@ -121,32 +162,33 @@
             <div class="section-title"><span></span> Shop By Category</div>
         </div>
         <div class="cat-row">
-            <div class="sub-cat-card active">
+            <!-- Added onclick events to trigger filter -->
+            <div class="sub-cat-card active" onclick="setCategoryFilter('All', this)">
                 <i class="fa-solid fa-fire"></i>
                 <h4>NEW RELEASES</h4>
                 <p>Fresh Arrivals</p>
             </div>
-            <div class="sub-cat-card">
+            <div class="sub-cat-card" onclick="setCategoryFilter('Best Sellers', this)">
                 <i class="fa-solid fa-trophy"></i>
                 <h4>BEST SELLERS</h4>
                 <p>Top Rated Games</p>
             </div>
-            <div class="sub-cat-card">
+            <div class="sub-cat-card" onclick="setCategoryFilter('Under 500', this)">
                 <i class="fa-solid fa-tag"></i>
                 <h4>UNDER ₹500</h4>
                 <p>Budget Friendly</p>
             </div>
-            <div class="sub-cat-card">
+            <div class="sub-cat-card" onclick="setCategoryFilter('Action', this)">
                 <i class="fa-solid fa-gamepad"></i>
                 <h4>ACTION</h4>
                 <p>Adventure & Action</p>
             </div>
-            <div class="sub-cat-card">
+            <div class="sub-cat-card" onclick="setCategoryFilter('Shooter', this)">
                 <i class="fa-solid fa-crosshairs"></i>
                 <h4>SHOOTER</h4>
                 <p>FPS / TPS Games</p>
             </div>
-            <div class="sub-cat-card">
+            <div class="sub-cat-card" onclick="setCategoryFilter('Racing', this)">
                 <i class="fa-solid fa-flag-checkered"></i>
                 <h4>RACING</h4>
                 <p>Speed & Thrill</p>
@@ -159,50 +201,156 @@
             <div class="section-title"><span></span> Popular PC Games</div>
             <a href="#" class="view-all-link">View All &rarr;</a>
         </div>
-        <div class="products-grid">
-            
-            <div class="product-card">
-                <span class="discount-badge">-30%</span>
-                <div class="product-img" style="background-image: url('image1.png.png');"></div>
-                <div class="product-info">
-                    <div class="product-title">Elden Ring</div>
-                    <div class="product-price">₹2,499</div>
-                    <a href="#" class="buy-btn">Add to Cart</a>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <span class="discount-badge">-25%</span>
-                <div class="product-img" style="background-image: url('image1.png.png');"></div>
-                <div class="product-info">
-                    <div class="product-title">Red Dead Redemption 2</div>
-                    <div class="product-price">₹1,599</div>
-                    <a href="#" class="buy-btn">Add to Cart</a>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <span class="discount-badge">-20%</span>
-                <div class="product-img" style="background-image: url('image1.png.png');"></div>
-                <div class="product-info">
-                    <div class="product-title">God of War Ragnarok</div>
-                    <div class="product-price">₹2,999</div>
-                    <a href="#" class="buy-btn">Add to Cart</a>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <span class="discount-badge">-25%</span>
-                <div class="product-img" style="background-image: url('image1.png.png');"></div>
-                <div class="product-info">
-                    <div class="product-title">Forza Horizon 5</div>
-                    <div class="product-price">₹1,999</div>
-                    <a href="#" class="buy-btn">Add to Cart</a>
-                </div>
-            </div>
-
+        <!-- Grid will be populated from Firebase -->
+        <div class="products-grid" id="pcGamesGrid">
+            <p style="color: gray; text-align: center; grid-column: 1 / -1;">Loading live PC games from database...</p>
         </div>
     </section>
 
+    <script>
+        window.allLivePcGames = [];
+        window.activeCategoryFilter = 'All';
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
+    </script>
+
+    <!-- FIREBASE MODULE & LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
+            authDomain: "gameflexstore-d20da.firebaseapp.com",
+            projectId: "gameflexstore-d20da"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch ONLY PC GAMES from Firestore
+        const qGames = query(collection(db, "games"), orderBy("createdAt", "desc"));
+        onSnapshot(qGames, (snapshot) => {
+            window.allLivePcGames = [];
+            snapshot.forEach((gameDoc) => {
+                const game = { id: gameDoc.id, ...gameDoc.data() };
+                if (game.platform === 'PC') {
+                    window.allLivePcGames.push(game);
+                }
+            });
+            window.renderPcGrid();
+        });
+
+        // Function to Render Grid Based on Selected Filter
+        window.renderPcGrid = function() {
+            const pcGrid = document.getElementById('pcGamesGrid');
+            pcGrid.innerHTML = '';
+
+            let filtered = window.allLivePcGames;
+
+            // Apply Filters
+            if (window.activeCategoryFilter === 'Under 500') {
+                filtered = filtered.filter(g => Number(g.price) < 500);
+            } else if (window.activeCategoryFilter === 'Best Sellers') {
+                filtered = filtered.filter(g => g.discount); // Example: items with discounts
+            } else if (window.activeCategoryFilter !== 'All') {
+                filtered = filtered.filter(g => {
+                    if (g.genres && Array.isArray(g.genres)) return g.genres.includes(window.activeCategoryFilter);
+                    return g.genre === window.activeCategoryFilter;
+                });
+            }
+
+            if(filtered.length === 0) {
+                pcGrid.innerHTML = `<p style="color:gray; grid-column:1/-1; text-align:center;">No PC games found in this category.</p>`;
+                return;
+            }
+
+            filtered.forEach(game => {
+                let badgeHTML = game.discount ? `<span class="discount-badge">${game.discount}</span>` : '';
+                let oldPriceHTML = game.oldPrice ? `<span style="font-size:12px; color:var(--text-gray); text-decoration:line-through; margin-left:5px;">₹${game.oldPrice}</span>` : '';
+                let escapedTitle = game.title.replace(/'/g, "\\'");
+                let genresText = game.genres ? game.genres.join(' • ') : (game.genre || 'Action');
+
+                // Render matching the exact CSS provided by user
+                pcGrid.innerHTML += `
+                <div class="product-card" onclick="window.location.href='game-details.html?id=${game.id}'">
+                    ${badgeHTML}
+                    <div class="product-img" style="background-image: url('${game.image}');"></div>
+                    <div class="product-info">
+                        <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--primary-red);"><i class="fa-solid fa-layer-group"></i> ${genresText}</div>
+                        <div class="product-title">${game.title}</div>
+                        <div class="product-price">₹${game.price} ${oldPriceHTML}</div>
+                        <button class="buy-btn" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button>
+                    </div>
+                </div>`;
+            });
+        };
+
+        // Click handler for category buttons
+        window.setCategoryFilter = function(category, element) {
+            document.querySelectorAll('.sub-cat-card').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+            window.activeCategoryFilter = category;
+            window.renderPcGrid();
+        };
+    </script>
+
+    <!-- Cart Rendering Script -->
+    <script>
+        window.toggleCart = function() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('active');
+        };
+
+        window.addToCart = function(title, price, imgUrl) {
+            const existingItem = window.cartArray.find(item => item.title === title);
+            if(existingItem) {
+                existingItem.qty += 1;
+            } else {
+                window.cartArray.push({ title: title, price: Number(price), img: imgUrl, qty: 1 });
+            }
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray));
+            window.updateCartUI();
+            window.toggleCart(); 
+        };
+
+        window.removeFromCart = function(index) {
+            window.cartArray.splice(index, 1);
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray));
+            window.updateCartUI();
+        };
+
+        window.updateCartUI = function() {
+            const itemsContainer = document.getElementById('cartItemsContainer');
+            const totalElement = document.getElementById('cartTotalPrice');
+            const badgeCount = document.getElementById('cartBadgeCount');
+            
+            itemsContainer.innerHTML = '';
+            let totalAmount = 0; let totalQty = 0;
+
+            if (window.cartArray.length === 0) {
+                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>';
+            } else {
+                window.cartArray.forEach((item, index) => {
+                    totalAmount += (item.price * item.qty);
+                    totalQty += item.qty;
+                    itemsContainer.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-title">${item.title} (x${item.qty})</div>
+                                <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            }
+            badgeCount.innerText = totalQty;
+            totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
+        };
+
+        // Initialize UI on load
+        window.updateCartUI();
+    </script>
 </body>
 </html>

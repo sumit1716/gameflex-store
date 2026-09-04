@@ -27,7 +27,10 @@
 
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; }
-        .logo-icon { width: 40px; height: 40px; background: radial-gradient(circle, #e31825 0%, #4a0000 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--primary-red); }
+        
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        
         .nav-links { display: flex; gap: 25px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); }
@@ -35,7 +38,6 @@
         
         .nav-actions { display: flex; align-items: center; gap: 15px; position: relative; }
         
-        /* DOMINOS STYLE TOKEN TRACKER CSS */
         .token-tracker-container { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 2px; margin-right: 5px; cursor: pointer; }
         .circular-progress { position: relative; width: 38px; height: 38px; }
         .circular-progress svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -48,7 +50,6 @@
         .claim-btn { display: none; width: 100%; background: linear-gradient(45deg, #00C9FF, #92FE9D); color: #000; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 201, 255, 0.5); }
         .claim-btn:hover { transform: scale(1.02); }
 
-        /* Onboarding Modal Popup CSS */
         .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .onboarding-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 400px; max-width: 90%; box-shadow: 0 10px 30px rgba(227, 24, 37, 0.3); text-align: center; }
         .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; }
@@ -77,7 +78,6 @@
         .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #c1121d; }
 
-        /* Search Bar */
         .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
         .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
         .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
@@ -99,7 +99,6 @@
         .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
         .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
 
-        /* Cart Sidebar */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
         .cart-overlay.active { display: block; opacity: 1; }
         .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
@@ -128,7 +127,6 @@
         .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
         .checkout-btn:hover { background: #c1121d; box-shadow: 0 5px 15px rgba(227, 24, 37, 0.4); }
 
-        /* Store Sections & Hero */
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
         .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2; }
@@ -202,6 +200,7 @@
 </head>
 <body>
 
+    <!-- Onboarding Modal (Appears only after login if profile is incomplete) -->
     <div id="onboardingOverlay" class="onboarding-overlay">
         <div class="onboarding-modal">
             <h2>Welcome to GameFlex!</h2>
@@ -237,14 +236,16 @@
     </div>
 
     <nav class="navbar">
-        <div class="logo">
-            <div class="logo-icon"><i class="fa-solid fa-mask"></i></div>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">
+                <img src="logo.png" alt="GameFlex Logo">
+            </div>
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
-        </div>
+        </a>
         <ul class="nav-links">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#pc-section">PC Games</a></li>
-            <li><a href="#ps5-section">PS5 Games</a></li>
+            <li><a href="pc.html">PC Games</a></li>
+            <li><a href="ps5.html">PS5 Games</a></li>
             <li><a href="#">Bundles</a></li>
             <li><a href="#">Pre-Orders</a></li>
             <li><a href="#">Offers</a></li>
@@ -280,6 +281,7 @@
                 <i class="fa-solid fa-shield-halved"></i> <span class="hide-mobile">Admin</span>
             </a>
 
+            <!-- User Login/Profile Button -->
             <button class="login-btn" id="authBtn">
                 <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
             </button>
@@ -301,7 +303,6 @@
                 <span id="cartTotalPrice">₹0</span>
             </div>
             <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> CLAIM FREE GAME (500 Tokens)</button>
-            
             <button class="checkout-btn" id="checkoutBtn" onclick="proceedToPayment()">Proceed to Payment</button>
             <p id="tokenEarnText" style="text-align:center; font-size:12px; color:#FFD700; margin-top:10px; font-weight:600;"></p>
         </div>
@@ -317,8 +318,8 @@
             <h1>Level Up Your <span>Gaming Experience</span></h1>
             <p>Discover the biggest titles, instant digital delivery, exclusive bundles, and unbeatable prices on PC & PlayStation games.</p>
             <div class="hero-btns">
-                <a href="#pc-section" class="btn-primary">Explore Games</a>
-                <a href="#ps5-section" class="btn-outline">View PS5 Offers</a>
+                <a href="pc.html" class="btn-primary">Explore Games</a>
+                <a href="ps5.html" class="btn-outline">View PS5 Offers</a>
             </div>
         </div>
     </header>
@@ -349,12 +350,12 @@
             <i class="fa-solid fa-gamepad" style="color: var(--primary-red); margin-top: 10px;"></i>
         </div>
         <div class="category-grid">
-            <a href="#pc-section" class="cat-card">
+            <a href="pc.html" class="cat-card">
                 <div class="cat-img" style="background-image: url('image1.png.png');"></div>
                 <h3>PC Games</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <a href="#ps5-section" class="cat-card">
+            <a href="ps5.html" class="cat-card">
                 <div class="cat-img" style="background-image: url('PS5.png');"></div>
                 <h3>PS5 Games</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
@@ -399,13 +400,13 @@
 
     <script>
         window.liveGamesDatabase = [];
-        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; // CHANGED: Load shared cart from Local Storage
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -424,7 +425,7 @@
         let currentUser = null;
         let currentTokens = 0;
 
-        // --- 1. REAL-TIME GAMES FETCHING (LIVE INVENTORY) ---
+        // Fetch Games
         const qGames = query(collection(db, "games"), orderBy("createdAt", "desc"));
         onSnapshot(qGames, (snapshot) => {
             const pcGrid = document.getElementById('pcGamesGrid');
@@ -442,193 +443,147 @@
 
             snapshot.forEach((gameDoc) => {
                 const game = gameDoc.data();
-                
-                // Add to Global Search Array - CHANGED link to new details page
                 let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${game.rentPrice} (Rent) / ₹${game.permPrice} (Buy)`;
                 window.liveGamesDatabase.push({
-                    title: game.title,
-                    price: searchPrice,
-                    platform: game.platform,
-                    img: game.image,
-                    link: `game-details.html?id=${gameDoc.id}` 
+                    title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
                 });
 
-                // Generate UI elements for badges and old prices
                 let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
                 let oldPrice = game.oldPrice ? `<span class="old-price" style="margin-left:5px; font-size:12px; color:gray; text-decoration:line-through;">₹${game.oldPrice}</span>` : '';
                 let descText = game.desc ? game.desc.substring(0, 55) + '...' : '';
-                
-                // Escape quotes in titles to prevent broken HTML buttons
                 let escapedTitle = game.title.replace(/'/g, "\\'");
 
-                // Build HTML Card based on Platform Category - CHANGED: added onclick for details page and stopPropagation for buttons
                 if (game.platform === 'PC') {
-                    pcGrid.innerHTML += `
-                    <div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                        ${badgeHTML}
-                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                        <div class="prod-info">
-                            <div class="prod-title">${game.title}</div>
-                            <div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div>
-                            <div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div>
-                            <button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button>
-                        </div>
-                    </div>`;
+                    pcGrid.innerHTML += `<div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
                 } else {
-                    ps5Grid.innerHTML += `
-                    <div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                        ${badgeHTML}
-                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                        <div class="prod-info">
-                            <div class="prod-title">${game.title}</div>
-                            <div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div>
-                            
-                            <div class="price-flex" style="margin-bottom:10px; align-items:center;">
-                                <div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;">
-                                    <span style="font-size:10px; color:#ccc;">1 Month Rent:</span>
-                                    <div><span class="curr-price" style="font-size:14px;">₹${game.rentPrice}</span> ${oldPrice}</div>
-                                </div>
-                                <button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${game.rentPrice}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button>
-                            </div>
-                            
-                            <div class="price-flex" style="align-items:center;">
-                                <div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;">
-                                    <span style="font-size:10px; color:#ccc;">Permanent Buy:</span>
-                                    <div><span class="curr-price" style="font-size:14px;">₹${game.permPrice}</span></div>
-                                </div>
-                                <button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${game.permPrice}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button>
-                            </div>
-                        </div>
-                    </div>`;
+                    ps5Grid.innerHTML += `<div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex" style="margin-bottom:10px; align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">1 Month Rent:</span><div><span class="curr-price" style="font-size:14px;">₹${game.rentPrice}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${game.rentPrice}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">Permanent Buy:</span><div><span class="curr-price" style="font-size:14px;">₹${game.permPrice}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${game.permPrice}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
                 }
             });
         });
 
-        // --- 2. AUTHENTICATION & LOGIN LOGIC ---
+        // --- AUTHENTICATION & ONBOARDING ---
         onAuthStateChanged(auth, async (user) => {
             const authBtn = document.getElementById('authBtn');
             if (user) {
                 currentUser = user;
+                
+                // Show Hi [Name] and link directly to profile page
                 authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${user.displayName.split(' ')[0]}</span>`;
+                authBtn.onclick = () => { window.location.href = "profile.html"; };
                 
                 const userRef = doc(db, "users", user.uid);
+                
+                // Check if user is fully registered, if not show the onboarding overlay
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists() || !userSnap.data().gamerType) {
+                    document.getElementById('obName').value = user.displayName || '';
+                    document.getElementById('onboardingOverlay').style.display = 'flex';
+                }
+
+                // Listen for tokens updating live
                 onSnapshot(userRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         currentTokens = data.tokens || 0;
-                        
                         document.getElementById('tokenTracker').style.display = 'flex';
                         document.getElementById('tokenFraction').innerText = `${currentTokens} / 500`;
                         
-                        const maxTokens = 500;
-                        const circumference = 113; 
-                        let percent = (currentTokens / maxTokens) * 100;
+                        let percent = (currentTokens / 500) * 100;
                         if (percent > 100) percent = 100; 
-                        const offset = circumference - (percent / 100) * circumference;
-                        
-                        document.getElementById('progressRing').style.strokeDashoffset = offset;
+                        document.getElementById('progressRing').style.strokeDashoffset = 113 - (percent / 100) * 113;
                         window.updateCartUI(); 
-                    } else {
-                        setDoc(userRef, {
-                            name: user.displayName, email: user.email, tokens: 0, lastLogin: serverTimestamp()
-                        }, { merge: true });
                     }
                 });
-
-                authBtn.onclick = () => {
-                    if (confirm("Do you want to logout?")) {
-                        signOut(auth);
-                    }
-                };
             } else {
                 currentUser = null;
                 currentTokens = 0;
                 document.getElementById('tokenTracker').style.display = 'none';
+                document.getElementById('onboardingOverlay').style.display = 'none';
+                
+                // Show Login Button
                 authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>`;
                 authBtn.onclick = loginUser;
             }
         });
 
         async function loginUser() {
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (err) {
-                alert("Login failed: " + err.message);
-            }
+            try { await signInWithPopup(auth, provider); } 
+            catch (err) { alert("Login failed: " + err.message); }
         }
 
-        // --- 3. CHECKOUT & PAYMENT ---
-        window.proceedToPayment = async function() {
-            if (window.cartArray.length === 0) {
-                alert("Bhai pehle koi game toh add kar le cart mein!");
-                return;
-            }
+        // --- SUBMITTING ONBOARDING FORM ---
+        document.getElementById('onboardingForm').onsubmit = async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
 
-            if (!currentUser) {
-                alert("Please login first to proceed with your payment!");
-                await loginUser();
-                return;
+            const name = document.getElementById('obName').value;
+            const selectedRadio = document.querySelector('input[name="gamerType"]:checked');
+            
+            if (!selectedRadio) { alert("Please select your gamer type!"); return; }
+
+            const submitBtn = document.querySelector('.onboarding-submit');
+            submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
+
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    name: name, 
+                    email: currentUser.email, 
+                    gamerType: selectedRadio.value,
+                    tokens: currentTokens || 0, 
+                    lastLogin: serverTimestamp(),
+                    createdAt: serverTimestamp() // Only recorded once
+                }, { merge: true });
+
+                document.getElementById('onboardingOverlay').style.display = 'none';
+                alert(`Welcome aboard, ${name}! Your profile is ready.`);
+            } catch (err) { 
+                alert("Error saving profile: " + err.message); 
+            } finally {
+                submitBtn.innerText = "Save & Start Gaming"; submitBtn.disabled = false;
             }
+        };
+
+        window.selectGamerType = function(element) {
+            document.querySelectorAll('.radio-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+        };
+
+        // --- CHECKOUT & CLAIM LOGIC ---
+        window.proceedToPayment = async function() {
+            if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
+            if (!currentUser) { alert("Please login first!"); await loginUser(); return; }
 
             const total = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
             const earnedTokens = Math.floor(total / 100) * 10; 
-            
             const checkoutBtn = document.getElementById('checkoutBtn');
-            checkoutBtn.disabled = true;
-            checkoutBtn.innerText = "Creating Booking...";
+            checkoutBtn.disabled = true; checkoutBtn.innerText = "Creating Booking...";
 
             try {
                 await addDoc(collection(db, "bookings"), {
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName,
-                    userEmail: currentUser.email,
-                    items: window.cartArray,
-                    totalAmount: total,
-                    status: "Paid",
-                    createdAt: serverTimestamp()
+                    userId: currentUser.uid, userName: currentUser.displayName, userEmail: currentUser.email,
+                    items: window.cartArray, totalAmount: total, status: "Paid", createdAt: serverTimestamp()
                 });
 
                 if (earnedTokens > 0) {
-                    await setDoc(doc(db, "users", currentUser.uid), {
-                        tokens: increment(earnedTokens)
-                    }, { merge: true });
+                    await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
                 }
 
                 alert(`Booking Successful!\nYou earned ${earnedTokens} GameFlex-Tokens! 🪙`);
-                
-                window.cartArray = [];
-                localStorage.removeItem('gf_cart'); // CHANGED: Clear cart from local storage
-                window.updateCartUI();
-                window.toggleCart();
-            } catch (error) {
-                console.error("Booking Error: ", error);
-                alert("Failed to save booking. Please check your Firestore rules!");
-            } finally {
-                checkoutBtn.disabled = false;
-                checkoutBtn.innerText = "Proceed to Payment";
-            }
+                window.cartArray = []; localStorage.removeItem('gf_cart'); window.updateCartUI(); window.toggleCart();
+            } catch (error) { alert("Failed to save booking"); } 
+            finally { checkoutBtn.disabled = false; checkoutBtn.innerText = "Proceed to Payment"; }
         };
 
         window.claimFreeGame = async function() {
             if (!currentUser) return;
             if (currentTokens < 500) return alert("You need 500 tokens!");
-
-            if(confirm("Awesome! Do you want to redeem 500 GameFlex-Tokens for a Free Mystery Game?")) {
+            if(confirm("Redeem 500 GameFlex-Tokens for a Free Mystery Game?")) {
                 try {
-                    await setDoc(doc(db, "users", currentUser.uid), {
-                        tokens: increment(-500)
-                    }, { merge: true });
-
-                    await addDoc(collection(db, "bookings"), {
-                        userId: currentUser.uid, userEmail: currentUser.email,
-                        items: [{title: "🎁 Free Reward Game Claimed!", price: 0, qty: 1}],
-                        totalAmount: 0, status: "Reward Claimed", createdAt: serverTimestamp()
-                    });
-
-                    alert("🎉 Congratulations! Your Free Game has been claimed and added to your orders.");
-                } catch (e) {
-                    console.error("Reward error", e);
-                }
+                    await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(-500) }, { merge: true });
+                    await addDoc(collection(db, "bookings"), { userId: currentUser.uid, userEmail: currentUser.email, items: [{title: "🎁 Free Reward Game Claimed!", price: 0, qty: 1}], totalAmount: 0, status: "Reward Claimed", createdAt: serverTimestamp() });
+                    alert("🎉 Congratulations! Your Free Game has been claimed.");
+                } catch (e) { console.error("Reward error", e); }
             }
         };
 
@@ -639,7 +594,6 @@
         const searchInput = document.getElementById('gameSearch');
         const searchDropdown = document.getElementById('searchDropdown');
 
-        // Search Bar Logic connected to LIVE Database Array
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             searchDropdown.innerHTML = ''; 
@@ -650,103 +604,38 @@
 
                 if (filteredGames.length > 0) {
                     filteredGames.forEach(game => {
-                        const gameItem = document.createElement('a');
-                        gameItem.href = game.link;
-                        gameItem.className = 'search-item';
-                        gameItem.innerHTML = `
-                            <div class="search-item-img" style="background-image: url('${game.img}');"></div>
-                            <div class="search-item-info">
-                                <span class="search-item-title">${game.title}</span>
-                                <span class="search-platform">${game.platform}</span>
-                                <span class="search-item-price">${game.price}</span>
-                            </div>
-                        `;
+                        const gameItem = document.createElement('a'); gameItem.href = game.link; gameItem.className = 'search-item';
+                        gameItem.innerHTML = `<div class="search-item-img" style="background-image: url('${game.img}');"></div><div class="search-item-info"><span class="search-item-title">${game.title}</span><span class="search-platform">${game.platform}</span><span class="search-item-price">${game.price}</span></div>`;
                         searchDropdown.appendChild(gameItem);
                     });
-                } else {
-                    searchDropdown.innerHTML = `<div class="no-results">No games found for "${this.value}"</div>`;
-                }
-            } else {
-                searchDropdown.style.display = 'none';
-            }
+                } else { searchDropdown.innerHTML = `<div class="no-results">No games found</div>`; }
+            } else { searchDropdown.style.display = 'none'; }
         });
 
-        document.addEventListener('click', function(event) {
-            if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) {
-                searchDropdown.style.display = 'none';
-            }
-        });
+        document.addEventListener('click', function(event) { if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; });
 
-        window.toggleCart = function() {
-            document.getElementById('cartSidebar').classList.toggle('open');
-            document.getElementById('cartOverlay').classList.toggle('active');
-        };
-
+        window.toggleCart = function() { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
         window.addToCart = function(title, price, imgUrl) {
             const existingItem = window.cartArray.find(item => item.title === title);
-            
-            if(existingItem) {
-                existingItem.qty += 1;
-            } else {
-                window.cartArray.push({ title: title, price: Number(price), img: imgUrl, qty: 1 });
-            }
-            
-            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); // CHANGED: Update shared local storage
-            window.updateCartUI();
-            window.toggleCart(); 
+            if(existingItem) existingItem.qty += 1; else window.cartArray.push({ title: title, price: Number(price), img: imgUrl, qty: 1 });
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); window.toggleCart(); 
         };
-
-        window.removeFromCart = function(index) {
-            window.cartArray.splice(index, 1);
-            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); // CHANGED: Update shared local storage
-            window.updateCartUI();
-        };
-
+        window.removeFromCart = function(index) { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
         window.updateCartUI = function() {
-            const itemsContainer = document.getElementById('cartItemsContainer');
-            const totalElement = document.getElementById('cartTotalPrice');
-            const badgeCount = document.getElementById('cartBadgeCount');
-            
-            itemsContainer.innerHTML = '';
-            let totalAmount = 0;
-            let totalQty = 0;
-
-            if (window.cartArray.length === 0) {
-                itemsContainer.innerHTML = '<div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>';
-            } else {
+            const itemsContainer = document.getElementById('cartItemsContainer'); const totalElement = document.getElementById('cartTotalPrice'); const badgeCount = document.getElementById('cartBadgeCount');
+            itemsContainer.innerHTML = ''; let totalAmount = 0; let totalQty = 0;
+            if (window.cartArray.length === 0) { itemsContainer.innerHTML = '<div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>'; } 
+            else {
                 window.cartArray.forEach((item, index) => {
-                    totalAmount += (item.price * item.qty);
-                    totalQty += item.qty;
-                    
-                    itemsContainer.innerHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
-                            <div class="cart-item-details">
-                                <div class="cart-item-title">${item.title} (x${item.qty})</div>
-                                <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
-                            </div>
-                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    `;
+                    totalAmount += (item.price * item.qty); totalQty += item.qty;
+                    itemsContainer.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`;
                 });
             }
-            
-            badgeCount.innerText = totalQty;
-            totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
-            
-            const earned = Math.floor(totalAmount / 100) * 10;
-            document.getElementById('tokenEarnText').innerText = earned > 0 ? `+ Earn ${earned} GameFlex-Tokens` : '';
-
-            const tokensAvailable = typeof window.currentTokensGlobal === 'function' ? window.currentTokensGlobal() : 0;
+            badgeCount.innerText = totalQty; totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
+            const earned = Math.floor(totalAmount / 100) * 10; document.getElementById('tokenEarnText').innerText = earned > 0 ? `+ Earn ${earned} GameFlex-Tokens` : '';
             const claimBtn = document.getElementById('claimBtn');
-            if(tokensAvailable >= 500) {
-                claimBtn.style.display = "block";
-            } else {
-                claimBtn.style.display = "none";
-            }
+            if(typeof window.currentTokensGlobal === 'function' && window.currentTokensGlobal() >= 500) { claimBtn.style.display = "block"; } else { claimBtn.style.display = "none"; }
         };
-
-        // Initialize UI on load
         window.updateCartUI();
     </script>
 </body>
