@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GameFlex Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -25,16 +25,39 @@
         .top-bar i { color: var(--primary-red); }
         .top-bar a { color: var(--primary-red); text-decoration: none; font-weight: 600; }
 
+        /* NAVBAR DESKTOP STYLES */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; color: white; text-decoration: none; }
+        
+        .logo { order: 1; display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; color: white; text-decoration: none; }
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .nav-links { display: flex; gap: 25px; list-style: none; }
+        
+        .nav-links { order: 2; display: flex; gap: 25px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); }
         .nav-links li.active a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); }
         
-        .nav-actions { display: flex; align-items: center; gap: 15px; position: relative; }
+        .search-container { order: 3; position: relative; display: flex; align-items: center; margin-right: 15px; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
+        .search-input::placeholder { color: var(--text-gray); }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-input:focus + .search-icon { color: var(--primary-red); }
+        
+        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
+        .search-dropdown::-webkit-scrollbar { width: 5px; }
+        .search-dropdown::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 5px; }
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background: rgba(227, 24, 37, 0.15); padding-left: 20px; }
+        .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
+        .search-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
+        .search-item-price { font-size: 12px; font-weight: 800; color: var(--primary-red); }
+        .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
+        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
+
+        .nav-actions { order: 4; display: flex; align-items: center; gap: 15px; position: relative; }
         
         .token-tracker-container { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 2px; margin-right: 5px; cursor: pointer; }
         .circular-progress { position: relative; width: 38px; height: 38px; }
@@ -48,34 +71,7 @@
         .claim-btn { display: none; width: 100%; background: linear-gradient(45deg, #00C9FF, #92FE9D); color: #000; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 201, 255, 0.5); }
         .claim-btn:hover { transform: scale(1.02); }
 
-        .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .onboarding-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 400px; max-width: 90%; box-shadow: 0 10px 30px rgba(227, 24, 37, 0.3); text-align: center; }
-        .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; }
-        .onboarding-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
-        .onboarding-group { margin-bottom: 15px; text-align: left; }
-        .onboarding-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
-        .onboarding-input { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 6px; outline: none; font-size: 14px; font-family: 'Montserrat', sans-serif; }
-        .onboarding-input:focus { border-color: var(--primary-red); }
-        
-        .radio-group { display: flex; gap: 10px; margin-top: 5px; }
-        .radio-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.3s; color: var(--text-gray); }
-        .radio-card input { display: none; }
-        .radio-card:hover { border-color: var(--primary-red); color: white; }
-        .radio-card.selected { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.2); color: white; box-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
-        
-        .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-        .onboarding-submit:hover { background: #c1121d; }
-
-        .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .payment-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 350px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .close-payment { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-gray); font-size: 20px; cursor: pointer; transition: 0.3s; }
-        .close-payment:hover { color: var(--primary-red); }
-        .qr-container { background: white; padding: 10px; border-radius: 8px; margin: 15px auto; width: 220px; height: 220px; border: 2px solid var(--border-dark); }
-        .qr-container img { width: 100%; height: 100%; object-fit: contain; }
-        .confirm-pay-btn { width: 100%; background: #00c853; color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; }
-        .confirm-pay-btn:hover { background: #00e676; box-shadow: 0 5px 15px rgba(0, 200, 83, 0.3); }
-
-        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; }
         .icon-btn:hover { color: var(--primary-red); }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
         
@@ -85,27 +81,30 @@
         .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #c1121d; }
 
-        .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
-        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
-        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
-        .search-input::placeholder { color: var(--text-gray); }
-        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
-        .search-input:focus + .search-icon { color: var(--primary-red); }
+        /* ONBOARDING & PAYMENT MODALS */
+        .onboarding-overlay, .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .onboarding-modal, .payment-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; position: relative; }
+        .onboarding-modal { width: 400px; }
+        .payment-modal { width: 350px; }
+        .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; }
+        .onboarding-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
+        .onboarding-group { margin-bottom: 15px; text-align: left; }
+        .onboarding-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
+        .onboarding-input { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 6px; outline: none; font-size: 14px; font-family: 'Montserrat', sans-serif; }
+        .onboarding-input:focus { border-color: var(--primary-red); }
+        .radio-group { display: flex; gap: 10px; margin-top: 5px; }
+        .radio-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.3s; color: var(--text-gray); }
+        .radio-card input { display: none; }
+        .radio-card.selected { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.2); color: white; box-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
+        .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         
-        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
-        .search-dropdown::-webkit-scrollbar { width: 5px; }
-        .search-dropdown::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 5px; }
-        
-        .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
-        .search-item:last-child { border-bottom: none; }
-        .search-item:hover { background: rgba(227, 24, 37, 0.15); padding-left: 20px; }
-        .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
-        .search-item-info { display: flex; flex-direction: column; gap: 4px; }
-        .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
-        .search-item-price { font-size: 12px; font-weight: 800; color: var(--primary-red); }
-        .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
-        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
+        .close-payment { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-gray); font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .close-payment:hover { color: var(--primary-red); }
+        .qr-container { background: white; padding: 10px; border-radius: 8px; margin: 15px auto; width: 220px; height: 220px; border: 2px solid var(--border-dark); }
+        .qr-container img { width: 100%; height: 100%; object-fit: contain; }
+        .confirm-pay-btn { width: 100%; background: #00c853; color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; }
 
+        /* CART SIDEBAR */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
         .cart-overlay.active { display: block; opacity: 1; }
         .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
@@ -115,11 +114,7 @@
         .cart-header h2 i { color: var(--primary-red); }
         .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
         .close-cart:hover { color: var(--primary-red); transform: rotate(90deg); }
-        
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .cart-items::-webkit-scrollbar { width: 5px; }
-        .cart-items::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 5px; }
-        
         .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); align-items: center; position: relative; }
         .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; border: 1px solid var(--border-dark); }
         .cart-item-details { flex: 1; }
@@ -128,12 +123,11 @@
         .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; transition: 0.3s; position: absolute; right: 12px; top: 12px; }
         .remove-item:hover { color: var(--primary-red); }
         .empty-cart-msg { text-align: center; color: var(--text-gray); font-size: 14px; margin-top: 50px; font-weight: 600; }
-        
         .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
         .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; color: var(--text-light); margin-bottom: 15px; }
         .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .checkout-btn:hover { background: #c1121d; box-shadow: 0 5px 15px rgba(227, 24, 37, 0.4); }
 
+        /* HERO & HOME SECTIONS */
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
         .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2; }
@@ -143,9 +137,7 @@
         .hero-content p { font-size: 16px; color: var(--text-gray); margin-bottom: 30px; line-height: 1.5; }
         .hero-btns { display: flex; gap: 15px; }
         .btn-primary { background: var(--primary-red); color: white; padding: 12px 30px; border-radius: 5px; font-weight: 700; text-decoration: none; transition: 0.3s; display: inline-block; cursor: pointer; }
-        .btn-primary:hover { background: #c1121d; }
         .btn-outline { background: transparent; color: white; border: 2px solid white; padding: 12px 30px; border-radius: 5px; font-weight: 700; text-decoration: none; transition: 0.3s; display: inline-block; cursor: pointer; }
-        .btn-outline:hover { background: white; color: black; }
 
         .features { display: flex; justify-content: space-between; background: rgba(20, 22, 28, 0.8); margin: -30px 5% 50px 5%; padding: 30px; border-radius: 10px; position: relative; z-index: 10; border: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .feature-item { display: flex; align-items: center; gap: 15px; flex: 1; border-right: 1px solid var(--border-dark); padding-left: 20px; }
@@ -160,13 +152,10 @@
         .section-header h5::before, .section-header h5::after { content: ""; width: 50px; height: 1px; background: var(--primary-red); }
         .section-header h2 { font-size: 28px; font-weight: 700; }
         .category-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        
         .cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; width: 250px; padding: 30px 20px; text-align: center; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; display: block; color: inherit; text-decoration: none; }
-        .cat-card:hover { border-color: var(--primary-red); box-shadow: 0 0 20px rgba(227, 24, 37, 0.15); transform: translateY(-5px); }
         .cat-img { height: 120px; width: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; margin-bottom: 20px; border-radius: 5px; }
         .cat-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
         .cat-arrow { width: 30px; height: 30px; border: 1px solid var(--text-gray); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-gray); transition: 0.3s; }
-        .cat-card:hover .cat-arrow { background: var(--primary-red); border-color: var(--primary-red); color: white; }
 
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
         .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
@@ -185,14 +174,9 @@
         .view-all.blue-link { color: var(--ps5-blue); }
         .view-all.gold-link { color: #FFD700; }
         .view-all.white-link { color: var(--text-gray); }
-        .view-all.white-link:hover { color: white; }
-        .view-all:hover { text-decoration: underline; }
 
         .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; }
-        .prod-card.pc-theme:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(227, 24, 37, 0.15); }
-        .prod-card.ps5-theme:hover { border-color: var(--ps5-blue); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(31, 106, 255, 0.15); }
-
         .badge { position: absolute; top: 12px; left: 12px; color: white; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2; }
         .badge.red-bg { background: var(--primary-red); }
         .badge.blue-bg { background: var(--ps5-blue); }
@@ -200,26 +184,116 @@
         .prod-img { height: 180px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
         .prod-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
         .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-light); }
-
         .prod-price-red { font-size: 18px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
         .buy-btn-red { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5;}
-        .buy-btn-red:hover { background: #c1121d; }
-
+        
         .price-flex { display: flex; justify-content: space-between; align-items: flex-end; }
         .price-details { display: flex; gap: 8px; align-items: center; }
         .curr-price { font-size: 16px; font-weight: 800; color: var(--ps5-blue); }
         .old-price { font-size: 12px; font-weight: 600; color: var(--text-gray); text-decoration: line-through; }
         .cart-btn-blue { background: var(--ps5-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; position: relative; z-index: 5;}
-        .cart-btn-blue:hover { background: #0051ed; box-shadow: 0 0 10px rgba(31, 106, 255, 0.5); }
         
-        /* COMMUNITY REVIEWS CSS */
         .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .review-card { background: var(--card-bg); border: 1px solid var(--border-dark); padding: 25px; border-radius: 12px; transition: 0.3s; }
-        .review-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
         .reviewer-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .reviewer-avatar { width: 45px; height: 45px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; border: 1px solid #444; }
         .stars { color: #FFD700; font-size: 12px; margin-top: 5px; }
         .review-text { font-size: 14px; color: var(--text-gray); line-height: 1.6; font-style: italic; }
+
+        /* ========================================================================= */
+        /* 📱 PRO MOBILE LAYOUT (AMAZON/FLIPKART STYLE) 📱 */
+        /* ========================================================================= */
+        
+        @media (max-width: 768px) {
+            
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: 
+                    "logo actions" 
+                    "search search" 
+                    "links links"; 
+                gap: 12px; 
+                padding: 12px 5% 0 5%; 
+                background: #0b0c10;
+            }
+            
+            .logo { grid-area: logo; font-size: 16px; align-items: center; }
+            .logo-icon { width: 30px; height: 30px; }
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            
+            .hide-mobile { display: none; }
+            .login-btn, .admin-link-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; }
+            .login-btn i, .admin-link-btn i { margin: 0; }
+            
+            .circular-progress { width: 32px; height: 32px; }
+            .progress-logo { width: 20px; height: 20px; }
+            
+            /* Token Text Visible in Mobile */
+            .token-text { display: block !important; font-size: 7px; } 
+            .token-tracker-container { margin: 0; display: flex !important; flex-direction: column; gap: 0px; } 
+
+            .search-container { grid-area: search; width: 100%; margin: 0; }
+            .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
+            .search-input:focus { width: 100%; }
+
+            .nav-links { 
+                grid-area: links; 
+                display: flex; 
+                flex-direction: row; 
+                position: static; 
+                width: 100%; 
+                height: auto; 
+                background: transparent; 
+                overflow-x: auto; 
+                padding: 5px 0 10px 0; 
+                border-top: 1px solid rgba(255,255,255,0.05); 
+                gap: 20px; 
+                -webkit-overflow-scrolling: touch; 
+            }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
+            
+            .hero { padding: 40px 5%; height: 400px; text-align: center; }
+            .hero-content h1 { font-size: 28px; margin-bottom: 15px; }
+            .hero-content p { font-size: 13px; margin-bottom: 20px; }
+            .hero-btns { flex-direction: column; width: 100%; gap: 10px; }
+            .btn-primary, .btn-outline { width: 100%; padding: 12px; font-size: 13px; }
+
+            .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; margin: -20px 5% 30px; }
+            .feature-item { flex-direction: column; text-align: center; border: none; padding: 0; gap: 8px; }
+            .feature-icon { font-size: 20px; }
+            
+            .section-header h2 { font-size: 22px; }
+            .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .cat-card { width: 100%; padding: 15px 10px; }
+            .cat-img { height: 90px; margin-bottom: 10px; }
+            .cat-card h3 { font-size: 13px; margin-bottom: 10px; }
+            .cat-arrow { width: 25px; height: 25px; font-size: 12px; }
+
+            .home-products-section { padding: 40px 5%; }
+            .sec-title-bar { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 20px; }
+            .title-left { font-size: 16px; }
+            
+            .prod-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .prod-img { height: 130px; }
+            .prod-info { padding: 10px; }
+            .prod-title { font-size: 12px; margin-bottom: 8px; }
+            
+            .prod-price-red { font-size: 15px; margin-bottom: 10px; }
+            .buy-btn-red { padding: 8px; font-size: 12px; }
+            
+            .curr-price { font-size: 14px; }
+            .old-price { font-size: 11px; }
+            .cart-btn-blue { width: 30px; height: 30px; font-size: 12px; }
+            .price-details span { font-size: 9px; }
+            .price-flex { margin-bottom: 8px; }
+
+            .onboarding-modal, .payment-modal { width: 95%; padding: 20px; }
+            .qr-container { width: 180px; height: 180px; }
+            .cart-sidebar { width: 100%; right: -100%; }
+        }
     </style>
 </head>
 <body>
@@ -254,19 +328,19 @@
     </div>
 
     <!-- PAYMENT MODAL -->
-    <div class="payment-overlay" id="paymentOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
-        <div class="payment-modal" style="background: #12141a; border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; position: relative;">
-            <button class="close-payment" onclick="closePaymentModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: white; font-size: 18px; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+    <div class="payment-overlay" id="paymentOverlay">
+        <div class="payment-modal">
+            <button class="close-payment" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
             <h2 style="color: white; margin-bottom: 10px; font-size: 20px;"><i class="fa-solid fa-qrcode" style="color: #ff3333;"></i> Scan & Pay Exact Amount</h2>
             <p style="color: gray; font-size: 14px; margin-bottom: 15px;">Total Amount: <span id="paymentTotalAmount" style="color: #ff3333; font-weight: bold; font-size: 18px;">₹0</span></p>
             
-            <div class="qr-container" style="background: white; padding: 10px; border-radius: 8px; margin: 15px auto; width: 180px; height: 180px; display: flex; justify-content: center; align-items: center;">
-                <img id="dynamicQRCode" src="" alt="Scan & Pay UPI QR" style="width: 100%; height: 100%; object-fit: contain;">
+            <div class="qr-container">
+                <img id="dynamicQRCode" src="" alt="Scan & Pay UPI QR">
             </div>
             
             <p style="font-size: 11px; color: gray; margin-bottom: 20px; line-height: 1.4;">Scan using any UPI app. Amount is locked. Click below after payment.</p>
             
-            <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndSendWhatsApp()" style="width: 100%; background: #ff3333; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">I HAVE PAID (Notify on WhatsApp)</button>
+            <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndSendWhatsApp()">I HAVE PAID (Notify on WhatsApp)</button>
         </div>
     </div>
 
@@ -276,33 +350,23 @@
         <a href="offer.html">Shop Now &rarr;</a>
     </div>
 
-    <!-- NAVBAR -->
+    <!-- NEW OPTIMIZED NAVBAR -->
     <nav class="navbar">
+        
         <a href="index.html" class="logo">
-            <div class="logo-icon">
-                <img src="logo.png" alt="GameFlex Logo">
-            </div>
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex Logo"></div>
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
         </a>
-        <ul class="nav-links">
-            <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="pc.html">PC Games</a></li>
-            <li><a href="ps5.html">PlayStation Games</a></li>
-            <li><a href="offer.html">Offers</a></li>
-            <li><a href="#">Pre-Orders</a></li>
-            <li><a href="reviews.html">Community Reviews</a></li>
-        </ul>
+        
+        <div class="search-container">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search God of War..." autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+
         <div class="nav-actions">
-            <div class="search-container">
-                <input type="text" id="gameSearch" class="search-input" placeholder="Search God of War..." autocomplete="off">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <div class="search-dropdown" id="searchDropdown"></div>
-            </div>
-            <button class="icon-btn" onclick="toggleCart()">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span class="cart-badge" id="cartBadgeCount">0</span>
-            </button>
-            <div id="tokenTracker" class="token-tracker-container" title="Collect 500 to get a Free Game!" style="display: none;">
+            
+            <div id="tokenTracker" class="token-tracker-container" title="Click to view Token Info" onclick="showTokenInfo()" style="display: none; cursor: pointer;">
                 <div class="circular-progress">
                     <svg viewBox="0 0 44 44">
                         <circle class="circle-bg" cx="22" cy="22" r="18"></circle>
@@ -315,15 +379,31 @@
                     <span id="tokenFraction">0 / 500</span>
                 </div>
             </div>
+
             <a href="admin.html" class="admin-link-btn" title="Admin Portal">
                 <i class="fa-solid fa-shield-halved"></i> <span class="hide-mobile">Admin</span>
             </a>
             <button class="login-btn" id="authBtn">
-                <i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login / Sign Up</span>
+            </button>
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
         </div>
+
+        <ul class="nav-links">
+            <li class="active"><a href="index.html">Home</a></li>
+            <li><a href="pc.html">PC Games</a></li>
+            <li><a href="ps5.html">PlayStation Games</a></li>
+            <li><a href="offer.html">Offers</a></li>
+            <li><a href="#">Pre-Orders</a></li>
+            <li><a href="reviews.html">Community Reviews</a></li>
+        </ul>
+
     </nav>
 
+    <!-- CART SIDEBAR -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
@@ -351,6 +431,7 @@
         </div>
     </div>
 
+    <!-- MAIN HOME SECTIONS -->
     <header class="hero">
         <video autoplay loop muted playsinline class="hero-bg-video">
             <source src="GAMEFLEX_STORE (1).mov" type="video/quicktime">
@@ -416,6 +497,7 @@
         </div>
     </section>
 
+    <!-- PC SECTION WITH LIMIT -->
     <section id="pc-section" class="home-products-section">
         <div class="sec-title-bar">
             <div class="title-left red-title"><span></span> POPULAR PC GAMES</div>
@@ -426,6 +508,7 @@
         </div>
     </section>
 
+    <!-- PS5 SECTION WITH LIMIT -->
     <section id="ps5-section" class="home-products-section ps5-bg">
         <div class="sec-title-bar">
             <div class="title-left blue-title"><span></span> PLAYSTATION GAMES</div>
@@ -436,6 +519,7 @@
         </div>
     </section>
 
+    <!-- OFFERS SECTION -->
     <section id="offers-home-section" class="home-products-section offers-bg">
         <div class="sec-title-bar">
             <div class="title-left gold-title"><span></span> 🔥 SPECIAL OFFERS & DEALS</div>
@@ -461,14 +545,25 @@
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
         window.appliedDiscount = 0; 
         window.activeCouponCode = "";
+        window.currentTokens = 0;
+
+        // Token Info Popup Function
+        window.showTokenInfo = function() {
+            const needed = Math.max(0, 500 - window.currentTokens);
+            if (window.currentTokens >= 500) {
+                alert("🎉 Awesome! You have 500+ tokens. Open your Cart sidebar to claim your Free Game!");
+            } else {
+                alert(`🎮 GameFlex Tokens: You currently have ${window.currentTokens} tokens. Collect ${needed} more tokens to redeem a Brand New Free Game!`);
+            }
+        };
     </script>
 
+    <!-- FIREBASE AND MAIN LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // REAL FIREBASE CONFIGURATION ADDED HERE
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
@@ -484,7 +579,11 @@
         const provider = new GoogleAuthProvider();
 
         let currentUser = null;
-        let currentTokens = 0;
+
+        // Ensure token icon shows correctly if user data is already in local storage before firebase loads
+        if (localStorage.getItem('gf_logged_in_user')) {
+            document.getElementById('tokenTracker').style.display = 'flex';
+        }
 
         // FETCH REVIEWS FOR HOME PAGE
         const qReviews = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(2));
@@ -521,7 +620,7 @@
             });
         });
 
-        // FETCH GAMES
+        // FETCH GAMES (WITH LIMITER)
         const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             const pcGrid = document.getElementById('pcGamesGrid');
@@ -533,10 +632,14 @@
             offersGrid.innerHTML = '';
             window.liveGamesDatabase = []; 
 
+            let pcCount = 0;
+            let ps5Count = 0;
+            let offerCount = 0;
+
             if(snapshot.empty) {
-                pcGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PC games found in database.</p>`;
-                ps5Grid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No PlayStation games found in database.</p>`;
-                offersGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center;">No special offers active right now.</p>`;
+                pcGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No PC games found in database.</p>`;
+                ps5Grid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No PlayStation games found in database.</p>`;
+                offersGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No special offers active right now.</p>`;
                 return;
             }
 
@@ -552,8 +655,7 @@
                 });
 
                 let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
-                let oldPrice = game.originalPrice ? `<span class="old-price" style="margin-left:5px; font-size:12px; color:gray; text-decoration:line-through;">₹${game.originalPrice}</span>` : '';
-                
+                let oldPrice = game.originalPrice ? `<span class="old-price" style="margin-left:5px; text-decoration:line-through;">₹${game.originalPrice}</span>` : '';
                 let descText = (game.description || game.desc || '').substring(0, 55) + '...';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
 
@@ -563,13 +665,26 @@
                 if (game.platform === 'PC') {
                     cardHTML = `<div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
                     
-                    pcGrid.innerHTML += cardHTML;
-                    if(isOffer) offersGrid.innerHTML += cardHTML;
-                } else {
-                    cardHTML = `<div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex" style="margin-bottom:10px; align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">1 Month Rent:</span><div><span class="curr-price" style="font-size:14px;">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:#ccc;">Permanent Buy:</span><div><span class="curr-price" style="font-size:14px;">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
+                    if(pcCount < 8) {
+                        pcGrid.innerHTML += cardHTML;
+                        pcCount++;
+                    }
+                    if(isOffer && offerCount < 8) {
+                        offersGrid.innerHTML += cardHTML;
+                        offerCount++;
+                    }
+                } 
+                else {
+                    cardHTML = `<div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>1 Month Rent:</span><div><span class="curr-price">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center; margin-top:5px;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>Permanent Buy:</span><div><span class="curr-price">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
                     
-                    ps5Grid.innerHTML += cardHTML;
-                    if(isOffer) offersGrid.innerHTML += cardHTML;
+                    if(ps5Count < 8) {
+                        ps5Grid.innerHTML += cardHTML;
+                        ps5Count++;
+                    }
+                    if(isOffer && offerCount < 8) {
+                        offersGrid.innerHTML += cardHTML;
+                        offerCount++;
+                    }
                 }
             });
 
@@ -578,42 +693,56 @@
             }
         });
 
-        onAuthStateChanged(auth, async (user) => {
-            const authBtn = document.getElementById('authBtn');
-            if (user) {
-                currentUser = user;
-                authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${user.displayName.split(' ')[0]}</span>`;
-                authBtn.onclick = () => { window.location.href = "profile.html"; };
-                
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-                if (!userSnap.exists() || !userSnap.data().gamerType) {
-                    document.getElementById('obName').value = user.displayName || '';
-                    document.getElementById('onboardingOverlay').style.display = 'flex';
-                }
+        let visitorId = localStorage.getItem('visitorId');
+        if(!visitorId) {
+            visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('visitorId', visitorId);
+        }
+        function pingActive() {
+            setDoc(doc(db, "live_visitors", visitorId), { timestamp: serverTimestamp() }, { merge: true });
+        }
+        pingActive();
+        setInterval(pingActive, 60000); 
 
-                onSnapshot(userRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        currentTokens = data.tokens || 0;
-                        document.getElementById('tokenTracker').style.display = 'flex';
-                        document.getElementById('tokenFraction').innerText = `${currentTokens} / 500`;
-                        
-                        let percent = (currentTokens / 500) * 100;
-                        if (percent > 100) percent = 100; 
-                        document.getElementById('progressRing').style.strokeDashoffset = 113 - (percent / 100) * 113;
-                        window.updateCartUI(); 
+        // AUTHENTICATION AND TOKENS
+        setPersistence(auth, browserLocalPersistence).then(() => {
+            onAuthStateChanged(auth, async (user) => {
+                const authBtn = document.getElementById('authBtn');
+                if (user) {
+                    currentUser = user;
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${user.displayName.split(' ')[0]}</span>`;
+                    authBtn.onclick = () => { window.location.href = "profile.html"; };
+                    
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    if (!userSnap.exists() || !userSnap.data().gamerType) {
+                        document.getElementById('obName').value = user.displayName || '';
+                        document.getElementById('onboardingOverlay').style.display = 'flex';
                     }
-                });
-            } else {
-                currentUser = null;
-                currentTokens = 0;
-                document.getElementById('tokenTracker').style.display = 'none';
-                document.getElementById('onboardingOverlay').style.display = 'none';
-                
-                authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login / Sign Up</span>`;
-                authBtn.onclick = loginUser;
-            }
+
+                    onSnapshot(userRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            window.currentTokens = data.tokens || 0;
+                            document.getElementById('tokenTracker').style.display = 'flex';
+                            document.getElementById('tokenFraction').innerText = `${window.currentTokens} / 500`;
+                            
+                            let percent = (window.currentTokens / 500) * 100;
+                            if (percent > 100) percent = 100; 
+                            document.getElementById('progressRing').style.strokeDashoffset = 113 - (percent / 100) * 113;
+                            window.updateCartUI(); 
+                        }
+                    });
+                } else {
+                    currentUser = null;
+                    window.currentTokens = 0;
+                    document.getElementById('tokenTracker').style.display = 'none';
+                    document.getElementById('onboardingOverlay').style.display = 'none';
+                    
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login / Sign Up</span>`;
+                    authBtn.onclick = loginUser;
+                }
+            });
         });
 
         async function loginUser() {
@@ -632,7 +761,7 @@
 
             try {
                 await setDoc(doc(db, "users", currentUser.uid), {
-                    name: name, email: currentUser.email, gamerType: selectedRadio.value, tokens: currentTokens || 0, 
+                    name: name, email: currentUser.email, gamerType: selectedRadio.value, tokens: window.currentTokens || 0, 
                     lastLogin: serverTimestamp(), createdAt: serverTimestamp() 
                 }, { merge: true });
                 document.getElementById('onboardingOverlay').style.display = 'none';
@@ -676,7 +805,6 @@
         window.confirmAndSendWhatsApp = async function() {
             const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
             const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
-            const earnedTokens = Math.floor(total / 100) * 10; 
             
             const confirmBtn = document.getElementById('confirmPaymentBtn');
             confirmBtn.disabled = true;
@@ -691,8 +819,21 @@
                     status: "Pending Verification", createdAt: serverTimestamp()
                 });
 
-                if (earnedTokens > 0) {
-                    await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(earnedTokens) }, { merge: true });
+                // NEW: RECORD CUSTOM COUPON USAGE AND INCREMENT ITS USED COUNT
+                if (window.activeCouponCode && window.activeCouponCode !== "") {
+                    // Update the coupon usedCount
+                    const couponRef = doc(db, "coupons", window.activeCouponCode);
+                    await setDoc(couponRef, { usedCount: increment(1) }, { merge: true });
+
+                    // Log history for admin table
+                    await addDoc(collection(db, "coupon_usage"), {
+                        userName: currentUser.displayName,
+                        userEmail: currentUser.email,
+                        couponUsed: window.activeCouponCode,
+                        gamesPurchased: itemNames,
+                        discountAmount: window.appliedDiscount,
+                        usedAt: serverTimestamp()
+                    });
                 }
 
                 const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
@@ -700,6 +841,7 @@
 
                 window.cartArray = []; localStorage.removeItem('gf_cart'); 
                 window.appliedDiscount = 0; document.getElementById('couponMsg').innerText = ""; document.getElementById('couponInput').value = "";
+                window.activeCouponCode = "";
                 window.updateCartUI(); closePaymentModal();
                 window.open(whatsappUrl, '_blank');
             } catch (error) { 
@@ -711,7 +853,7 @@
 
         window.claimFreeGame = async function() {
             if (!currentUser) return;
-            if (currentTokens < 500) return alert("You need 500 tokens!");
+            if (window.currentTokens < 500) return alert("You need 500 tokens!");
             if(confirm("Redeem 500 GameFlex-Tokens for a Free Mystery Game?")) {
                 try {
                     await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(-500) }, { merge: true });
@@ -721,11 +863,10 @@
             }
         };
 
-        window.currentTokensGlobal = () => currentTokens;
-    </script>
+        window.currentTokensGlobal = () => window.currentTokens;
 
-    <script>
-        window.applyCoupon = function() {
+        // UPDATED: EXCLUSIVE FIREBASE COUPON VALIDATION (Hardcoded Coupons Removed)
+        window.applyCoupon = async function() {
             const code = document.getElementById('couponInput').value.trim().toUpperCase();
             const msg = document.getElementById('couponMsg');
             const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
@@ -734,19 +875,50 @@
                 msg.style.color = "#ff3333"; msg.innerText = "Cart is empty!"; window.appliedDiscount = 0; return;
             }
 
-            if (code === "GAMEFLEX10") {
-                window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
-                msg.style.color = "#4BB543"; msg.innerText = `🎉 Coupon applied! You saved ₹${window.appliedDiscount}`;
-            } else if (code === "FLAT50") {
-                window.appliedDiscount = 50; window.activeCouponCode = code;
-                msg.style.color = "#4BB543"; msg.innerText = `🎉 Coupon applied! Flat ₹50 off.`;
-            } else {
-                window.appliedDiscount = 0; window.activeCouponCode = "";
-                msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid coupon code.";
+            if (code === "") {
+                msg.style.color = "#ff3333"; msg.innerText = "Please enter a code."; return;
             }
-            window.updateCartUI();
+
+            msg.style.color = "gray"; 
+            msg.innerText = "Checking coupon...";
+
+            try {
+                const couponRef = doc(db, "coupons", code);
+                const couponSnap = await getDoc(couponRef);
+
+                if (couponSnap.exists()) {
+                    const cpnData = couponSnap.data();
+                    
+                    if (cpnData.active && (cpnData.usedCount < cpnData.usageLimit)) {
+                        let discountPct = cpnData.discountPercent;
+                        window.appliedDiscount = Math.round((subtotal * discountPct) / 100);
+                        window.activeCouponCode = code;
+                        
+                        msg.style.color = "#4BB543"; 
+                        if (discountPct === 100) {
+                             msg.innerText = `🎉 100% FREE Giveaway Applied!`;
+                        } else {
+                             msg.innerText = `🎉 Coupon applied! You saved ₹${window.appliedDiscount} (${discountPct}% OFF)`;
+                        }
+                    } else {
+                        window.appliedDiscount = 0; window.activeCouponCode = "";
+                        msg.style.color = "#ff3333"; msg.innerText = "❌ Coupon is Expired or Usage Limit Reached.";
+                    }
+                } else {
+                    // No fallback! If it's not in the database, it's invalid.
+                    window.appliedDiscount = 0; window.activeCouponCode = "";
+                    msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid coupon code.";
+                }
+                window.updateCartUI();
+            } catch(e) {
+                console.error(e);
+                msg.style.color = "#ff3333"; msg.innerText = "Error verifying coupon.";
+            }
         };
 
+    </script>
+
+    <script>
         const searchInput = document.getElementById('gameSearch');
         const searchDropdown = document.getElementById('searchDropdown');
 
