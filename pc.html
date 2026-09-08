@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PC Games - GameFlex Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -16,31 +16,53 @@
             --border-dark: #2a2a30;
         }
 
+        html { scroll-behavior: smooth; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
 
         /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
-        /* FIXED LOGO HERE */
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
         
         .nav-links { display: flex; gap: 30px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
         .nav-links li a:hover, .nav-links li a.active { color: var(--primary-red); }
-        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-links li a.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); }
         
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        
+        /* SEARCH BAR DESKTOP CSS */
+        .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
+        .search-input::placeholder { color: var(--text-gray); }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-input:focus + .search-icon { color: var(--primary-red); }
+        
+        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
+        .search-dropdown::-webkit-scrollbar { width: 5px; }
+        .search-dropdown::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 5px; }
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background: rgba(227, 24, 37, 0.15); padding-left: 20px; }
+        .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
+        .search-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
+        .search-item-price { font-size: 12px; font-weight: 800; color: var(--primary-red); }
+        .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
+        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
+
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; }
-        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: bold; }
         
-        /* ADDED LOGIN BUTTON CSS */
         .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #c1121d; }
 
-        /* PC Hero Banner (Exact Reference Match) */
-        .pc-hero { display: flex; justify-content: space-between; align-items: center; padding: 50px 5%; background: #0b0c10; border-bottom: 1px solid var(--border-dark); gap: 40px; flex-wrap: wrap; }
-        .pc-hero-content { flex: 1; min-width: 300px; }
+        /* PC Hero Banner */
+        .pc-hero { display: flex; justify-content: space-between; align-items: center; padding: 50px 5%; background: #0b0c10; border-bottom: 1px solid var(--border-dark); gap: 40px; flex-wrap: wrap; position: relative; }
+        .pc-hero-content { flex: 1; min-width: 300px; z-index: 2; }
         .pc-subtitle { color: var(--primary-red); font-size: 13px; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 12px; }
         .pc-title { font-size: 46px; font-weight: 800; line-height: 1.15; margin-bottom: 15px; text-transform: uppercase; }
         .pc-title span { color: var(--primary-red); display: block; }
@@ -50,16 +72,14 @@
         .pc-feat-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-light); }
         .pc-feat-item i { color: var(--primary-red); font-size: 16px; }
 
-        /* Banner Image Box */
-        .pc-hero-img { flex: 1.2; min-width: 350px; height: 350px; background-image: url('image1.png.png'); background-size: cover; background-position: center; border-radius: 12px; border: 1px solid var(--border-dark); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(227, 24, 37, 0.2); }
+        /* Banner Image Box (Desktop Only) */
+        .pc-hero-img { flex: 1.2; min-width: 350px; height: 350px; background-image: url('image1.png.png'); background-size: cover; background-position: center; border-radius: 12px; border: 1px solid var(--border-dark); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(227, 24, 37, 0.2); z-index: 2; }
 
-        /* Shop by Category Section (Exact 6 Cards Row) */
+        /* Shop by Category Section */
         .category-section { padding: 40px 5%; }
         .section-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .section-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; }
         .section-title span { color: var(--primary-red); width: 4px; height: 18px; background: var(--primary-red); display: inline-block; border-radius: 2px; }
-        .view-all-link { color: var(--primary-red); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .view-all-link:hover { text-decoration: underline; }
         
         .cat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
         .sub-cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; }
@@ -72,15 +92,15 @@
         .products-section { padding: 20px 5% 60px 5%; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
-        .product-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer;}
+        .product-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; display: flex; flex-direction: column;}
         .product-card:hover { border-color: var(--primary-red); transform: translateY(-6px); box-shadow: 0 12px 30px rgba(227, 24, 37, 0.25); }
         
         .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--primary-red); color: white; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; z-index: 2; box-shadow: 0 2px 8px rgba(227, 24, 37, 0.4); }
         .product-img { height: 180px; width: 100%; background-size: cover; background-position: center; transition: transform 0.5s ease; border-bottom: 1px solid var(--border-dark);}
         .product-card:hover .product-img { transform: scale(1.05); }
         
-        .product-info { padding: 18px; position: relative; background: var(--card-bg); z-index: 5;}
-        .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+        .product-info { padding: 18px; position: relative; background: var(--card-bg); z-index: 5; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;}
+        .product-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.3;}
         .product-price { font-size: 17px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
         
         .buy-btn { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 12px rgba(227, 24, 37, 0.3); cursor: pointer;}
@@ -110,28 +130,154 @@
         .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; color: var(--text-light); margin-bottom: 15px; }
         .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         .checkout-btn:hover { background: #c1121d; }
+
+        /* ========================================================================= */
+        /* 📱 PRO MOBILE LAYOUT (AMAZON/FLIPKART STYLE) 📱 */
+        /* ========================================================================= */
+        
+        @media (max-width: 768px) {
+            
+            /* Navbar Grid System */
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: 
+                    "logo actions" 
+                    "search search"
+                    "links links"; 
+                gap: 12px; 
+                padding: 12px 5% 0 5%; 
+                background: #0b0c10;
+            }
+            
+            .logo { grid-area: logo; font-size: 16px; align-items: center; }
+            .logo-icon { width: 30px; height: 30px; }
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            
+            .hide-mobile { display: none; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; }
+            .login-btn i { margin: 0; }
+
+            /* Search Bar Full Width */
+            .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
+            .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
+            .search-input:focus { width: 100%; }
+
+            /* Smooth Horizontal Scroll Nav Links */
+            .nav-links { 
+                grid-area: links; 
+                display: flex; 
+                flex-direction: row; 
+                position: static; 
+                width: 100%; 
+                height: auto; 
+                background: transparent; 
+                overflow-x: auto; 
+                padding: 5px 0 10px 0; 
+                border-top: 1px solid rgba(255,255,255,0.05); 
+                gap: 20px; 
+                -webkit-overflow-scrolling: touch; 
+                scrollbar-width: none;
+            }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
+            
+            /* HERO SECTION FIX */
+            .pc-hero { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 40px 5%; 
+                gap: 20px; 
+                background-image: url('image1.png.png'); 
+                background-size: cover; 
+                background-position: center; 
+                z-index: 1;
+            }
+            .pc-hero::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(11, 12, 16, 0.85);
+                z-index: -1;
+            }
+            .pc-hero-img { display: none; } 
+            .pc-hero-content { min-width: unset; width: 100%; }
+            .pc-title { font-size: 28px; margin-bottom: 15px; }
+            .pc-desc { font-size: 13px; margin-bottom: 20px; }
+            .pc-features { justify-content: center; gap: 10px; }
+            .pc-feat-item { font-size: 11px; }
+
+            /* NEW: Categories - Smooth Horizontal Scroll (Flipkart Style) */
+            .category-section { padding: 25px 5%; }
+            .section-header-flex { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 15px; }
+            .section-title { font-size: 16px; }
+            
+            .cat-row { 
+                display: flex; 
+                flex-wrap: nowrap; 
+                overflow-x: auto; 
+                gap: 12px; 
+                padding-bottom: 10px; 
+                -webkit-overflow-scrolling: touch; 
+                scrollbar-width: none; 
+            }
+            .cat-row::-webkit-scrollbar { display: none; }
+            .sub-cat-card { 
+                flex: 0 0 auto; 
+                width: 130px; /* Fixed width for smooth sliding */
+                padding: 15px 10px; 
+            }
+            .sub-cat-card i { font-size: 20px; margin-bottom: 8px; }
+            .sub-cat-card h4 { font-size: 11px; }
+            .sub-cat-card p { font-size: 9px; }
+
+            /* Products 2-Column Grid Fix */
+            .products-section { padding: 10px 5% 40px 5%; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            
+            .product-img { height: 140px; }
+            .product-info { padding: 10px; }
+            .product-title { font-size: 12px; margin-bottom: 6px; }
+            .product-price { font-size: 15px; margin-bottom: 10px; }
+            .buy-btn { padding: 8px; font-size: 12px; }
+            .discount-badge { font-size: 9px; padding: 3px 6px; }
+
+            .cart-sidebar { width: 100%; right: -100%; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- NEW OPTIMIZED NAVBAR -->
     <nav class="navbar">
+        <!-- Area: Logo -->
         <a href="index.html" class="logo">
             <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
         </a>
+
+        <!-- Area: Search -->
+        <div class="search-container">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search PC or PS5 Games..." autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+
+        <!-- Area: Actions -->
+        <div class="nav-actions">
+            <button class="login-btn" id="authBtn"><i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span></button>
+            <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
+        </div>
+
+        <!-- Area: Links -->
         <ul class="nav-links">
-            <!-- FIXED ALL LINKS HERE -->
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html" class="active">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Reviews</a></li>
         </ul>
-        <div class="nav-actions">
-            <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
-            <!-- LOGIN BUTTON ADDED -->
-            <button class="login-btn" id="authBtn"><i class="fa-solid fa-user"></i> <span>Login</span></button>
-        </div>
     </nav>
 
     <!-- Cart Overlay & Sidebar -->
@@ -153,6 +299,7 @@
         </div>
     </div>
 
+    <!-- MAIN SECTIONS -->
     <header class="pc-hero">
         <div class="pc-hero-content">
             <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
@@ -209,7 +356,6 @@
     <section class="products-section">
         <div class="section-header-flex">
             <div class="section-title"><span></span> Popular PC Games</div>
-            <a href="#" class="view-all-link">View All &rarr;</a>
         </div>
         <div class="products-grid" id="pcGamesGrid">
             <p style="color: gray; text-align: center; grid-column: 1 / -1;">Loading live PC games from database...</p>
@@ -218,17 +364,17 @@
 
     <script>
         window.allLivePcGames = [];
+        window.liveGamesDatabase = []; // <-- Variable for Global Search
         window.activeCategoryFilter = 'All';
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
     </script>
 
-    <!-- FIREBASE MODULE & LOGIC WITH AUTHENTICATION ADDED -->
+    <!-- FIREBASE MODULE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
@@ -245,13 +391,11 @@
         
         let currentUser = null;
 
-        // INSTANT LOGIN UI UPDATE
         const savedUserName = localStorage.getItem('gf_logged_in_user');
         if(savedUserName) {
-            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
         }
 
-        // AUTHENTICATION LOGIC
         setPersistence(auth, browserLocalPersistence).then(() => {
             onAuthStateChanged(auth, (user) => {
                 const authBtn = document.getElementById('authBtn');
@@ -259,12 +403,12 @@
                     currentUser = user;
                     const firstName = user.displayName.split(' ')[0];
                     localStorage.setItem('gf_logged_in_user', firstName); 
-                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${firstName}</span>`;
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
                     authBtn.onclick = () => { window.location.href = "profile.html"; };
                 } else {
                     currentUser = null;
                     localStorage.removeItem('gf_logged_in_user'); 
-                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login</span>`;
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
                     authBtn.onclick = async () => {
                         try { await signInWithPopup(auth, provider); } 
                         catch (err) { alert("Login failed: " + err.message); }
@@ -273,12 +417,25 @@
             });
         });
 
-        // FETCH ONLY PC GAMES FROM FIRESTORE (FIXED 'addedOn' Query)
+        // 🔥 MODIFIED TO FETCH ALL GAMES FOR SEARCH, BUT FILTER PC FOR GRID
         const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             window.allLivePcGames = [];
+            window.liveGamesDatabase = []; 
+
             snapshot.forEach((gameDoc) => {
                 const game = { id: gameDoc.id, ...gameDoc.data() };
+                
+                // Add to Global Search Database
+                let rent = game.rentalPrice || game.rentPrice || 0;
+                let perm = game.permanentPrice || game.permPrice || 0;
+                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
+                
+                window.liveGamesDatabase.push({
+                    title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
+                });
+
+                // Add to PC Grid ONLY if it's PC
                 if (game.platform === 'PC') {
                     window.allLivePcGames.push(game);
                 }
@@ -286,21 +443,18 @@
             window.renderPcGrid();
         });
 
-        // Function to Render Grid Based on Selected Filter
         window.renderPcGrid = function() {
             const pcGrid = document.getElementById('pcGamesGrid');
             pcGrid.innerHTML = '';
 
             let filtered = window.allLivePcGames;
 
-            // Apply Filters (Fixed g.categories Bug)
             if (window.activeCategoryFilter === 'Under 500') {
                 filtered = filtered.filter(g => Number(g.price) < 500);
             } else if (window.activeCategoryFilter === 'Best Sellers') {
                 filtered = filtered.filter(g => g.discount); 
             } else if (window.activeCategoryFilter !== 'All') {
                 filtered = filtered.filter(g => {
-                    // Using g.categories array as saved from admin panel
                     if (g.categories && Array.isArray(g.categories)) return g.categories.includes(window.activeCategoryFilter);
                     return false;
                 });
@@ -316,7 +470,6 @@
                 let oldPriceHTML = game.originalPrice ? `<span style="font-size:12px; color:var(--text-gray); text-decoration:line-through; margin-left:5px;">₹${game.originalPrice}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
                 
-                // Get genres/categories text for UI
                 let genresText = game.categories ? game.categories.join(' • ') : 'Action';
 
                 pcGrid.innerHTML += `
@@ -333,7 +486,6 @@
             });
         };
 
-        // Click handler for category buttons
         window.setCategoryFilter = function(category, element) {
             document.querySelectorAll('.sub-cat-card').forEach(b => b.classList.remove('active'));
             element.classList.add('active');
@@ -342,8 +494,34 @@
         };
     </script>
 
-    <!-- Cart Rendering Script -->
+    <!-- UI Scripts (Cart + Global Search) -->
     <script>
+        // GLOBAL SEARCH BAR LOGIC
+        const searchInput = document.getElementById('gameSearch');
+        const searchDropdown = document.getElementById('searchDropdown');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            searchDropdown.innerHTML = ''; 
+            if (query.length > 0) {
+                // Searches ALL games (PC + PS5)
+                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                searchDropdown.style.display = 'block';
+                if (filteredGames.length > 0) {
+                    filteredGames.forEach(game => {
+                        const gameItem = document.createElement('a'); gameItem.href = game.link; gameItem.className = 'search-item';
+                        gameItem.innerHTML = `<div class="search-item-img" style="background-image: url('${game.img}');"></div><div class="search-item-info"><span class="search-item-title">${game.title}</span><span class="search-platform">${game.platform}</span><span class="search-item-price">${game.price}</span></div>`;
+                        searchDropdown.appendChild(gameItem);
+                    });
+                } else { searchDropdown.innerHTML = `<div class="no-results">No games found</div>`; }
+            } else { searchDropdown.style.display = 'none'; }
+        });
+
+        document.addEventListener('click', function(event) { 
+            if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; 
+        });
+
+        // CART LOGIC
         window.toggleCart = function() {
             document.getElementById('cartSidebar').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('active');
@@ -397,7 +575,6 @@
             totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
         };
 
-        // Initialize UI on load
         window.updateCartUI();
     </script>
 </body>

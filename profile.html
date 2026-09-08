@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Profile - GameFlex Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -48,7 +48,12 @@
         .profile-sidebar { width: 300px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 30px 20px; flex-shrink: 0; position: sticky; top: 100px; }
         .user-avatar-wrapper { text-align: center; margin-bottom: 20px; position: relative; }
         .user-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--theme-gradient); border: 3px solid var(--theme-color); display: inline-flex; justify-content: center; align-items: center; font-size: 40px; color: white; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .user-name { font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 5px; color: white; }
+        
+        .user-name-wrapper { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .user-name { font-size: 20px; font-weight: 800; color: white; }
+        .edit-profile-btn { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 14px; transition: 0.3s; }
+        .edit-profile-btn:hover { color: var(--theme-color); }
+        
         .user-email { font-size: 12px; color: var(--text-gray); text-align: center; margin-bottom: 15px; }
         .gamer-tag { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid var(--theme-color); color: var(--theme-color); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin: 0 auto 30px auto; display: table; }
 
@@ -66,8 +71,11 @@
 
         /* Dynamic Banner */
         .profile-banner { position: relative; width: 100%; height: 220px; border-radius: 16px; overflow: hidden; background: var(--theme-gradient); display: flex; align-items: center; padding: 0 40px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(5,7,12,0.9) 0%, rgba(5,7,12,0.4) 100%); z-index: 1; }
-        .banner-img { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); height: 110%; z-index: 2; opacity: 0.8; filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.8)); transition: 0.5s ease; }
+        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(5,7,12,0.95) 0%, rgba(5,7,12,0.6) 50%, rgba(5,7,12,0) 100%); z-index: 1; }
+        
+        /* FIXED BANNER IMAGE FIT */
+        .banner-img { position: absolute; right: 0; top: 0; width: 60%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.7; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); transition: 0.5s ease; }
+        
         .banner-content { position: relative; z-index: 3; }
         .welcome-text { font-size: 14px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase;}
         .banner-name { font-size: 36px; font-weight: 900; color: white; margin-bottom: 15px; }
@@ -80,7 +88,6 @@
 
         /* Section Grids */
         .dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 30px; }
-        @media (max-width: 992px) { .dashboard-grid { grid-template-columns: 1fr; } }
         
         .dash-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 25px; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -134,11 +141,62 @@
         .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
         .checkout-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
+        /* EDIT PROFILE MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 400px; max-width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: left; }
+        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-gray); font-size: 20px; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: white; }
+        .modal-content h3 { font-size: 22px; margin-bottom: 20px; color: white; text-align: center;}
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: white; padding: 12px; border-radius: 8px; outline: none; font-size: 14px; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--theme-color); }
+        
+        .submit-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+
+        /* ========================================= */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
+        /* ========================================= */
         @media (max-width: 768px) {
-            .profile-container { flex-direction: column; }
-            .profile-sidebar { width: 100%; position: static; }
-            .banner-name { font-size: 24px; }
-            .banner-img { opacity: 0.3; } /* Less intrusive on mobile */
+            
+            /* Navbar Mobile Grid */
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: "logo actions" "links links"; 
+                gap: 12px; padding: 12px 5% 0 5%; 
+            }
+            .logo { grid-area: logo; font-size: 16px; }
+            .logo-icon { width: 30px; height: 30px; }
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            .hide-mobile { display: none; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; }
+            
+            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; width: auto; }
+
+            /* Profile Structure */
+            .profile-container { flex-direction: column; padding: 20px 5%; gap: 20px; }
+            .profile-sidebar { width: 100%; position: static; padding: 20px; }
+            
+            /* Banner Adjustments */
+            .profile-banner { height: 180px; padding: 0 20px; }
+            .banner-name { font-size: 24px; margin-bottom: 10px; }
+            .welcome-text { font-size: 12px; }
+            .banner-stats { gap: 10px; }
+            .b-stat { padding: 8px 12px; }
+            .b-stat h4 { font-size: 14px; }
+
+            /* Dashboard Grids */
+            .dashboard-grid { grid-template-columns: 1fr; gap: 20px; }
+            .dash-card { padding: 20px; }
+            
+            .library-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            
+            .cart-sidebar { width: 100%; right: -100%; }
+            .modal-content { width: 95%; padding: 20px; }
         }
     </style>
 </head>
@@ -150,15 +208,15 @@
             <div class="logo-icon"><img src="logo.png" alt="Logo"></div>
             <div>GAMEFLEX<br><span style="color: var(--theme-color); font-size: 14px;">_STORE</span></div>
         </a>
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
+            <button class="login-btn" id="authBtn" style="display: none;"><i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span></button>
+        </div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PS5 Games</a></li>
         </ul>
-        <div class="nav-actions">
-            <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
-            <button class="login-btn" id="authBtn" style="display: none;"><i class="fa-solid fa-user"></i> <span>Login</span></button>
-        </div>
     </nav>
 
     <!-- Cart Sidebar -->
@@ -183,7 +241,10 @@
             <div class="user-avatar-wrapper">
                 <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
             </div>
-            <h2 class="user-name" id="sideName">Loading...</h2>
+            <div class="user-name-wrapper">
+                <h2 class="user-name" id="sideName">Loading...</h2>
+                <button class="edit-profile-btn" onclick="openEditModal()" title="Edit Profile"><i class="fa-solid fa-pen"></i></button>
+            </div>
             <p class="user-email" id="sideEmail">...</p>
             <div class="gamer-tag" id="sideGamerTag">Gamer</div>
 
@@ -201,8 +262,8 @@
             <!-- Dynamic Banner -->
             <div class="profile-banner">
                 <div class="banner-overlay"></div>
-                <!-- Banner Image changes based on Gamer Type -->
-                <img id="bannerImage" src="" alt="Hardware Setup" class="banner-img" style="display: none;">
+                <!-- Banner Image Fix -->
+                <img id="bannerImage" src="image1.png.png" alt="Background" class="banner-img" style="display: none;">
                 
                 <div class="banner-content">
                     <div class="welcome-text">Welcome Back,</div>
@@ -268,11 +329,34 @@
         </main>
     </div>
 
+    <!-- EDIT PROFILE MODAL -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-user-pen" style="color:var(--theme-color);"></i> Edit Profile</h3>
+            
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label>Display Name</label>
+                    <input type="text" id="editNameInput" required>
+                </div>
+                <div class="form-group">
+                    <label>Gamer Type (Changes Theme)</label>
+                    <select id="editThemeSelect" required>
+                        <option value="PC Gamer">PC Gamer (Red Theme)</option>
+                        <option value="PlayStation Gamer">PlayStation Gamer (Blue Theme)</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn" id="saveProfileBtn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -286,14 +370,14 @@
 
         // Globals
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
+        let currentUser = null;
 
         // Authentication State
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is logged in, fetch profile data
+                currentUser = user;
                 loadUserProfile(user);
             } else {
-                // Not logged in -> Redirect to index.html to login
                 alert("Please login to view your profile.");
                 window.location.href = "index.html";
             }
@@ -309,7 +393,6 @@
                 if (userSnap.exists()) {
                     userData = userSnap.data();
                 } else {
-                    // Fallback if document doesn't exist yet but auth does
                     userData = { name: user.displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0 };
                 }
 
@@ -321,20 +404,22 @@
                 
                 const gamerType = userData.gamerType || 'PC Gamer';
                 document.getElementById('sideGamerTag').innerText = gamerType;
+                
+                // Pre-fill edit modal
+                document.getElementById('editNameInput').value = displayName;
+                document.getElementById('editThemeSelect').value = gamerType === 'Both' ? 'PC Gamer' : gamerType;
 
                 // 3. Dynamic Theming Logic based on Gamer Type
                 const body = document.getElementById('profileBody');
                 const bannerImg = document.getElementById('bannerImage');
                 bannerImg.style.display = 'block';
 
-                if (gamerType === 'PC Gamer') {
+                if (gamerType === 'PC Gamer' || gamerType === 'Both') {
                     body.className = 'theme-pc';
-                    // Professional Red PC Setup Image
-                    bannerImg.src = 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=800&auto=format&fit=crop';
+                    bannerImg.src = 'image1.png.png'; // Using the local PC image
                 } else {
                     body.className = 'theme-ps5';
-                    // PS5 Console Image
-                    bannerImg.src = 'PS5.png'; 
+                    bannerImg.src = 'PS5.png'; // Using the local PS5 image
                 }
 
                 // 4. Set Tokens & Progress
@@ -344,7 +429,6 @@
                 let percent = (tokens / 500) * 100;
                 if (percent > 100) percent = 100;
                 
-                // Small timeout to allow CSS transition to play on load
                 setTimeout(() => {
                     document.getElementById('tokenProgressBar').style.width = percent + '%';
                 }, 500);
@@ -366,15 +450,13 @@
 
         async function loadUserBookings(uid) {
             try {
-                // Fetch all bookings for this user
                 const q = query(collection(db, "bookings"), where("userId", "==", uid));
                 const querySnapshot = await getDocs(q);
                 
                 let ordersHTML = "";
-                let purchasedGames = new Map(); // Use Map to prevent duplicate game cards in library
+                let purchasedGames = new Map(); 
                 let orderCount = 0;
 
-                // Since we couldn't compound query order by desc easily without index, we sort in JS
                 let bookingsData = [];
                 querySnapshot.forEach((doc) => {
                     bookingsData.push({ id: doc.id, ...doc.data() });
@@ -390,7 +472,6 @@
                     orderCount++;
                     let dateStr = booking.createdAt ? booking.createdAt.toDate().toLocaleDateString() : "Just Now";
                     
-                    // Build Order Row
                     let itemsStr = booking.items ? booking.items.map(i => `${i.title} (x${i.qty})`).join(', ') : "Item";
                     
                     ordersHTML += `
@@ -406,19 +487,16 @@
                         </div>
                     `;
 
-                    // Extract items for Library Grid
                     if (booking.items && Array.isArray(booking.items)) {
                         booking.items.forEach(item => {
-                            // Clean title to avoid duplicates if they bought "Game (PC)" and "Game"
                             let cleanTitle = item.title.replace(' (PC)', '').replace(' (Rent)', '').replace(' (Buy)', '');
-                            if (!purchasedGames.has(cleanTitle) && item.price > 0) { // Don't add free reward placeholders if they have price 0
+                            if (!purchasedGames.has(cleanTitle) && item.price > 0) { 
                                 purchasedGames.set(cleanTitle, item.img);
                             }
                         });
                     }
                 });
 
-                // Update DOM
                 document.getElementById('statOrders').innerText = orderCount;
                 
                 const ordersContainer = document.getElementById('ordersContainer');
@@ -428,7 +506,6 @@
                     ordersContainer.innerHTML = ordersHTML;
                 }
 
-                // Render Library
                 const libContainer = document.getElementById('libraryContainer');
                 if (purchasedGames.size === 0) {
                     libContainer.innerHTML = '<p style="color: gray; font-size: 13px; grid-column: 1/-1;">Your library is empty. Start shopping to add games here!</p>';
@@ -455,17 +532,55 @@
             }
         }
 
+        // --- EDIT PROFILE LOGIC ---
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(!currentUser) return;
+
+            const btn = document.getElementById('saveProfileBtn');
+            btn.innerText = "Saving..."; btn.disabled = true;
+
+            const newName = document.getElementById('editNameInput').value;
+            const newTheme = document.getElementById('editThemeSelect').value;
+
+            try {
+                // Update Firebase Auth Profile (For quick access)
+                await updateProfile(currentUser, { displayName: newName });
+                
+                // Update Firestore Document
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    name: newName,
+                    gamerType: newTheme
+                }, { merge: true });
+
+                alert("Profile updated successfully!");
+                closeEditModal();
+                loadUserProfile(currentUser); // Refresh UI
+            } catch (error) {
+                console.error("Error updating profile: ", error);
+                alert("Failed to update profile. Try again.");
+            } finally {
+                btn.innerText = "Save Changes"; btn.disabled = false;
+            }
+        });
+
         window.logoutUser = function() {
             if (confirm("Are you sure you want to log out?")) {
                 signOut(auth).then(() => {
+                    localStorage.removeItem('gf_logged_in_user');
                     window.location.href = "index.html";
                 });
             }
         }
     </script>
 
-    <!-- Cart Rendering Script -->
+    <!-- Modal & Cart UI Script -->
     <script>
+        // Modal functions
+        window.openEditModal = function() { document.getElementById('editModal').style.display = 'flex'; };
+        window.closeEditModal = function() { document.getElementById('editModal').style.display = 'none'; };
+
+        // Cart functions
         window.toggleCart = function() {
             document.getElementById('cartSidebar').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('active');

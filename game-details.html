@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Game Details - GameFlex</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -27,12 +27,52 @@
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
         
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; position: relative; }
+        .theme-pc .nav-links li a:hover { color: var(--primary-red); }
+        .theme-ps5 .nav-links li a:hover { color: var(--ps5-blue); }
+        
+        /* SEARCH BAR CSS */
+        .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input::placeholder { color: var(--text-gray); }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        
+        .theme-pc .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
+        .theme-pc .search-input:focus + .search-icon { color: var(--primary-red); }
+        .theme-ps5 .search-input:focus { width: 280px; border-color: var(--ps5-blue); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(31, 106, 255, 0.2); }
+        .theme-ps5 .search-input:focus + .search-icon { color: var(--ps5-blue); }
+
+        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
+        .search-dropdown::-webkit-scrollbar { width: 5px; }
+        .theme-pc .search-dropdown::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 5px; }
+        .theme-ps5 .search-dropdown::-webkit-scrollbar-thumb { background: var(--ps5-blue); border-radius: 5px; }
+        
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .search-item:last-child { border-bottom: none; }
+        .theme-pc .search-item:hover { background: rgba(227, 24, 37, 0.15); padding-left: 20px; }
+        .theme-ps5 .search-item:hover { background: rgba(31, 106, 255, 0.15); padding-left: 20px; }
+        .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
+        .search-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
+        .search-item-price { font-size: 12px; font-weight: 800; color: #fff; }
+        .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
+        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
+
         .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 15px; }
-        .icon-btn:hover { color: var(--primary-red); }
-        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
-        .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
-        .login-btn:hover { background: #c1121d; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
+        .theme-pc .icon-btn:hover { color: var(--primary-red); }
+        .theme-ps5 .icon-btn:hover { color: var(--ps5-blue); }
+        
+        .cart-badge { position: absolute; top: -5px; right: -10px; color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
+        .theme-pc .cart-badge { background: var(--primary-red); }
+        .theme-ps5 .cart-badge { background: var(--ps5-blue); }
+
+        .login-btn { color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .theme-pc .login-btn { background: var(--primary-red); }
+        .theme-pc .login-btn:hover { background: #c1121d; }
+        .theme-ps5 .login-btn { background: var(--ps5-blue); }
+        .theme-ps5 .login-btn:hover { background: #0051ed; }
 
         /* Cart Sidebar */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
@@ -41,15 +81,23 @@
         .cart-sidebar.open { right: 0; }
         .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
         .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .theme-pc .close-cart:hover { color: var(--primary-red); }
+        .theme-ps5 .close-cart:hover { color: var(--ps5-blue); }
+        
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); position: relative; }
         .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; }
         .cart-item-details { flex: 1; }
         .cart-item-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 5px; }
-        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--primary-red); }
+        .cart-item-price { font-size: 15px; font-weight: 800; }
+        .theme-pc .cart-item-price { color: var(--primary-red); }
+        .theme-ps5 .cart-item-price { color: var(--ps5-blue); }
+        
         .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; position: absolute; right: 12px; top: 12px; }
         .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
-        .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .checkout-btn { width: 100%; color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .theme-pc .checkout-btn { background: var(--primary-red); }
+        .theme-ps5 .checkout-btn { background: var(--ps5-blue); }
 
         /* PDP Container */
         .pdp-container { max-width: 1200px; margin: 40px auto; padding: 0 5%; }
@@ -82,29 +130,10 @@
 
         /* Center Column: Box Art Card */
         .pdp-center-col { display: flex; justify-content: center; align-items: flex-start; }
-        .pdp-image-card { 
-            position: relative; 
-            width: 100%; 
-            max-width: 320px; 
-            height: 420px; 
-            border-radius: 12px; 
-            overflow: hidden; 
-            background: rgba(0, 0, 0, 0.4); 
-            border: 2px solid var(--border-dark); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
-            margin: 0 auto; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .pdp-image-card { position: relative; width: 100%; max-width: 320px; height: 420px; border-radius: 12px; overflow: hidden; background: rgba(0, 0, 0, 0.4); border: 2px solid var(--border-dark); box-shadow: 0 20px 50px rgba(0,0,0,0.8); margin: 0 auto; display: flex; align-items: center; justify-content: center; }
         .theme-ps5 .pdp-image-card { border-color: rgba(31, 106, 255, 0.4); box-shadow: 0 10px 40px rgba(31, 106, 255, 0.25); }
         .theme-pc .pdp-image-card { border-color: rgba(227, 24, 37, 0.4); box-shadow: 0 10px 40px rgba(227, 24, 37, 0.25); }
-        .pdp-image-card img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: contain; 
-            display: block; 
-        }
+        .pdp-image-card img { width: 100%; height: 100%; object-fit: contain; display: block; }
         .pdp-image-overlay-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); z-index: 5; }
 
         /* Right Column: Checkout Card */
@@ -115,7 +144,8 @@
         .theme-ps5 .pdp-current-price { color: var(--ps5-blue); }
         .theme-pc .pdp-current-price { color: var(--primary-red); }
         .pdp-old-price { font-size: 16px; color: var(--text-gray); text-decoration: line-through; font-weight: 600; }
-        .pdp-discount-pill { background: var(--ps5-blue); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; display:none; }
+        .pdp-discount-pill { color: #fff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; display:none; }
+        .theme-ps5 .pdp-discount-pill { background: var(--ps5-blue); }
         .theme-pc .pdp-discount-pill { background: var(--primary-red); }
 
         .pdp-checklist { list-style: none; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--border-dark); }
@@ -147,41 +177,104 @@
         .pdp-rec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .pdp-rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
         .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: 0.3s; cursor: pointer; position: relative; }
-        .prod-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
+        .theme-pc .prod-card:hover { transform: translateY(-5px); border-color: var(--primary-red); }
+        .theme-ps5 .prod-card:hover { transform: translateY(-5px); border-color: var(--ps5-blue); }
         .prod-img { height: 140px; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
-        
-        @media (max-width: 992px) {
-            .pdp-hero-grid { grid-template-columns: 1fr; gap: 30px; }
-            .pdp-image-card { max-width: 420px; margin: 0 auto; }
+
+        /* ========================================================================= */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
+        /* ========================================================================= */
+        @media (max-width: 768px) {
+            
+            /* Navbar Grid System */
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: "logo actions" "search search" "links links"; 
+                gap: 12px; padding: 12px 5% 0 5%; 
+            }
+            .logo { grid-area: logo; font-size: 16px; align-items: center; }
+            .logo-icon { width: 30px; height: 30px; }
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            
+            .hide-mobile { display: none; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; margin: 0; }
+            .login-btn i { margin: 0; }
+
+            .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
+            .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
+            .search-input:focus { width: 100%; }
+
+            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; -webkit-overflow-scrolling: touch; }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
+
+            /* PDP Layout Ordering for Mobile */
+            .pdp-hero-grid { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 25px; 
+                margin-bottom: 40px; 
+            }
+            .pdp-center-col { order: 1; width: 100%; margin-bottom: 10px; } /* Image on Top */
+            .pdp-left-col { order: 2; width: 100%; } /* Details Middle */
+            .pdp-right-col { order: 3; width: 100%; } /* Checkout Bottom */
+
+            .pdp-image-card { height: 350px; max-width: 100%; }
+            .pdp-title { font-size: 26px; margin-bottom: 10px; }
+            .pdp-action-card { padding: 20px; }
+            .pdp-current-price { font-size: 28px; }
+
+            /* Recommendations Grid */
+            .pdp-rec-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .prod-img { height: 120px; }
+            
+            .cart-sidebar { width: 100%; right: -100%; }
         }
     </style>
 </head>
-<body id="pageBody" class="theme-pc"> <!-- default class -->
+<body id="pageBody" class="theme-pc">
 
     <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">
-            <!-- FIXED LOGO -->
             <div class="logo-icon"><img src="logo.png" alt="GameFlex" style="width: 100%; height: 100%; object-fit: contain;"></div>
-            <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
+            <div id="navLogoText">GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;" id="navLogoSub">_STORE</span></div>
         </a>
+
+        <!-- SEARCH BAR -->
+        <div class="search-container">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search Games..." autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+
         <div class="nav-actions">
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
-            <!-- AUTH BUTTON FOR PDP -->
             <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
-                <i class="fa-solid fa-user"></i> <span>Login</span>
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
             </button>
         </div>
+
+        <!-- Links (Mobile Friendly Scrollable) -->
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pc.html">PC Games</a></li>
+            <li><a href="ps5.html">PlayStation</a></li>
+            <li><a href="offer.html">Offers</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
+        </ul>
     </nav>
 
     <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <h2 id="cartHeaderText"><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer"></div>
@@ -198,6 +291,15 @@
         </div>
 
         <div class="pdp-hero-grid" id="pdpGrid">
+            
+            <!-- Center Image (Moved to top via CSS order on mobile) -->
+            <div class="pdp-center-col">
+                <div class="pdp-image-card">
+                    <div class="pdp-image-overlay-badge" id="pdpCardOverlayBadge">OFFICIAL</div>
+                    <img id="pdpMainImage" src="https://via.placeholder.com/400x500/12141a/fff?text=Loading..." alt="Game Poster">
+                </div>
+            </div>
+
             <!-- Left Info -->
             <div class="pdp-left-col">
                 <div class="pdp-platform-tag" id="pdpPlatformBadge">
@@ -212,7 +314,6 @@
                     <span>4.8 (Verified)</span>
                 </div>
 
-                <!-- DESCRIPTION BUG FIXED: Searching for 'description' AND 'desc' -->
                 <p class="pdp-desc" id="pdpMainDesc">Please wait while we load the game details from the database.</p>
 
                 <div class="pdp-feature-pills">
@@ -225,14 +326,6 @@
                 <div class="pdp-badges-row">
                     <span class="pdp-badge-mini active-badge" id="editionBadge">Standard Edition</span>
                     <span class="pdp-badge-mini">Digital Delivery</span>
-                </div>
-            </div>
-
-            <!-- Center Image -->
-            <div class="pdp-center-col">
-                <div class="pdp-image-card">
-                    <div class="pdp-image-overlay-badge" id="pdpCardOverlayBadge">OFFICIAL</div>
-                    <img id="pdpMainImage" src="https://via.placeholder.com/400x500/12141a/fff?text=Loading..." alt="Game Poster">
                 </div>
             </div>
 
@@ -290,7 +383,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, limit, query, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
@@ -309,7 +402,7 @@
         // LOGIN SYNC UI
         const savedUserName = localStorage.getItem('gf_logged_in_user');
         if(savedUserName) {
-            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
             document.getElementById('authBtn').onclick = () => { window.location.href = "profile.html"; };
         }
 
@@ -319,6 +412,21 @@
         window.activeBasePrice = 0;
         window.activeQty = 1;
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
+        window.liveGamesDatabase = []; // For Global Search
+
+        // Fetch all games for Search Bar
+        onSnapshot(collection(db, "games"), (snapshot) => {
+            window.liveGamesDatabase = [];
+            snapshot.forEach((docSnap) => {
+                const game = docSnap.data();
+                let rent = game.rentalPrice || game.rentPrice || 0;
+                let perm = game.permanentPrice || game.permPrice || 0;
+                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
+                window.liveGamesDatabase.push({
+                    title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${docSnap.id}`
+                });
+            });
+        });
 
         // Load Game Data from URL Parameter
         async function loadGameDetails() {
@@ -352,16 +460,18 @@
             // Check if it's PS4, PS5, or PS4/PS5
             const isConsole = (game.platform !== 'PC');
             
-            // Set Theme
+            // Set Theme Colors
             const pageBody = document.getElementById('pageBody');
             pageBody.className = isConsole ? 'theme-ps5' : 'theme-pc';
+            
+            // Update Logo color based on theme
+            document.getElementById('navLogoSub').style.color = isConsole ? 'var(--ps5-blue)' : 'var(--primary-red)';
 
             // Set Text & Images
             document.getElementById('pdpBreadcrumbCategory').innerText = isConsole ? 'PlayStation Games' : 'PC Games';
             document.getElementById('pdpBreadcrumbTitle').innerText = game.title;
             document.getElementById('pdpMainTitle').innerText = game.title;
             
-            // 🔥 FIX: Check both 'description' and 'desc' keys 
             const finalDesc = game.description || game.desc || 'Experience authentic gaming with instant digital delivery and 24/7 verified support.';
             document.getElementById('pdpMainDesc').innerText = finalDesc;
             
@@ -382,7 +492,6 @@
                 document.getElementById('pdpSelectorTitle').innerText = "Choose Access Type";
                 document.getElementById('editionBadge').innerText = "Console Edition";
                 
-                // Defaults to Permanent Buy for consoles unless only Rent exists
                 let pRent = Number(game.rentalPrice || game.rentPrice || 0);
                 let pPerm = Number(game.permanentPrice || game.permPrice || 0);
 
@@ -409,7 +518,6 @@
         async function loadRecommendations(excludeId) {
             const recGrid = document.getElementById('pdpRecommendationsGrid');
             try {
-                // Fetch a batch of games
                 const q = query(collection(db, "games"), limit(15));
                 const querySnapshot = await getDocs(q);
                 
@@ -418,9 +526,8 @@
                     if (doc.id !== excludeId) allGamesArray.push({id: doc.id, ...doc.data()});
                 });
 
-                // Shuffle Array for Randomization
+                // Shuffle Array
                 allGamesArray = allGamesArray.sort(() => 0.5 - Math.random());
-                
                 // Pick top 5
                 const selectedGames = allGamesArray.slice(0, 5);
 
@@ -485,23 +592,46 @@
             if (existing) { existing.qty += window.activeQty; } 
             else { window.cartArray.push({ title: cartTitle, price: window.activeBasePrice, img: game.image, qty: window.activeQty }); }
 
-            // SAVE TO LOCAL STORAGE
             localStorage.setItem('gf_cart', JSON.stringify(window.cartArray));
             
             if (redirect) {
-                window.location.href = 'index.html'; // Buy Now takes to main page for checkout
+                window.location.href = 'index.html'; 
             } else {
                 window.updateCartUI();
                 window.toggleCart();
             }
         };
 
-        // RUN INIT
         loadGameDetails();
     </script>
 
-    <!-- Cart Rendering Script -->
+    <!-- UI Scripts (Cart & Search Bar) -->
     <script>
+        // Global Search Bar Logic
+        const searchInput = document.getElementById('gameSearch');
+        const searchDropdown = document.getElementById('searchDropdown');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            searchDropdown.innerHTML = ''; 
+            if (query.length > 0 && window.liveGamesDatabase) {
+                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                searchDropdown.style.display = 'block';
+                if (filteredGames.length > 0) {
+                    filteredGames.forEach(game => {
+                        const gameItem = document.createElement('a'); gameItem.href = game.link; gameItem.className = 'search-item';
+                        gameItem.innerHTML = `<div class="search-item-img" style="background-image: url('${game.img}');"></div><div class="search-item-info"><span class="search-item-title">${game.title}</span><span class="search-platform">${game.platform}</span><span class="search-item-price">${game.price}</span></div>`;
+                        searchDropdown.appendChild(gameItem);
+                    });
+                } else { searchDropdown.innerHTML = `<div class="no-results">No games found</div>`; }
+            } else { searchDropdown.style.display = 'none'; }
+        });
+
+        document.addEventListener('click', function(event) { 
+            if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; 
+        });
+
+        // Cart Logic
         window.toggleCart = function() {
             document.getElementById('cartSidebar').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('active');
@@ -515,16 +645,17 @@
 
         window.updateCartUI = function() {
             const itemsContainer = document.getElementById('cartItemsContainer');
+            const totalElement = document.getElementById('cartTotalPrice');
+            const badgeCount = document.getElementById('cartBadgeCount');
+            
             itemsContainer.innerHTML = '';
-            let subtotal = 0; 
-            let totalQty = 0;
+            let totalAmount = 0; let totalQty = 0;
 
             if (window.cartArray.length === 0) {
                 itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Cart is empty.<br>Start adding games!</div>';
-                subtotal = 0;
             } else {
                 window.cartArray.forEach((item, index) => {
-                    subtotal += (item.price * item.qty);
+                    totalAmount += (item.price * item.qty);
                     totalQty += item.qty;
                     itemsContainer.innerHTML += `
                         <div class="cart-item">
@@ -538,18 +669,10 @@
                     `;
                 });
             }
-
-            const discount = window.appliedDiscount || 0;
-            const finalTotal = Math.max(0, subtotal - discount);
-
-            document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
-            
-            // Badge Update if element exists
-            const badgeCount = document.getElementById('cartBadgeCount');
             if(badgeCount) badgeCount.innerText = totalQty;
-        }      
+            if(totalElement) totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
+        };
 
-        // First render
         window.updateCartUI();
     </script>
 </body>

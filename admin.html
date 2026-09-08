@@ -2,15 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GameFlex Admin Panel</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { margin: 0; font-family: 'Arial', sans-serif; background: #0b0c10; color: white; display: flex; overflow-x: hidden; }
-        .sidebar { width: 250px; background: #12141a; height: 100vh; padding: 20px; box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.05); }
+        body { margin: 0; font-family: 'Arial', sans-serif; background: #0b0c10; color: white; overflow-x: hidden; }
+        
+        #adminWrapper { display: none; width: 100%; height: 100vh; }
+        
+        .sidebar { width: 250px; background: #12141a; height: 100vh; padding: 20px; box-sizing: border-box; border-right: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; overflow-y: auto;}
         .sidebar h2 { color: #ff3333; text-align: center; margin-bottom: 30px; font-size: 24px; }
         .nav-links { list-style: none; padding: 0; }
         .nav-links li { padding: 15px; margin-bottom: 10px; background: #1f222b; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; color: gray; font-weight: bold; }
@@ -26,7 +29,8 @@
         .stat-card h2 { margin: 10px 0 0 0; font-size: 28px; color: white; }
         .stat-card p { margin: 5px 0 0 0; font-size: 12px; color: #4BB543; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; min-width: 600px; }
         th, td { padding: 12px; border-bottom: 1px solid #1f222b; text-align: left; }
         th { color: #ff3333; text-transform: uppercase; font-size: 12px; }
         
@@ -34,6 +38,7 @@
         .form-group { flex: 1; margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; color: gray; font-size: 14px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #1f222b; background: #1a1d24; color: white; box-sizing: border-box; outline: none; }
+        .form-group input[type="datetime-local"] { cursor: pointer; color-scheme: dark; } 
         
         .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #1a1d24; padding: 15px; border-radius: 8px; border: 1px solid #1f222b; }
         .category-grid label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: white; cursor: pointer; margin: 0; }
@@ -47,271 +52,456 @@
         
         .btn-edit { background: #00d2ff; color: black; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; margin-right: 5px; }
         .btn-delete { background: #ff3333; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .btn-approve { background: #4BB543; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
+        .btn-approve:hover { background: #3a8e34; }
         
         .month-filter { background: #1a1d24; border: 1px solid #1f222b; color: white; padding: 10px; border-radius: 8px; outline: none; }
         
         .game-list-scroll::-webkit-scrollbar { width: 6px; }
         .game-list-scroll::-webkit-scrollbar-thumb { background: #1f222b; border-radius: 5px; }
+
+        .offer-games-flex { display: flex; gap: 20px; }
+        .banner-text-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 8px; border: 1px solid #1f222b; margin-bottom: 20px; }
+
+        .banner-action-btns { display: flex; gap: 15px; margin-top: 10px; }
+        .btn-update { flex: 1; background: #00d2ff; color: black; padding: 15px; font-size: 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-update:hover { background: #00a8cc; }
+        .btn-remove { flex: 1; background: #ff3333; color: white; padding: 15px; font-size: 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-remove:hover { background: #cc0000; }
+
+        .email-action-btns { display: flex; gap: 15px; margin-top: 10px; }
+        .btn-direct { flex: 1; background: #e31825; color: white; padding: 15px; font-size: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-direct:hover { background: #c1121d; }
+        .btn-html { flex: 1; background: #00d2ff; color: black; padding: 15px; font-size: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-html:hover { background: #00a8cc; }
+
+        /* Status Badge Styling */
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;}
+        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.5); }
+        .status-completed { background: rgba(75, 181, 67, 0.2); color: #4BB543; border: 1px solid rgba(75, 181, 67, 0.5); }
+
+        /* ========================================================================= */
+        /* 📱 MOBILE RESPONSIVE OPTIMIZATION 📱 */
+        /* ========================================================================= */
+        @media (max-width: 768px) {
+            #adminWrapper { display: flex; flex-direction: column; height: auto; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-dark); padding: 15px; position: static; }
+            .sidebar h2 { margin-bottom: 15px; font-size: 20px; }
+            .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+            .nav-links li { padding: 8px 12px; margin-bottom: 0; font-size: 12px; width: auto; flex: 1 1 calc(50% - 8px); text-align: center; justify-content: center;}
+            
+            .main-content { padding: 15px; height: auto; overflow-y: visible; width: 100%;}
+            .header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            #pageTitle { font-size: 20px; }
+            
+            .card { padding: 15px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 15px; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            
+            .form-row { flex-direction: column; gap: 0; margin-bottom: 0;}
+            .form-group { margin-bottom: 15px; }
+            
+            .offer-games-flex { flex-direction: column; gap: 15px; }
+            .banner-action-btns, .email-action-btns { flex-direction: column; gap: 10px; }
+            
+            #loginOverlay { padding: 20px; }
+            #loginOverlay h1 { font-size: 24px !important; }
+            #loginOverlay p { font-size: 14px !important; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2><i class="fa-solid fa-gamepad"></i> GameFlex</h2>
-        <ul class="nav-links">
-            <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard & Report</li>
-            <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
-            <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Manage Games</li>
-            <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Manage Reviews</li>
-            <li onclick="switchTab('offerbanner', this)"><i class="fa-solid fa-bullhorn"></i> Manage Offer Banner</li>
-        </ul>
+    <!-- SECURITY LOCK OVERLAY -->
+    <div id="loginOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0b0c10; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+        <h1 style="color:#ff3333; font-size: 32px;"><i class="fa-solid fa-shield-halved"></i> GameFlex Admin Portal</h1>
+        <p style="color:gray; font-size: 16px; margin-bottom: 30px;">Restricted Area - Only authorized GameFlex personnel are allowed.</p>
+        <button id="adminLoginBtn" class="btn-primary" style="padding:15px 30px; font-size:18px;">
+            <i class="fa-brands fa-google"></i> Login to Access
+        </button>
+        <p id="loginErrorMsg" style="color:#ff3333; margin-top:20px; font-weight:bold; display:none;"></p>
     </div>
 
-    <div class="main-content">
-        <div class="header">
-            <h1 id="pageTitle">Dashboard & Report</h1>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <label style="color: gray; font-size: 14px;">Select Month:</label>
-                <input type="month" id="monthPicker" class="month-filter" onchange="filterDashboardData()">
-            </div>
+    <!-- MAIN ADMIN PANEL -->
+    <div id="adminWrapper">
+        <div class="sidebar">
+            <h2><i class="fa-solid fa-gamepad"></i> GameFlex</h2>
+            <ul class="nav-links">
+                <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+                <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
+                <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games</li>
+                <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Reviews</li>
+                <li onclick="switchTab('offerbanner', this)"><i class="fa-solid fa-bullhorn"></i> Banners</li>
+                <!-- NEW COUPONS TAB -->
+                <li onclick="switchTab('coupons', this)"><i class="fa-solid fa-ticket"></i> Coupons</li>
+                <li onclick="switchTab('email', this)"><i class="fa-solid fa-envelope"></i> Send Mail</li>
+            </ul>
         </div>
 
-        <!-- 1. DASHBOARD -->
-        <div id="dashboardSection" class="section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>Registered Users</h4>
-                    <h2 id="statRegUsers">0</h2>
-                    <p>Total on platform: <span id="statTotalRegUsers">0</span></p>
-                </div>
-                <div class="stat-card">
-                    <h4>Game Buyers</h4>
-                    <h2 id="statBuyers">0</h2>
-                    <p>Overall Buyers: <span id="statTotalBuyers">0</span></p>
-                </div>
-                <div class="stat-card">
-                    <h4>Sales Revenue</h4>
-                    <h2 id="statRevenue">₹0</h2>
-                    <p>Overall Sales: ₹<span id="statTotalRevenue">0</span></p>
+        <div class="main-content">
+            <div class="header">
+                <h1 id="pageTitle">Dashboard & Report</h1>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <label style="color: gray; font-size: 14px;">Select Month:</label>
+                    <input type="month" id="monthPicker" class="month-filter" onchange="filterDashboardData()">
                 </div>
             </div>
 
-            <div class="card" id="pdfExportArea">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin: 0; color: gray;" id="reportTitle">Detailed Profit & Sales Report</h3>
-                    <button class="btn-pdf" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</button>
-                </div>
-                <table>
-                    <thead><tr><th>Date</th><th>Customer Details</th><th>Games Purchased</th><th>Amount Paid</th></tr></thead>
-                    <tbody id="reportTableBody">
-                        <tr><td colspan="4" style="text-align: center; color: gray;">Loading real data...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 2. LIVE ORDERS -->
-        <div id="ordersSection" class="section" style="display: none;">
-            <div class="card">
-                <h3 style="margin-top: 0; color: gray;">All-Time Live Orders</h3>
-                <table>
-                    <thead><tr><th>Date</th><th>Customer</th><th>Items</th><th>Status</th><th>Total</th></tr></thead>
-                    <tbody id="allOrdersTable">
-                        <tr><td colspan="5" style="text-align: center; color: gray;">Loading...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 3. MANAGE & UPLOAD GAMES -->
-        <div id="manageSection" class="section" style="display: none;">
-            <div class="card" id="formCard">
-                <h3 style="margin-top: 0; color: gray; text-align: center;" id="formHeading">Upload New Game</h3>
-                <form id="gameForm">
-                    <input type="hidden" id="editGameId" value="">
-                    <input type="hidden" id="existingImage" value="">
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Game Title</label>
-                            <input type="text" id="gTitle" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Platform</label>
-                            <select id="gPlatform" onchange="togglePS5Fields()">
-                                <option value="PC">PC Games</option>
-                                <option value="PS5">PlayStation 5</option>
-                                <option value="PS4">PlayStation 4</option>
-                                <option value="PS4/PS5">PS4 / PS5</option>
-                            </select>
-                        </div>
+            <!-- 1. DASHBOARD -->
+            <div id="dashboardSection" class="section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Live Visitors</h4>
+                        <h2 id="statLiveUsers" style="color: #00d2ff;">0 <span style="font-size: 14px; color: gray; font-weight:normal;">Online Now</span></h2>
+                        <p>Total Registered: <span id="statTotalRegUsers">0</span></p>
                     </div>
-
-                    <div class="form-group">
-                        <label>Select Categories</label>
-                        <div class="category-grid" id="categoryCheckboxes">
-                            <label><input type="checkbox" value="Offer" class="cat-check" style="accent-color: #ff3333;"> <strong style="color:#ff3333;">🔥 Special Offer</strong></label>
-                            <label><input type="checkbox" value="Action" class="cat-check"> Action</label>
-                            <label><input type="checkbox" value="RPG" class="cat-check"> RPG</label>
-                            <label><input type="checkbox" value="Shooter" class="cat-check"> Shooter</label>
-                            <label><input type="checkbox" value="Sports" class="cat-check"> Sports</label>
-                            <label><input type="checkbox" value="Horror" class="cat-check"> Horror</label>
-                            <label><input type="checkbox" value="Open-World" class="cat-check"> Open-World</label>
-                            <label><input type="checkbox" value="Multiplayer" class="cat-check"> Multiplayer</label>
-                            <label><input type="checkbox" value="Racing" class="cat-check"> Racing</label> <!-- NEW RACING CATEGORY -->
-                        </div>
+                    <div class="stat-card">
+                        <h4>Game Buyers</h4>
+                        <h2 id="statBuyers">0</h2>
+                        <p>Overall Buyers: <span id="statTotalBuyers">0</span></p>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Original Price (₹)</label>
-                            <input type="number" id="gOriginalPrice" oninput="calculateDiscount()" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Selling Price (₹)</label>
-                            <input type="number" id="gSellingPrice" oninput="calculateDiscount()" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Discount (%)</label>
-                            <input type="text" id="gDiscount" readonly style="color: #4BB543; font-weight: bold;">
-                        </div>
+                    <div class="stat-card">
+                        <h4>Sales Revenue</h4>
+                        <h2 id="statRevenue">₹0</h2>
+                        <p>Overall Sales: ₹<span id="statTotalRevenue">0</span></p>
                     </div>
-
-                    <div class="form-row" id="ps5PricingBlock" style="display: none; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px dashed #00d2ff;">
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label style="color:#00d2ff;">Console 1-Month Rental (₹)</label>
-                            <input type="number" id="gRentalPrice">
-                        </div>
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label style="color:#00d2ff;">Console Permanent Buy (₹)</label>
-                            <input type="number" id="gPermanentPrice">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Game Cover Image (Choose ONE option)</label>
-                        <div class="drop-zone" id="dropZone">
-                            <span id="dropZoneText">Option 1: Drag & Drop Image File Here (Max 800KB)</span>
-                            <input type="file" id="gImageFile" accept="image/*">
-                        </div>
-                        <div style="text-align: center; margin: 10px 0; color: gray; font-size: 12px;">--- OR ---</div>
-                        <input type="url" id="gImageUrlFallback" placeholder="Option 2: Paste Image URL Directly (e.g., https://...)">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="gDesc" rows="3" required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn-primary" id="uploadBtn" style="width: 100%;">Upload Game to Database</button>
-                    <button type="button" class="btn-primary" id="cancelEditBtn" style="display:none; width: 100%; margin-top:10px; background:gray;" onclick="cancelEdit()">Cancel Edit</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <h3 style="margin-top: 0; color: gray;">Uploaded Games Database</h3>
-                <table>
-                    <thead><tr><th>Image</th><th>Title</th><th>Platform</th><th>Price</th><th>Action</th></tr></thead>
-                    <tbody id="gamesTableBody">
-                        <tr><td colspan="5" style="text-align: center; color: gray;">Loading games...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 4. MANAGE REVIEWS SECTION -->
-        <div id="reviewsSection" class="section" style="display: none;">
-            <div class="card">
-                <h3 style="margin-top: 0; color: gray;">Community Reviews Moderation</h3>
-                <table>
-                    <thead><tr><th>Customer</th><th>Rating</th><th>Game / Context</th><th>Review Comment</th><th>Action</th></tr></thead>
-                    <tbody id="adminReviewsTable">
-                        <tr><td colspan="5" style="text-align: center; color: gray;">Loading reviews...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 5. MANAGE OFFERS BANNER SECTION (UPGRADED) -->
-        <div id="offerbannerSection" class="section" style="display: none;">
-            
-            <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="margin: 0; color: gray;">Live Offer Banner, Timer & Game Discounts</h3>
-                    
-                    <!-- MULTIPLE BANNERS SELECTOR -->
-                    <select id="obBannerSlot" onchange="loadBannerSettings()" style="padding: 10px; border-radius: 8px; border: 1px solid #1f222b; background: #1a1d24; color: white; outline: none; font-weight: bold;">
-                        <option value="offerBanner1">Slide 1 (Main Offer Banner)</option>
-                        <option value="offerBanner2">Slide 2 (Secondary Banner)</option>
-                        <option value="offerBanner3">Slide 3 (Event Banner)</option>
-                    </select>
                 </div>
 
-                <form id="offerBannerForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Offer End Date & Time (For Countdown Timer)</label>
-                            <input type="datetime-local" id="obTimer" required>
-                        </div>
+                <div class="card" id="pdfExportArea">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="margin: 0; color: gray;" id="reportTitle">Detailed Profit & Sales Report</h3>
+                        <button class="btn-pdf" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> Download PDF Report</button>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>Hero Banner Image (Choose ONE option)</label>
-                        <div class="drop-zone" id="obDropZone">
-                            <span id="obDropZoneText">Option 1: Drag & Drop Image File Here (Max 800KB)</span>
-                            <input type="file" id="obImageFile" accept="image/*">
-                        </div>
-                        <div style="text-align: center; margin: 10px 0; color: gray; font-size: 12px;">--- OR ---</div>
-                        <input type="url" id="obImageUrlFallback" placeholder="Option 2: Paste Image URL Directly (e.g., https://...)">
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>Customer Details</th><th>Games Purchased</th><th>Amount Paid</th></tr></thead>
+                            <tbody id="reportTableBody">
+                                <tr><td colspan="4" style="text-align: center; color: gray;">Loading real data...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
 
-                    <!-- SELECT GAMES AND SET CUSTOM SALE PRICES -->
-                    <div style="margin-top: 30px; margin-bottom: 20px;">
-                        <label style="color: white; font-size: 15px; font-weight:bold; margin-bottom: 10px; display: block;">Select Games & Apply Sale Price for this Banner:</label>
-                        <p style="font-size: 12px; color: gray; margin-bottom: 15px;">Tick the checkbox to feature the game. Enter a <b>Sale Price</b> to automatically calculate and apply the discount tag.</p>
+            <!-- 2. LIVE ORDERS -->
+            <div id="ordersSection" class="section" style="display: none;">
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;">All-Time Live Orders</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>Customer</th><th>Items</th><th>Status</th><th>Total</th><th>Action</th></tr></thead>
+                            <tbody id="allOrdersTable">
+                                <tr><td colspan="6" style="text-align: center; color: gray;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. MANAGE & UPLOAD GAMES -->
+            <div id="manageSection" class="section" style="display: none;">
+                <div class="card" id="formCard">
+                    <h3 style="margin-top: 0; color: gray; text-align: center;" id="formHeading">Upload New Game</h3>
+                    <form id="gameForm">
+                        <input type="hidden" id="editGameId" value="">
+                        <input type="hidden" id="existingImage" value="">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Game Title</label>
+                                <input type="text" id="gTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Platform</label>
+                                <select id="gPlatform" onchange="togglePS5Fields()">
+                                    <option value="PC">PC Games</option>
+                                    <option value="PS5">PlayStation 5</option>
+                                    <option value="PS4">PlayStation 4</option>
+                                    <option value="PS4/PS5">PS4 / PS5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Select Categories</label>
+                            <div class="category-grid" id="categoryCheckboxes">
+                                <label><input type="checkbox" value="Offer" class="cat-check" style="accent-color: #ff3333;"> <strong style="color:#ff3333;">🔥 Special Offer</strong></label>
+                                <label><input type="checkbox" value="Action" class="cat-check"> Action</label>
+                                <label><input type="checkbox" value="RPG" class="cat-check"> RPG</label>
+                                <label><input type="checkbox" value="Shooter" class="cat-check"> Shooter</label>
+                                <label><input type="checkbox" value="Sports" class="cat-check"> Sports</label>
+                                <label><input type="checkbox" value="Horror" class="cat-check"> Horror</label>
+                                <label><input type="checkbox" value="Open-World" class="cat-check"> Open-World</label>
+                                <label><input type="checkbox" value="Multiplayer" class="cat-check"> Multiplayer</label>
+                                <label><input type="checkbox" value="Racing" class="cat-check"> Racing</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Original Price (₹)</label>
+                                <input type="number" id="gOriginalPrice" oninput="calculateDiscount()" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Selling Price (₹)</label>
+                                <input type="number" id="gSellingPrice" oninput="calculateDiscount()" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Discount (%)</label>
+                                <input type="text" id="gDiscount" readonly style="color: #4BB543; font-weight: bold;">
+                            </div>
+                        </div>
+
+                        <div class="form-row" id="ps5PricingBlock" style="display: none; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px dashed #00d2ff;">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label style="color:#00d2ff;">Console 1-Month Rental (₹)</label>
+                                <input type="number" id="gRentalPrice">
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label style="color:#00d2ff;">Console Permanent Buy (₹)</label>
+                                <input type="number" id="gPermanentPrice">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Game Cover Image (Choose ONE option)</label>
+                            <div class="drop-zone" id="dropZone">
+                                <span id="dropZoneText">Option 1: Drag & Drop Image File Here (Max 800KB)</span>
+                                <input type="file" id="gImageFile" accept="image/*">
+                            </div>
+                            <div style="text-align: center; margin: 10px 0; color: gray; font-size: 12px;">--- OR ---</div>
+                            <input type="url" id="gImageUrlFallback" placeholder="Option 2: Paste Image URL Directly (e.g., https://...)">
+                        </div>
                         
-                        <div style="display: flex; gap: 20px;">
-                            <!-- PC Games List -->
-                            <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid #1f222b;">
-                                <h4 style="color: var(--primary-red); margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-solid fa-desktop"></i> PC Games</h4>
-                                <div id="obPcGamesList" class="game-list-scroll" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
-                                    <span style="color:gray; font-size:12px;">Loading PC games...</span>
-                                </div>
-                            </div>
-                            <!-- PS Games List -->
-                            <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid #1f222b;">
-                                <h4 style="color: #00d2ff; margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-brands fa-playstation"></i> PlayStation Games</h4>
-                                <div id="obPsGamesList" class="game-list-scroll" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
-                                    <span style="color:gray; font-size:12px;">Loading PS games...</span>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="gDesc" rows="3" required></textarea>
                         </div>
-                    </div>
+                        
+                        <button type="submit" class="btn-primary" id="uploadBtn" style="width: 100%;">Upload Game to Database</button>
+                        <button type="button" class="btn-primary" id="cancelEditBtn" style="display:none; width: 100%; margin-top:10px; background:gray;" onclick="cancelEdit()">Cancel Edit</button>
+                    </form>
+                </div>
 
-                    <button type="submit" class="btn-primary" id="updateBannerBtn" style="width: 100%; margin-top: 10px; padding: 15px; font-size: 16px;">Update Selected Banner & Discounts</button>
-                </form>
-            </div>
-            
-            <div class="card">
-                <h3 style="margin-top: 0; color: gray;">Preview Current Settings</h3>
-                <div style="display:flex; gap:20px; align-items:center;">
-                    <img id="currentBannerImg" src="" alt="No Image Set" style="width:200px; height:120px; object-fit:cover; border-radius:8px; border:1px solid #1f222b; display:none;">
-                    <div>
-                        <p style="color:gray; margin-bottom:5px;">Offer Ends On:</p>
-                        <h2 id="currentBannerTime" style="color:var(--primary-red); margin:0;">Not Set</h2>
-                        <p id="currentFeaturedCount" style="color:#4BB543; font-size: 13px; margin-top: 5px;">0 Games Featured</p>
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;">Uploaded Games Database</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Image</th><th>Title</th><th>Platform</th><th>Price</th><th>Action</th></tr></thead>
+                            <tbody id="gamesTableBody">
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Loading games...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            <!-- 4. MANAGE REVIEWS SECTION -->
+            <div id="reviewsSection" class="section" style="display: none;">
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;">Community Reviews Moderation</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Customer</th><th>Rating</th><th>Game / Context</th><th>Review Comment</th><th>Action</th></tr></thead>
+                            <tbody id="adminReviewsTable">
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Loading reviews...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. MANAGE OFFERS BANNER SECTION -->
+            <div id="offerbannerSection" class="section" style="display: none;">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="margin: 0; color: gray;">Live Offer Banner, Timer & Game Discounts</h3>
+                        <select id="obBannerSlot" onchange="loadBannerSettings()" style="padding: 10px; border-radius: 8px; border: 1px solid #1f222b; background: #1a1d24; color: white; outline: none; font-weight: bold; width: 100%; max-width: 300px;">
+                            <option value="offerBanner1">Slide 1 (Main Offer Banner)</option>
+                            <option value="offerBanner2">Slide 2 (Secondary Banner)</option>
+                            <option value="offerBanner3">Slide 3 (Event Banner)</option>
+                        </select>
+                    </div>
+
+                    <form id="offerBannerForm">
+                        <div class="banner-text-box">
+                            <h4 style="color: #00d2ff; margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-solid fa-pen"></i> Edit Banner Text Display</h4>
+                            <p style="font-size: 12px; color: gray; margin-bottom: 15px;">Change the text shown on the slider.</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Tagline (Small top text)</label>
+                                    <input type="text" id="obTagline" placeholder="e.g. LIMITED TIME ONLY">
+                                </div>
+                                <div class="form-group">
+                                    <label>Main Title (White text line)</label>
+                                    <input type="text" id="obTitle" placeholder="e.g. BIGGEST">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Highlighted Title (Red text line)</label>
+                                    <input type="text" id="obTitleHighlight" placeholder="e.g. GAMING DEALS">
+                                </div>
+                                <div class="form-group">
+                                    <label>Subtitle (Description)</label>
+                                    <input type="text" id="obSubtitle" placeholder="e.g. Same Games. Lower Prices. More Playtime.">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label style="color: #ff3333;"><i class="fa-solid fa-clock"></i> Select Offer Expiry Date & Time</label>
+                                <input type="datetime-local" id="obTimer" required step="any" style="border-color: #ff3333;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Hero Banner Image (Choose ONE option)</label>
+                            <div class="drop-zone" id="obDropZone">
+                                <span id="obDropZoneText">Option 1: Drag & Drop Image File Here (Max 800KB)</span>
+                                <input type="file" id="obImageFile" accept="image/*">
+                            </div>
+                            <div style="text-align: center; margin: 10px 0; color: gray; font-size: 12px;">--- OR ---</div>
+                            <input type="url" id="obImageUrlFallback" placeholder="Option 2: Paste Image URL Directly (e.g., https://...)">
+                        </div>
+
+                        <div style="margin-top: 30px; margin-bottom: 20px;">
+                            <label style="color: white; font-size: 15px; font-weight:bold; margin-bottom: 10px; display: block;">Select Games & Apply Sale Price for this Banner:</label>
+                            <div class="offer-games-flex">
+                                <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid #1f222b;">
+                                    <h4 style="color: var(--primary-red); margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-solid fa-desktop"></i> PC Games</h4>
+                                    <div id="obPcGamesList" class="game-list-scroll" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;"></div>
+                                </div>
+                                <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid #1f222b;">
+                                    <h4 style="color: #00d2ff; margin-top: 0; margin-bottom: 15px; font-size: 14px;"><i class="fa-brands fa-playstation"></i> PlayStation Games</h4>
+                                    <div id="obPsGamesList" class="game-list-scroll" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="banner-action-btns">
+                            <button type="submit" class="btn-update" id="updateBannerBtn">
+                                <i class="fa-solid fa-floppy-disk"></i> Save & Update Banner
+                            </button>
+                            <button type="button" class="btn-remove" onclick="deleteBanner()">
+                                <i class="fa-solid fa-trash"></i> Delete / Clear Banner
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- NEW 6: COUPON MANAGEMENT SECTION -->
+            <div id="couponsSection" class="section" style="display: none;">
+                <!-- Create Coupon Form -->
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-plus-circle" style="color:#00d2ff;"></i> Create New Coupon / Giveaway</h3>
+                    <form id="createCouponForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Coupon Code Name</label>
+                                <input type="text" id="cpnCode" placeholder="e.g. SUMIT50 or FREEGIFT" required style="text-transform: uppercase;">
+                            </div>
+                            <div class="form-group">
+                                <label>Discount Percentage (%)</label>
+                                <input type="number" id="cpnDiscount" placeholder="e.g. 50 (Use 100 for Free Giveaway)" required min="1" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Usage Limit (Max users allowed)</label>
+                                <input type="number" id="cpnLimit" placeholder="e.g. 1 (For single use) or 100" required min="1">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; background: #00d2ff; color: black; font-size: 16px;">
+                            <i class="fa-solid fa-ticket"></i> Create Coupon
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Active Coupons Table -->
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;">Active Custom Coupons</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Coupon Code</th><th>Discount</th><th>Usage Limit</th><th>Used Count</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="activeCouponsTable">
+                                <tr><td colspan="6" style="text-align: center; color: gray;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Coupon Usage History Table -->
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;">Coupon Usage History</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>Customer</th><th>Coupon Used</th><th>Order Details</th><th>Discount Given</th></tr></thead>
+                            <tbody id="couponUsageTable">
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. SEND EMAIL SECTION -->
+            <div id="emailSection" class="section" style="display: none;">
+                <div class="card">
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-envelope" style="color:#e31825;"></i> Send Broadcast Email</h3>
+                    <p style="font-size:12px; color:gray; margin-bottom: 20px;">Instantly send a plain text email via your default mail app, OR generate a rich HTML template to use in Mailchimp/SendGrid.</p>
+                    
+                    <form id="sendEmailForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Target Audience</label>
+                                <select id="emailRecipientType" onchange="toggleEmailInput()">
+                                    <option value="all">All Registered Users (Broadcast)</option>
+                                    <option value="single">Specific User Email</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="singleEmailGroup" style="display: none;">
+                                <label>Recipient Email Address</label>
+                                <input type="email" id="targetEmail" placeholder="user@example.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Subject</label>
+                            <input type="text" id="emailSubject" placeholder="e.g. Huge Discount on GameFlex Store!" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Header Image URL (Optional - For HTML Only)</label>
+                            <input type="url" id="emailImage" placeholder="Paste an image link here for the email header...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Message Content</label>
+                            <textarea id="emailBody" rows="5" placeholder="Write your main announcement or offer details here..." required></textarea>
+                        </div>
+
+                        <div class="email-action-btns">
+                            <button type="button" class="btn-direct" id="sendDirectBtn">
+                                <i class="fa-solid fa-paper-plane"></i> 1-Click Send (Plain Text)
+                            </button>
+                            <button type="button" class="btn-html" id="generateHtmlBtn">
+                                <i class="fa-solid fa-code"></i> Generate HTML Template
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <!-- FIREBASE SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // YAHAN APNI REAL CONFIG DAALNA
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
@@ -322,8 +512,46 @@
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        
+        const ALLOWED_EMAIL = "sumitroman198@gmail.com";
+        let adminDataLoaded = false;
 
-        let allOrders = [], allUsers = [], allGames = [];
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.email === ALLOWED_EMAIL) {
+                    setDoc(doc(db, "users", user.uid), {
+                        email: user.email,
+                        lastActive: serverTimestamp()
+                    }, { merge: true });
+
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    document.getElementById('adminWrapper').style.display = 'flex';
+                    if(!adminDataLoaded) {
+                        initializeAdminPanelData();
+                        adminDataLoaded = true;
+                    }
+                } else {
+                    document.getElementById('loginErrorMsg').innerText = `Access Denied! Your email is not authorized as Admin.`;
+                    document.getElementById('loginErrorMsg').style.display = 'block';
+                    signOut(auth);
+                }
+            } else {
+                document.getElementById('loginOverlay').style.display = 'flex';
+                document.getElementById('adminWrapper').style.display = 'none';
+            }
+        });
+
+        document.getElementById('adminLoginBtn').addEventListener('click', () => {
+            signInWithPopup(auth, provider).catch(error => {
+                document.getElementById('loginErrorMsg').innerText = "Login Failed: " + error.message;
+                document.getElementById('loginErrorMsg').style.display = 'block';
+            });
+        });
+
+        let allOrders = [], allGames = [];
+        window.allUsers = []; 
         window.currentFeaturedGames = []; 
         let bannerUnsubscribe = null;
         
@@ -340,7 +568,9 @@
                 'orders': 'Live Orders', 
                 'manage': 'Manage Games Database',
                 'reviews': 'Manage Community Reviews',
-                'offerbanner': 'Manage Banners & Discounts'
+                'offerbanner': 'Manage Banners & Discounts',
+                'coupons': 'Manage Coupons & Limits',
+                'email': 'Send Broadcast Email'
             };
             document.getElementById('pageTitle').innerText = titles[tabId];
         };
@@ -367,44 +597,137 @@
             if(fileInput.files.length > 0) document.getElementById('dropZoneText').innerHTML = `<span style="color:#4BB543;"><i class="fa-solid fa-check"></i> File Ready (${(fileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
         });
 
-        // FETCH USERS
-        onSnapshot(collection(db, "users"), (snapshot) => {
-            allUsers = []; snapshot.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
-            filterDashboardData();
-        });
+        // ==========================================
+        // FETCH DATA & LIVE USERS FIX
+        // ==========================================
+        function initializeAdminPanelData() {
+            
+            // 1. Fetch Users (Live Tracking)
+            onSnapshot(collection(db, "users"), (snapshot) => {
+                window.allUsers = []; 
+                let liveCount = 0;
+                const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000); 
 
-        // FETCH ORDERS
-        onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snapshot) => {
-            allOrders = [];
-            snapshot.forEach(doc => {
-                const data = doc.data(); if(data.createdAt) allOrders.push({ id: doc.id, ...data, dateObj: data.createdAt.toDate() });
+                snapshot.forEach(doc => {
+                    const uData = doc.data();
+                    window.allUsers.push({ id: doc.id, ...uData });
+                    
+                    if (uData.lastActive && typeof uData.lastActive.toDate === 'function') {
+                        if (uData.lastActive.toDate() > fiveMinsAgo) liveCount++;
+                    }
+                });
+
+                document.getElementById('statLiveUsers').innerHTML = `${liveCount} <span style="font-size: 14px; color: gray; font-weight:normal;">Online Now</span>`;
+                filterDashboardData(); 
             });
-            renderAllOrdersTable(); filterDashboardData();
-        });
 
-        // FETCH REVIEWS
-        onSnapshot(query(collection(db, "reviews"), orderBy("createdAt", "desc")), (snapshot) => {
-            const tbody = document.getElementById('adminReviewsTable');
-            tbody.innerHTML = '';
-            if(snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: gray;">No reviews found</td></tr>';
-                return;
-            }
-            snapshot.forEach((docSnap) => {
-                const rev = docSnap.data();
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${rev.userName || 'Anonymous'}</strong></td>
-                        <td style="color: #FFD700; font-weight: bold;">${rev.rating || 5} / 5 ⭐</td>
-                        <td>${rev.gameName || 'General Store'}</td>
-                        <td style="max-width: 300px; word-break: break-word;">"${rev.reviewText}"</td>
+            // 2. Fetch Orders (For Table & Admin Approval)
+            onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snapshot) => {
+                allOrders = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data(); 
+                    if(data.createdAt) allOrders.push({ id: doc.id, ...data, dateObj: data.createdAt.toDate() });
+                });
+                renderAllOrdersTable(); 
+                filterDashboardData();
+            });
+
+            // 3. Fetch Reviews
+            onSnapshot(query(collection(db, "reviews"), orderBy("createdAt", "desc")), (snapshot) => {
+                const tbody = document.getElementById('adminReviewsTable');
+                tbody.innerHTML = '';
+                if(snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: gray;">No reviews found</td></tr>';
+                    return;
+                }
+                snapshot.forEach((docSnap) => {
+                    const rev = docSnap.data();
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${rev.userName || 'Anonymous'}</strong></td>
+                            <td style="color: #FFD700; font-weight: bold;">${rev.rating || 5} / 5 ⭐</td>
+                            <td>${rev.gameName || 'General Store'}</td>
+                            <td style="max-width: 300px; word-break: break-word;">"${rev.reviewText}"</td>
+                            <td>
+                                <button class="btn-delete" onclick="deleteReview('${docSnap.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // 4. Fetch Games
+            onSnapshot(query(collection(db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
+                allGames = [];
+                const tbody = document.getElementById('gamesTableBody'); tbody.innerHTML = '';
+                if(snapshot.empty) { tbody.innerHTML = '<tr><td colspan="5">No games found</td></tr>'; return; }
+                snapshot.forEach(doc => {
+                    const game = { id: doc.id, ...doc.data() }; allGames.push(game);
+                    tbody.innerHTML += `<tr>
+                        <td><img src="${game.image}" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover;"></td>
+                        <td><strong>${game.title}</strong></td>
+                        <td>${game.platform}</td>
+                        <td>₹${game.price || game.permanentPrice || game.rentPrice || 0}</td>
                         <td>
-                            <button class="btn-delete" onclick="deleteReview('${docSnap.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                            <button class="btn-edit" onclick="editGame('${game.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button class="btn-delete" onclick="deleteGame('${game.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
+                });
+                renderOfferGameSelection();
             });
-        });
+
+            // 5. Fetch Coupons
+            onSnapshot(query(collection(db, "coupons"), orderBy("createdAt", "desc")), (snapshot) => {
+                const tbody = document.getElementById('activeCouponsTable');
+                tbody.innerHTML = '';
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: gray;">No custom coupons created yet.</td></tr>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const cpn = docSnap.data();
+                    // Status logic: active is true AND usedCount is strictly less than usageLimit
+                    const statusHtml = cpn.active && (cpn.usedCount < cpn.usageLimit) 
+                        ? `<span style="color:#4BB543;font-weight:bold;">Active</span>` 
+                        : `<span style="color:#ff3333;font-weight:bold;">Expired/Maxed</span>`;
+                    
+                    tbody.innerHTML += `<tr>
+                        <td style="font-weight:800; font-size: 15px; color:var(--primary-red); letter-spacing: 1px;">${cpn.code}</td>
+                        <td style="font-weight:bold; color: #00d2ff;">${cpn.discountPercent}% OFF</td>
+                        <td>${cpn.usageLimit} Max</td>
+                        <td>${cpn.usedCount || 0} Used</td>
+                        <td>${statusHtml}</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteCoupon('${docSnap.id}')"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                });
+            });
+
+            // 6. Fetch Coupon Usage History
+            onSnapshot(query(collection(db, "coupon_usage"), orderBy("usedAt", "desc")), (snapshot) => {
+                const tbody = document.getElementById('couponUsageTable');
+                tbody.innerHTML = '';
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: gray;">No usage history found</td></tr>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const usage = docSnap.data();
+                    const dateStr = usage.usedAt ? usage.usedAt.toDate().toLocaleString() : 'N/A';
+                    tbody.innerHTML += `<tr>
+                        <td style="font-size: 12px;">${dateStr}</td>
+                        <td><strong>${usage.userName || 'Unknown'}</strong><br><small style="color:gray;">${usage.userEmail}</small></td>
+                        <td style="color:var(--primary-red); font-weight:800; letter-spacing: 1px;">${usage.couponUsed}</td>
+                        <td style="font-size:12px; max-width:200px; color: #ccc;">${usage.gamesPurchased}</td>
+                        <td style="color:#4BB543; font-weight:bold;">₹${usage.discountAmount} Saved</td>
+                    </tr>`;
+                });
+            });
+
+            setTimeout(loadBannerSettings, 1000);
+        }
 
         window.deleteReview = async function(reviewId) {
             if(confirm("Are you sure you want to delete this customer review?")) {
@@ -418,7 +741,49 @@
             }
         };
 
-        // RENDER CHECKBOXES AND SALE PRICE INPUTS
+        // COUPON CREATION LOGIC
+        document.getElementById('createCouponForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('cpnCode').value.trim().toUpperCase();
+            const discount = Number(document.getElementById('cpnDiscount').value);
+            const limit = Number(document.getElementById('cpnLimit').value);
+            const btn = e.target.querySelector('button');
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
+            btn.disabled = true;
+
+            try {
+                await setDoc(doc(db, "coupons", code), {
+                    code: code,
+                    discountPercent: discount,
+                    usageLimit: limit,
+                    usedCount: 0,
+                    active: true,
+                    createdAt: serverTimestamp()
+                });
+                alert(`✅ Coupon ${code} Created Successfully!`);
+                e.target.reset();
+            } catch (err) {
+                console.error("Coupon error:", err);
+                alert("❌ Failed to create coupon.");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-ticket"></i> Create Coupon';
+                btn.disabled = false;
+            }
+        });
+
+        // COUPON DELETION LOGIC
+        window.deleteCoupon = async function(codeId) {
+            if(confirm(`Are you sure you want to permanently delete the coupon ${codeId}?`)) {
+                try {
+                    await deleteDoc(doc(db, "coupons", codeId));
+                    alert("✅ Coupon deleted successfully!");
+                } catch(e) {
+                    alert("❌ Failed to delete coupon.");
+                }
+            }
+        };
+
         function renderOfferGameSelection() {
             const pcList = document.getElementById('obPcGamesList');
             const psList = document.getElementById('obPsGamesList');
@@ -454,58 +819,32 @@
             if(psCount === 0) psList.innerHTML = '<span style="color:gray; font-size:12px;">No PS games found</span>';
         }
 
-        // FETCH GAMES
-        onSnapshot(query(collection(db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
-            allGames = [];
-            const tbody = document.getElementById('gamesTableBody'); tbody.innerHTML = '';
-            if(snapshot.empty) { tbody.innerHTML = '<tr><td colspan="5">No games found</td></tr>'; return; }
-            snapshot.forEach(doc => {
-                const game = { id: doc.id, ...doc.data() }; allGames.push(game);
-                tbody.innerHTML += `<tr>
-                    <td><img src="${game.image}" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover;"></td>
-                    <td><strong>${game.title}</strong></td>
-                    <td>${game.platform}</td>
-                    <td>₹${game.price || game.permanentPrice || game.rentPrice || 0}</td>
-                    <td>
-                        <button class="btn-edit" onclick="editGame('${game.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <button class="btn-delete" onclick="deleteGame('${game.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
-                    </td>
-                </tr>`;
-            });
-            renderOfferGameSelection();
-        });
-
         window.filterDashboardData = function() {
             const selectedMonthStr = document.getElementById('monthPicker').value;
-            let monthUsers = 0, monthRevenue = 0, totalRevenue = 0;
+            let monthRevenue = 0, totalRevenue = 0;
             let monthBuyers = new Set(), totalBuyers = new Set();
             const reportTable = document.getElementById('reportTableBody'); reportTable.innerHTML = '';
             
             allOrders.forEach(order => {
                 const orderMonthStr = order.dateObj.getFullYear() + '-' + String(order.dateObj.getMonth() + 1).padStart(2, '0');
-                totalRevenue += order.totalAmount || 0;
-                if(order.userId) totalBuyers.add(order.userId);
                 
-                if(orderMonthStr === selectedMonthStr) {
-                    monthRevenue += order.totalAmount || 0;
-                    if(order.userId) monthBuyers.add(order.userId);
-                    let itemsStr = order.items ? order.items.map(i => `${i.title} (x${i.qty})`).join('<br>') : "Game Item";
-                    reportTable.innerHTML += `<tr><td>${order.dateObj.toLocaleDateString()}</td><td><strong>${order.userName || 'Guest'}</strong><br><small>${order.userEmail || ''}</small></td><td style="color: #00d2ff;">${itemsStr}</td><td style="color: #4BB543; font-weight: bold;">₹${order.totalAmount}</td></tr>`;
+                if (order.status !== "Pending Verification") {
+                    totalRevenue += order.totalAmount || 0;
+                    if(order.userId) totalBuyers.add(order.userId);
+                    
+                    if(orderMonthStr === selectedMonthStr) {
+                        monthRevenue += order.totalAmount || 0;
+                        if(order.userId) monthBuyers.add(order.userId);
+                        let itemsStr = order.items ? order.items.map(i => `${i.title} (x${i.qty})`).join('<br>') : "Game Item";
+                        reportTable.innerHTML += `<tr><td>${order.dateObj.toLocaleDateString()}</td><td><strong>${order.userName || 'Guest'}</strong><br><small>${order.userEmail || ''}</small></td><td style="color: #00d2ff;">${itemsStr}</td><td style="color: #4BB543; font-weight: bold;">₹${order.totalAmount}</td></tr>`;
+                    }
                 }
             });
 
-            allUsers.forEach(u => {
-                if(u.createdAt && u.createdAt.toDate) {
-                    const uMonth = u.createdAt.toDate().getFullYear() + '-' + String(u.createdAt.toDate().getMonth() + 1).padStart(2, '0');
-                    if(uMonth === selectedMonthStr) monthUsers++;
-                }
-            });
-
-            if(reportTable.innerHTML === '') reportTable.innerHTML = '<tr><td colspan="4" style="text-align: center; color: gray;">No sales in this month.</td></tr>';
+            if(reportTable.innerHTML === '') reportTable.innerHTML = '<tr><td colspan="4" style="text-align: center; color: gray;">No verified sales in this month.</td></tr>';
 
             document.getElementById('reportTitle').innerText = `Report for ${selectedMonthStr}`;
-            document.getElementById('statRegUsers').innerText = monthUsers || '-';
-            document.getElementById('statTotalRegUsers').innerText = allUsers.length;
+            document.getElementById('statTotalRegUsers').innerText = window.allUsers.length;
             document.getElementById('statBuyers').innerText = monthBuyers.size;
             document.getElementById('statTotalBuyers').innerText = totalBuyers.size;
             document.getElementById('statRevenue').innerText = '₹' + monthRevenue.toLocaleString('en-IN');
@@ -516,9 +855,50 @@
             const tbody = document.getElementById('allOrdersTable'); tbody.innerHTML = '';
             allOrders.forEach(order => {
                 let itemsStr = order.items ? order.items.map(i => `${i.title} (x${i.qty})`).join(', ') : "Game Item";
-                tbody.innerHTML += `<tr><td>${order.dateObj.toLocaleDateString()}</td><td>${order.userName || 'Guest'}</td><td style="font-size:12px;">${itemsStr}</td><td><span style="color:#4BB543;">Verified</span></td><td style="color:#ff3333; font-weight:bold;">₹${order.totalAmount}</td></tr>`;
+                
+                let statusHtml = '';
+                let actionHtml = '';
+
+                if (order.status === "Pending Verification") {
+                    statusHtml = `<span class="status-badge status-pending"><i class="fa-solid fa-clock"></i> Pending</span>`;
+                    actionHtml = `<button class="btn-approve" onclick="approveOrder('${order.id}', '${order.userId}', ${order.totalAmount})"><i class="fa-solid fa-check"></i> Approve & Give Tokens</button>`;
+                } else {
+                    statusHtml = `<span class="status-badge status-completed"><i class="fa-solid fa-check-circle"></i> Completed</span>`;
+                    actionHtml = `<span style="color:gray; font-size:11px;">Tokens Sent</span>`;
+                }
+
+                tbody.innerHTML += `<tr>
+                    <td>${order.dateObj.toLocaleDateString()}</td>
+                    <td>${order.userName || 'Guest'}</td>
+                    <td style="font-size:12px;">${itemsStr}</td>
+                    <td>${statusHtml}</td>
+                    <td style="color:#ff3333; font-weight:bold;">₹${order.totalAmount}</td>
+                    <td>${actionHtml}</td>
+                </tr>`;
             });
         }
+
+        window.approveOrder = async function(bookingId, userId, totalAmount) {
+            if(confirm("Confirm payment received? This will approve the order and credit tokens to the user.")) {
+                try {
+                    await updateDoc(doc(db, "bookings", bookingId), {
+                        status: "Completed"
+                    });
+
+                    const earnedTokens = Math.floor(totalAmount / 100) * 10;
+                    if (earnedTokens > 0) {
+                        await setDoc(doc(db, "users", userId), { 
+                            tokens: increment(earnedTokens) 
+                        }, { merge: true });
+                    }
+
+                    alert(`✅ Order Approved! ${earnedTokens} tokens added to user.`);
+                } catch (error) {
+                    console.error("Approval Error: ", error);
+                    alert("❌ Failed to approve order. Please try again.");
+                }
+            }
+        };
 
         window.editGame = function(gameId) {
             const game = allGames.find(g => g.id === gameId); if(!game) return;
@@ -578,7 +958,6 @@
             });
         }
 
-        // GAME UPLOAD LOGIC
         document.getElementById('gameForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('uploadBtn');
@@ -643,15 +1022,9 @@
             }
         });
 
-        // ============================================
-        // OFFER BANNER & DISCOUNT SYNC LOGIC (UPGRADED)
-        // ============================================
-
-        // Function to load settings for the selected banner slot
         window.loadBannerSettings = function() {
             const slot = document.getElementById('obBannerSlot').value;
             
-            // Unsubscribe from previous listener if exists
             if(bannerUnsubscribe) bannerUnsubscribe();
             
             bannerUnsubscribe = onSnapshot(doc(db, "settings", slot), (docSnap) => {
@@ -662,11 +1035,24 @@
                 if(docSnap.exists()) {
                     const data = docSnap.data();
                     
+                    document.getElementById('obTagline').value = data.tagline || "";
+                    document.getElementById('obTitle').value = data.title || "";
+                    document.getElementById('obTitleHighlight').value = data.titleHighlight || "";
+                    document.getElementById('obSubtitle').value = data.subtitle || "";
+
                     if(data.image) { imgPreview.src = data.image; imgPreview.style.display = 'block'; }
                     else { imgPreview.style.display = 'none'; }
                     
-                    if(data.endTime) timePreview.innerText = new Date(data.endTime).toLocaleString();
-                    else timePreview.innerText = "Not Set";
+                    if(data.endTime) {
+                        timePreview.innerText = new Date(data.endTime).toLocaleString();
+                        let dt = new Date(data.endTime);
+                        let formattedDt = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0') + 'T' + String(dt.getHours()).padStart(2,'0') + ':' + String(dt.getMinutes()).padStart(2,'0');
+                        document.getElementById('obTimer').value = formattedDt;
+                    }
+                    else { 
+                        timePreview.innerText = "Not Set"; 
+                        document.getElementById('obTimer').value = '';
+                    }
                     
                     if(data.featuredGames) {
                         window.currentFeaturedGames = data.featuredGames;
@@ -676,27 +1062,20 @@
                         featCount.innerText = `0 Games Featured`;
                     }
                 } else {
+                    document.getElementById('obTagline').value = "";
+                    document.getElementById('obTitle').value = "";
+                    document.getElementById('obTitleHighlight').value = "";
+                    document.getElementById('obSubtitle').value = "";
                     imgPreview.style.display = 'none';
                     timePreview.innerText = "Not Set";
+                    document.getElementById('obTimer').value = '';
                     window.currentFeaturedGames = [];
                     featCount.innerText = `0 Games Featured`;
                 }
-                // Refresh checkboxes
                 renderOfferGameSelection(); 
             });
         };
 
-        // Load default banner 1 on start
-        setTimeout(loadBannerSettings, 1000);
-
-        const obFileInput = document.getElementById('obImageFile');
-        obFileInput.addEventListener('change', () => {
-            if(obFileInput.files.length > 0) {
-                document.getElementById('obDropZoneText').innerHTML = `<span style="color:#4BB543;"><i class="fa-solid fa-check"></i> File Ready (${(obFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
-            }
-        });
-
-        // Handle Offer Banner Update & Game Discounts
         document.getElementById('offerBannerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('updateBannerBtn');
@@ -705,7 +1084,12 @@
             const fallbackUrl = document.getElementById('obImageUrlFallback').value.trim();
             const endTime = document.getElementById('obTimer').value;
             
-            btn.innerHTML = 'Applying Discounts & Updating...'; 
+            const tagline = document.getElementById('obTagline').value.trim();
+            const title = document.getElementById('obTitle').value.trim();
+            const titleHighlight = document.getElementById('obTitleHighlight').value.trim();
+            const subtitle = document.getElementById('obSubtitle').value.trim();
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; 
             btn.disabled = true;
 
             try {
@@ -714,17 +1098,13 @@
                 if (file) {
                     if(file.size > 800 * 1024) { 
                         alert("❌ Error: Image size is too large (max 800KB).");
-                        btn.innerHTML = "Update Selected Banner & Discounts"; btn.disabled = false; return;
+                        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; btn.disabled = false; return;
                     }
                     imageUrl = await getBase64(file);
                 } else if (fallbackUrl !== "") {
                     imageUrl = fallbackUrl;
-                } else if (imageUrl === "" || imageUrl.includes(window.location.host)) {
-                    alert("⚠️ Please either upload a file OR paste an Image URL for the banner!");
-                    btn.innerHTML = "Update Selected Banner & Discounts"; btn.disabled = false; return;
                 }
 
-                // GATHER SELECTED GAMES & NEW SALE PRICES
                 const selectedGames = [];
                 const gameUpdates = [];
                 
@@ -736,15 +1116,17 @@
                     }
                 });
 
-                // UPDATE THE SETTINGS DOCUMENT FOR THIS BANNER
                 await setDoc(doc(db, "settings", slot), {
                     image: imageUrl,
                     endTime: endTime,
                     featuredGames: selectedGames,
+                    tagline: tagline,
+                    title: title,
+                    titleHighlight: titleHighlight,
+                    subtitle: subtitle,
                     updatedAt: serverTimestamp()
                 }, { merge: true });
 
-                // AUTOMATICALLY UPDATE GAME PRICES IN DATABASE
                 for(let update of gameUpdates) {
                     const game = allGames.find(g => g.id === update.id);
                     if(game) {
@@ -756,28 +1138,122 @@
                             discount: discountTag,
                             categories: game.categories ? [...new Set([...game.categories, "Offer"])] : ["Offer"]
                         };
-                        
-                        if (game.platform === 'PC') {
-                            updatedGameData.price = update.salePrice;
-                        } else {
-                            updatedGameData.permanentPrice = update.salePrice; // For consoles, applying discount to perm price
-                        }
+                        if (game.platform === 'PC') updatedGameData.price = update.salePrice;
+                        else updatedGameData.permanentPrice = update.salePrice; 
                         
                         await updateDoc(doc(db, "games", update.id), updatedGameData);
                     }
                 }
                 
-                alert(`✅ Banner (${slot}) Updated & Sale Prices Applied!`);
-                document.getElementById('offerBannerForm').reset();
-                document.getElementById('obDropZoneText').innerText = "Option 1: Drag & Drop Image File Here (Max 800KB)";
-                
+                alert(`✅ Banner (${slot}) Updated Successfully!`);
             } catch (error) {
                 console.error("Banner Update Error: ", error);
                 alert("❌ Update Failed! Check console for details.");
             } finally {
-                btn.innerHTML = "Update Selected Banner & Discounts"; 
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; 
                 btn.disabled = false;
             }
+        });
+
+        window.deleteBanner = async function() {
+            const slot = document.getElementById('obBannerSlot').value;
+            if(confirm(`Are you sure you want to completely delete "${slot}"?`)) {
+                try {
+                    await deleteDoc(doc(db, "settings", slot));
+                    alert(`✅ Banner (${slot}) deleted successfully!`);
+                } catch (error) { console.error("Delete Error: ", error); alert("❌ Failed to delete banner."); }
+            }
+        };
+
+    </script>
+    
+    <script>
+        window.toggleEmailInput = function() {
+            const type = document.getElementById('emailRecipientType').value;
+            document.getElementById('singleEmailGroup').style.display = (type === 'single') ? 'block' : 'none';
+        };
+
+        document.getElementById('sendDirectBtn').addEventListener('click', () => {
+            const type = document.getElementById('emailRecipientType').value;
+            const subject = encodeURIComponent(document.getElementById('emailSubject').value);
+            const rawBody = document.getElementById('emailBody').value;
+            
+            const textBody = encodeURIComponent(
+`GAMEFLEX STORE
+Play More. Pay Less.
+
+${rawBody}
+
+------------------------
+Shop Now: https://gameflexstore-d20da.web.app/
+Follow us on Instagram: https://www.instagram.com/gameflex_store4?igsi=Zzc2aXF6d2JxOXp6`
+            );
+
+            if (type === 'single') {
+                const target = document.getElementById('targetEmail').value;
+                if(!target) { alert("Please enter an email address."); return; }
+                window.location.href = `mailto:${target}?subject=${subject}&body=${textBody}`;
+            } else {
+                if(!window.allUsers || window.allUsers.length === 0) { alert("No users found in database!"); return; }
+                const emails = window.allUsers.map(u => u.email).filter(e => e).join(',');
+                window.location.href = `mailto:?bcc=${emails}&subject=${subject}&body=${textBody}`;
+            }
+        });
+
+        document.getElementById('generateHtmlBtn').addEventListener('click', () => {
+            const subject = document.getElementById('emailSubject').value;
+            const messageBody = document.getElementById('emailBody').value.replace(/\n/g, "<br>");
+            const customImage = document.getElementById('emailImage').value;
+            
+            let imageHtml = customImage ? `<img src="${customImage}" alt="Promo Banner" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 20px;">` : '';
+            const logoUrl = "https://gameflexstore-d20da.web.app/logo.png";
+
+            const htmlCode = `
+<div style="font-family: 'Arial', sans-serif; background-color: #0b0c10; color: #ffffff; padding: 30px 10px; margin: 0; text-align: center;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #12141a; border-radius: 12px; overflow: hidden; border: 1px solid #1f222b; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <div style="padding: 20px; text-align: center; border-bottom: 1px solid #1f222b; background: rgba(5,7,12,0.95);">
+            <img src="${logoUrl}" alt="GameFlex Logo" style="width: 50px; height: 50px; margin-bottom: 10px;">
+            <h1 style="margin: 0; font-size: 24px; font-weight: 800; color: white;">GAMEFLEX<span style="color: #e31825;">_STORE</span></h1>
+            <p style="margin: 5px 0 0; color: #a3a3a3; font-size: 11px; letter-spacing: 2px;">PLAY MORE. PAY LESS.</p>
+        </div>
+
+        <div style="padding: 30px 20px; text-align: center;">
+            ${imageHtml}
+            <h2 style="color: #ffffff; font-size: 22px; margin-top: 0; margin-bottom: 20px;">${subject}</h2>
+            <p style="color: #a3a3a3; font-size: 15px; line-height: 1.6; margin-bottom: 30px; white-space: pre-line;">
+                ${messageBody}
+            </p>
+            
+            <a href="https://gameflexstore-d20da.web.app/" style="display: inline-block; background-color: #e31825; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 15px; text-transform: uppercase;">
+                Start Shopping Now
+            </a>
+        </div>
+
+        <div style="padding: 20px; background-color: #0b0c10; text-align: center; border-top: 1px solid #1f222b;">
+            <p style="color: #a3a3a3; font-size: 12px; margin-bottom: 10px;">Follow us for the latest drops and deals!</p>
+            <a href="https://www.instagram.com/gameflex_store4?igsi=Zzc2aXF6d2JxOXp6" style="display: inline-block; color: white; text-decoration: none; font-size: 14px; font-weight: bold; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 8px 15px; border-radius: 20px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="width:16px; vertical-align:middle; margin-right:5px; filter: brightness(0) invert(1);"> Instagram
+            </a>
+            <p style="color: #555; font-size: 10px; margin-top: 20px;">&copy; 2026 GameFlex Store. All Rights Reserved.</p>
+        </div>
+    </div>
+</div>`;
+
+            const newWindow = window.open();
+            newWindow.document.write(`
+                <title>Generated Email Code</title>
+                <body style="background:#f4f4f4; padding:20px; font-family:sans-serif;">
+                    <h2>HTML Email Generated Successfully!</h2>
+                    <p>Copy the HTML code below and paste it into your bulk email sender (like Mailchimp, SendGrid, or any HTML email extension).</p>
+                    <textarea style="width:100%; height:300px; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:monospace;">${htmlCode}</textarea>
+                    
+                    <h3 style="margin-top:30px;">Email Preview:</h3>
+                    <div style="border:1px solid #ccc; background:white; max-width:800px; margin:auto;">
+                        ${htmlCode}
+                    </div>
+                </body>
+            `);
         });
     </script>
 </body>

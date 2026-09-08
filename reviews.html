@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>GameFlex - Customer Reviews</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -29,33 +29,71 @@
         .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; color: white; text-decoration: none; }
         .logo-icon { width: 45px; height: 45px; }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        
         .nav-links { display: flex; gap: 25px; list-style: none; }
-        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .nav-links li a:hover, .nav-links li.active a { color: var(--ps5-light-blue); }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; position: relative; }
+        .nav-links li a:hover, .nav-links li a.active { color: var(--ps5-light-blue); }
+        .nav-links li a.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--ps5-light-blue); }
+        
+        /* SEARCH BAR CSS */
+        .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { width: 280px; border-color: var(--ps5-light-blue); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(0, 112, 204, 0.2); }
+        .search-input::placeholder { color: var(--text-gray); }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-input:focus + .search-icon { color: var(--ps5-light-blue); }
+        
+        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
+        .search-dropdown::-webkit-scrollbar { width: 5px; }
+        .search-dropdown::-webkit-scrollbar-thumb { background: var(--ps5-light-blue); border-radius: 5px; }
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background: rgba(0, 112, 204, 0.15); padding-left: 20px; }
+        .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
+        .search-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
+        .search-item-price { font-size: 12px; font-weight: 800; color: var(--ps5-light-blue); }
+        .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
+        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
+
+        /* NAV ACTIONS (CART & LOGIN) */
         .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; }
+        .icon-btn:hover { color: var(--ps5-light-blue); }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--ps5-light-blue); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
+        
         .login-btn { background: var(--ps5-light-blue); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #005bb5; }
 
-        /* UPGRADED REVIEWS HEADER - SEAMLESS BANNER */
-        .reviews-header-section { 
-            padding: 50px 5% 30px 5%; 
-            position: relative; 
-            overflow: hidden; 
-        }
+        /* CART OVERLAY & SIDEBAR */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .cart-header h2 { font-size: 18px; font-weight: 800; color: var(--text-light); }
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .close-cart:hover { color: var(--ps5-light-blue); transform: rotate(90deg); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); align-items: center; position: relative; }
+        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--ps5-light-blue); }
+        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; position: absolute; right: 12px; top: 12px; }
+        .remove-item:hover { color: var(--primary-red); }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+        .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; margin-bottom: 15px; }
+        .checkout-btn { width: 100%; background: var(--ps5-light-blue); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        /* SEAMLESS FADING IMAGE TRICK */
+        /* REVIEWS HEADER - SEAMLESS BANNER */
+        .reviews-header-section { padding: 50px 5% 30px 5%; position: relative; overflow: hidden; }
+
         .header-bg-image {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 60%;
-            height: 100%;
-            background-image: url('review_photo.png'); /* Add .jpg if needed */
-            background-size: cover;
-            background-position: center right;
-            background-repeat: no-repeat;
+            position: absolute; top: 0; right: 0; width: 60%; height: 100%;
+            background-image: url('review_photo.png');
+            background-size: cover; background-position: center right; background-repeat: no-repeat;
             z-index: 0;
-            /* Fades the left side into the dark background */
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
             mask-image: linear-gradient(to right, transparent 0%, black 40%);
             opacity: 0.95;
@@ -68,32 +106,14 @@
             100% { transform: translateY(0px); }
         }
 
-        .rh-content {
-            position: relative;
-            z-index: 2;
-            max-width: 600px;
-            margin-bottom: 40px;
-            margin-top: 20px;
-        }
-
+        .rh-content { position: relative; z-index: 2; max-width: 600px; margin-bottom: 40px; margin-top: 20px; }
         .rh-subtitle { color: var(--ps5-light-blue); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
         .rh-title { font-size: 50px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
         .rh-title span { color: var(--ps5-light-blue); }
         .rh-desc { color: var(--text-gray); font-size: 16px; margin-bottom: 20px; line-height: 1.5; }
 
         /* FULL WIDTH STATS BAR */
-        .stats-bar { 
-            position: relative;
-            z-index: 2;
-            display: flex; 
-            gap: 60px; 
-            align-items: center; 
-            border-top: 1px solid var(--border-dark); 
-            border-bottom: 1px solid var(--border-dark); 
-            padding: 25px 0; 
-            margin-bottom: 40px; 
-            flex-wrap: wrap; 
-        }
+        .stats-bar { position: relative; z-index: 2; display: flex; gap: 60px; align-items: center; border-top: 1px solid var(--border-dark); border-bottom: 1px solid var(--border-dark); padding: 25px 0; margin-bottom: 40px; flex-wrap: wrap; }
         .stat-item { display: flex; align-items: center; gap: 15px; }
         .stat-icon { font-size: 30px; color: var(--ps5-light-blue); }
         .stat-icon.star { color: var(--star-gold); }
@@ -148,9 +168,87 @@
         .submit-btn:hover { background: #005bb5; }
         .submit-btn:disabled { background: gray; cursor: not-allowed; }
 
+        /* ========================================================================= */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
+        /* ========================================================================= */
         @media (max-width: 768px) {
-            .header-bg-image { width: 100%; opacity: 0.3; -webkit-mask-image: none; mask-image: none; }
-            .stats-bar { justify-content: center; gap: 30px; }
+            /* Navbar Grid System (Exactly like PC page) */
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: "logo actions" "search search" "links links"; 
+                gap: 12px; padding: 12px 5% 0 5%; background: rgba(7, 9, 14, 0.98);
+            }
+            .logo { grid-area: logo; font-size: 16px; align-items: center; }
+            .logo-icon { width: 30px; height: 30px; }
+            
+            /* Actions: Cart and Login */
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            .hide-mobile { display: none; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; }
+            .login-btn i { margin: 0; }
+
+            .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
+            .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
+            .search-input:focus { width: 100%; }
+
+            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; -webkit-overflow-scrolling: touch; }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
+
+            /* Header Section with Integrated Background Image */
+            .reviews-header-section { 
+                padding: 40px 5%; 
+                text-align: center; 
+                background-image: url('review_photo.png'); 
+                background-size: cover; 
+                background-position: center; 
+                position: relative; 
+                z-index: 1; 
+            }
+            .reviews-header-section::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(7, 9, 14, 0.88); /* Dark overlay so text is readable */
+                z-index: -1;
+            }
+            .header-bg-image { display: none; } /* Hide old absolute image on mobile */
+
+            .rh-title { font-size: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+            .rh-desc { font-size: 13px; margin-bottom: 30px; }
+
+            /* Stats Bar */
+            .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; padding: 20px 0; margin-bottom: 30px; }
+            .stat-item { flex-direction: column; gap: 5px; }
+            .stat-icon { font-size: 22px; }
+            .stat-val { font-size: 16px; }
+            .stat-lbl { font-size: 10px; }
+
+            /* Slider - Partial Card Visibility (Peek Effect) */
+            .reviews-container { gap: 15px; padding-right: 5%; }
+            .review-card { 
+                min-width: 80vw; /* Takes 80% width, leaving 20% for next card */
+                max-width: 80vw; 
+                padding: 20px; 
+                scroll-snap-align: center; 
+            }
+            .r-name { font-size: 14px; }
+            .r-text { font-size: 13px; }
+
+            /* Bottom Action Area */
+            .bottom-action-area { flex-direction: column; text-align: center; gap: 25px; padding-top: 30px; }
+            .thank-you-msg { font-size: 20px; }
+            .write-review-btn { width: 100%; justify-content: center; }
+            .trust-badges { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .t-badge { width: 45%; }
+            .t-badge i { font-size: 20px; }
+
+            /* Modal */
+            .modal-content { width: 95%; padding: 20px; }
+            .modal-content h3 { font-size: 18px; }
+            .cart-sidebar { width: 100%; right: -100%; }
         }
     </style>
 </head>
@@ -158,29 +256,62 @@
 
     <!-- NAVBAR -->
     <nav class="navbar">
+        <!-- AREA: LOGO -->
         <a href="index.html" class="logo">
             <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
             <div>GAMEFLEX<br><span style="color: var(--primary-red); font-size: 14px;">_STORE</span></div>
         </a>
+
+        <!-- AREA: SEARCH BAR -->
+        <div class="search-container">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search Games..." autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+
+        <!-- AREA: ACTIONS (CART & LOGIN) -->
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span>
+            </button>
+            <button class="login-btn" id="authBtn">
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
+            </button>
+        </div>
+
+        <!-- AREA: LINKS -->
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
             <li><a href="offer.html">Offers</a></li>
-            <li class="active"><a href="reviews.html">Reviews</a></li>
+            <li><a href="reviews.html" class="active">Reviews</a></li>
         </ul>
-        <div class="nav-actions">
-            <!-- Auth Button Sync -->
-            <button class="login-btn" id="authBtn"><i class="fa-solid fa-user"></i> <span>Login</span></button>
-        </div>
     </nav>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <p style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span><span id="cartTotalPrice">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Main Store</button>
+        </div>
+    </div>
 
     <!-- HEADER SECTION -->
     <section class="reviews-header-section">
-        
-        <!-- SEAMLESS BACKGROUND IMAGE -->
+        <!-- Desktop Background fading image -->
         <div class="header-bg-image"></div>
-
+        
         <div class="rh-content">
             <div class="rh-subtitle">Our Community</div>
             <h1 class="rh-title">CUSTOMER <span>REVIEWS</span></h1>
@@ -215,7 +346,6 @@
         <!-- REVIEWS SLIDER -->
         <div class="reviews-slider-wrapper">
             <div class="reviews-container" id="reviewsGrid">
-                <!-- Data loads here from Firebase -->
                 <p style="color:gray; width: 100%; text-align: center;"><i class="fa-solid fa-spinner fa-spin"></i> Loading community feedback...</p>
             </div>
         </div>
@@ -266,13 +396,18 @@
         </div>
     </div>
 
+    <!-- Global Variables -->
+    <script>
+        window.liveGamesDatabase = []; // For Global Search
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; // Cart data
+    </script>
+
     <!-- FIREBASE & JS LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
             authDomain: "gameflexstore-d20da.firebaseapp.com",
@@ -292,7 +427,7 @@
         // INSTANT LOGIN UI UPDATE
         const savedUserName = localStorage.getItem('gf_logged_in_user');
         if(savedUserName) {
-            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${savedUserName}</span>`;
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
         }
 
         // AUTHENTICATION LOGIC
@@ -303,12 +438,12 @@
                     currentUser = user;
                     const firstName = user.displayName.split(' ')[0];
                     localStorage.setItem('gf_logged_in_user', firstName); 
-                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span>Hi, ${firstName}</span>`;
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
                     authBtn.onclick = () => { window.location.href = "profile.html"; };
                 } else {
                     currentUser = null;
                     localStorage.removeItem('gf_logged_in_user'); 
-                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span>Login</span>`;
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
                     authBtn.onclick = async () => {
                         try { await signInWithPopup(auth, provider); } 
                         catch (err) { alert("Login failed: " + err.message); }
@@ -388,6 +523,21 @@
             document.getElementById('totalReviewsDisplay').innerText = `${reviewCount}+`;
         });
 
+        // FETCH GAMES FOR GLOBAL SEARCH BAR
+        const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
+        onSnapshot(qGames, (snapshot) => {
+            window.liveGamesDatabase = [];
+            snapshot.forEach((docSnap) => {
+                const game = docSnap.data();
+                let rent = game.rentalPrice || game.rentPrice || 0;
+                let perm = game.permanentPrice || game.permPrice || 0;
+                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
+                window.liveGamesDatabase.push({
+                    title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${docSnap.id}` 
+                });
+            });
+        });
+
         // MODAL LOGIC
         window.openReviewModal = function() {
             if(!currentUser && !localStorage.getItem('gf_logged_in_user')) {
@@ -453,6 +603,46 @@
                 btn.innerText = "Post Review"; btn.disabled = false;
             }
         });
+    </script>
+
+    <!-- SEARCH SCRIPT -->
+    <script>
+        const searchInput = document.getElementById('gameSearch');
+        const searchDropdown = document.getElementById('searchDropdown');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            searchDropdown.innerHTML = ''; 
+            if (query.length > 0) {
+                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                searchDropdown.style.display = 'block';
+                if (filteredGames.length > 0) {
+                    filteredGames.forEach(game => {
+                        const gameItem = document.createElement('a'); gameItem.href = game.link; gameItem.className = 'search-item';
+                        gameItem.innerHTML = `<div class="search-item-img" style="background-image: url('${game.img}');"></div><div class="search-item-info"><span class="search-item-title">${game.title}</span><span class="search-platform">${game.platform}</span><span class="search-item-price">${game.price}</span></div>`;
+                        searchDropdown.appendChild(gameItem);
+                    });
+                } else { searchDropdown.innerHTML = `<div class="no-results">No games found</div>`; }
+            } else { searchDropdown.style.display = 'none'; }
+        });
+
+        document.addEventListener('click', function(event) { 
+            if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; 
+        });
+        
+        // CART LOGIC
+        window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
+        
+        window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
+        
+        window.updateCartUI = () => {
+            const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
+            if (window.cartArray.length === 0) container.innerHTML = '<p style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</p>';
+            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`; });
+            
+            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + tot.toLocaleString('en-IN');
+        };
+        window.updateCartUI();
     </script>
 </body>
 </html>
