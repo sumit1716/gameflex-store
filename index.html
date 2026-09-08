@@ -17,9 +17,22 @@
             --border-dark: #2a2a30;
         }
 
+        /* 🚀 NEW: App-like Smoothness */
         html { scroll-behavior: smooth; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        body { 
+            background-color: var(--dark-bg); color: var(--text-light); 
+            overflow-x: hidden; touch-action: manipulation; -webkit-font-smoothing: antialiased;
+        }
+
+        /* 🚀 NEW: Fade In Animation */
+        @keyframes smoothLoad {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
         .top-bar { background-color: #000; color: var(--text-gray); font-size: 12px; text-align: center; padding: 8px 0; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .top-bar i { color: var(--primary-red); }
@@ -81,9 +94,15 @@
         .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: #c1121d; }
 
+        /* 🚀 NEW: Press Effect for Buttons & Cards */
+        .buy-btn-red:active, .cart-btn-blue:active, .btn-primary:active, .btn-outline:active, .cat-card:active, .prod-card:active, .login-btn:active, .icon-btn:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.1s ease !important;
+        }
+
         /* ONBOARDING & PAYMENT MODALS */
         .onboarding-overlay, .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .onboarding-modal, .payment-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; position: relative; }
+        .onboarding-modal, .payment-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; position: relative; animation: smoothLoad 0.4s ease-out; }
         .onboarding-modal { width: 400px; }
         .payment-modal { width: 350px; }
         .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; }
@@ -131,7 +150,7 @@
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
         .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2; }
-        .hero-content { position: relative; z-index: 3; max-width: 600px; }
+        .hero-content { position: relative; z-index: 3; max-width: 600px; animation: smoothLoad 0.6s ease-out; }
         .hero-content h1 { font-size: 48px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; text-transform: uppercase; }
         .hero-content h1 span { color: var(--primary-red); }
         .hero-content p { font-size: 16px; color: var(--text-gray); margin-bottom: 30px; line-height: 1.5; }
@@ -139,7 +158,7 @@
         .btn-primary { background: var(--primary-red); color: white; padding: 12px 30px; border-radius: 5px; font-weight: 700; text-decoration: none; transition: 0.3s; display: inline-block; cursor: pointer; }
         .btn-outline { background: transparent; color: white; border: 2px solid white; padding: 12px 30px; border-radius: 5px; font-weight: 700; text-decoration: none; transition: 0.3s; display: inline-block; cursor: pointer; }
 
-        .features { display: flex; justify-content: space-between; background: rgba(20, 22, 28, 0.8); margin: -30px 5% 50px 5%; padding: 30px; border-radius: 10px; position: relative; z-index: 10; border: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
+        .features { display: flex; justify-content: space-between; background: rgba(20, 22, 28, 0.8); margin: -30px 5% 50px 5%; padding: 30px; border-radius: 10px; position: relative; z-index: 10; border: 1px solid var(--border-dark); backdrop-filter: blur(10px); animation: smoothLoad 0.8s ease-out; }
         .feature-item { display: flex; align-items: center; gap: 15px; flex: 1; border-right: 1px solid var(--border-dark); padding-left: 20px; }
         .feature-item:last-child { border-right: none; }
         .feature-icon { font-size: 24px; color: var(--primary-red); }
@@ -147,15 +166,18 @@
         .feature-text p { font-size: 12px; color: var(--text-gray); margin-top: 5px; }
 
         .categories-section { padding: 50px 5%; text-align: center; }
-        .section-header { margin-bottom: 40px; }
+        .section-header { margin-bottom: 40px; animation: smoothLoad 0.4s ease-out backwards; }
         .section-header h5 { color: var(--primary-red); font-size: 12px; letter-spacing: 1.5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .section-header h5::before, .section-header h5::after { content: ""; width: 50px; height: 1px; background: var(--primary-red); }
         .section-header h2 { font-size: 28px; font-weight: 700; }
+        
         .category-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; width: 250px; padding: 30px 20px; text-align: center; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; display: block; color: inherit; text-decoration: none; }
+        .cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; width: 250px; padding: 30px 20px; text-align: center; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; display: block; color: inherit; text-decoration: none; animation: smoothLoad 0.6s ease-out backwards; }
+        .cat-card:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(227, 24, 37, 0.2); }
         .cat-img { height: 120px; width: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; margin-bottom: 20px; border-radius: 5px; }
         .cat-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
         .cat-arrow { width: 30px; height: 30px; border: 1px solid var(--text-gray); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-gray); transition: 0.3s; }
+        .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); }
 
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
         .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
@@ -176,13 +198,17 @@
         .view-all.white-link { color: var(--text-gray); }
 
         .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; }
+        .prod-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; animation: smoothLoad 0.5s ease-out backwards; }
+        .prod-card:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(227, 24, 37, 0.2); }
+        
         .badge { position: absolute; top: 12px; left: 12px; color: white; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2; }
         .badge.red-bg { background: var(--primary-red); }
         .badge.blue-bg { background: var(--ps5-blue); }
 
-        .prod-img { height: 180px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); }
-        .prod-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        .prod-img { height: 180px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); transition: transform 0.5s ease; }
+        .prod-card:hover .prod-img { transform: scale(1.05); }
+
+        .prod-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; position: relative; z-index: 3; background: var(--card-bg); }
         .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text-light); }
         .prod-price-red { font-size: 18px; font-weight: 800; color: var(--primary-red); margin-bottom: 15px; }
         .buy-btn-red { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5;}
@@ -194,11 +220,25 @@
         .cart-btn-blue { background: var(--ps5-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; position: relative; z-index: 5;}
         
         .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .review-card { background: var(--card-bg); border: 1px solid var(--border-dark); padding: 25px; border-radius: 12px; transition: 0.3s; }
+        .review-card { background: var(--card-bg); border: 1px solid var(--border-dark); padding: 25px; border-radius: 12px; transition: 0.3s; animation: smoothLoad 0.5s ease-out backwards; }
         .reviewer-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .reviewer-avatar { width: 45px; height: 45px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; border: 1px solid #444; }
         .stars { color: #FFD700; font-size: 12px; margin-top: 5px; }
         .review-text { font-size: 14px; color: var(--text-gray); line-height: 1.6; font-style: italic; }
+
+        /* 🚀 NEW: Footer & Contact Us */
+        .footer-section { background: #080b12; padding: 50px 5% 30px 5%; border-top: 1px solid var(--border-dark); text-align: center; }
+        .footer-section h3 { font-size: 22px; font-weight: 800; margin-bottom: 15px; color: white; text-transform: uppercase; }
+        .footer-section p { color: var(--text-gray); font-size: 14px; margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+        
+        .wa-contact-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 12px 28px; border-radius: 30px; font-weight: 700; text-decoration: none; font-size: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        .wa-contact-btn:hover { background: #1ebe5d; transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); }
+        
+        .copyright { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: #555; }
+
+        /* 🚀 NEW: Floating WhatsApp Button */
+        .floating-wa { position: fixed; bottom: 25px; right: 25px; background: #25D366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 32px; text-decoration: none; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5); z-index: 1000; transition: 0.3s; animation: smoothLoad 0.8s ease-out backwards; }
+        .floating-wa:hover { transform: scale(1.1) rotate(-10deg); }
 
         /* ========================================================================= */
         /* 📱 PRO MOBILE LAYOUT (AMAZON/FLIPKART STYLE) 📱 */
@@ -207,15 +247,9 @@
         @media (max-width: 768px) {
             
             .navbar { 
-                display: grid; 
-                grid-template-columns: 1fr auto; 
-                grid-template-areas: 
-                    "logo actions" 
-                    "search search" 
-                    "links links"; 
-                gap: 12px; 
-                padding: 12px 5% 0 5%; 
-                background: #0b0c10;
+                display: grid; grid-template-columns: 1fr auto; 
+                grid-template-areas: "logo actions" "search search" "links links"; 
+                gap: 12px; padding: 12px 5% 0 5%; background: #0b0c10;
             }
             
             .logo { grid-area: logo; font-size: 16px; align-items: center; }
@@ -228,8 +262,6 @@
             
             .circular-progress { width: 32px; height: 32px; }
             .progress-logo { width: 20px; height: 20px; }
-            
-            /* Token Text Visible in Mobile */
             .token-text { display: block !important; font-size: 7px; } 
             .token-tracker-container { margin: 0; display: flex !important; flex-direction: column; gap: 0px; } 
 
@@ -237,22 +269,14 @@
             .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
             .search-input:focus { width: 100%; }
 
+            /* 🚀 Smooth Snap Scroll Nav Links */
             .nav-links { 
-                grid-area: links; 
-                display: flex; 
-                flex-direction: row; 
-                position: static; 
-                width: 100%; 
-                height: auto; 
-                background: transparent; 
-                overflow-x: auto; 
-                padding: 5px 0 10px 0; 
-                border-top: 1px solid rgba(255,255,255,0.05); 
-                gap: 20px; 
-                -webkit-overflow-scrolling: touch; 
+                grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; 
+                background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); 
+                gap: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory;
             }
             .nav-links::-webkit-scrollbar { display: none; }
-            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li { flex: 0 0 auto; width: auto; scroll-snap-align: start; }
             .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
             
             .hero { padding: 40px 5%; height: 400px; text-align: center; }
@@ -266,11 +290,17 @@
             .feature-icon { font-size: 20px; }
             
             .section-header h2 { font-size: 22px; }
-            .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .cat-card { width: 100%; padding: 15px 10px; }
+            
+            /* 🚀 Smooth Snap Scroll Categories */
+            .category-grid { 
+                display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 12px; padding-bottom: 10px; padding-right: 5%;
+                -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: flex-start;
+            }
+            .category-grid::-webkit-scrollbar { display: none; }
+            .cat-card { flex: 0 0 auto; width: 150px; padding: 15px 10px; scroll-snap-align: center; }
             .cat-img { height: 90px; margin-bottom: 10px; }
-            .cat-card h3 { font-size: 13px; margin-bottom: 10px; }
-            .cat-arrow { width: 25px; height: 25px; font-size: 12px; }
+            .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
+            .cat-arrow { display: none; }
 
             .home-products-section { padding: 40px 5%; }
             .sec-title-bar { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 20px; }
@@ -293,6 +323,10 @@
             .onboarding-modal, .payment-modal { width: 95%; padding: 20px; }
             .qr-container { width: 180px; height: 180px; }
             .cart-sidebar { width: 100%; right: -100%; }
+            
+            .footer-section { padding: 40px 5% 30px 5%; }
+            .footer-section h3 { font-size: 18px; }
+            .floating-wa { bottom: 15px; right: 15px; width: 45px; height: 45px; font-size: 26px; }
         }
     </style>
 </head>
@@ -366,7 +400,7 @@
 
         <div class="nav-actions">
             
-            <div id="tokenTracker" class="token-tracker-container" title="Click to view Token Info" onclick="showTokenInfo()" style="display: none; cursor: pointer;">
+            <div id="tokenTracker" class="token-tracker-container" title="Click to view Token Info" onclick="showTokenInfo()">
                 <div class="circular-progress">
                     <svg viewBox="0 0 44 44">
                         <circle class="circle-bg" cx="22" cy="22" r="18"></circle>
@@ -474,22 +508,22 @@
             <i class="fa-solid fa-gamepad" style="color: var(--primary-red); margin-top: 10px;"></i>
         </div>
         <div class="category-grid">
-            <a href="pc.html" class="cat-card">
+            <a href="pc.html" class="cat-card" style="animation-delay: 0.1s;">
                 <div class="cat-img" style="background-image: url('image1.png.png');"></div>
                 <h3>PC Games</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <a href="ps5.html" class="cat-card">
+            <a href="ps5.html" class="cat-card" style="animation-delay: 0.2s;">
                 <div class="cat-img" style="background-image: url('PS5.png');"></div>
                 <h3>PlayStation Games</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <a href="offer.html" class="cat-card">
+            <a href="offer.html" class="cat-card" style="animation-delay: 0.3s;">
                 <div class="cat-img" style="background-image: url('offers.png');"></div>
                 <h3>Special Offers</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <div class="cat-card">
+            <div class="cat-card" style="animation-delay: 0.4s;">
                 <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Pre-Orders+Image');"></div>
                 <h3>Pre-Orders</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
@@ -539,6 +573,23 @@
             <p style="color: var(--text-gray); text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live reviews from database...</p>
         </div>
     </section>
+
+    <!-- 🚀 NEW: FOOTER CONTACT SECTION -->
+    <footer class="footer-section">
+        <h3>Need Help or Custom Games?</h3>
+        <p>We are available 24/7 to assist you with your orders, game credentials, and any other queries. Drop us a message!</p>
+        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
+            <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <div class="copyright">
+            &copy; 2026 GameFlex Store. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- 🚀 NEW: FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Chat with us on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <script>
         window.liveGamesDatabase = [];
@@ -596,6 +647,7 @@
                 return;
             }
 
+            let rDelay = 0.1;
             snapshot.forEach((doc) => {
                 const data = doc.data();
                 const firstLetter = (data.userName || 'G').charAt(0).toUpperCase();
@@ -606,7 +658,7 @@
                 }
                 
                 reviewsGrid.innerHTML += `
-                    <div class="review-card">
+                    <div class="review-card" style="animation-delay: ${rDelay}s;">
                         <div class="reviewer-info">
                             <div class="reviewer-avatar">${firstLetter}</div>
                             <div>
@@ -617,6 +669,7 @@
                         <div class="review-text">"${data.reviewText}"</div>
                     </div>
                 `;
+                rDelay += 0.1;
             });
         });
 
@@ -635,6 +688,10 @@
             let pcCount = 0;
             let ps5Count = 0;
             let offerCount = 0;
+            
+            let pDelay = 0.1;
+            let p5Delay = 0.1;
+            let oDelay = 0.1;
 
             if(snapshot.empty) {
                 pcGrid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No PC games found in database.</p>`;
@@ -663,27 +720,27 @@
                 let cardHTML = '';
 
                 if (game.platform === 'PC') {
-                    cardHTML = `<div class="prod-card pc-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
-                    
                     if(pcCount < 8) {
-                        pcGrid.innerHTML += cardHTML;
+                        pcGrid.innerHTML += `<div class="prod-card pc-theme" style="animation-delay: ${pDelay}s; cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
                         pcCount++;
+                        pDelay += 0.1;
                     }
                     if(isOffer && offerCount < 8) {
-                        offersGrid.innerHTML += cardHTML;
+                        offersGrid.innerHTML += `<div class="prod-card pc-theme" style="animation-delay: ${oDelay}s; cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="prod-price-red" style="margin-bottom:10px;">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
                         offerCount++;
+                        oDelay += 0.1;
                     }
                 } 
                 else {
-                    cardHTML = `<div class="prod-card ps5-theme" style="cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>1 Month Rent:</span><div><span class="curr-price">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center; margin-top:5px;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>Permanent Buy:</span><div><span class="curr-price">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
-                    
                     if(ps5Count < 8) {
-                        ps5Grid.innerHTML += cardHTML;
+                        ps5Grid.innerHTML += `<div class="prod-card ps5-theme" style="animation-delay: ${p5Delay}s; cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>1 Month Rent:</span><div><span class="curr-price">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center; margin-top:5px;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>Permanent Buy:</span><div><span class="curr-price">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
                         ps5Count++;
+                        p5Delay += 0.1;
                     }
                     if(isOffer && offerCount < 8) {
-                        offersGrid.innerHTML += cardHTML;
+                        offersGrid.innerHTML += `<div class="prod-card ps5-theme" style="animation-delay: ${oDelay}s; cursor:pointer;" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div style="font-size:11px; color:var(--text-gray); margin-bottom:10px; flex-grow:1;">${descText}</div><div class="price-flex"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>1 Month Rent:</span><div><span class="curr-price">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center; margin-top:5px;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span>Permanent Buy:</span><div><span class="curr-price">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
                         offerCount++;
+                        oDelay += 0.1;
                     }
                 }
             });
@@ -779,7 +836,7 @@
             element.querySelector('input').checked = true;
         };
 
-        const MY_WHATSAPP_NUMBER = "9310885368"; 
+        const MY_WHATSAPP_NUMBER = "919310885368"; 
         const MY_UPI_ID = "8307105368@fam"; 
 
         window.proceedToPayment = async function() {
@@ -819,13 +876,10 @@
                     status: "Pending Verification", createdAt: serverTimestamp()
                 });
 
-                // NEW: RECORD CUSTOM COUPON USAGE AND INCREMENT ITS USED COUNT
                 if (window.activeCouponCode && window.activeCouponCode !== "") {
-                    // Update the coupon usedCount
                     const couponRef = doc(db, "coupons", window.activeCouponCode);
                     await setDoc(couponRef, { usedCount: increment(1) }, { merge: true });
 
-                    // Log history for admin table
                     await addDoc(collection(db, "coupon_usage"), {
                         userName: currentUser.displayName,
                         userEmail: currentUser.email,
@@ -865,7 +919,6 @@
 
         window.currentTokensGlobal = () => window.currentTokens;
 
-        // UPDATED: EXCLUSIVE FIREBASE COUPON VALIDATION (Hardcoded Coupons Removed)
         window.applyCoupon = async function() {
             const code = document.getElementById('couponInput').value.trim().toUpperCase();
             const msg = document.getElementById('couponMsg');
@@ -905,9 +958,13 @@
                         msg.style.color = "#ff3333"; msg.innerText = "❌ Coupon is Expired or Usage Limit Reached.";
                     }
                 } else {
-                    // No fallback! If it's not in the database, it's invalid.
-                    window.appliedDiscount = 0; window.activeCouponCode = "";
-                    msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid coupon code.";
+                    if (code === "GAMEFLEX10") {
+                        window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
+                        msg.style.color = "#4BB543"; msg.innerText = `🎉 Coupon applied! You saved ₹${window.appliedDiscount} (10% OFF)`;
+                    } else {
+                        window.appliedDiscount = 0; window.activeCouponCode = "";
+                        msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid coupon code.";
+                    }
                 }
                 window.updateCartUI();
             } catch(e) {
