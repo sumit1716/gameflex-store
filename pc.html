@@ -169,7 +169,7 @@
         .cart-overlay.active { display: block; opacity: 1; }
         .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: rgba(18, 20, 26, 0.98); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
         .cart-sidebar.open { right: 0; }
-        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .cart-header h2 { font-size: 18px; font-weight: 800; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
         .cart-header h2 i { color: var(--primary-red); }
         .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
@@ -417,22 +417,25 @@
 
     <!-- Intersection Observer Script for Scroll Animations -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const animatedElements = document.querySelectorAll('.animate-fade-up');
-            const observer = new IntersectionObserver((entries) => {
+        window.observeAnimations = function() {
+            const animatedElements = document.querySelectorAll('.animate-fade-up:not(.observed)');
+            const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.style.animationPlayState = 'running';
-                        observer.unobserve(entry.target);
+                        obs.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.05 });
 
             animatedElements.forEach(el => {
                 el.style.animationPlayState = 'paused';
+                el.classList.add('observed');
                 observer.observe(el);
             });
-        });
+        };
+        
+        document.addEventListener("DOMContentLoaded", window.observeAnimations);
     </script>
 
     <script>
@@ -562,6 +565,9 @@
                 </div>`;
                 delay += 0.1; 
             });
+            
+            // Trigger animation on newly loaded grid items
+            setTimeout(window.observeAnimations, 50);
         };
 
         window.setCategoryFilter = function(category, element) {
