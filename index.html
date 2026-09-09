@@ -114,13 +114,6 @@
         .login-btn { background: var(--primary-red); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.3); }
         .login-btn:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); transform: translateY(-2px); }
 
-        /* Press Effect for Buttons & Cards */
-        .buy-btn-red:active, .cart-btn-blue:active, .btn-primary:active, .btn-outline:active, .cat-card:active, .prod-card:active, .login-btn:active, .icon-btn:active {
-            transform: scale(0.96) !important;
-            transition: transform 0.1s ease !important;
-            box-shadow: none !important;
-        }
-
         /* ONBOARDING & PAYMENT MODALS */
         .onboarding-overlay, .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .onboarding-modal, .payment-modal { background: rgba(18,20,26,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.8); text-align: center; position: relative; animation: smoothLoad 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -171,7 +164,7 @@
         .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
         .checkout-btn:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); transform: translateY(-2px); }
 
-        /* HERO & HOME SECTIONS (With Parallax Prep) */
+        /* HERO & HOME SECTIONS */
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
         .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.7; }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%); z-index: 2; }
@@ -229,7 +222,6 @@
 
         .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
         
-        /* 🚀 Enhanced Product Card with Neon Hover */
         .prod-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; display: flex; flex-direction: column; animation: smoothLoad 0.5s ease-out backwards; box-shadow: 0 5px 20px rgba(0,0,0,0.6); }
         .prod-card:hover { border-color: var(--primary-red); transform: translateY(-8px); box-shadow: 0 15px 35px rgba(227, 24, 37, 0.25), 0 0 20px rgba(227, 24, 37, 0.1) inset; z-index: 10; }
         .prod-card.ps5-theme:hover { border-color: var(--ps5-blue); box-shadow: 0 15px 35px rgba(31, 106, 255, 0.25), 0 0 20px rgba(31, 106, 255, 0.1) inset; }
@@ -277,7 +269,7 @@
         .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
         /* ========================================================================= */
-        /* 📱 PRO MOBILE LAYOUT (AMAZON/FLIPKART STYLE) 📱 */
+        /* 📱 PRO MOBILE LAYOUT - FIXED SKELETON & TAP EFFECTS 📱 */
         /* ========================================================================= */
         
         @media (max-width: 768px) {
@@ -323,7 +315,7 @@
 
             .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; margin: -20px 5% 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
             .feature-item { flex-direction: column; text-align: center; border: none; padding: 0; gap: 8px; }
-            .feature-item:hover { transform: none; } /* Disable hover lift on mobile */
+            .feature-item:hover { transform: none; } 
             .feature-icon { font-size: 22px; }
             
             .section-header h2 { font-size: 24px; }
@@ -334,8 +326,8 @@
                 -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: flex-start;
             }
             .category-grid::-webkit-scrollbar { display: none; }
-            .cat-card { flex: 0 0 auto; width: 140px; padding: 15px 10px; scroll-snap-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-            .cat-card:hover { transform: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); } /* Disable hover lift on mobile */
+            .cat-card { flex: 0 0 auto; width: 140px; padding: 15px 10px; scroll-snap-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.05); }
+            .cat-card:hover { transform: none; box-shadow: 0 4px 15px rgba(0,0,0,0.4); } 
             .cat-img { height: 90px; margin-bottom: 10px; }
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
@@ -346,7 +338,28 @@
             .view-all { background: rgba(255,255,255,0.05); }
             
             .prod-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .prod-card:hover { transform: none; box-shadow: 0 5px 20px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.05); } /* Disable hover lift on mobile grids */
+            
+            /* 🚀 MOBILE SPECIFIC FIXES */
+            .skeleton-card { height: 240px; } /* Fixed skeleton size for mobile */
+            
+            .prod-card { 
+                box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 10px rgba(227, 24, 37, 0.05) inset; 
+                border-color: rgba(255,255,255,0.08);
+            }
+            .prod-card.ps5-theme { box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 10px rgba(31, 106, 255, 0.05) inset; }
+            .prod-card:hover { transform: none; } /* Disable laptop hover on mobile */
+            
+            /* 💥 MOBILE TAP (ACTIVE) GLOW EFFECT */
+            .prod-card:active, .cat-card:active, .btn-primary:active, .buy-btn-red:active {
+                transform: scale(0.95) !important;
+                border-color: var(--primary-red) !important;
+                box-shadow: 0 0 20px rgba(227, 24, 37, 0.5) !important;
+                transition: 0.1s !important;
+            }
+            .prod-card.ps5-theme:active {
+                border-color: var(--ps5-blue) !important;
+                box-shadow: 0 0 20px rgba(31, 106, 255, 0.5) !important;
+            }
             
             .prod-img { height: 130px; }
             .prod-info { padding: 12px 10px; }
@@ -580,7 +593,7 @@
             <a href="pc.html" class="view-all red-link">View PC Store &rarr;</a>
         </div>
         <div class="prod-grid" id="pcGamesGrid">
-            <!-- 🚀 SKELETON LOADERS (Replaced by JS once data loads) -->
+            <!-- 🚀 SKELETON LOADERS -->
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
             <div class="skeleton-card"></div>
