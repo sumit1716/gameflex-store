@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Profile - GameFlex Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Added Orbitron for Gaming Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Base Colors */
@@ -14,149 +15,212 @@
             --border-dark: #2a2a30;
             --text-light: #ffffff;
             --text-gray: #a3a3a3;
+            --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             
             /* Theme Variables (Will dynamically change via JS) */
             --theme-color: #e31825; /* Defaults to Red */
             --theme-gradient: linear-gradient(135deg, #e31825, #4a0000);
+            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
         }
 
         /* Dynamic Theme Classes */
-        body.theme-pc { --theme-color: #e31825; --theme-gradient: linear-gradient(135deg, #e31825, #4a0000); }
-        body.theme-ps5 { --theme-color: #1f6aff; --theme-gradient: linear-gradient(135deg, #1f6aff, #09132b); }
+        body.theme-pc { 
+            --theme-color: #e31825; 
+            --theme-gradient: linear-gradient(135deg, #e31825, #4a0000); 
+            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
+        }
+        body.theme-ps5 { 
+            --theme-color: #1f6aff; 
+            --theme-gradient: linear-gradient(135deg, #1f6aff, #09132b); 
+            --theme-glow: 0 0 15px rgba(31, 106, 255, 0.4);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
 
-        /* Navbar (Standard) */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(5, 7, 12, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
-        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        /* 🚀 Custom Gaming Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--theme-gradient); border-radius: 10px; }
+
+        /* 🚀 Smooth Fade-In-Up Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(5, 7, 12, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        
+        /* 🎨 Stylish Dynamic Logo Design */
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid var(--theme-color); padding: 5px; transition: var(--hover-transition); box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05); }
+        .logo:hover .logo-icon { transform: scale(1.05) rotate(5deg); box-shadow: var(--theme-glow), inset 0 0 10px rgba(255, 255, 255, 0.1); }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-text .top { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: white; line-height: 1; letter-spacing: 1px; }
+        .logo-text .bottom { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--theme-color); letter-spacing: 3.5px; margin-top: 2px; text-shadow: 0 0 5px rgba(255,255,255,0.2); transition: 0.3s;}
+
         .nav-links { display: flex; gap: 25px; list-style: none; }
-        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .nav-links li a:hover { color: var(--theme-color); }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; position: relative; }
+        .nav-links li a:hover { color: var(--theme-color); text-shadow: var(--theme-glow); }
         .nav-actions { display: flex; align-items: center; gap: 15px; position: relative; }
+        
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
-        .icon-btn:hover { color: var(--theme-color); }
-        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--theme-color); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
-        .login-btn { background: var(--theme-color); color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .icon-btn:hover { color: var(--theme-color); filter: drop-shadow(0 0 8px var(--theme-color)); transform: scale(1.1); }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--theme-color); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        
+        .login-btn { background: transparent; border: 1px solid var(--theme-color); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .login-btn:hover { background: var(--theme-color); transform: translateY(-2px); box-shadow: var(--theme-glow); }
 
         /* Profile Layout */
         .profile-container { display: flex; gap: 30px; padding: 40px 5%; align-items: flex-start; max-width: 1400px; margin: 0 auto; }
         
         /* Left Sidebar */
-        .profile-sidebar { width: 300px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 30px 20px; flex-shrink: 0; position: sticky; top: 100px; }
+        .profile-sidebar { width: 300px; background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px 20px; flex-shrink: 0; position: sticky; top: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .user-avatar-wrapper { text-align: center; margin-bottom: 20px; position: relative; }
-        .user-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--theme-gradient); border: 3px solid var(--theme-color); display: inline-flex; justify-content: center; align-items: center; font-size: 40px; color: white; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .user-avatar { width: 110px; height: 110px; border-radius: 50%; background: var(--theme-gradient); border: 3px solid var(--theme-color); display: inline-flex; justify-content: center; align-items: center; font-size: 45px; color: white; box-shadow: var(--theme-glow); transition: 0.4s; }
+        .profile-sidebar:hover .user-avatar { transform: scale(1.05) rotate(5deg); }
         
         .user-name-wrapper { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 5px; }
-        .user-name { font-size: 20px; font-weight: 800; color: white; }
-        .edit-profile-btn { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 14px; transition: 0.3s; }
-        .edit-profile-btn:hover { color: var(--theme-color); }
+        .user-name { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; }
+        .edit-profile-btn { background: rgba(255,255,255,0.05); border: 1px solid transparent; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text-gray); cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .edit-profile-btn:hover { color: white; background: var(--theme-color); box-shadow: var(--theme-glow); transform: rotate(15deg); }
         
         .user-email { font-size: 12px; color: var(--text-gray); text-align: center; margin-bottom: 15px; }
-        .gamer-tag { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid var(--theme-color); color: var(--theme-color); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin: 0 auto 30px auto; display: table; }
+        .gamer-tag { display: table; background: rgba(255,255,255,0.05); border: 1px solid var(--theme-color); color: var(--theme-color); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin: 0 auto 30px auto; letter-spacing: 1px; box-shadow: inset 0 0 10px rgba(255,255,255,0.02); }
 
         .sidebar-menu { list-style: none; }
         .sidebar-menu li { margin-bottom: 5px; }
         .sidebar-menu li a { display: flex; align-items: center; gap: 15px; padding: 12px 15px; color: var(--text-gray); text-decoration: none; font-size: 13px; font-weight: 600; border-radius: 8px; transition: 0.3s; }
-        .sidebar-menu li a i { font-size: 16px; width: 20px; text-align: center; }
-        .sidebar-menu li a.active, .sidebar-menu li a:hover { background: rgba(255,255,255,0.05); color: var(--theme-color); }
-        .logout-btn-side { border-top: 1px solid var(--border-dark); margin-top: 15px; padding-top: 15px; }
+        .sidebar-menu li a i { font-size: 16px; width: 20px; text-align: center; transition: 0.3s; }
+        .sidebar-menu li a.active, .sidebar-menu li a:hover { background: rgba(255,255,255,0.05); color: var(--text-light); }
+        .sidebar-menu li a.active i, .sidebar-menu li a:hover i { color: var(--theme-color); filter: drop-shadow(0 0 5px var(--theme-color)); transform: scale(1.1); }
+        
+        .logout-btn-side { border-top: 1px solid rgba(255,255,255,0.05); margin-top: 15px; padding-top: 15px; }
         .logout-btn-side a { color: #ff4444 !important; }
-        .logout-btn-side a:hover { background: rgba(255, 68, 68, 0.1) !important; }
+        .logout-btn-side a:hover { background: rgba(255, 68, 68, 0.1) !important; color: white !important; }
 
         /* Right Content Area */
         .profile-main { flex: 1; min-width: 0; }
 
         /* Dynamic Banner */
-        .profile-banner { position: relative; width: 100%; height: 220px; border-radius: 16px; overflow: hidden; background: var(--theme-gradient); display: flex; align-items: center; padding: 0 40px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(5,7,12,0.95) 0%, rgba(5,7,12,0.6) 50%, rgba(5,7,12,0) 100%); z-index: 1; }
+        .profile-banner { position: relative; width: 100%; height: 240px; border-radius: 16px; overflow: hidden; background: var(--theme-gradient); display: flex; align-items: center; padding: 0 40px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(5,7,12,0.95) 0%, rgba(5,7,12,0.7) 40%, rgba(5,7,12,0) 100%); z-index: 1; }
         
         /* FIXED BANNER IMAGE FIT */
-        .banner-img { position: absolute; right: 0; top: 0; width: 60%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.7; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); transition: 0.5s ease; }
+        .banner-img { position: absolute; right: 0; top: 0; width: 60%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.8; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); transition: 1s ease; }
+        .profile-banner:hover .banner-img { transform: scale(1.05); opacity: 1; }
         
         .banner-content { position: relative; z-index: 3; }
-        .welcome-text { font-size: 14px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase;}
-        .banner-name { font-size: 36px; font-weight: 900; color: white; margin-bottom: 15px; }
+        .welcome-text { font-size: 14px; color: #ccc; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; text-shadow: 1px 1px 5px black;}
+        .banner-name { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; color: white; margin-bottom: 15px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: 1px;}
         
         /* Stats Box inside Banner */
         .banner-stats { display: flex; gap: 20px; }
-        .b-stat { background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        .b-stat span { display: block; font-size: 10px; color: #ccc; margin-bottom: 3px; text-transform: uppercase; font-weight: 700; }
-        .b-stat h4 { font-size: 16px; color: white; font-weight: 800; }
+        .b-stat { background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); padding: 12px 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .b-stat:hover { background: rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .b-stat span { display: block; font-size: 10px; color: #ccc; margin-bottom: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;}
+        .b-stat h4 { font-family: 'Orbitron', sans-serif; font-size: 18px; color: white; font-weight: 800; }
 
         /* Section Grids */
         .dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 30px; }
         
-        .dash-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 25px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-title { font-size: 15px; font-weight: 800; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;}
-        .card-title i { color: var(--theme-color); font-size: 18px; }
+        .dash-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; transition: var(--hover-transition); box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+        .dash-card:hover { border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;}
+        .card-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;}
+        .card-title i { color: var(--theme-color); font-size: 20px; filter: drop-shadow(0 0 5px var(--theme-color)); }
 
         /* Tokens Card */
         .token-display { display: flex; align-items: center; gap: 20px; }
-        .token-icon { width: 60px; height: 60px; background: rgba(255, 215, 0, 0.1); border: 2px solid #FFD700; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
-        .token-amount { font-size: 32px; font-weight: 900; color: white; line-height: 1; }
-        .token-sub { font-size: 11px; color: var(--text-gray); font-weight: 600; }
-        .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 15px; overflow: hidden; position: relative; }
-        .progress-bar-fill { height: 100%; background: #FFD700; border-radius: 4px; width: 0%; transition: width 1s ease; box-shadow: 0 0 10px #FFD700; }
-
-        /* My Library Grid */
-        .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-        .lib-card { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-dark); aspect-ratio: 3/4; cursor: pointer; transition: 0.3s; background: #000; }
-        .lib-card:hover { border-color: var(--theme-color); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .lib-card img { width: 100%; height: 100%; object-fit: contain; }
-        .lib-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 10px; transform: translateY(100%); transition: 0.3s; backdrop-filter: blur(5px); }
-        .lib-card:hover .lib-overlay { transform: translateY(0); }
-        .lib-title { font-size: 11px; font-weight: 700; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
-        .download-btn { font-size: 10px; color: var(--theme-color); font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+        .token-icon { width: 65px; height: 65px; background: rgba(255, 215, 0, 0.05); border: 2px solid #FFD700; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); transition: 0.4s; }
+        .dash-card:hover .token-icon { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+        .token-amount { font-family: 'Orbitron', sans-serif; font-size: 36px; font-weight: 900; color: white; line-height: 1; text-shadow: 0 0 10px rgba(255,215,0,0.3); margin-bottom: 2px;}
+        .token-sub { font-size: 11px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
+        .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 20px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.02); }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #d4af37, #FFD700); border-radius: 4px; width: 0%; transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 0 15px #FFD700; }
 
         /* Orders List */
-        .orders-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
-        .orders-list::-webkit-scrollbar { width: 4px; } .orders-list::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
-        .order-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border-dark); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-        .order-item:hover { background: rgba(255,255,255,0.05); border-color: var(--theme-color); }
-        .o-date { font-size: 11px; color: var(--text-gray); font-weight: 600; margin-bottom: 4px; }
-        .o-items { font-size: 13px; font-weight: 700; color: white; }
-        .o-price { font-size: 15px; font-weight: 800; color: var(--theme-color); text-align: right; }
-        .o-status { font-size: 10px; color: #00ff00; font-weight: 700; background: rgba(0,255,0,0.1); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 5px; }
+        .orders-list { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
+        .orders-list::-webkit-scrollbar { width: 5px; } 
+        .orders-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        
+        .order-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; transition: var(--hover-transition); cursor: pointer;}
+        .order-item:hover { background: rgba(255,255,255,0.05); border-color: var(--theme-color); transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .o-date { font-size: 11px; color: var(--text-gray); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .o-items { font-size: 14px; font-weight: 700; color: white; line-height: 1.4;}
+        .o-price { font-size: 16px; font-weight: 900; color: var(--theme-color); text-align: right; margin-bottom: 5px;}
+        .o-status { font-size: 10px; color: #00ff00; font-weight: 800; background: rgba(0,255,0,0.1); padding: 4px 10px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px; text-transform: uppercase;}
+
+        /* My Library Grid */
+        .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+        .lib-card { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); aspect-ratio: 3/4; cursor: pointer; transition: var(--hover-transition); background: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .lib-card:hover { border-color: var(--theme-color); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.1) inset; z-index: 5;}
+        .lib-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.9;}
+        .lib-card:hover img { transform: scale(1.08); opacity: 1; }
+        .lib-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 60%, transparent 100%); padding: 20px 12px 12px 12px; transform: translateY(100%); transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); backdrop-filter: blur(2px); }
+        .lib-card:hover .lib-overlay { transform: translateY(0); }
+        .lib-title { font-size: 12px; font-weight: 800; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 8px; text-transform: uppercase;}
+        .download-btn { font-size: 11px; color: var(--theme-color); font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 6px; text-transform: uppercase; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 4px; justify-content: center; border: 1px solid rgba(255,255,255,0.1);}
+        .download-btn:hover { background: var(--theme-color); color: white; }
 
         /* Cart Sidebar Styles */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.4s ease; backdrop-filter: blur(5px); }
         .cart-overlay.active { display: block; opacity: 1; }
-        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: rgba(18, 20, 26, 0.98); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
         .cart-sidebar.open { right: 0; }
         .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
         .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
         .close-cart:hover { color: var(--theme-color); transform: rotate(90deg); }
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); position: relative; }
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); position: relative; transition: 0.3s; }
+        .cart-item:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(-5px); }
         .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; }
         .cart-item-details { flex: 1; }
-        .cart-item-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 5px; }
+        .cart-item-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 5px; line-height: 1.3; }
         .cart-item-price { font-size: 15px; font-weight: 800; color: var(--theme-color); }
-        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; position: absolute; right: 12px; top: 12px; }
-        .remove-item:hover { color: var(--theme-color); }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
-        .checkout-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; position: absolute; right: 12px; top: 12px; transition: 0.3s;}
+        .remove-item:hover { color: var(--theme-color); transform: scale(1.2); }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: rgba(8, 11, 16, 0.9); }
+        .checkout-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; transition: var(--hover-transition); text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .checkout-btn:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: var(--theme-glow); }
 
         /* EDIT PROFILE MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; width: 400px; max-width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: left; }
-        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-gray); font-size: 20px; cursor: pointer; transition: 0.3s; }
-        .close-modal:hover { color: white; }
-        .modal-content h3 { font-size: 22px; margin-bottom: 20px; color: white; text-align: center;}
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 35px; width: 420px; max-width: 90%; position: relative; box-shadow: 0 15px 50px rgba(0,0,0,0.6); text-align: left; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .close-modal { position: absolute; top: 18px; right: 20px; background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: white; transform: rotate(90deg); }
+        .modal-content h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; margin-bottom: 25px; color: white; text-align: center; text-transform: uppercase; letter-spacing: 1px;}
         
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
-        .form-group input, .form-group select { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: white; padding: 12px; border-radius: 8px; outline: none; font-size: 14px; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus { border-color: var(--theme-color); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-gray); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .form-group input, .form-group select { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: white; padding: 14px; border-radius: 8px; outline: none; font-size: 14px; font-weight: 600; font-family: inherit; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--theme-color); background: rgba(0,0,0,0.5); box-shadow: 0 0 10px rgba(255,255,255,0.05); }
         
-        .submit-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+        .submit-btn:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: var(--theme-glow); }
+
+        /* Footer & Contact Us */
+        .footer-section { background: #06080d; padding: 60px 5% 40px 5%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; margin-top: 40px;}
+        .footer-section h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 15px; color: white; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-section p { color: var(--text-gray); font-size: 15px; margin-bottom: 30px; max-width: 550px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .wa-contact-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 14px 32px; border-radius: 30px; font-weight: 800; text-decoration: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wa-contact-btn:hover { background: #1ebe5d; transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6); }
+        .copyright { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 13px; color: #666; }
+        
+        .floating-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; text-decoration: none; box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6); z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
         /* ========================================= */
-        /* 📱 PRO MOBILE LAYOUT 📱 */
+        /* 📱 PRO MOBILE LAYOUT (Safely Enhanced) 📱 */
         /* ========================================= */
         @media (max-width: 768px) {
             
@@ -165,48 +229,68 @@
                 display: grid; 
                 grid-template-columns: 1fr auto; 
                 grid-template-areas: "logo actions" "links links"; 
-                gap: 12px; padding: 12px 5% 0 5%; 
+                gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);
             }
-            .logo { grid-area: logo; font-size: 16px; }
-            .logo-icon { width: 30px; height: 30px; }
+            .logo { grid-area: logo; gap: 8px; }
+            .logo-icon { width: 32px; height: 32px; padding: 3px; border-radius: 8px; }
+            .logo-text .top { font-size: 16px; }
+            .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
+
             .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
             .hide-mobile { display: none; }
-            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; box-shadow: none; }
+            .login-btn i { margin: 0; }
             
-            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; }
+            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; -webkit-overflow-scrolling: touch;}
             .nav-links::-webkit-scrollbar { display: none; }
             .nav-links li { flex: 0 0 auto; width: auto; }
 
             /* Profile Structure */
-            .profile-container { flex-direction: column; padding: 20px 5%; gap: 20px; }
-            .profile-sidebar { width: 100%; position: static; padding: 20px; }
+            .profile-container { flex-direction: column; padding: 20px 5%; gap: 25px; margin-bottom: 20px;}
+            .profile-sidebar { width: 100%; position: static; padding: 25px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
             
             /* Banner Adjustments */
-            .profile-banner { height: 180px; padding: 0 20px; }
-            .banner-name { font-size: 24px; margin-bottom: 10px; }
+            .profile-banner { height: 200px; padding: 0 20px; margin-bottom: 20px; }
+            .banner-name { font-size: 26px; margin-bottom: 10px; }
             .welcome-text { font-size: 12px; }
-            .banner-stats { gap: 10px; }
-            .b-stat { padding: 8px 12px; }
-            .b-stat h4 { font-size: 14px; }
+            .banner-stats { gap: 12px; }
+            .b-stat { padding: 10px 12px; }
+            .b-stat h4 { font-size: 16px; }
 
             /* Dashboard Grids */
-            .dashboard-grid { grid-template-columns: 1fr; gap: 20px; }
+            .dashboard-grid { grid-template-columns: 1fr; gap: 20px; margin-bottom: 20px;}
             .dash-card { padding: 20px; }
             
-            .library-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .library-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             
+            /* Mobile Touch Ripples */
+            .lib-card:active, .order-item:active, .dash-card:active, .b-stat:active {
+                transform: scale(0.97) !important;
+                border-color: var(--theme-color) !important;
+                transition: 0.1s !important;
+            }
+            .lib-card:hover, .order-item:hover, .dash-card:hover { transform: none; box-shadow: none; } /* disable hover lift */
+
             .cart-sidebar { width: 100%; right: -100%; }
-            .modal-content { width: 95%; padding: 20px; }
+            .modal-content { width: 95%; padding: 25px 20px; }
+
+            .footer-section { padding: 40px 5% 30px 5%; }
+            .footer-section h3 { font-size: 20px; }
+            .wa-contact-btn { font-size: 14px; padding: 12px 25px; }
+            .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 28px; }
         }
     </style>
 </head>
-<body id="profileBody">
+<body id="profileBody" class="theme-pc">
 
     <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">
             <div class="logo-icon"><img src="logo.png" alt="Logo"></div>
-            <div>GAMEFLEX<br><span style="color: var(--theme-color); font-size: 14px;">_STORE</span></div>
+            <div class="logo-text">
+                <span class="top">GAMEFLEX</span>
+                <span class="bottom">STORE</span>
+            </div>
         </a>
         <div class="nav-actions">
             <button class="icon-btn" onclick="toggleCart()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span></button>
@@ -228,8 +312,8 @@
         </div>
         <div class="cart-items" id="cartItemsContainer"></div>
         <div class="cart-footer">
-            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px; color:white;"><span>Total:</span> <span id="cartTotalPrice">₹0</span></div>
-            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Main Store</button>
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px; color:white; text-transform:uppercase;"><span>Total:</span> <span id="cartTotalPrice">₹0</span></div>
+            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Store</button>
         </div>
     </div>
 
@@ -237,7 +321,7 @@
     <div class="profile-container">
         
         <!-- Sidebar -->
-        <aside class="profile-sidebar">
+        <aside class="profile-sidebar animate-fade-up">
             <div class="user-avatar-wrapper">
                 <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
             </div>
@@ -252,7 +336,7 @@
                 <li><a href="#" class="active"><i class="fa-solid fa-border-all"></i> Overview</a></li>
                 <li><a href="#librarySection"><i class="fa-solid fa-layer-group"></i> My Library</a></li>
                 <li><a href="#ordersSection"><i class="fa-solid fa-bag-shopping"></i> My Orders</a></li>
-                <li class="logout-btn-side"><a href="#" onclick="logoutUser()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout Account</a></li>
+                <li class="logout-btn-side"><a href="#" onclick="logoutUser()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Disconnect System</a></li>
             </ul>
         </aside>
 
@@ -260,7 +344,7 @@
         <main class="profile-main">
             
             <!-- Dynamic Banner -->
-            <div class="profile-banner">
+            <div class="profile-banner animate-fade-up delay-1">
                 <div class="banner-overlay"></div>
                 <!-- Banner Image Fix -->
                 <img id="bannerImage" src="image1.png.png" alt="Background" class="banner-img" style="display: none;">
@@ -271,11 +355,11 @@
                     
                     <div class="banner-stats">
                         <div class="b-stat">
-                            <span>Member Since</span>
+                            <span>System Joined</span>
                             <h4 id="statDate">-</h4>
                         </div>
                         <div class="b-stat">
-                            <span>Total Orders</span>
+                            <span>Total Bounties</span>
                             <h4 id="statOrders">0</h4>
                         </div>
                     </div>
@@ -286,7 +370,7 @@
             <div class="dashboard-grid">
                 
                 <!-- Tokens Card -->
-                <div class="dash-card">
+                <div class="dash-card animate-fade-up delay-2">
                     <div class="card-header">
                         <div class="card-title"><i class="fa-solid fa-star"></i> GameFlex Tokens</div>
                     </div>
@@ -300,59 +384,96 @@
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" id="tokenProgressBar"></div>
                     </div>
-                    <div style="font-size: 10px; color: var(--text-gray); margin-top: 8px; text-align: right;" id="tokenProgressText">0 / 500 XP</div>
+                    <div style="font-size: 11px; font-weight:bold; color: var(--text-gray); margin-top: 10px; text-align: right;" id="tokenProgressText">0 / 500 XP</div>
                 </div>
 
                 <!-- Recent Orders -->
-                <div class="dash-card" id="ordersSection">
+                <div class="dash-card animate-fade-up delay-3" id="ordersSection">
                     <div class="card-header">
-                        <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Orders</div>
+                        <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Transaction Log</div>
                     </div>
                     <div class="orders-list" id="ordersContainer">
-                        <p style="color: gray; font-size: 13px; text-align: center; padding: 20px;">Loading orders...</p>
+                        <p style="color: gray; font-size: 13px; text-align: center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Accessing logs...</p>
                     </div>
                 </div>
 
             </div>
 
             <!-- My Library (Purchased Games) -->
-            <div class="dash-card" id="librarySection">
+            <div class="dash-card animate-fade-up delay-4" id="librarySection">
                 <div class="card-header">
-                    <div class="card-title"><i class="fa-solid fa-gamepad"></i> My Library</div>
-                    <span style="font-size: 12px; color: var(--text-gray);">Your purchased games</span>
+                    <div class="card-title"><i class="fa-solid fa-gamepad"></i> Digital Vault</div>
+                    <span style="font-size: 12px; font-weight:700; color: var(--text-gray); text-transform:uppercase;">Authorized Access</span>
                 </div>
                 <div class="library-grid" id="libraryContainer">
-                    <p style="color: gray; font-size: 13px; grid-column: 1/-1;">No games in library yet.</p>
+                    <p style="color: gray; font-size: 13px; grid-column: 1/-1;">No records found in vault.</p>
                 </div>
             </div>
 
         </main>
     </div>
 
+    <!-- 🚀 NEW: FOOTER CONTACT SECTION -->
+    <footer class="footer-section">
+        <h3>Need Network Support?</h3>
+        <p>If you face issues with game access or credentials, ping our 24/7 network admins instantly.</p>
+        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
+            <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Initialize Comm
+        </a>
+        <div class="copyright">
+            &copy; 2026 GameFlex Cyber Network. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- 🚀 NEW: FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Secure Comms">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
     <!-- EDIT PROFILE MODAL -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h3><i class="fa-solid fa-user-pen" style="color:var(--theme-color);"></i> Edit Profile</h3>
+            <h3><i class="fa-solid fa-user-pen" style="color:var(--theme-color);"></i> Modify Profile</h3>
             
             <form id="editProfileForm">
                 <div class="form-group">
-                    <label>Display Name</label>
-                    <input type="text" id="editNameInput" required>
+                    <label>Designation (Name)</label>
+                    <input type="text" id="editNameInput" required autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label>Gamer Type (Changes Theme)</label>
+                    <label>Faction (Changes UI Theme)</label>
                     <select id="editThemeSelect" required>
-                        <option value="PC Gamer">PC Gamer (Red Theme)</option>
-                        <option value="PlayStation Gamer">PlayStation Gamer (Blue Theme)</option>
+                        <option value="PC Gamer">PC Master (Crimson UI)</option>
+                        <option value="PlayStation Gamer">Console (Neon Blue UI)</option>
                     </select>
                 </div>
-                <button type="submit" class="submit-btn" id="saveProfileBtn">Save Changes</button>
+                <button type="submit" class="submit-btn" id="saveProfileBtn">Update Core Data</button>
             </form>
         </div>
     </div>
 
-    <!-- Firebase Script -->
+    <!-- Intersection Observer Script for Scroll Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const animatedElements = document.querySelectorAll('.animate-fade-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        });
+    </script>
+
+    <!-- Firebase Script (LOGIC KEPT 100% UNTOUCHED) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -416,10 +537,10 @@
 
                 if (gamerType === 'PC Gamer' || gamerType === 'Both') {
                     body.className = 'theme-pc';
-                    bannerImg.src = 'image1.png.png'; // Using the local PC image
+                    bannerImg.src = 'image1.png.png'; 
                 } else {
                     body.className = 'theme-ps5';
-                    bannerImg.src = 'PS5.png'; // Using the local PS5 image
+                    bannerImg.src = 'PS5.png'; 
                 }
 
                 // 4. Set Tokens & Progress
@@ -482,7 +603,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <div class="o-price">₹${(booking.totalAmount || 0).toLocaleString('en-IN')}</div>
-                                <div class="o-status">Completed <i class="fa-solid fa-check-circle"></i></div>
+                                <div class="o-status">Verified <i class="fa-solid fa-check-circle"></i></div>
                             </div>
                         </div>
                     `;
@@ -501,14 +622,14 @@
                 
                 const ordersContainer = document.getElementById('ordersContainer');
                 if (orderCount === 0) {
-                    ordersContainer.innerHTML = '<p style="color:gray; font-size:13px; text-align:center; padding:20px;">You haven\'t placed any orders yet.</p>';
+                    ordersContainer.innerHTML = '<p style="color:gray; font-size:13px; text-align:center; padding:20px; font-weight:600; text-transform:uppercase;">No transactions found.</p>';
                 } else {
                     ordersContainer.innerHTML = ordersHTML;
                 }
 
                 const libContainer = document.getElementById('libraryContainer');
                 if (purchasedGames.size === 0) {
-                    libContainer.innerHTML = '<p style="color: gray; font-size: 13px; grid-column: 1/-1;">Your library is empty. Start shopping to add games here!</p>';
+                    libContainer.innerHTML = '<p style="color: gray; font-size: 13px; grid-column: 1/-1; font-weight:600; text-transform:uppercase;">Vault is empty. Acquire games to unlock.</p>';
                 } else {
                     libContainer.innerHTML = "";
                     purchasedGames.forEach((imgUrl, title) => {
@@ -519,7 +640,7 @@
                                 <img src="${actualImg}" alt="Game Cover">
                                 <div class="lib-overlay">
                                     <div class="lib-title">${title}</div>
-                                    <a href="#" class="download-btn"><i class="fa-solid fa-download"></i> View Key</a>
+                                    <a href="#" class="download-btn"><i class="fa-solid fa-key"></i> View Key</a>
                                 </div>
                             </div>
                         `;
@@ -528,7 +649,7 @@
 
             } catch (error) {
                 console.error("Error loading orders:", error);
-                document.getElementById('ordersContainer').innerHTML = '<p style="color:red; font-size:13px; text-align:center;">Failed to load orders.</p>';
+                document.getElementById('ordersContainer').innerHTML = '<p style="color:red; font-size:13px; text-align:center;">Failed to connect to database.</p>';
             }
         }
 
@@ -538,7 +659,7 @@
             if(!currentUser) return;
 
             const btn = document.getElementById('saveProfileBtn');
-            btn.innerText = "Saving..."; btn.disabled = true;
+            btn.innerText = "Updating Data..."; btn.disabled = true;
 
             const newName = document.getElementById('editNameInput').value;
             const newTheme = document.getElementById('editThemeSelect').value;
@@ -553,19 +674,19 @@
                     gamerType: newTheme
                 }, { merge: true });
 
-                alert("Profile updated successfully!");
+                alert("System Profile Updated!");
                 closeEditModal();
                 loadUserProfile(currentUser); // Refresh UI
             } catch (error) {
                 console.error("Error updating profile: ", error);
-                alert("Failed to update profile. Try again.");
+                alert("Failed to update system. Try again.");
             } finally {
-                btn.innerText = "Save Changes"; btn.disabled = false;
+                btn.innerText = "Update Core Data"; btn.disabled = false;
             }
         });
 
         window.logoutUser = function() {
-            if (confirm("Are you sure you want to log out?")) {
+            if (confirm("Disconnect from GameFlex Network?")) {
                 signOut(auth).then(() => {
                     localStorage.removeItem('gf_logged_in_user');
                     window.location.href = "index.html";
@@ -598,7 +719,7 @@
             let totalAmount = 0; let totalQty = 0;
 
             if (window.cartArray.length === 0) {
-                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>';
+                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Cart is empty.</div>';
             } else {
                 window.cartArray.forEach((item, index) => {
                     totalAmount += (item.price * item.qty);
