@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PS Games - GameFlex Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Added Orbitron for Gaming Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --ps5-blue: #1f6aff; 
@@ -16,50 +17,75 @@
             --text-light: #ffffff;
             --text-gray: #8c96a8;
             --border-dark: #1a243d;
+            --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --theme-glow: 0 0 15px rgba(31, 106, 255, 0.4);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent;}
         body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
 
+        /* 🚀 Custom Gaming Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #0e4cc4, var(--ps5-blue)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #33f3ff; }
+
+        /* 🚀 Smooth Fade-In-Up Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
         /* Navbar */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(5, 8, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(10px); }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; line-height: 1.1; text-decoration: none; color: white; }
-        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
-        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .logo-tagline { font-size: 9px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-top: 3px; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(5, 8, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        
+        /* 🎨 Stylish Dynamic Logo Design */
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(31, 106, 255, 0.3); padding: 5px; transition: var(--hover-transition); box-shadow: inset 0 0 10px rgba(31, 106, 255, 0.1); }
+        .logo:hover .logo-icon { transform: scale(1.05) rotate(5deg); border-color: var(--ps5-blue); box-shadow: var(--theme-glow), inset 0 0 10px rgba(31, 106, 255, 0.2); }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 2px var(--ps5-blue));}
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-text .top { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: white; line-height: 1; letter-spacing: 1px; }
+        .logo-text .bottom { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--logo-red); letter-spacing: 3.5px; margin-top: 2px; text-shadow: 0 0 5px rgba(227, 24, 37, 0.3); }
         
         .nav-links { display: flex; gap: 30px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
-        .nav-links li a:hover, .nav-links li a.active { color: var(--ps5-blue); }
-        .nav-links li a.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--ps5-blue); }
+        .nav-links li a:hover, .nav-links li a.active { color: var(--ps5-blue); text-shadow: 0 0 8px rgba(31, 106, 255, 0.4); }
+        .nav-links li a.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--ps5-blue); box-shadow: 0 0 5px var(--ps5-blue); }
         
         /* SEARCH BAR CSS */
         .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
-        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 8px 35px 8px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s ease; font-size: 13px; font-family: 'Montserrat', sans-serif; }
-        .search-input:focus { width: 280px; border-color: var(--ps5-blue); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 10px rgba(31, 106, 255, 0.2); }
-        .search-input::placeholder { color: var(--text-gray); }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 9px 35px 9px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; }
+        .search-input:focus { width: 280px; border-color: var(--ps5-blue); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(31, 106, 255, 0.3); }
+        .search-input::placeholder { color: var(--text-gray); transition: 0.3s;}
+        .search-input:focus::placeholder { opacity: 0.5; }
         .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
         .search-input:focus + .search-icon { color: var(--ps5-blue); }
         
-        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; }
+        .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: rgba(12, 18, 32, 0.98); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; backdrop-filter: blur(10px); }
         .search-dropdown::-webkit-scrollbar { width: 5px; }
         .search-dropdown::-webkit-scrollbar-thumb { background: var(--ps5-blue); border-radius: 5px; }
         .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
         .search-item:last-child { border-bottom: none; }
-        .search-item:hover { background: rgba(31, 106, 255, 0.15); padding-left: 20px; }
+        .search-item:hover { background: rgba(31, 106, 255, 0.15); padding-left: 20px; border-left: 3px solid var(--ps5-blue);}
         .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
         .search-item-info { display: flex; flex-direction: column; gap: 4px; }
         .search-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); }
         .search-item-price { font-size: 12px; font-weight: 800; color: var(--ps5-blue); }
         .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
-        .no-results { padding: 15px; text-align: center; color: var(--text-gray); font-size: 13px; font-weight: 600; }
 
         .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; }
-        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--ps5-blue); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: bold;}
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px;}
+        .icon-btn:hover { color: var(--ps5-blue); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--ps5-blue));}
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--ps5-blue); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: bold; box-shadow: 0 2px 5px rgba(31, 106, 255, 0.5);}
         
-        .login-btn { background: var(--ps5-blue); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(31, 106, 255, 0.3); display: flex; align-items: center; gap: 8px; font-size: 13px; }
-        .login-btn:hover { background: #0051ed; box-shadow: 0 4px 20px rgba(31, 106, 255, 0.5); }
+        .login-btn { background: transparent; border: 1px solid var(--ps5-blue); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); box-shadow: inset 0 0 10px rgba(31, 106, 255, 0.2); display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .login-btn:hover { background: var(--ps5-blue); box-shadow: var(--theme-glow); transform: translateY(-2px); }
 
         /* Breadcrumb */
         .breadcrumb { padding: 20px 5% 0; font-size: 12px; color: var(--text-gray); font-weight: 600; }
@@ -67,107 +93,131 @@
 
         /* PS5 Hero Banner */
         .ps5-hero { display: flex; justify-content: space-between; align-items: center; padding: 30px 5% 50px 5%; gap: 40px; flex-wrap: wrap; position: relative; }
-        .hero-glow { position: absolute; top: 50%; right: 15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(31,106,255,0.15) 0%, rgba(5,8,16,0) 70%); transform: translateY(-50%); z-index: 0; }
+        .hero-glow { position: absolute; top: 50%; right: 15%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(31,106,255,0.15) 0%, rgba(5,8,16,0) 70%); transform: translateY(-50%); z-index: 0; pointer-events: none;}
+        
         .ps5-hero-content { flex: 1; min-width: 300px; z-index: 2; }
-        .ps5-subtitle { color: var(--ps5-blue); font-size: 14px; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
-        .ps5-title { font-size: 48px; font-weight: 800; line-height: 1.15; margin-bottom: 15px; text-transform: uppercase; }
-        .ps5-title span { color: var(--ps5-blue); display: block; }
-        .ps5-desc { color: var(--text-light); font-size: 15px; margin-bottom: 30px; line-height: 1.6; max-width: 450px; }
+        .ps5-subtitle { color: var(--ps5-blue); font-size: 14px; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; text-shadow: 0 0 8px rgba(31, 106, 255, 0.4);}
+        .ps5-title { font-family: 'Orbitron', sans-serif; font-size: 52px; font-weight: 900; line-height: 1.15; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;}
+        .ps5-title span { color: var(--ps5-blue); display: block; text-shadow: 0 0 15px rgba(31, 106, 255, 0.5);}
+        .ps5-desc { color: #ddd; font-size: 16px; margin-bottom: 30px; line-height: 1.6; max-width: 450px; font-weight: 400;}
         
         .hero-features { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 35px; max-width: 400px; }
-        .hero-feat-item { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; color: var(--text-gray); }
-        .hero-feat-item i { color: var(--ps5-blue); font-size: 20px; }
+        .hero-feat-item { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--text-light); }
+        .hero-feat-item i { color: var(--ps5-blue); font-size: 20px; filter: drop-shadow(0 0 5px rgba(31, 106, 255, 0.5));}
 
         .hero-btns { display: flex; gap: 15px; }
-        .btn-solid-blue { background: var(--ps5-blue); color: white; padding: 12px 25px; border-radius: 6px; font-weight: 700; font-size: 13px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(31, 106, 255, 0.4); }
-        .btn-solid-blue:hover { background: #0051ed; box-shadow: 0 6px 20px rgba(31, 106, 255, 0.6); }
-        .btn-outline-blue { background: transparent; color: white; border: 1px solid var(--text-gray); padding: 12px 25px; border-radius: 6px; font-weight: 700; font-size: 13px; text-decoration: none; transition: 0.3s; }
-        .btn-outline-blue:hover { border-color: var(--ps5-blue); color: var(--ps5-blue); }
+        .btn-solid-blue { background: var(--ps5-blue); color: white; padding: 14px 28px; border-radius: 6px; font-weight: 800; font-size: 13px; text-decoration: none; transition: var(--hover-transition); box-shadow: 0 4px 15px rgba(31, 106, 255, 0.4); text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-solid-blue:hover { background: #0051ed; box-shadow: 0 8px 25px rgba(31, 106, 255, 0.6); transform: translateY(-3px);}
+        .btn-outline-blue { background: rgba(255,255,255,0.05); color: white; border: 2px solid white; padding: 14px 28px; border-radius: 6px; font-weight: 800; font-size: 13px; text-decoration: none; transition: var(--hover-transition); backdrop-filter: blur(5px); text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-outline-blue:hover { background: white; color: black; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3); transform: translateY(-3px);}
 
-        .ps5-hero-img { flex: 1.2; min-width: 350px; height: 450px; background-image: url('PS5.png'); background-size: contain; background-repeat: no-repeat; background-position: center; z-index: 1; filter: drop-shadow(0 20px 30px rgba(31, 106, 255, 0.2)); }
+        .ps5-hero-img { flex: 1.2; min-width: 350px; height: 450px; background-image: url('PS5.png'); background-size: contain; background-repeat: no-repeat; background-position: center; z-index: 1; filter: drop-shadow(0 20px 30px rgba(31, 106, 255, 0.2)); transition: 0.5s ease;}
+        .ps5-hero-img:hover { transform: scale(1.03) translateY(-10px); filter: drop-shadow(0 25px 40px rgba(31, 106, 255, 0.3));}
 
         /* Category Section */
-        .category-section { padding: 20px 5% 40px 5%; }
-        .cat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; }
-        .sub-cat-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.3s; }
-        .sub-cat-card.active, .sub-cat-card:hover { border-color: var(--ps5-blue); box-shadow: 0 0 20px rgba(31, 106, 255, 0.15); background: linear-gradient(145deg, #0c1220, #131c30); }
-        .sub-cat-card i { font-size: 26px; color: var(--ps5-blue); }
-        .sub-cat-card-text h4 { font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 3px; }
-        .sub-cat-card-text p { font-size: 11px; color: var(--text-gray); }
+        .category-section { padding: 40px 5%; }
+        .cat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 18px; }
+        .sub-cat-card { background: linear-gradient(145deg, var(--card-bg), #09132b); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: var(--hover-transition); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .sub-cat-card.active, .sub-cat-card:hover { border-color: rgba(31, 106, 255, 0.5); box-shadow: 0 10px 25px rgba(31, 106, 255, 0.25), inset 0 0 10px rgba(31, 106, 255, 0.1); background: linear-gradient(145deg, #0c1220, #131c30); transform: translateY(-4px); }
+        .sub-cat-card i { font-size: 28px; color: var(--ps5-blue); transition: 0.3s; filter: drop-shadow(0 0 5px rgba(31, 106, 255, 0.4));}
+        .sub-cat-card:hover i { transform: scale(1.15); }
+        .sub-cat-card-text h4 { font-size: 14px; font-weight: 800; color: var(--text-light); margin-bottom: 3px; }
+        .sub-cat-card-text p { font-size: 11px; color: var(--text-gray); font-weight: 600;}
 
         /* Featured PS5 Games Grid */
-        .products-section { padding: 20px 5% 40px 5%; }
-        .section-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .section-title { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); }
-        .view-all-link { color: var(--ps5-blue); text-decoration: none; font-size: 13px; font-weight: 600; transition: 0.3s; }
-        .view-all-link:hover { text-decoration: underline; }
+        .products-section { padding: 30px 5% 60px 5%; }
+        .section-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); display: flex; align-items: center; gap: 12px;}
+        .section-title span { width: 6px; height: 22px; background: var(--ps5-blue); display: inline-block; border-radius: 3px; box-shadow: 0 0 8px var(--ps5-blue); }
         
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .product-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; cursor: pointer;}
-        .product-card:hover { border-color: var(--ps5-blue); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(31, 106, 255, 0.15); }
+        .view-all-link { color: white; background: rgba(255,255,255,0.05); text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.3s; padding: 8px 16px; border-radius: 20px; text-transform: uppercase; border: 1px solid transparent;}
+        .view-all-link:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); transform: translateX(4px);}
         
-        .discount-badge { position: absolute; top: 12px; left: 12px; background: var(--ps5-blue); color: white; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 4px; z-index: 2; }
-        .product-img { height: 240px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-dark); transition: transform 0.5s ease;}
-        .product-card:hover .product-img { transform: scale(1.03); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
         
-        .product-info { padding: 15px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; z-index: 5; background: var(--card-bg); }
-        .product-title { font-size: 13px; font-weight: 600; margin-bottom: 15px; color: var(--text-light); line-height: 1.4; }
+        /* 🚀 Smooth Animated Product Cards */
+        .product-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5);}
+        .product-card:hover { border-color: rgba(31, 106, 255, 0.4); transform: translateY(-8px); box-shadow: 0 15px 35px rgba(31, 106, 255, 0.25), inset 0 0 15px rgba(31, 106, 255, 0.05); z-index: 5;}
         
-        .card-genre-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--ps5-blue); }
+        .discount-badge { position: absolute; top: 12px; left: 12px; background: linear-gradient(45deg, #0e4cc4, var(--ps5-blue)); color: white; font-size: 11px; font-weight: 900; padding: 5px 10px; border-radius: 6px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.4); letter-spacing: 0.5px;}
+        .product-img { height: 260px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid rgba(255,255,255,0.05); transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);}
+        .product-card:hover .product-img { transform: scale(1.06); filter: brightness(1.1); }
+        
+        .product-info { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; z-index: 5; background: transparent; }
+        .product-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: var(--text-light); line-height: 1.4; text-transform: uppercase;}
+        
+        .card-genre-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--ps5-blue); }
 
-        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
+        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
+        .price-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .price-col { display: flex; flex-direction: row; gap: 8px; align-items: center; }
-        .current-price { font-size: 15px; font-weight: 800; color: var(--ps5-blue); }
-        .old-price { font-size: 11px; font-weight: 600; color: var(--text-gray); text-decoration: line-through; }
+        .current-price { font-size: 16px; font-weight: 900; color: var(--ps5-blue); text-shadow: 0 0 8px rgba(31, 106, 255, 0.2);}
+        .old-price { font-size: 11px; font-weight: 700; color: var(--text-gray); text-decoration: line-through; opacity: 0.8;}
         
-        .cart-btn { background: var(--ps5-blue); color: white; border: none; width: 32px; height: 32px; border-radius: 6px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        .cart-btn:hover { background: #0051ed; box-shadow: 0 0 10px rgba(31, 106, 255, 0.5); }
+        .cart-btn { background: transparent; color: var(--ps5-blue); border: 2px solid var(--ps5-blue); width: 36px; height: 36px; border-radius: 8px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; box-shadow: 0 4px 12px rgba(31, 106, 255, 0.1); }
+        .cart-btn:hover { background: var(--ps5-blue); color: white; transform: translateY(-2px) scale(1.05); box-shadow: 0 6px 18px rgba(31, 106, 255, 0.4); }
 
         /* PS5 Bundles Banner */
-        .bundle-banner { margin: 20px 5% 60px 5%; background: linear-gradient(90deg, #061124 0%, #0d2657 100%); border-radius: 15px; border: 1px solid var(--border-dark); display: flex; justify-content: space-between; align-items: center; padding: 40px; flex-wrap: wrap; gap: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .bundle-content { flex: 1; min-width: 280px; }
-        .bundle-subtitle { color: var(--ps5-blue); font-size: 13px; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
-        .bundle-title { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 15px; color: white; text-transform: uppercase; }
-        .bundle-desc { color: var(--text-gray); font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
-        .bundle-img { flex: 1; min-width: 300px; height: 200px; background-image: url('PS5.png'); background-size: contain; background-repeat: no-repeat; background-position: right center; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .bundle-banner { margin: 20px 5% 80px 5%; background: linear-gradient(135deg, #09132b 0%, #050810 100%); border-radius: 16px; border: 1px solid rgba(31, 106, 255, 0.2); display: flex; justify-content: space-between; align-items: center; padding: 50px; flex-wrap: wrap; gap: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden;}
+        .bundle-banner::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 50%, rgba(31,106,255,0.1), transparent 60%); pointer-events: none;}
+        .bundle-content { flex: 1; min-width: 280px; z-index: 2;}
+        .bundle-subtitle { color: var(--ps5-blue); font-size: 14px; font-weight: 800; margin-bottom: 12px; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 8px rgba(31, 106, 255, 0.4);}
+        .bundle-title { font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900; line-height: 1.2; margin-bottom: 20px; color: white; text-transform: uppercase; letter-spacing: 1px;}
+        .bundle-desc { color: #ccc; font-size: 15px; margin-bottom: 30px; line-height: 1.6; font-weight: 600;}
+        .bundle-img { flex: 1; min-width: 300px; height: 250px; background-image: url('PS5.png'); background-size: contain; background-repeat: no-repeat; background-position: right center; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6)); z-index: 2; transition: 0.5s ease;}
+        .bundle-banner:hover .bundle-img { transform: scale(1.05) translateY(-5px); }
 
         /* Why Choose Section */
-        .why-choose { padding: 20px 5% 50px 5%; }
-        .why-choose-row { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border-dark); padding-top: 30px; }
-        .why-item { display: flex; align-items: center; gap: 15px; flex: 1; min-width: 200px; }
-        .why-item i { font-size: 30px; color: var(--ps5-blue); }
-        .why-text h4 { font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 3px; }
-        .why-text p { font-size: 11px; color: var(--text-gray); }
+        .why-choose { padding: 40px 5% 60px 5%; background: rgba(255,255,255,0.01); border-top: 1px solid rgba(255,255,255,0.02);}
+        .why-choose-row { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
+        .why-item { display: flex; align-items: center; gap: 18px; flex: 1; min-width: 200px; transition: 0.3s; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);}
+        .why-item:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); border-color: rgba(31, 106, 255, 0.2);}
+        .why-item i { font-size: 32px; color: var(--ps5-blue); filter: drop-shadow(0 0 5px rgba(31,106,255,0.4));}
+        .why-text h4 { font-size: 15px; font-weight: 800; color: var(--text-light); margin-bottom: 5px; }
+        .why-text p { font-size: 12px; color: var(--text-gray); font-weight: 600;}
+
+        /* Footer & Contact Us */
+        .footer-section { background: #030408; padding: 60px 5% 40px 5%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .footer-section h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 15px; color: white; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-section p { color: var(--text-gray); font-size: 15px; margin-bottom: 30px; max-width: 550px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .wa-contact-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 14px 32px; border-radius: 30px; font-weight: 800; text-decoration: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wa-contact-btn:hover { background: #1ebe5d; transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6); }
+        .copyright { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 13px; color: #666; }
+        
+        .floating-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; text-decoration: none; box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6); z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
         /* Cart Sidebar Styles */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(3px); }
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.4s ease; backdrop-filter: blur(5px); }
         .cart-overlay.active { display: block; opacity: 1; }
-        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -5px 0 30px rgba(0,0,0,0.8); transition: right 0.4s ease; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: rgba(12, 18, 32, 0.98); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
         .cart-sidebar.open { right: 0; }
-        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .cart-header h2 { font-size: 18px; font-weight: 800; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
+        .cart-header h2 i { color: var(--ps5-blue); }
         .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
         .close-cart:hover { color: var(--logo-red); transform: rotate(90deg); }
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); align-items: center; position: relative; }
-        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; border: 1px solid var(--border-dark); }
+        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); align-items: center; position: relative; transition: 0.3s; }
+        .cart-item:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(-5px); }
+        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; border: 1px solid rgba(255,255,255,0.05); }
         .cart-item-details { flex: 1; }
         .cart-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; line-height: 1.3; }
         .cart-item-price { font-size: 15px; font-weight: 800; color: var(--logo-red); }
         .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; transition: 0.3s; position: absolute; right: 12px; top: 12px; }
-        .remove-item:hover { color: var(--logo-red); }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+        .remove-item:hover { color: var(--logo-red); transform: scale(1.2); }
+        .cart-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(5, 8, 16, 0.9); }
         .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; color: var(--text-light); margin-bottom: 15px; }
-        .checkout-btn { width: 100%; background: var(--logo-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .checkout-btn:hover { background: #c1121d; }
+        .checkout-btn { width: 100%; background: var(--logo-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.3);}
+        .checkout-btn:hover { background: #c1121d; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(227, 24, 37, 0.5);}
 
         /* ========================================================================= */
-        /* 📱 PRO MOBILE LAYOUT (AMAZON/FLIPKART STYLE) 📱 */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
         /* ========================================================================= */
         
         @media (max-width: 768px) {
             
-            /* Navbar Grid System with Search Bar */
+            /* Navbar Grid System */
             .navbar { 
                 display: grid; 
                 grid-template-columns: 1fr auto; 
@@ -180,131 +230,131 @@
                 background: rgba(5, 8, 16, 0.98);
             }
             
-            .logo { grid-area: logo; font-size: 16px; align-items: center; }
-            .logo-icon { width: 30px; height: 30px; }
+            .logo { grid-area: logo; gap: 8px; }
+            .logo-icon { width: 32px; height: 32px; padding: 3px; border-radius: 8px; }
+            .logo-text .top { font-size: 16px; }
+            .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
+
             .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
-            
-            /* Hide Desktop text inside buttons */
             .hide-mobile { display: none; }
-            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; box-shadow: none;}
             .login-btn i { margin: 0; }
 
-            /* Search Bar Full Width for Mobile */
+            /* Search Bar */
             .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
             .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
-            .search-input:focus { width: 100%; }
+            .search-input:focus { width: 100%; box-shadow: inset 0 0 10px rgba(31,106,255,0.2);}
 
             /* Horizontal Scroll Nav Links */
             .nav-links { 
-                grid-area: links; 
-                display: flex; 
-                flex-direction: row; 
-                position: static; 
-                width: 100%; 
-                height: auto; 
-                background: transparent; 
-                overflow-x: auto; 
-                padding: 5px 0 10px 0; 
-                border-top: 1px solid rgba(255,255,255,0.05); 
-                gap: 20px; 
-                -webkit-overflow-scrolling: touch; 
+                grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; 
+                background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); 
+                gap: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory; 
             }
             .nav-links::-webkit-scrollbar { display: none; }
-            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li { flex: 0 0 auto; width: auto; scroll-snap-align: start; }
             .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
             
-            /* HERO SECTION WITH BACKGROUND IMAGE FIXED */
+            /* HERO SECTION */
             .ps5-hero { 
-                flex-direction: column; 
-                text-align: center; 
-                padding: 40px 5%; 
-                gap: 20px; 
-                background-image: url('PS5.png'); /* Set image in background */
-                background-size: cover; 
-                background-position: center; 
-                z-index: 1;
+                flex-direction: column; text-align: center; padding: 40px 5%; gap: 20px; 
+                background-image: url('PS5.png'); background-size: cover; background-position: center; z-index: 1;
             }
-            /* Dark Overlay so text is readable */
-            .ps5-hero::before {
-                content: '';
-                position: absolute;
-                top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(5, 8, 16, 0.88);
-                z-index: -1;
-            }
-            .ps5-hero-img { display: none; } /* Hide the separate box */
+            .ps5-hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 16, 0.88); z-index: -1; }
+            .ps5-hero-img { display: none; } 
             
             .ps5-hero-content { min-width: unset; width: 100%; }
-            .ps5-title { font-size: 28px; margin-bottom: 15px; }
-            .ps5-desc { font-size: 13px; margin-bottom: 20px; }
-            .hero-features { grid-template-columns: 1fr; gap: 10px; margin: 0 auto 25px auto; }
-            .hero-feat-item { font-size: 11px; justify-content: center; }
-            .hero-btns { flex-direction: column; }
+            .ps5-title { font-size: 32px; margin-bottom: 15px; }
+            .ps5-desc { font-size: 14px; margin-bottom: 25px; padding: 0 10px;}
+            .hero-features { grid-template-columns: 1fr; gap: 12px; margin: 0 auto 25px auto; }
+            .hero-feat-item { font-size: 12px; justify-content: center; }
+            .hero-btns { flex-direction: column; width: 100%; gap: 12px;}
+            .btn-solid-blue, .btn-outline-blue { width: 100%; padding: 14px; font-size: 14px;}
 
-            /* Categories 2-Column Horizontal Scroll or Grid */
-            .category-section { padding: 30px 5%; }
-            .cat-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .sub-cat-card { padding: 12px 10px; flex-direction: column; text-align: center; gap: 8px; }
-            .sub-cat-card i { font-size: 20px; }
+            /* Categories */
+            .category-section { padding: 40px 5%; }
+            .cat-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .sub-cat-card { padding: 12px 10px; flex-direction: column; text-align: center; gap: 8px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
+            .sub-cat-card:hover { transform: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); } 
+            .sub-cat-card i { font-size: 24px; }
+            
+            /* 💥 MOBILE TOUCH (ACTIVE) PUSH EFFECT */
+            .sub-cat-card:active, .product-card:active, .btn-solid-blue:active {
+                transform: scale(0.96) !important;
+                border-color: rgba(31, 106, 255, 0.5) !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.5) !important;
+                transition: 0.1s !important;
+            }
 
-            /* Products 2-Column Grid */
+            /* Products Grid */
             .products-section { padding: 10px 5% 40px 5%; }
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .section-header-flex { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px;}
+            .section-title { font-size: 18px; }
+            .view-all-link { font-size: 11px; padding: 8px 14px; background: rgba(255,255,255,0.05); border-radius: 20px;}
+
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             
-            .product-img { height: 130px; }
+            .product-card { box-shadow: 0 4px 12px rgba(0,0,0,0.5); border-radius: 10px;}
+            .product-card:hover { transform: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+            
+            .product-img { height: 160px; }
             .product-info { padding: 10px; }
-            .product-title { font-size: 11px; margin-bottom: 8px; }
-            .card-genre-tag { font-size: 9px; }
+            .product-title { font-size: 11px; margin-bottom: 10px; line-height: 1.3;}
+            .card-genre-tag { font-size: 9px; margin-bottom: 8px;}
             
-            .price-row { padding-bottom: 5px; margin-bottom: 5px; }
-            .current-price { font-size: 13px; }
+            .price-row { padding-bottom: 8px; margin-bottom: 8px; flex-direction: column; align-items: flex-start; gap: 5px;}
+            .price-col { width: 100%; display: flex; justify-content: space-between; align-items: center;}
+            .current-price { font-size: 14px; }
             .old-price { font-size: 10px; }
-            .cart-btn { width: 28px; height: 28px; font-size: 11px; }
+            .cart-btn { width: 100%; height: 30px; font-size: 12px; margin-top: 5px; border-radius: 4px;}
 
             /* Bundles Banner */
-            .bundle-banner { margin: 10px 5% 40px 5%; padding: 25px; flex-direction: column; text-align: center; }
-            .bundle-img { min-width: unset; width: 100%; height: 150px; background-position: center; }
-            .bundle-title { font-size: 24px; }
+            .bundle-banner { margin: 10px 5% 50px 5%; padding: 30px 20px; flex-direction: column; text-align: center; border-radius: 12px;}
+            .bundle-img { min-width: unset; width: 100%; height: 180px; background-position: center; }
+            .bundle-title { font-size: 26px; margin-bottom: 15px;}
             
             /* Why Choose Us */
-            .why-choose-row { flex-direction: column; gap: 15px; }
+            .why-choose { padding: 30px 5% 40px 5%;}
+            .why-choose-row { flex-direction: column; gap: 15px; margin-top: 20px;}
+            .why-item { padding: 15px; }
 
-            /* Cart Sidebar Resize */
             .cart-sidebar { width: 100%; right: -100%; }
+
+            .footer-section { padding: 40px 5% 30px 5%; margin-top: 20px;}
+            .footer-section h3 { font-size: 20px; }
+            .wa-contact-btn { font-size: 14px; padding: 12px 25px; }
+            .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 28px; }
         }
     </style>
 </head>
-<body>
+<body class="theme-ps5">
 
-    <!-- NEW OPTIMIZED NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <!-- Area: Logo -->
         <a href="index.html" class="logo">
-            <div class="logo-icon"><img src="logo.png" alt="GameFlex" style="width: 100%; height: 100%; object-fit: contain;"></div>
-            <div>
-                GAMEFLEX<br><span style="color: var(--logo-red); font-size: 14px;">_STORE</span>
-                <div class="logo-tagline">PLAY MORE. PAY LESS.</div>
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
+            <div class="logo-text">
+                <span class="top">GAMEFLEX</span>
+                <span class="bottom">STORE</span>
             </div>
         </a>
 
-        <!-- Area: Search -->
+        <!-- SEARCH BAR -->
         <div class="search-container">
-            <input type="text" id="gameSearch" class="search-input" placeholder="Search PC or PS5 Games..." autocomplete="off">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search PS5 Games..." autocomplete="off">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
 
-        <!-- Area: Actions -->
         <div class="nav-actions">
-            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
-                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
-            </button>
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
+            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
+            </button>
         </div>
 
-        <!-- Area: Links -->
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
@@ -318,26 +368,26 @@
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <h2 style="font-family:'Orbitron', sans-serif;"><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer">
-            <div style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>
+            <div style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</div>
         </div>
         <div class="cart-footer">
-            <div class="cart-total">
+            <div class="cart-total" style="text-transform:uppercase;">
                 <span>Total:</span>
                 <span id="cartTotalPrice">₹0</span>
             </div>
-            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Main Store</button>
+            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Store</button>
         </div>
     </div>
 
     <!-- Breadcrumb -->
-    <div class="breadcrumb">Home > <span>PS Games</span></div>
+    <div class="breadcrumb animate-fade-up">Home > <span style="font-weight:700;">PS Games</span></div>
 
     <!-- PS5 Hero Banner -->
-    <header class="ps5-hero">
+    <header class="ps5-hero animate-fade-up delay-1">
         <div class="hero-glow"></div>
         <div class="ps5-hero-content">
             <div class="ps5-subtitle">PLAY HAS NO LIMITS.</div>
@@ -356,12 +406,11 @@
                 <a href="#bundles" class="btn-outline-blue">VIEW BUNDLES &rarr;</a>
             </div>
         </div>
-        
         <div class="ps5-hero-img"></div>
     </header>
 
     <!-- Horizontal Categories -->
-    <section class="category-section">
+    <section class="category-section animate-fade-up delay-2">
         <div class="cat-row">
             <div class="sub-cat-card active" onclick="setCategoryFilter('All', this)">
                 <i class="fa-solid fa-gamepad"></i>
@@ -408,31 +457,39 @@
         </div>
     </section>
 
-    <!-- Featured PS5 Games Section -->
-    <section class="products-section" id="games">
+    <!-- Featured PS5 Games Grid -->
+    <section class="products-section animate-fade-up delay-3" id="games">
         <div class="section-header-flex">
-            <div class="section-title">FEATURED PS GAMES</div>
+            <div class="section-title"><span></span> FEATURED PS GAMES</div>
             <a href="#" class="view-all-link">View All &rarr;</a>
         </div>
         <div class="products-grid" id="psGamesGrid">
-            <p style="color: gray; text-align: center; grid-column: 1 / -1; margin-top:20px;">Loading live PS4 and PS5 games from database...</p>
+            <!-- 🚀 SKELETON LOADERS -->
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
         </div>
     </section>
 
     <!-- PS5 Bundles Banner -->
-    <section class="bundle-banner" id="bundles">
+    <section class="bundle-banner animate-fade-up delay-1" id="bundles">
         <div class="bundle-content">
             <div class="bundle-subtitle">PS BUNDLES</div>
             <h2 class="bundle-title">MORE GAMES.<br>MORE FUN.</h2>
             <p class="bundle-desc">Exclusive bundles at<br>best prices.</p>
-            <a href="#" class="btn-solid-blue">EXPLORE BUNDLES &rarr;</a>
+            <a href="#games" class="btn-solid-blue">EXPLORE BUNDLES &rarr;</a>
         </div>
         <div class="bundle-img"></div>
     </section>
 
     <!-- Why Choose Us -->
-    <section class="why-choose">
-        <div class="section-title" style="margin-bottom: 20px; font-size: 16px;">WHY CHOOSE GAMEFLEX_STORE?</div>
+    <section class="why-choose animate-fade-up delay-2">
+        <div class="section-title" style="margin-bottom: 20px; font-size: 16px;"><span></span> WHY CHOOSE GAMEFLEX_STORE?</div>
         <div class="why-choose-row">
             <div class="why-item">
                 <i class="fa-regular fa-circle-check"></i>
@@ -453,9 +510,46 @@
         </div>
     </section>
 
+    <!-- 🚀 NEW: FOOTER CONTACT SECTION -->
+    <footer class="footer-section animate-fade-up delay-1">
+        <h3>Need Help or Custom Games?</h3>
+        <p>We are available 24/7 to assist you with your orders, game credentials, and any other queries. Drop us a message!</p>
+        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
+            <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Chat on WhatsApp
+        </a>
+        <div class="copyright">
+            &copy; 2026 GameFlex Store. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- 🚀 NEW: FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Chat with us on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Intersection Observer Script for Scroll Animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const animatedElements = document.querySelectorAll('.animate-fade-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        });
+    </script>
+
     <script>
         window.allLivePsGames = [];
-        window.liveGamesDatabase = []; // <-- Global Search Array
+        window.liveGamesDatabase = []; 
         window.activeCategoryFilter = 'All';
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
     </script>
@@ -480,13 +574,11 @@
         const provider = new GoogleAuthProvider();
         let currentUser = null;
 
-        // INSTANT LOGIN UI UPDATE
         const savedUserName = localStorage.getItem('gf_logged_in_user');
         if(savedUserName) {
             document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
         }
 
-        // AUTHENTICATION LOGIC
         setPersistence(auth, browserLocalPersistence).then(() => {
             onAuthStateChanged(auth, (user) => {
                 const authBtn = document.getElementById('authBtn');
@@ -512,7 +604,13 @@
         onSnapshot(query(collection(db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
             window.allLivePsGames = [];
             window.liveGamesDatabase = []; 
+            const psGrid = document.getElementById('psGamesGrid');
             
+            if(snapshot.empty) {
+                psGrid.innerHTML = `<p style="color:gray; grid-column:1/-1; text-align:center; margin-top:20px;">No PS games found in database.</p>`;
+                return;
+            }
+
             snapshot.forEach((gameDoc) => {
                 const game = { id: gameDoc.id, ...gameDoc.data() };
                 
@@ -520,12 +618,10 @@
                 let perm = game.permanentPrice || game.permPrice || 0;
                 let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
-                // Add to Global Search Array
                 window.liveGamesDatabase.push({
                     title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
                 });
 
-                // Add to PS Grid ONLY if it's PS
                 if (game.platform === 'PS5' || game.platform === 'PS4' || game.platform === 'PS4/PS5') {
                     window.allLivePsGames.push(game);
                 }
@@ -551,6 +647,7 @@
                 return;
             }
 
+            let delay = 0.1;
             filtered.forEach(game => {
                 let badgeHTML = (game.discount && game.discount !== "0%") ? `<span class="discount-badge">${game.discount}</span>` : '';
                 let oldPriceHTML = game.originalPrice ? `<span class="old-price">₹${game.originalPrice}</span>` : '';
@@ -561,37 +658,38 @@
                 let pPerm = game.permanentPrice || game.permPrice || 0;
 
                 psGrid.innerHTML += `
-                <div class="product-card" onclick="window.location.href='game-details.html?id=${game.id}'">
+                <div class="product-card animate-fade-up" style="animation-delay: ${delay}s;" onclick="window.location.href='game-details.html?id=${game.id}'">
                     ${badgeHTML}
                     <div class="product-img" style="background-image: url('${game.image}');"></div>
                     <div class="product-info">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                             <div class="card-genre-tag"><i class="fa-solid fa-layer-group"></i> ${genresText}</div>
-                            <div style="background:rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:2px 5px; border-radius:3px;">${game.platform}</div>
+                            <div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>
                         </div>
                         <div class="product-title">${game.title}</div>
                         
-                        <div class="price-row" style="border-bottom: 1px solid var(--border-dark); padding-bottom: 10px; margin-bottom: 10px;">
+                        <div class="price-row">
                             <div class="price-col">
                                 <div style="display:flex; flex-direction:column; gap:2px;">
-                                    <span style="font-size:9px; color:#ccc;">RENT (1M):</span>
+                                    <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH):</span>
                                     <div><span class="current-price">₹${pRent}</span></div>
                                 </div>
                             </div>
                             <button class="cart-btn" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${pRent}, '${game.image}')"><i class="fa-solid fa-clock"></i></button>
                         </div>
                         
-                        <div class="price-row" style="margin-bottom:0;">
+                        <div class="price-row" style="border:none; margin:0; padding:0;">
                             <div class="price-col">
                                 <div style="display:flex; flex-direction:column; gap:2px;">
-                                    <span style="font-size:9px; color:#ccc;">PERMANENT BUY:</span>
-                                    <div><span class="current-price">₹${pPerm}</span> ${oldPriceHTML}</div>
+                                    <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY:</span>
+                                    <div><span class="current-price" style="color:white; text-shadow:none;">₹${pPerm}</span> ${oldPriceHTML}</div>
                                 </div>
                             </div>
-                            <button class="cart-btn" style="background:#fff; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i></button>
+                            <button class="cart-btn" style="background:rgba(255,255,255,0.1); border-color:transparent; color:white;" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i></button>
                         </div>
                     </div>
                 </div>`;
+                delay += 0.1;
             });
         };
 
@@ -614,7 +712,7 @@
             searchDropdown.innerHTML = ''; 
             if (query.length > 0) {
                 // Searches ALL games (PC + PS5)
-                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query) && game.platform !== 'PC');
                 searchDropdown.style.display = 'block';
                 if (filteredGames.length > 0) {
                     filteredGames.forEach(game => {
@@ -622,7 +720,7 @@
                         gameItem.innerHTML = `<div class="search-item-img" style="background-image: url('${game.img}');"></div><div class="search-item-info"><span class="search-item-title">${game.title}</span><span class="search-platform">${game.platform}</span><span class="search-item-price">${game.price}</span></div>`;
                         searchDropdown.appendChild(gameItem);
                     });
-                } else { searchDropdown.innerHTML = `<div class="no-results">No games found</div>`; }
+                } else { searchDropdown.innerHTML = `<div class="no-results" style="color:var(--ps5-blue); text-transform:uppercase;">No games found</div>`; }
             } else { searchDropdown.style.display = 'none'; }
         });
 
@@ -635,14 +733,16 @@
         
         window.addToCart = (title, price, imgUrl) => {
             const ex = window.cartArray.find(i => i.title === title); if(ex) ex.qty += 1; else window.cartArray.push({ title, price: Number(price), img: imgUrl, qty: 1 });
-            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); window.toggleCart(); 
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); 
+            if (navigator.vibrate) navigator.vibrate(50);
+            window.toggleCart(); 
         };
         
         window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
         
         window.updateCartUI = () => {
             const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
-            if (window.cartArray.length === 0) container.innerHTML = '<div class="empty-cart-msg" style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>';
+            if (window.cartArray.length === 0) container.innerHTML = '<div class="empty-cart-msg" style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</div>';
             else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price" style="color:var(--logo-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`; });
             
             const finalTotal = Math.max(0, tot - (window.appliedDiscount || 0));
