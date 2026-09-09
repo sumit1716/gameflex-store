@@ -16,6 +16,7 @@
             --text-gray: #a3a3a3;
             --border-dark: #2a2a30;
             --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
         }
 
         /* 🚀 Smooth Scrolling & App-like behavior */
@@ -103,6 +104,66 @@
         .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.2); }
         .login-btn:hover { background: var(--primary-red); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(227, 24, 37, 0.4); }
 
+        /* ONBOARDING MODAL */
+        .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        .onboarding-modal { background: rgba(18,20,26,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.8); text-align: center; position: relative; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 400px; }
+        .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; text-shadow: 0 0 10px rgba(227,24,37,0.3); }
+        .onboarding-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
+        .onboarding-group { margin-bottom: 15px; text-align: left; }
+        .onboarding-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
+        .onboarding-input { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 6px; outline: none; font-size: 14px; font-family: 'Montserrat', sans-serif; transition: 0.3s; }
+        .onboarding-input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227,24,37,0.2); background: rgba(0,0,0,0.5); }
+        .radio-group { display: flex; gap: 10px; margin-top: 5px; }
+        .radio-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.3s; color: var(--text-gray); }
+        .radio-card input { display: none; }
+        .radio-card.selected { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.15); color: white; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.2); transform: translateY(-2px); }
+        .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
+        .onboarding-submit:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); }
+
+        /* 🔥 ENHANCED PAYMENT MODAL 🚀 */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(227, 24, 37, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(227, 24, 37, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(227, 24, 37, 0); }
+        }
+        .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        .payment-modal { background: linear-gradient(145deg, #12141a, #1a1d24); border: 2px solid var(--primary-red); border-radius: 16px; padding: 35px 25px; width: 380px; max-width: 95%; box-shadow: 0 0 30px rgba(227, 24, 37, 0.2), 0 15px 40px rgba(0,0,0,0.8); text-align: center; position: relative; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .close-payment { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: var(--text-gray); width: 35px; height: 35px; border-radius: 50%; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .close-payment:hover { background: var(--primary-red); color: white; transform: rotate(90deg); border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); }
+        .payment-modal h2 { font-family: 'Orbitron', sans-serif; color: white; font-size: 22px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
+        .payment-methods-icons { display: flex; justify-content: center; gap: 20px; margin: 10px 0 15px 0; font-size: 24px; color: var(--text-gray); }
+        .qr-container { background: white; padding: 15px; border-radius: 12px; margin: 15px auto; width: 220px; height: 220px; border: 3px dashed var(--primary-red); box-shadow: 0 5px 20px rgba(227, 24, 37, 0.2); animation: pulse-border 2s infinite; }
+        .qr-container img { width: 100%; height: 100%; object-fit: contain; }
+        .confirm-pay-btn { width: 100%; background: linear-gradient(90deg, #00c853, #00e676); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 15px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
+        .confirm-pay-btn:hover { background: linear-gradient(90deg, #00e676, #69f0ae); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 200, 83, 0.5); }
+
+        /* 🔥 ENHANCED CART SIDEBAR 🔥 */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; display: none; opacity: 0; transition: 0.4s ease; backdrop-filter: blur(8px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -420px; width: 400px; max-width: 100%; height: 100vh; background: rgba(11, 12, 16, 0.95); z-index: 1000; box-shadow: -15px 0 50px rgba(0,0,0,0.9); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(227, 24, 37, 0.3); backdrop-filter: blur(20px); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); background: linear-gradient(90deg, rgba(227, 24, 37, 0.1), transparent); }
+        .cart-header h2 { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: white; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
+        .cart-header h2 i { color: var(--primary-red); }
+        .close-cart { background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: var(--text-gray); width: 35px; height: 35px; border-radius: 50%; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .close-cart:hover { background: var(--primary-red); color: white; transform: rotate(90deg); border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-item { display: flex; gap: 15px; background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(0,0,0,0.5)); padding: 15px; border-radius: 10px; border-left: 3px solid transparent; border-top: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; position: relative; transition: 0.3s; }
+        .cart-item:hover { border-left: 3px solid var(--primary-red); background: rgba(227, 24, 37, 0.05); transform: translateX(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .cart-item-img { width: 65px; height: 65px; background-size: cover; background-position: center; border-radius: 8px; border: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        .cart-item-details { flex: 1; }
+        .cart-item-title { font-size: 14px; font-weight: 700; color: var(--text-light); margin-bottom: 6px; line-height: 1.3; }
+        .cart-item-price { font-size: 16px; font-weight: 800; color: var(--primary-red); text-shadow: 0 0 5px rgba(227, 24, 37, 0.2); }
+        .remove-item { background: rgba(227, 24, 37, 0.1); border: 1px solid rgba(227, 24, 37, 0.2); color: var(--primary-red); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 13px; transition: 0.3s; position: absolute; right: 15px; top: 15px; display: flex; justify-content: center; align-items: center; }
+        .remove-item:hover { background: var(--primary-red); color: white; transform: scale(1.1) rotate(15deg); box-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
+        .empty-cart-msg { text-align: center; color: var(--text-gray); font-size: 15px; margin-top: 50px; font-weight: 600; line-height: 1.5; }
+        .coupon-section { margin: 15px 20px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.15); border-radius: 10px; transition: 0.3s; }
+        .coupon-section:hover { border-color: rgba(227, 24, 37, 0.4); background: rgba(255,255,255,0.04); }
+        .cart-footer { padding: 25px 20px; border-top: 1px solid var(--border-dark); background: rgba(8, 11, 16, 0.98); }
+        .cart-total { display: flex; justify-content: space-between; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 800; color: white; margin-bottom: 20px; letter-spacing: 1px; }
+        .checkout-btn { width: 100%; background: linear-gradient(90deg, #c1121d, var(--primary-red)); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(227, 24, 37, 0.4); position: relative; overflow: hidden; }
+        .checkout-btn:hover { background: linear-gradient(90deg, var(--primary-red), #ff3333); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(227, 24, 37, 0.6); }
+
         /* PC Hero Banner */
         .pc-hero { display: flex; justify-content: space-between; align-items: center; padding: 50px 5%; background: #0b0c10; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 40px; flex-wrap: wrap; position: relative; overflow: hidden; }
         .pc-hero::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 80% 50%, rgba(227, 24, 37, 0.05), transparent 50%); z-index: 0; pointer-events: none; }
@@ -145,13 +206,15 @@
         .discount-badge { position: absolute; top: 12px; left: 12px; background: linear-gradient(45deg, #c1121d, var(--primary-red)); color: white; font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 6px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.4); letter-spacing: 0.5px; }
         .product-img { height: 180px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid rgba(255,255,255,0.05); transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
         .product-card:hover .product-img { transform: scale(1.06); filter: brightness(1.1); }
-        
+
         .product-info { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; position: relative; z-index: 3; background: transparent; }
         .product-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text-light); line-height: 1.3; }
         .product-price { font-size: 18px; font-weight: 800; color: var(--primary-red); margin-bottom: 18px; text-shadow: 0 0 8px rgba(227, 24, 37, 0.2); }
         
-        .buy-btn { display: block; width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(227, 24, 37, 0.2); }
-        .buy-btn:hover { background: #c1121d; box-shadow: 0 6px 18px rgba(227, 24, 37, 0.5); transform: translateY(-2px); }
+        .buy-btn { display: block; width: 100%; background: transparent; color: white; border: 2px solid var(--primary-red); padding: 12px; border-radius: 8px; font-weight: 800; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(227, 24, 37, 0.2); overflow: hidden; }
+        .buy-btn::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--primary-red); transition: 0.4s; z-index: -1; }
+        .buy-btn:hover::before { left: 0; }
+        .buy-btn:hover { box-shadow: var(--theme-glow); border-color: transparent; }
         
         /* Footer & Contact Us */
         .footer-section { background: #06080d; padding: 60px 5% 40px 5%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
@@ -163,29 +226,6 @@
         
         .floating-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; text-decoration: none; box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6); z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
-
-        /* Cart Sidebar Styles */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.4s ease; backdrop-filter: blur(5px); }
-        .cart-overlay.active { display: block; opacity: 1; }
-        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: rgba(18, 20, 26, 0.98); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
-        .cart-sidebar.open { right: 0; }
-        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .cart-header h2 { font-size: 18px; font-weight: 800; color: var(--text-light); display: flex; align-items: center; gap: 10px; }
-        .cart-header h2 i { color: var(--primary-red); }
-        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
-        .close-cart:hover { color: var(--primary-red); transform: rotate(90deg); }
-        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); align-items: center; position: relative; transition: 0.3s; }
-        .cart-item:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(-5px); }
-        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; border: 1px solid var(--border-dark); }
-        .cart-item-details { flex: 1; }
-        .cart-item-title { font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; line-height: 1.3; }
-        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--primary-red); }
-        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; transition: 0.3s; position: absolute; right: 12px; top: 12px; }
-        .remove-item:hover { color: var(--primary-red); transform: scale(1.2); }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: rgba(8, 11, 16, 0.9); }
-        .checkout-btn { width: 100%; background: var(--primary-red); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.3); }
-        .checkout-btn:hover { background: #c1121d; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(227, 24, 37, 0.5); }
 
         /* ========================================================================= */
         /* 📱 PRO MOBILE LAYOUT (Safely Kept intact, added touch ripples) 📱 */
@@ -212,11 +252,15 @@
 
             .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
             .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
-            .search-input:focus { width: 100%; }
+            .search-input:focus { width: 100%; box-shadow: inset 0 0 10px rgba(227,24,37,0.2); }
 
-            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; -webkit-overflow-scrolling: touch; }
+            .nav-links { 
+                grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; 
+                background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); 
+                gap: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory;
+            }
             .nav-links::-webkit-scrollbar { display: none; }
-            .nav-links li { flex: 0 0 auto; width: auto; }
+            .nav-links li { flex: 0 0 auto; width: auto; scroll-snap-align: start; }
             .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
             
             .pc-hero { flex-direction: column; text-align: center; padding: 40px 5%; gap: 20px; background-image: url('image1.png.png'); background-size: cover; background-position: center; z-index: 1; }
@@ -244,10 +288,10 @@
             .products-section { padding: 10px 5% 40px 5%; }
             .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             
-            .skeleton-card { height: 240px; } /* Fixed skeleton size for mobile */
+            .skeleton-card { height: 240px; } 
             
             .product-card { box-shadow: 0 4px 12px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.05); }
-            .product-card:hover { transform: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.05); } 
+            .product-card:hover { transform: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); } 
             
             /* 💥 MOBILE TOUCH (ACTIVE) PUSH EFFECT */
             .product-card:active, .buy-btn:active {
@@ -261,10 +305,17 @@
             .product-info { padding: 12px 10px; }
             .product-title { font-size: 12px; margin-bottom: 6px; }
             .product-price { font-size: 15px; margin-bottom: 10px; }
-            .buy-btn { padding: 8px; font-size: 12px; }
+            .buy-btn { padding: 8px; font-size: 12px; background: var(--primary-red); color: white; }
+            .buy-btn::before { display: none; }
             .discount-badge { font-size: 9px; padding: 3px 6px; }
 
-            .cart-sidebar { width: 100%; right: -100%; }
+            /* Enhanced UI Mobile Fixes for Modal/Cart */
+            .payment-modal { width: 90% !important; padding: 25px 15px; border-radius: 12px; }
+            .qr-container { width: 180px; height: 180px; }
+            .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
+            .coupon-section { margin: 10px 15px;}
+            .coupon-section input { width: 60%; font-size: 11px; padding: 8px;}
+            .coupon-section button { width: 35%; font-size: 11px; padding: 8px;}
 
             .footer-section { padding: 40px 5% 30px 5%; margin-top: 40px; }
             .footer-section h3 { font-size: 20px; }
@@ -275,10 +326,68 @@
 </head>
 <body id="pageBody" class="theme-pc">
 
+    <!-- Onboarding Modal -->
+    <div id="onboardingOverlay" class="onboarding-overlay">
+        <div class="onboarding-modal">
+            <h2>Welcome to GameFlex!</h2>
+            <p>Please complete your profile to continue.</p>
+            <form id="onboardingForm">
+                <div class="onboarding-group">
+                    <label>Your Full Name</label>
+                    <input type="text" id="obName" class="onboarding-input" placeholder="Enter your name" required>
+                </div>
+                <div class="onboarding-group">
+                    <label>What kind of gamer are you?</label>
+                    <div class="radio-group">
+                        <label class="radio-card" onclick="selectGamerType(this)">
+                            <input type="radio" name="gamerType" value="PC Gamer" required> PC Gamer
+                        </label>
+                        <label class="radio-card" onclick="selectGamerType(this)">
+                            <input type="radio" name="gamerType" value="PlayStation Gamer"> PlayStation
+                        </label>
+                        <label class="radio-card" onclick="selectGamerType(this)">
+                            <input type="radio" name="gamerType" value="Both"> Both
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="onboarding-submit">Save & Start Gaming</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🚀 ENHANCED PAYMENT MODAL 🚀 -->
+    <div class="payment-overlay" id="paymentOverlay">
+        <div class="payment-modal">
+            <button class="close-payment" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+            
+            <h2><i class="fa-solid fa-qrcode" style="color: #ff3333;"></i> Secure Checkout</h2>
+            
+            <!-- Added Payment Method Trust Badges -->
+            <div class="payment-methods-icons">
+                <i class="fa-brands fa-google-pay" title="Google Pay" style="color: #ffffff;"></i>
+                <i class="fa-solid fa-wallet" title="Paytm" style="color: #00baf2;"></i>
+                <i class="fa-solid fa-money-bill-transfer" title="UPI" style="color: #5f259f;"></i>
+            </div>
+            
+            <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 10px;">Total Amount To Pay:</p>
+            <p><span id="paymentTotalAmount" style="color: var(--primary-red); font-weight: 900; font-size: 26px; text-shadow: 0 0 15px rgba(227, 24, 37, 0.4); display: inline-block; margin-bottom: 15px;">₹0</span></p>
+            
+            <div class="qr-container">
+                <img id="dynamicQRCode" src="" alt="Scan & Pay UPI QR">
+            </div>
+            
+            <p style="font-size: 12px; color: var(--text-gray); margin-bottom: 20px; line-height: 1.5;">Scan using any UPI app. Amount is locked.<br><strong style="color: white;">Click below after successful payment.</strong></p>
+            
+            <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndSendWhatsApp()">
+                <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)
+            </button>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">
-            <div class="logo-icon"><img src="logo.png" alt="GameFlex" style="width: 100%; height: 100%; object-fit: contain;"></div>
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
             <div class="logo-text">
                 <span class="top">GAMEFLEX</span>
                 <span class="bottom">STORE</span>
@@ -312,19 +421,35 @@
         </ul>
     </nav>
 
-    <!-- Cart Sidebar -->
+    <!-- 🚀 ENHANCED CART SIDEBAR 🚀 -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2 id="cartHeaderText"><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <h2 style="font-family: 'Orbitron', sans-serif;"><i class="fa-solid fa-cart-shopping"></i> Neural Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer">
-            <div style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>
+            <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
+        
+        <!-- Enhanced Coupon Section -->
+        <div class="coupon-section">
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="couponInput" placeholder="Enter Promo Code" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px;">
+                <button onclick="applyCoupon()" style="background: var(--primary-red); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(227,24,37,0.3); transition: 0.3s;">APPLY</button>
+            </div>
+            <p id="couponMsg" style="font-size: 12px; margin-top: 10px; color: var(--text-gray); font-weight: 600;"></p>
+        </div>
+
         <div class="cart-footer">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:bold; font-size:18px;"><span>Total:</span> <span id="cartTotalPrice">₹0</span></div>
-            <button class="checkout-btn" onclick="window.location.href='index.html'">Checkout in Main Store</button>
+            <div class="cart-total">
+                <span>TOTAL:</span>
+                <span id="cartTotalPrice">₹0</span>
+            </div>
+            
+            <button class="checkout-btn" id="checkoutBtn" onclick="proceedToPayment()">
+                PROCEED TO CHECKOUT <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+            </button>
         </div>
     </div>
 
@@ -448,7 +573,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, getDoc, setDoc, addDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -461,10 +586,10 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        window.db = getFirestore(app); // EXPORT DB FOR COUPON LOGIC
         const provider = new GoogleAuthProvider();
         
-        let currentUser = null;
+        window.currentUser = null;
 
         const savedUserName = localStorage.getItem('gf_logged_in_user');
         if(savedUserName) {
@@ -476,13 +601,13 @@
             onAuthStateChanged(auth, (user) => {
                 const authBtn = document.getElementById('authBtn');
                 if (user) {
-                    currentUser = user;
+                    window.currentUser = user;
                     const firstName = user.displayName.split(' ')[0];
                     localStorage.setItem('gf_logged_in_user', firstName); 
                     authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
                     authBtn.onclick = () => { window.location.href = "profile.html"; };
                 } else {
-                    currentUser = null;
+                    window.currentUser = null;
                     localStorage.removeItem('gf_logged_in_user'); 
                     authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
                     authBtn.onclick = async () => {
@@ -493,7 +618,7 @@
             });
         });
 
-        const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
+        const qGames = query(collection(window.db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             window.allLivePcGames = [];
             window.liveGamesDatabase = []; 
@@ -576,6 +701,16 @@
             window.activeCategoryFilter = category;
             window.renderPcGrid();
         };
+
+        // MAKE FIREBASE FUNCTIONS GLOBAL FOR PAYMENT MODAL
+        window.getDoc = getDoc;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.serverTimestamp = serverTimestamp;
+        window.increment = increment;
+
     </script>
 
     <script>
@@ -636,7 +771,7 @@
             let totalAmount = 0; let totalQty = 0;
 
             if (window.cartArray.length === 0) {
-                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px;">Your cart is empty.</div>';
+                itemsContainer.innerHTML = '<div style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</div>';
             } else {
                 window.cartArray.forEach((item, index) => {
                     totalAmount += (item.price * item.qty);
@@ -655,6 +790,122 @@
             }
             if(badgeCount) badgeCount.innerText = totalQty;
             if(totalElement) totalElement.innerText = '₹' + totalAmount.toLocaleString('en-IN');
+        };
+
+        // --- PAYMENT & COUPON LOGIC ---
+        window.appliedDiscount = 0; 
+        window.activeCouponCode = "";
+        const MY_WHATSAPP_NUMBER = "919310885368"; 
+        const MY_UPI_ID = "8307105368@fam"; 
+
+        window.proceedToPayment = async function() {
+            if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
+            if (!window.currentUser) { 
+                alert("Please login first to proceed to checkout!"); 
+                document.getElementById('authBtn').click(); 
+                return; 
+            }
+
+            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
+            document.getElementById('paymentTotalAmount').innerText = '₹' + total.toLocaleString('en-IN');
+            
+            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${total}&cu=INR`;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('dynamicQRCode').src = qrApiUrl;
+
+            window.toggleCart();
+            document.getElementById('paymentOverlay').style.display = 'flex';
+        };
+
+        window.closePaymentModal = function() {
+            document.getElementById('paymentOverlay').style.display = 'none';
+        };
+
+        window.applyCoupon = async function() {
+            const code = document.getElementById('couponInput').value.trim().toUpperCase();
+            const msg = document.getElementById('couponMsg');
+            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            
+            if (subtotal === 0) { msg.style.color = "#ff3333"; msg.innerText = "Cart is empty!"; window.appliedDiscount = 0; return; }
+            if (code === "") { msg.style.color = "#ff3333"; msg.innerText = "Please enter a promo code."; return; }
+
+            msg.style.color = "var(--text-gray)"; 
+            msg.innerText = "Checking promo code...";
+
+            try {
+                if(!window.db) throw new Error("Database not ready");
+                const couponRef = window.doc(window.db, "coupons", code);
+                const couponSnap = await window.getDoc(couponRef);
+
+                if (couponSnap.exists()) {
+                    const cpnData = couponSnap.data();
+                    if (cpnData.active && (cpnData.usedCount < cpnData.usageLimit)) {
+                        let discountPct = cpnData.discountPercent;
+                        window.appliedDiscount = Math.round((subtotal * discountPct) / 100);
+                        window.activeCouponCode = code;
+                        msg.style.color = "#00e676"; 
+                        if (discountPct === 100) { msg.innerText = `🎉 100% FREE Giveaway Applied!`; } 
+                        else { msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`; }
+                    } else {
+                        window.appliedDiscount = 0; window.activeCouponCode = "";
+                        msg.style.color = "#ff3333"; msg.innerText = "❌ Promo code Expired or Limit Reached.";
+                    }
+                } else {
+                    if (code === "GAMEFLEX10") {
+                        window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
+                        msg.style.color = "#00e676"; msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
+                    } else {
+                        window.appliedDiscount = 0; window.activeCouponCode = "";
+                        msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid promo code.";
+                    }
+                }
+                window.updateCartUI();
+            } catch(e) { console.error(e); msg.style.color = "#ff3333"; msg.innerText = "Error verifying promo code."; }
+        };
+
+        window.confirmAndSendWhatsApp = async function() {
+            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
+            
+            const confirmBtn = document.getElementById('confirmPaymentBtn');
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+            let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
+
+            try {
+                if(!window.db) throw new Error("Database not ready");
+                await window.addDoc(window.collection(window.db, "bookings"), {
+                    userId: window.currentUser.uid, userName: window.currentUser.displayName, userEmail: window.currentUser.email,
+                    items: window.cartArray, totalAmount: total, discountApplied: window.appliedDiscount || 0,
+                    status: "Pending Verification", createdAt: window.serverTimestamp()
+                });
+
+                if (window.activeCouponCode && window.activeCouponCode !== "") {
+                    const couponRef = window.doc(window.db, "coupons", window.activeCouponCode);
+                    await window.setDoc(couponRef, { usedCount: window.increment(1) }, { merge: true });
+
+                    await window.addDoc(window.collection(window.db, "coupon_usage"), {
+                        userName: window.currentUser.displayName, userEmail: window.currentUser.email,
+                        couponUsed: window.activeCouponCode, gamesPurchased: itemNames,
+                        discountAmount: window.appliedDiscount, usedAt: window.serverTimestamp()
+                    });
+                }
+
+                const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${window.currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
+                const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+                window.cartArray = []; localStorage.removeItem('gf_cart'); 
+                window.appliedDiscount = 0; document.getElementById('couponMsg').innerText = ""; document.getElementById('couponInput').value = "";
+                window.activeCouponCode = "";
+                window.updateCartUI(); window.closePaymentModal();
+                window.open(whatsappUrl, '_blank');
+            } catch (error) { 
+                console.error("Booking Error: ", error); alert("Failed to save booking. Please try again."); 
+            } finally { 
+                confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; 
+            }
         };
 
         window.updateCartUI();
