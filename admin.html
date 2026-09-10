@@ -24,7 +24,6 @@
 
         body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--dark-bg); color: var(--text-light); overflow-x: hidden; scroll-behavior: smooth; }
         
-        /* 🚀 Custom Gaming Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a0e15, var(--primary-red)); border-radius: 10px; }
@@ -128,7 +127,7 @@
         .status-pending { background: rgba(255, 193, 7, 0.1); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); }
         .status-completed { background: rgba(0, 200, 83, 0.1); color: #00e676; border: 1px solid rgba(0, 200, 83, 0.3); }
 
-        /* PDF FIX CONTAINER */
+        /* 🚀 PDF FIX CONTAINER 🚀 */
         #pdfExportArea { background: white !important; color: black !important; }
         #pdfExportArea h3, #pdfExportArea th, #pdfExportArea td, #pdfExportArea strong, #pdfExportArea small { color: black !important; }
         #pdfExportArea th { background: #f0f0f0 !important; border-bottom: 2px solid #ccc !important; }
@@ -157,7 +156,7 @@
             
             .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
             .nav-links li { padding: 10px 12px; margin-bottom: 0; font-size: 11px; width: auto; flex: 1 1 calc(50% - 8px); text-align: center; justify-content: center; border-radius: 6px;}
-            .nav-links li i { display: none; } /* Hide icons on mobile for space */
+            .nav-links li i { display: none; } 
             
             .main-content { padding: 20px 15px; height: auto; overflow-y: visible; width: 100%;}
             .header { flex-direction: column; align-items: flex-start; gap: 15px; }
@@ -178,7 +177,6 @@
             #loginOverlay h1 { font-size: 24px !important; }
             #loginOverlay p { font-size: 14px !important; }
 
-            /* Touch Press Effect for Mobile */
             .btn-primary:active, .nav-links li:active, .stat-card:active {
                 transform: scale(0.96) !important;
                 transition: 0.1s !important;
@@ -482,9 +480,10 @@
 
             <!-- 6. COUPON MANAGEMENT SECTION -->
             <div id="couponsSection" class="section animate-fade-up" style="display: none;">
+                <!-- Create Coupon Form -->
                 <div class="card">
-                    <h3><i class="fa-solid fa-plus-circle" style="color:var(--ps5-blue); margin-right:8px;"></i> Create New Promo / Giveaway</h3>
-                    <form id="createCouponForm" style="margin-top:20px;">
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-plus-circle" style="color:var(--ps5-blue);"></i> Create New Coupon / Giveaway</h3>
+                    <form id="createCouponForm">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Coupon Code Name</label>
@@ -495,18 +494,19 @@
                                 <input type="number" id="cpnDiscount" placeholder="e.g. 50 (Use 100 for Free Giveaway)" required min="1" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Usage Limit (Max users)</label>
-                                <input type="number" id="cpnLimit" placeholder="e.g. 1 (Single use) or 100" required min="1">
+                                <label>Usage Limit (Max users allowed)</label>
+                                <input type="number" id="cpnLimit" placeholder="e.g. 1 (For single use) or 100" required min="1">
                             </div>
                         </div>
-                        <button type="submit" class="btn-primary" style="width: 100%; background: var(--ps5-blue); color: black; box-shadow: 0 4px 15px rgba(0,210,255,0.3);">
-                            <i class="fa-solid fa-ticket"></i> Generate Coupon Code
+                        <button type="submit" class="btn-primary" style="width: 100%; background: var(--ps5-blue); color: black; font-size: 16px;">
+                            <i class="fa-solid fa-ticket"></i> Create Coupon
                         </button>
                     </form>
                 </div>
 
+                <!-- Active Coupons Table -->
                 <div class="card">
-                    <h3><i class="fa-solid fa-ticket" style="color:var(--primary-red); margin-right:8px;"></i> Active Custom Coupons</h3>
+                    <h3 style="margin-top: 0; color: gray;">Active Custom Coupons</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Coupon Code</th><th>Discount</th><th>Usage Limit</th><th>Used Count</th><th>Status</th><th>Action</th></tr></thead>
@@ -517,8 +517,9 @@
                     </div>
                 </div>
 
+                <!-- Coupon Usage History Table -->
                 <div class="card">
-                    <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--text-gray); margin-right:8px;"></i> Coupon Usage History</h3>
+                    <h3 style="margin-top: 0; color: gray;">Coupon Usage History</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Date</th><th>Customer</th><th>Coupon Used</th><th>Order Details</th><th>Discount Given</th></tr></thead>
@@ -533,8 +534,8 @@
             <!-- 7. SEND EMAIL SECTION -->
             <div id="emailSection" class="section animate-fade-up" style="display: none;">
                 <div class="card">
-                    <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-envelope" style="color:var(--primary-red); margin-right:8px;"></i> Broadcast Email Center</h3>
-                    <p style="font-size:12px; font-weight:600; color:var(--text-gray); margin-bottom: 25px;">Instantly send a plain text email via your default mail app, OR generate a rich HTML template to use in Mailchimp/SendGrid.</p>
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-envelope" style="color:var(--primary-red);"></i> Send Broadcast Email</h3>
+                    <p style="font-size:12px; color:gray; margin-bottom: 20px;">Instantly send a plain text email via your default mail app, OR generate a rich HTML template to use in Mailchimp/SendGrid.</p>
                     
                     <form id="sendEmailForm">
                         <div class="form-row">
@@ -563,7 +564,7 @@
 
                         <div class="form-group">
                             <label>Message Content</label>
-                            <textarea id="emailBody" rows="6" placeholder="Write your main announcement or offer details here..." required></textarea>
+                            <textarea id="emailBody" rows="5" placeholder="Write your main announcement or offer details here..." required></textarea>
                         </div>
 
                         <div class="email-action-btns">
@@ -583,9 +584,9 @@
 
     <!-- FIREBASE SCRIPTS -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -603,22 +604,31 @@
         const ALLOWED_EMAIL = "sumitroman198@gmail.com";
         let adminDataLoaded = false;
 
-        onAuthStateChanged(auth, (user) => {
+        // 🚀 BULLETPROOF EMAIL CHECK LOGIC 🚀
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                if (user.email === ALLOWED_EMAIL) {
-                    setDoc(doc(db, "users", user.uid), {
-                        email: user.email,
-                        lastActive: serverTimestamp()
-                    }, { merge: true });
+                // Ignore spaces and capital letters in email
+                const userEmail = user.email ? user.email.trim().toLowerCase() : "";
+                const adminEmail = ALLOWED_EMAIL.trim().toLowerCase();
+
+                if (userEmail === adminEmail) {
+                    // Added Try-Catch so UI always loads even if timestamp update takes time
+                    try {
+                        await setDoc(doc(db, "users", user.uid), {
+                            email: user.email,
+                            lastActive: serverTimestamp()
+                        }, { merge: true });
+                    } catch(e) { console.warn("Timestamp update skipped"); }
 
                     document.getElementById('loginOverlay').style.display = 'none';
                     document.getElementById('adminWrapper').style.display = 'flex';
+                    
                     if(!adminDataLoaded) {
                         initializeAdminPanelData();
                         adminDataLoaded = true;
                     }
                 } else {
-                    document.getElementById('loginErrorMsg').innerText = `Access Denied! Your email is not authorized as Admin.`;
+                    document.getElementById('loginErrorMsg').innerHTML = `Access Denied! <br>The email <b>${user.email}</b> is not authorized as Admin.`;
                     document.getElementById('loginErrorMsg').style.display = 'block';
                     signOut(auth);
                 }
@@ -629,8 +639,9 @@
         });
 
         document.getElementById('adminLoginBtn').addEventListener('click', () => {
+            document.getElementById('loginErrorMsg').style.display = 'none';
             signInWithPopup(auth, provider).catch(error => {
-                document.getElementById('loginErrorMsg').innerText = "Login Failed: " + error.message;
+                document.getElementById('loginErrorMsg').innerText = "Login Cancelled or Failed: " + error.message;
                 document.getElementById('loginErrorMsg').style.display = 'block';
             });
         });
@@ -944,7 +955,7 @@
             document.getElementById('formHeading').innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--ps5-blue);"></i> Edit Game: ` + game.title;
             document.getElementById('editGameId').value = game.id;
             document.getElementById('existingImage').value = game.image;
-            document.getElementById('uploadBtn').innerHTML = "<i class="fa-solid fa-floppy-disk"></i> Update Game in Database";
+            document.getElementById('uploadBtn').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Update Game in Database`;
             document.getElementById('cancelEditBtn').style.display = 'block';
 
             document.getElementById('gTitle').value = game.title;
@@ -1122,8 +1133,8 @@
                 else { psList.innerHTML += cbHtml; psCount++; }
             });
 
-            if(pcCount === 0) pcList.innerHTML = '<span style="color:gray; font-size:11px;">No PC games in database</span>';
-            if(psCount === 0) psList.innerHTML = '<span style="color:gray; font-size:11px;">No PS games in database</span>';
+            if(pcCount === 0) pcList.innerHTML = '<span style="color:gray; font-size:11px;">No PC games found</span>';
+            if(psCount === 0) psList.innerHTML = '<span style="color:gray; font-size:11px;">No PS games found</span>';
         }
 
         window.loadBannerSettings = function() {
@@ -1131,25 +1142,49 @@
             if(bannerUnsubscribe) bannerUnsubscribe();
             
             bannerUnsubscribe = onSnapshot(doc(db, "settings", slot), (docSnap) => {
+                const imgPreview = document.getElementById('currentBannerImg');
+                const timePreview = document.getElementById('currentBannerTime');
+                const featCount = document.getElementById('currentFeaturedCount');
+                
                 if(docSnap.exists()) {
                     const data = docSnap.data();
+                    
                     document.getElementById('obTagline').value = data.tagline || "";
                     document.getElementById('obTitle').value = data.title || "";
                     document.getElementById('obTitleHighlight').value = data.titleHighlight || "";
                     document.getElementById('obSubtitle').value = data.subtitle || "";
+
+                    if(data.image) { imgPreview.src = data.image; imgPreview.style.display = 'block'; }
+                    else { imgPreview.style.display = 'none'; }
                     
                     if(data.endTime) {
+                        timePreview.innerText = new Date(data.endTime).toLocaleString();
                         let dt = new Date(data.endTime);
                         let formattedDt = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0') + 'T' + String(dt.getHours()).padStart(2,'0') + ':' + String(dt.getMinutes()).padStart(2,'0');
                         document.getElementById('obTimer').value = formattedDt;
-                    } else { document.getElementById('obTimer').value = ''; }
+                    }
+                    else { 
+                        timePreview.innerText = "Not Set"; 
+                        document.getElementById('obTimer').value = '';
+                    }
                     
-                    if(data.featuredGames) { window.currentFeaturedGames = data.featuredGames; } 
-                    else { window.currentFeaturedGames = []; }
+                    if(data.featuredGames) {
+                        window.currentFeaturedGames = data.featuredGames;
+                        featCount.innerText = `${data.featuredGames.length} Games Featured`;
+                    } else {
+                        window.currentFeaturedGames = [];
+                        featCount.innerText = `0 Games Featured`;
+                    }
                 } else {
-                    document.getElementById('offerBannerForm').reset();
+                    document.getElementById('obTagline').value = "";
+                    document.getElementById('obTitle').value = "";
+                    document.getElementById('obTitleHighlight').value = "";
+                    document.getElementById('obSubtitle').value = "";
+                    imgPreview.style.display = 'none';
+                    timePreview.innerText = "Not Set";
                     document.getElementById('obTimer').value = '';
                     window.currentFeaturedGames = [];
+                    featCount.innerText = `0 Games Featured`;
                 }
                 renderOfferGameSelection(); 
             });
@@ -1173,14 +1208,21 @@
             const titleHighlight = document.getElementById('obTitleHighlight').value.trim();
             const subtitle = document.getElementById('obSubtitle').value.trim();
 
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; 
+            btn.disabled = true;
 
             try {
-                let imageUrl = ""; // Default empty, update if user provides new one
+                let imageUrl = document.getElementById('currentBannerImg').src || "";
+
                 if (file) {
-                    if(file.size > 800 * 1024) { alert("❌ Image size is too large (max 800KB)."); btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; btn.disabled = false; return; }
+                    if(file.size > 800 * 1024) { 
+                        alert("❌ Error: Image size is too large (max 800KB).");
+                        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; btn.disabled = false; return;
+                    }
                     imageUrl = await getBase64(file);
-                } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; }
+                } else if (fallbackUrl !== "") {
+                    imageUrl = fallbackUrl;
+                }
 
                 const selectedGames = [];
                 const gameUpdates = [];
@@ -1193,7 +1235,6 @@
                     }
                 });
 
-                // Update settings document. Only update image field if a new image was provided.
                 const bannerDataUpdate = {
                     endTime: endTime, featuredGames: selectedGames,
                     tagline: tagline, title: title, titleHighlight: titleHighlight,
@@ -1227,14 +1268,18 @@
                 console.error("Banner Update Error: ", error);
                 alert("❌ Update Failed! Check console for details.");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; 
+                btn.disabled = false;
             }
         });
 
         window.deleteBanner = async function() {
             const slot = document.getElementById('obBannerSlot').value;
-            if(confirm(`Remove all data for "${slot}"?`)) {
-                try { await deleteDoc(doc(db, "settings", slot)); alert(`✅ Banner cleared!`); } catch (error) {}
+            if(confirm(`Are you sure you want to completely delete "${slot}"?`)) {
+                try {
+                    await deleteDoc(doc(db, "settings", slot));
+                    alert(`✅ Banner (${slot}) deleted successfully!`);
+                } catch (error) { console.error("Delete Error: ", error); alert("❌ Failed to delete banner."); }
             }
         };
 
@@ -1316,12 +1361,13 @@ Follow us on Instagram: https://www.instagram.com/gameflex_store4`
             const newWindow = window.open();
             newWindow.document.write(`
                 <title>Generated Email Code</title>
-                <body style="background:#0b0c10; color:white; padding:20px; font-family:sans-serif;">
-                    <h2 style="color:#00d2ff;">HTML Email Generated Successfully!</h2>
-                    <p style="color:gray;">Copy the HTML code below and paste it into your bulk email sender.</p>
-                    <textarea style="width:100%; height:300px; padding:15px; border-radius:8px; border:1px solid #1f222b; background:#12141a; color:#00e676; font-family:monospace; outline:none;">${htmlCode}</textarea>
-                    <h3 style="margin-top:30px; color:#ff3333;">Email Preview:</h3>
-                    <div style="border:1px solid #1f222b; background:black; max-width:800px; margin:auto;">
+                <body style="background:#f4f4f4; padding:20px; font-family:sans-serif;">
+                    <h2>HTML Email Generated Successfully!</h2>
+                    <p>Copy the HTML code below and paste it into your bulk email sender (like Mailchimp, SendGrid, or any HTML email extension).</p>
+                    <textarea style="width:100%; height:300px; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:monospace;">${htmlCode}</textarea>
+                    
+                    <h3 style="margin-top:30px;">Email Preview:</h3>
+                    <div style="border:1px solid #ccc; background:white; max-width:800px; margin:auto;">
                         ${htmlCode}
                     </div>
                 </body>
