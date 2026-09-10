@@ -24,6 +24,7 @@
 
         body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--dark-bg); color: var(--text-light); overflow-x: hidden; scroll-behavior: smooth; }
         
+        /* 🚀 Custom Gaming Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a0e15, var(--primary-red)); border-radius: 10px; }
@@ -177,6 +178,7 @@
             #loginOverlay h1 { font-size: 24px !important; }
             #loginOverlay p { font-size: 14px !important; }
 
+            /* Touch Press Effect for Mobile */
             .btn-primary:active, .nav-links li:active, .stat-card:active {
                 transform: scale(0.96) !important;
                 transition: 0.1s !important;
@@ -186,7 +188,7 @@
 </head>
 <body>
 
-    <!-- SECURITY LOCK OVERLAY -->
+    <!-- 🚀 BULLETPROOF SECURITY LOCK OVERLAY 🚀 -->
     <div id="loginOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0b0c10; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
         <h1 style="color:var(--primary-red); font-size: 32px; font-family:'Orbitron', sans-serif; text-transform:uppercase;"><i class="fa-solid fa-shield-halved"></i> GameFlex Command</h1>
         <p style="color:gray; font-size: 14px; margin-bottom: 30px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Restricted Area - Authorized Personnel Only.</p>
@@ -482,8 +484,8 @@
             <div id="couponsSection" class="section animate-fade-up" style="display: none;">
                 <!-- Create Coupon Form -->
                 <div class="card">
-                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-plus-circle" style="color:var(--ps5-blue);"></i> Create New Coupon / Giveaway</h3>
-                    <form id="createCouponForm">
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-plus-circle" style="color:var(--ps5-blue); margin-right:8px;"></i> Create New Promo / Giveaway</h3>
+                    <form id="createCouponForm" style="margin-top:20px;">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Coupon Code Name</label>
@@ -494,19 +496,19 @@
                                 <input type="number" id="cpnDiscount" placeholder="e.g. 50 (Use 100 for Free Giveaway)" required min="1" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Usage Limit (Max users allowed)</label>
-                                <input type="number" id="cpnLimit" placeholder="e.g. 1 (For single use) or 100" required min="1">
+                                <label>Usage Limit (Max users)</label>
+                                <input type="number" id="cpnLimit" placeholder="e.g. 1 (Single use) or 100" required min="1">
                             </div>
                         </div>
-                        <button type="submit" class="btn-primary" style="width: 100%; background: var(--ps5-blue); color: black; font-size: 16px;">
-                            <i class="fa-solid fa-ticket"></i> Create Coupon
+                        <button type="submit" class="btn-primary" style="width: 100%; background: var(--ps5-blue); color: black; box-shadow: 0 4px 15px rgba(0,210,255,0.3);">
+                            <i class="fa-solid fa-ticket"></i> Generate Coupon Code
                         </button>
                     </form>
                 </div>
 
                 <!-- Active Coupons Table -->
                 <div class="card">
-                    <h3 style="margin-top: 0; color: gray;">Active Custom Coupons</h3>
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-ticket" style="color:var(--primary-red); margin-right:8px;"></i> Active Custom Coupons</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Coupon Code</th><th>Discount</th><th>Usage Limit</th><th>Used Count</th><th>Status</th><th>Action</th></tr></thead>
@@ -519,7 +521,7 @@
 
                 <!-- Coupon Usage History Table -->
                 <div class="card">
-                    <h3 style="margin-top: 0; color: gray;">Coupon Usage History</h3>
+                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--text-gray); margin-right:8px;"></i> Coupon Usage History</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Date</th><th>Customer</th><th>Coupon Used</th><th>Order Details</th><th>Discount Given</th></tr></thead>
@@ -534,8 +536,8 @@
             <!-- 7. SEND EMAIL SECTION -->
             <div id="emailSection" class="section animate-fade-up" style="display: none;">
                 <div class="card">
-                    <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-envelope" style="color:var(--primary-red);"></i> Send Broadcast Email</h3>
-                    <p style="font-size:12px; color:gray; margin-bottom: 20px;">Instantly send a plain text email via your default mail app, OR generate a rich HTML template to use in Mailchimp/SendGrid.</p>
+                    <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-envelope" style="color:var(--primary-red); margin-right:8px;"></i> Broadcast Email Center</h3>
+                    <p style="font-size:12px; font-weight:600; color:var(--text-gray); margin-bottom: 25px;">Instantly send a plain text email via your default mail app, OR generate a rich HTML template to use in Mailchimp/SendGrid.</p>
                     
                     <form id="sendEmailForm">
                         <div class="form-row">
@@ -564,7 +566,7 @@
 
                         <div class="form-group">
                             <label>Message Content</label>
-                            <textarea id="emailBody" rows="5" placeholder="Write your main announcement or offer details here..." required></textarea>
+                            <textarea id="emailBody" rows="6" placeholder="Write your main announcement or offer details here..." required></textarea>
                         </div>
 
                         <div class="email-action-btns">
@@ -584,9 +586,9 @@
 
     <!-- FIREBASE SCRIPTS -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -607,12 +609,12 @@
         // 🚀 BULLETPROOF EMAIL CHECK LOGIC 🚀
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Ignore spaces and capital letters in email
+                // Completely safe case-insensitive and space-free matching
                 const userEmail = user.email ? user.email.trim().toLowerCase() : "";
                 const adminEmail = ALLOWED_EMAIL.trim().toLowerCase();
 
                 if (userEmail === adminEmail) {
-                    // Added Try-Catch so UI always loads even if timestamp update takes time
+                    // Update timestamp safely
                     try {
                         await setDoc(doc(db, "users", user.uid), {
                             email: user.email,
@@ -628,9 +630,12 @@
                         adminDataLoaded = true;
                     }
                 } else {
-                    document.getElementById('loginErrorMsg').innerHTML = `Access Denied! <br>The email <b>${user.email}</b> is not authorized as Admin.`;
+                    // KICK OUT UNAUTHORIZED USER COMPLETELY
+                    document.getElementById('adminWrapper').style.display = 'none';
+                    document.getElementById('loginOverlay').style.display = 'flex';
+                    document.getElementById('loginErrorMsg').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Access Denied!<br><span style="font-size:12px; color:gray; font-weight:normal; letter-spacing:0;">Only authorized GameFlex personnel can access this portal.</span>`;
                     document.getElementById('loginErrorMsg').style.display = 'block';
-                    signOut(auth);
+                    await signOut(auth);
                 }
             } else {
                 document.getElementById('loginOverlay').style.display = 'flex';
@@ -641,7 +646,7 @@
         document.getElementById('adminLoginBtn').addEventListener('click', () => {
             document.getElementById('loginErrorMsg').style.display = 'none';
             signInWithPopup(auth, provider).catch(error => {
-                document.getElementById('loginErrorMsg').innerText = "Login Cancelled or Failed: " + error.message;
+                document.getElementById('loginErrorMsg').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Login Failed: <br><span style="font-size:12px; color:gray; font-weight:normal; letter-spacing:0;">${error.message}</span>`;
                 document.getElementById('loginErrorMsg').style.display = 'block';
             });
         });
@@ -1361,13 +1366,12 @@ Follow us on Instagram: https://www.instagram.com/gameflex_store4`
             const newWindow = window.open();
             newWindow.document.write(`
                 <title>Generated Email Code</title>
-                <body style="background:#f4f4f4; padding:20px; font-family:sans-serif;">
-                    <h2>HTML Email Generated Successfully!</h2>
-                    <p>Copy the HTML code below and paste it into your bulk email sender (like Mailchimp, SendGrid, or any HTML email extension).</p>
-                    <textarea style="width:100%; height:300px; padding:10px; border-radius:8px; border:1px solid #ccc; font-family:monospace;">${htmlCode}</textarea>
-                    
-                    <h3 style="margin-top:30px;">Email Preview:</h3>
-                    <div style="border:1px solid #ccc; background:white; max-width:800px; margin:auto;">
+                <body style="background:#0b0c10; color:white; padding:20px; font-family:sans-serif;">
+                    <h2 style="color:#00d2ff;">HTML Email Generated Successfully!</h2>
+                    <p style="color:gray;">Copy the HTML code below and paste it into your bulk email sender.</p>
+                    <textarea style="width:100%; height:300px; padding:15px; border-radius:8px; border:1px solid #1f222b; background:#12141a; color:#00e676; font-family:monospace; outline:none;">${htmlCode}</textarea>
+                    <h3 style="margin-top:30px; color:#ff3333;">Email Preview:</h3>
+                    <div style="border:1px solid #1f222b; background:black; max-width:800px; margin:auto;">
                         ${htmlCode}
                     </div>
                 </body>
