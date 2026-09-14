@@ -133,7 +133,7 @@
         #pdfExportArea.dark-mode th { color: var(--primary-red) !important; background: rgba(255,255,255,0.02) !important; border-bottom: 1px solid var(--border-dark) !important;}
         #pdfExportArea.dark-mode td, #pdfExportArea.dark-mode strong, #pdfExportArea.dark-mode small { color: inherit !important; border-bottom: 1px solid var(--border-dark) !important; }
 
-        /* 🚀 NEW: Search Bar in Games List */
+        /* 🚀 Search Bar in Games List */
         .game-search-box { position: relative; margin-bottom: 20px; width: 100%; max-width: 400px; }
         .game-search-box input { width: 100%; padding: 12px 20px 12px 40px; border-radius: 30px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; font-family: inherit; font-size: 13px; outline: none; transition: 0.3s; }
         .game-search-box input:focus { border-color: var(--primary-red); background: rgba(0,0,0,0.5); box-shadow: 0 0 10px rgba(227,24,37,0.2); }
@@ -165,7 +165,7 @@
             .form-group { margin-bottom: 15px; min-width: 100%; }
             
             .offer-games-flex { flex-direction: column; gap: 15px; }
-            .banner-action-btns { flex-direction: column; gap: 10px; }
+            .banner-action-btns, .email-action-btns { flex-direction: column; gap: 10px; }
             .btn-update, .btn-remove { width: 100%; font-size: 13px; padding: 12px;}
             
             #loginOverlay { padding: 20px; }
@@ -205,7 +205,7 @@
                 <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
                 
-                <!-- 🚀 NEW PRE-ORDER DB TAB 🚀 -->
+                <!-- 🚀 PRE-ORDER DB TAB 🚀 -->
                 <li onclick="switchTab('managepo', this)"><i class="fa-solid fa-calendar-plus"></i> Pre-Orders DB</li>
                 
                 <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Reviews</li>
@@ -362,6 +362,8 @@
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
                         <h3 style="margin: 0;"><i class="fa-solid fa-server" style="color:var(--ps5-blue); margin-right:8px;"></i> Uploaded Games Database</h3>
+                        
+                        <!-- 🚀 Search Bar in Admin Games List -->
                         <div class="game-search-box">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <input type="text" id="adminGameSearch" placeholder="Search by game title...">
@@ -420,8 +422,8 @@
                         <div class="form-group">
                             <label>Filter Categories (For sorting on Pre-Order page)</label>
                             <div class="category-grid" id="poCategoryCheckboxes">
-                                <label><input type="checkbox" value="2025" class="po-cat-check"> Upcoming 2025</label>
                                 <label><input type="checkbox" value="2026" class="po-cat-check"> Upcoming 2026</label>
+                                <label><input type="checkbox" value="2027" class="po-cat-check"> Upcoming 2027</label>
                                 <label><input type="checkbox" value="action" class="po-cat-check"> Action</label>
                                 <label><input type="checkbox" value="adventure" class="po-cat-check"> Adventure</label>
                                 <label><input type="checkbox" value="rpg" class="po-cat-check"> RPG</label>
@@ -575,6 +577,7 @@
 
             <!-- 6. COUPON MANAGEMENT SECTION -->
             <div id="couponsSection" class="section animate-fade-up" style="display: none;">
+                <!-- Create Coupon Form -->
                 <div class="card">
                     <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-plus-circle" style="color:var(--ps5-blue); margin-right:8px;"></i> Create New Promo / Giveaway</h3>
                     <form id="createCouponForm" style="margin-top:20px;">
@@ -598,6 +601,7 @@
                     </form>
                 </div>
 
+                <!-- Active Coupons Table -->
                 <div class="card">
                     <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-ticket" style="color:var(--primary-red); margin-right:8px;"></i> Active Custom Coupons</h3>
                     <div class="table-responsive">
@@ -610,6 +614,7 @@
                     </div>
                 </div>
 
+                <!-- Coupon Usage History Table -->
                 <div class="card">
                     <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--text-gray); margin-right:8px;"></i> Coupon Usage History</h3>
                     <div class="table-responsive">
@@ -648,7 +653,7 @@
         // 🚀 BULLETPROOF SECURITY ALLOW LIST 🚀
         const ALLOWED_EMAILS = [
             "sumitroman198@gmail.com",
-            "sudhir017@gmail.com"
+            "sudhir017panwar@gmail.com"
         ];
         
         let adminDataLoaded = false;
@@ -906,7 +911,7 @@
             });
         };
 
-        // 🚀 NEW: Render Pre-Orders Table 🚀
+        // 🚀 Render Pre-Orders Table 🚀
         window.renderAdminPOTable = function(searchQuery = "") {
             const tbody = document.getElementById('poTableBody'); 
             tbody.innerHTML = '';
