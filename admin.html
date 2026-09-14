@@ -117,12 +117,6 @@
         .btn-remove { flex: 1; background: var(--primary-red); color: white; padding: 15px; font-size: 14px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase;}
         .btn-remove:hover { background: #c1121d; box-shadow: 0 0 15px rgba(227,24,37,0.4); transform: translateY(-2px);}
 
-        .email-action-btns { display: flex; gap: 15px; margin-top: 10px; }
-        .btn-direct { flex: 1; background: var(--primary-red); color: white; padding: 15px; font-size: 14px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase;}
-        .btn-direct:hover { background: #c1121d; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(227,24,37,0.3);}
-        .btn-html { flex: 1; background: var(--ps5-blue); color: black; padding: 15px; font-size: 14px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase;}
-        .btn-html:hover { background: #00b8e6; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,210,255,0.3);}
-
         /* Status Badge Styling */
         .status-badge { padding: 5px 10px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;}
         .status-pending { background: rgba(255, 193, 7, 0.1); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); }
@@ -171,8 +165,8 @@
             .form-group { margin-bottom: 15px; min-width: 100%; }
             
             .offer-games-flex { flex-direction: column; gap: 15px; }
-            .banner-action-btns, .email-action-btns { flex-direction: column; gap: 10px; }
-            .btn-update, .btn-remove, .btn-direct, .btn-html { width: 100%; font-size: 13px; padding: 12px;}
+            .banner-action-btns { flex-direction: column; gap: 10px; }
+            .btn-update, .btn-remove { width: 100%; font-size: 13px; padding: 12px;}
             
             #loginOverlay { padding: 20px; }
             #loginOverlay h1 { font-size: 24px !important; }
@@ -188,7 +182,7 @@
 </head>
 <body>
 
-    <!-- 🚀 BULLETPROOF SECURITY LOCK OVERLAY 🚀 -->
+    <!-- 🚀 BULLETPROOF SECURITY LOCK OVERLAY (Dual Admin Authorized) 🚀 -->
     <div id="loginOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0b0c10; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
         <h1 style="color:var(--primary-red); font-size: 32px; font-family:'Orbitron', sans-serif; text-transform:uppercase;"><i class="fa-solid fa-shield-halved"></i> GameFlex Command</h1>
         <p style="color:gray; font-size: 14px; margin-bottom: 30px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Restricted Area - Authorized Personnel Only.</p>
@@ -210,10 +204,13 @@
                 <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
                 <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
+                
+                <!-- 🚀 NEW PRE-ORDER DB TAB 🚀 -->
+                <li onclick="switchTab('managepo', this)"><i class="fa-solid fa-calendar-plus"></i> Pre-Orders DB</li>
+                
                 <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Reviews</li>
                 <li onclick="switchTab('offerbanner', this)"><i class="fa-solid fa-bullhorn"></i> Banners</li>
                 <li onclick="switchTab('coupons', this)"><i class="fa-solid fa-ticket"></i> Coupons</li>
-                <li onclick="switchTab('email', this)"><i class="fa-solid fa-envelope"></i> Broadcasts</li>
             </ul>
         </div>
 
@@ -365,8 +362,6 @@
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
                         <h3 style="margin: 0;"><i class="fa-solid fa-server" style="color:var(--ps5-blue); margin-right:8px;"></i> Uploaded Games Database</h3>
-                        
-                        <!-- 🚀 NEW: Search Bar in Admin Games List -->
                         <div class="game-search-box">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <input type="text" id="adminGameSearch" placeholder="Search by game title...">
@@ -378,6 +373,104 @@
                             <thead><tr><th>Image</th><th>Title</th><th>Platform</th><th>Price</th><th>Action</th></tr></thead>
                             <tbody id="gamesTableBody">
                                 <tr><td colspan="5" style="text-align: center; color: gray;">Loading games...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🚀 3.5. NEW MANAGE PRE-ORDERS SECTION 🚀 -->
+            <div id="managepoSection" class="section animate-fade-up" style="display: none;">
+                <div class="card" id="poFormCard">
+                    <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;" id="poFormHeading"><i class="fa-solid fa-calendar-plus" style="color:var(--primary-red);"></i> Add Upcoming Pre-Order</h3>
+                    <form id="poForm">
+                        <input type="hidden" id="editPoId" value="">
+                        <input type="hidden" id="existingPoImage" value="">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Game Title</label>
+                                <input type="text" id="poTitle" required placeholder="e.g. Assassin's Creed Shadows">
+                            </div>
+                            <div class="form-group">
+                                <label>Platform</label>
+                                <select id="poPlatform">
+                                    <option value="PS5">PlayStation 5</option>
+                                    <option value="PC">PC</option>
+                                    <option value="PS5/PC">PS5 & PC</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Release Date (Text format)</label>
+                                <input type="text" id="poReleaseDate" required placeholder="e.g. 26 May, 2026">
+                            </div>
+                            <div class="form-group">
+                                <label>Trailer YouTube URL (Optional)</label>
+                                <input type="url" id="poTrailer" placeholder="https://youtube.com/...">
+                            </div>
+                            <div class="form-group">
+                                <label>Pre-Book Token Price (₹)</label>
+                                <input type="number" id="poPrice" required placeholder="e.g. 499">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Filter Categories (For sorting on Pre-Order page)</label>
+                            <div class="category-grid" id="poCategoryCheckboxes">
+                                <label><input type="checkbox" value="2025" class="po-cat-check"> Upcoming 2025</label>
+                                <label><input type="checkbox" value="2026" class="po-cat-check"> Upcoming 2026</label>
+                                <label><input type="checkbox" value="action" class="po-cat-check"> Action</label>
+                                <label><input type="checkbox" value="adventure" class="po-cat-check"> Adventure</label>
+                                <label><input type="checkbox" value="rpg" class="po-cat-check"> RPG</label>
+                                <label><input type="checkbox" value="shooter" class="po-cat-check"> Shooter</label>
+                                <label><input type="checkbox" value="racing" class="po-cat-check"> Racing</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="background: rgba(31,106,255,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(31,106,255,0.2);">
+                            <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:14px; color:white; text-transform:none;">
+                                <input type="checkbox" id="poBonus" style="width:20px; height:20px; accent-color:var(--ps5-blue);"> 
+                                <strong>Show "Bonus Content" Badge on Card?</strong>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Game Poster Image</label>
+                            <div class="drop-zone" id="poDropZone">
+                                <span id="poDropZoneText" style="font-size:13px; font-weight:600;"><i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; display:block; margin-bottom:10px;"></i> Option 1: Drag & Drop Image Here (Max 800KB)</span>
+                                <input type="file" id="poImageFile" accept="image/*">
+                            </div>
+                            <div style="text-align: center; margin: 15px 0; color: var(--text-gray); font-size: 11px; font-weight:800;">--- OR ---</div>
+                            <input type="url" id="poImageUrlFallback" placeholder="Option 2: Paste Image URL Directly (e.g., https://...)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="poDesc" rows="2" required placeholder="Write a short description..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="poUploadBtn" style="width: 100%;"><i class="fa-solid fa-calendar-check"></i> Add Pre-Order to Database</button>
+                        <button type="button" class="btn-primary" id="poCancelEditBtn" style="display:none; width: 100%; margin-top:10px; background:#444; box-shadow:none;" onclick="cancelPOEdit()">Cancel Edit</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
+                        <h3 style="margin: 0;"><i class="fa-solid fa-server" style="color:var(--ps5-blue); margin-right:8px;"></i> Pre-Orders Database</h3>
+                        <div class="game-search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="adminPOSearch" placeholder="Search pre-orders...">
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Image</th><th>Title</th><th>Platform</th><th>Release</th><th>Pre-book</th><th>Action</th></tr></thead>
+                            <tbody id="poTableBody">
+                                <tr><td colspan="6" style="text-align: center; color: gray;">Loading pre-orders...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -482,7 +575,6 @@
 
             <!-- 6. COUPON MANAGEMENT SECTION -->
             <div id="couponsSection" class="section animate-fade-up" style="display: none;">
-                <!-- Create Coupon Form -->
                 <div class="card">
                     <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-plus-circle" style="color:var(--ps5-blue); margin-right:8px;"></i> Create New Promo / Giveaway</h3>
                     <form id="createCouponForm" style="margin-top:20px;">
@@ -506,7 +598,6 @@
                     </form>
                 </div>
 
-                <!-- Active Coupons Table -->
                 <div class="card">
                     <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-ticket" style="color:var(--primary-red); margin-right:8px;"></i> Active Custom Coupons</h3>
                     <div class="table-responsive">
@@ -519,7 +610,6 @@
                     </div>
                 </div>
 
-                <!-- Coupon Usage History Table -->
                 <div class="card">
                     <h3 style="margin-top: 0; color: gray;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--text-gray); margin-right:8px;"></i> Coupon Usage History</h3>
                     <div class="table-responsive">
@@ -530,54 +620,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-
-            <!-- 7. SEND EMAIL SECTION -->
-            <div id="emailSection" class="section animate-fade-up" style="display: none;">
-                <div class="card">
-                    <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-envelope" style="color:var(--primary-red); margin-right:8px;"></i> Broadcast Email Center</h3>
-                    <p style="font-size:12px; font-weight:600; color:var(--text-gray); margin-bottom: 25px;">Instantly send a plain text email via your default mail app, OR generate a rich HTML template to use in Mailchimp/SendGrid.</p>
-                    
-                    <form id="sendEmailForm">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Target Audience</label>
-                                <select id="emailRecipientType" onchange="toggleEmailInput()">
-                                    <option value="all">All Registered Users (Broadcast)</option>
-                                    <option value="single">Specific User Email</option>
-                                </select>
-                            </div>
-                            <div class="form-group" id="singleEmailGroup" style="display: none;">
-                                <label>Recipient Email Address</label>
-                                <input type="email" id="targetEmail" placeholder="user@example.com">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Email Subject</label>
-                            <input type="text" id="emailSubject" placeholder="e.g. Huge Discount on GameFlex Store!" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Header Image URL (Optional - For HTML Only)</label>
-                            <input type="url" id="emailImage" placeholder="Paste an image link here for the email header...">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Message Content</label>
-                            <textarea id="emailBody" rows="6" placeholder="Write your main announcement or offer details here..." required></textarea>
-                        </div>
-
-                        <div class="email-action-btns">
-                            <button type="button" class="btn-direct" id="sendDirectBtn">
-                                <i class="fa-solid fa-paper-plane"></i> 1-Click Send (Plain Text)
-                            </button>
-                            <button type="button" class="btn-html" id="generateHtmlBtn">
-                                <i class="fa-solid fa-code"></i> Generate HTML Template
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
 
@@ -603,24 +645,22 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         
-        const ALLOWED_EMAIL = "sumitroman198@gmail.com";
+        // 🚀 BULLETPROOF SECURITY ALLOW LIST 🚀
+        const ALLOWED_EMAILS = [
+            "sumitroman198@gmail.com",
+            "sudhir017@gmail.com"
+        ];
+        
         let adminDataLoaded = false;
 
-        // 🚀 BULLETPROOF EMAIL CHECK LOGIC 🚀
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Completely safe case-insensitive and space-free matching
                 const userEmail = user.email ? user.email.trim().toLowerCase() : "";
-                const adminEmail = ALLOWED_EMAIL.trim().toLowerCase();
 
-                if (userEmail === adminEmail) {
-                    // Update timestamp safely
+                if (ALLOWED_EMAILS.includes(userEmail)) {
                     try {
-                        await setDoc(doc(db, "users", user.uid), {
-                            email: user.email,
-                            lastActive: serverTimestamp()
-                        }, { merge: true });
-                    } catch(e) { console.warn("Timestamp update skipped"); }
+                        await setDoc(doc(db, "users", user.uid), { email: user.email, lastActive: serverTimestamp() }, { merge: true });
+                    } catch(e) {}
 
                     document.getElementById('loginOverlay').style.display = 'none';
                     document.getElementById('adminWrapper').style.display = 'flex';
@@ -630,7 +670,6 @@
                         adminDataLoaded = true;
                     }
                 } else {
-                    // KICK OUT UNAUTHORIZED USER COMPLETELY
                     document.getElementById('adminWrapper').style.display = 'none';
                     document.getElementById('loginOverlay').style.display = 'flex';
                     document.getElementById('loginErrorMsg').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Access Denied!<br><span style="font-size:12px; color:gray; font-weight:normal; letter-spacing:0;">Only authorized GameFlex personnel can access this portal.</span>`;
@@ -651,7 +690,7 @@
             });
         });
 
-        let allOrders = [], allGames = [];
+        let allOrders = [], allGames = [], allPreOrders = [];
         window.allUsers = []; 
         window.currentFeaturedGames = []; 
         let bannerUnsubscribe = null;
@@ -668,21 +707,19 @@
                 'dashboard': 'Dashboard & Report', 
                 'orders': 'Live Orders', 
                 'manage': 'Manage Games Database',
+                'managepo': 'Manage Pre-Orders DB',
                 'reviews': 'Manage Community Reviews',
                 'offerbanner': 'Manage Banners & Discounts',
-                'coupons': 'Manage Coupons & Limits',
-                'email': 'Send Broadcast Email'
+                'coupons': 'Manage Coupons & Limits'
             };
             document.getElementById('pageTitle').innerText = titles[tabId];
         };
 
-        // 🚀 PDF FIX FOR MOBILE BLACK SCREEN 🚀
         window.downloadPDF = function() { 
             const element = document.getElementById('pdfExportArea');
             const btn = document.getElementById('pdfDownloadBtn');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
             
-            // Temporary switch to light mode for clean PDF capture
             element.classList.remove('dark-mode');
             element.classList.add('pdf-mode');
 
@@ -690,12 +727,11 @@
                 margin:       0.5,
                 filename:     `GameFlex_Report_${document.getElementById('monthPicker').value}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' }, // Explicit White Background
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                // Revert to dark mode after generating
                 element.classList.remove('pdf-mode');
                 element.classList.add('dark-mode');
                 btn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Download PDF Report';
@@ -727,26 +763,21 @@
         // ==========================================
         function initializeAdminPanelData() {
             
-            // 1. Fetch Users
             onSnapshot(collection(db, "users"), (snapshot) => {
                 window.allUsers = []; 
                 let liveCount = 0;
                 const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000); 
-
                 snapshot.forEach(doc => {
                     const uData = doc.data();
                     window.allUsers.push({ id: doc.id, ...uData });
-                    
                     if (uData.lastActive && typeof uData.lastActive.toDate === 'function') {
                         if (uData.lastActive.toDate() > fiveMinsAgo) liveCount++;
                     }
                 });
-
                 document.getElementById('statLiveUsers').innerHTML = `${liveCount} <span style="font-size: 12px; color: gray; font-weight:700; font-family:'Montserrat', sans-serif;">Online Now</span>`;
                 filterDashboardData(); 
             });
 
-            // 2. Fetch Orders
             onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snapshot) => {
                 allOrders = [];
                 snapshot.forEach(doc => {
@@ -757,7 +788,6 @@
                 filterDashboardData();
             });
 
-            // 3. Fetch Reviews
             onSnapshot(query(collection(db, "reviews"), orderBy("createdAt", "desc")), (snapshot) => {
                 const tbody = document.getElementById('adminReviewsTable');
                 tbody.innerHTML = '';
@@ -781,21 +811,29 @@
                 });
             });
 
-            // 4. Fetch Games
+            // FETCH REGULAR GAMES
             onSnapshot(query(collection(db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
                 allGames = [];
                 if(snapshot.empty) { 
                     document.getElementById('gamesTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;">No games found</td></tr>'; 
-                    return; 
+                } else {
+                    snapshot.forEach(doc => { allGames.push({ id: doc.id, ...doc.data() }); });
                 }
-                snapshot.forEach(doc => {
-                    allGames.push({ id: doc.id, ...doc.data() });
-                });
-                renderAdminGamesTable(); // Initial full render
-                renderOfferGameSelection(); // Offer banners checklist
+                renderAdminGamesTable(); 
+                renderOfferGameSelection(); 
             });
 
-            // 5. Fetch Coupons
+            // 🚀 FETCH PRE-ORDERS 🚀
+            onSnapshot(query(collection(db, "preorders"), orderBy("addedOn", "desc")), (snapshot) => {
+                allPreOrders = [];
+                if(snapshot.empty) { 
+                    document.getElementById('poTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;">No pre-orders found</td></tr>'; 
+                } else {
+                    snapshot.forEach(doc => { allPreOrders.push({ id: doc.id, ...doc.data() }); });
+                }
+                renderAdminPOTable(); 
+            });
+
             onSnapshot(query(collection(db, "coupons"), orderBy("createdAt", "desc")), (snapshot) => {
                 const tbody = document.getElementById('activeCouponsTable');
                 tbody.innerHTML = '';
@@ -815,14 +853,11 @@
                         <td>${cpn.usageLimit} Max</td>
                         <td>${cpn.usedCount || 0} Used</td>
                         <td>${statusHtml}</td>
-                        <td>
-                            <button class="btn-delete" onclick="deleteCoupon('${docSnap.id}')"><i class="fa-solid fa-trash"></i></button>
-                        </td>
+                        <td><button class="btn-delete" onclick="deleteCoupon('${docSnap.id}')"><i class="fa-solid fa-trash"></i></button></td>
                     </tr>`;
                 });
             });
 
-            // 6. Fetch Coupon Usage History
             onSnapshot(query(collection(db, "coupon_usage"), orderBy("usedAt", "desc")), (snapshot) => {
                 const tbody = document.getElementById('couponUsageTable');
                 tbody.innerHTML = '';
@@ -846,11 +881,9 @@
             setTimeout(loadBannerSettings, 1000);
         }
 
-        // 🚀 NEW: Render Games Table with Search Support
         window.renderAdminGamesTable = function(searchQuery = "") {
             const tbody = document.getElementById('gamesTableBody'); 
             tbody.innerHTML = '';
-            
             const lowerQuery = searchQuery.toLowerCase();
             const filteredGames = allGames.filter(g => g.title.toLowerCase().includes(lowerQuery));
 
@@ -858,10 +891,8 @@
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:gray;">No games found matching search.</td></tr>';
                 return;
             }
-
             filteredGames.forEach(game => {
                 let pBadge = game.platform === 'PC' ? `<span style="background:rgba(227,24,37,0.1); color:var(--primary-red); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">PC</span>` : `<span style="background:rgba(31,106,255,0.1); color:var(--ps5-blue); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">${game.platform}</span>`;
-                
                 tbody.innerHTML += `<tr>
                     <td><img src="${game.image}" style="width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border:1px solid var(--border-dark);"></td>
                     <td style="font-weight:600; font-size:13px;">${game.title}</td>
@@ -875,10 +906,35 @@
             });
         };
 
-        // Trigger search on input
-        document.getElementById('adminGameSearch').addEventListener('input', function() {
-            window.renderAdminGamesTable(this.value.trim());
-        });
+        // 🚀 NEW: Render Pre-Orders Table 🚀
+        window.renderAdminPOTable = function(searchQuery = "") {
+            const tbody = document.getElementById('poTableBody'); 
+            tbody.innerHTML = '';
+            const lowerQuery = searchQuery.toLowerCase();
+            const filteredPOs = allPreOrders.filter(g => g.title.toLowerCase().includes(lowerQuery));
+
+            if(filteredPOs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:gray;">No pre-orders found.</td></tr>';
+                return;
+            }
+            filteredPOs.forEach(game => {
+                let pBadge = game.platform.includes('PC') ? `<span style="background:rgba(227,24,37,0.1); color:var(--primary-red); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">${game.platform}</span>` : `<span style="background:rgba(31,106,255,0.1); color:var(--ps5-blue); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">${game.platform}</span>`;
+                tbody.innerHTML += `<tr>
+                    <td><img src="${game.image}" style="width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border:1px solid var(--border-dark);"></td>
+                    <td style="font-weight:600; font-size:13px;">${game.title}</td>
+                    <td>${pBadge}</td>
+                    <td style="color:#00e676; font-weight:bold; font-size:11px;">${game.releaseDate}</td>
+                    <td style="font-weight:700;">₹${game.price}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editPO('${game.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn-delete" onclick="deletePO('${game.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        };
+
+        document.getElementById('adminGameSearch').addEventListener('input', function() { window.renderAdminGamesTable(this.value.trim()); });
+        document.getElementById('adminPOSearch').addEventListener('input', function() { window.renderAdminPOTable(this.value.trim()); });
 
         window.filterDashboardData = function() {
             const selectedMonthStr = document.getElementById('monthPicker').value;
@@ -888,11 +944,9 @@
             
             allOrders.forEach(order => {
                 const orderMonthStr = order.dateObj.getFullYear() + '-' + String(order.dateObj.getMonth() + 1).padStart(2, '0');
-                
                 if (order.status !== "Pending Verification") {
                     totalRevenue += order.totalAmount || 0;
                     if(order.userId) totalBuyers.add(order.userId);
-                    
                     if(orderMonthStr === selectedMonthStr) {
                         monthRevenue += order.totalAmount || 0;
                         if(order.userId) monthBuyers.add(order.userId);
@@ -901,9 +955,7 @@
                     }
                 }
             });
-
             if(reportTable.innerHTML === '') reportTable.innerHTML = '<tr><td colspan="4" style="text-align: center; color: gray;">No verified sales in this month.</td></tr>';
-
             document.getElementById('reportTitle').innerText = `Report for ${selectedMonthStr}`;
             document.getElementById('statTotalRegUsers').innerText = window.allUsers.length;
             document.getElementById('statBuyers').innerText = monthBuyers.size;
@@ -916,10 +968,7 @@
             const tbody = document.getElementById('allOrdersTable'); tbody.innerHTML = '';
             allOrders.forEach(order => {
                 let itemsStr = order.items ? order.items.map(i => `${i.title} (x${i.qty})`).join(', ') : "Game Item";
-                
-                let statusHtml = '';
-                let actionHtml = '';
-
+                let statusHtml = ''; let actionHtml = '';
                 if (order.status === "Pending Verification") {
                     statusHtml = `<span class="status-badge status-pending"><i class="fa-regular fa-clock"></i> Pending</span>`;
                     actionHtml = `<button class="btn-approve" onclick="approveOrder('${order.id}', '${order.userId}', ${order.totalAmount})"><i class="fa-solid fa-check"></i> Approve & Give Tokens</button>`;
@@ -927,7 +976,6 @@
                     statusHtml = `<span class="status-badge status-completed"><i class="fa-solid fa-check-double"></i> Completed</span>`;
                     actionHtml = `<span style="color:var(--text-gray); font-size:11px; font-weight:bold;">Tokens Sent</span>`;
                 }
-
                 tbody.innerHTML += `<tr>
                     <td style="font-size:11px;">${order.dateObj.toLocaleDateString()}</td>
                     <td><strong>${order.userName || 'Guest'}</strong></td>
@@ -948,13 +996,22 @@
                         await setDoc(doc(db, "users", userId), { tokens: increment(earnedTokens) }, { merge: true });
                     }
                     alert(`✅ Order Approved! ${earnedTokens} tokens added to user.`);
-                } catch (error) {
-                    console.error("Approval Error: ", error);
-                    alert("❌ Failed to approve order. Please try again.");
-                }
+                } catch (error) { alert("❌ Failed to approve order."); }
             }
         };
 
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // ===============================================
+        // REGULAR GAMES CRUD LOGIC
+        // ===============================================
         window.editGame = function(gameId) {
             const game = allGames.find(g => g.id === gameId); if(!game) return;
             document.getElementById('formHeading').innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--ps5-blue);"></i> Edit Game: ` + game.title;
@@ -997,21 +1054,9 @@
                 try {
                     await deleteDoc(doc(db, "games", gameId));
                     if(document.getElementById('editGameId').value === gameId) cancelEdit();
-                } catch (error) {
-                    console.error("Delete Error: ", error);
-                    alert("❌ Delete Failed! Check console.");
-                }
+                } catch (error) { alert("❌ Delete Failed!"); }
             }
         };
-
-        function getBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
 
         document.getElementById('gameForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1019,24 +1064,15 @@
             const editId = document.getElementById('editGameId').value;
             const file = fileInput.files[0];
             const fallbackUrl = document.getElementById('gImageUrlFallback').value.trim();
-            
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
 
             try {
                 let imageUrl = document.getElementById('existingImage').value;
-
                 if (file) {
-                    if(file.size > 800 * 1024) { 
-                        alert("❌ Error: Image size is too large (max 800KB).");
-                        btn.innerHTML = editId ? "Update Game" : "Upload Game"; btn.disabled = false; return;
-                    }
+                    if(file.size > 800 * 1024) { alert("❌ Error: Image > 800KB."); btn.disabled = false; return; }
                     imageUrl = await getBase64(file);
-                } else if (fallbackUrl !== "") {
-                    imageUrl = fallbackUrl;
-                } else if (!editId) {
-                    alert("⚠️ Please provide an image (Upload or URL)!");
-                    btn.innerHTML = 'Upload Game'; btn.disabled = false; return;
-                }
+                } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; } 
+                else if (!editId) { alert("⚠️ Provide an image!"); btn.disabled = false; return; }
 
                 const selectedCategories = [];
                 document.querySelectorAll('.cat-check:checked').forEach(chk => selectedCategories.push(chk.value));
@@ -1067,30 +1103,118 @@
                     alert("✅ New Game Uploaded Successfully!");
                 }
                 cancelEdit();
-            } catch (error) {
-                console.error("Database Error: ", error);
-                alert("❌ Upload Failed!");
-            } finally {
-                btn.innerHTML = editId ? "<i class='fa-solid fa-floppy-disk'></i> Update Game" : "<i class='fa-solid fa-database'></i> Upload Game"; 
-                btn.disabled = false;
-            }
+            } catch (error) { alert("❌ Upload Failed!"); } 
+            finally { btn.innerHTML = editId ? "<i class='fa-solid fa-floppy-disk'></i> Update Game" : "<i class='fa-solid fa-database'></i> Upload Game"; btn.disabled = false; }
         });
 
-        window.deleteReview = async function(reviewId) {
-            if(confirm("Delete this customer review permanently?")) {
-                try { await deleteDoc(doc(db, "reviews", reviewId)); } 
-                catch(err) { console.error(err); alert("❌ Failed to delete review."); }
+        // ===============================================
+        // 🚀 PRE-ORDER CRUD LOGIC 🚀
+        // ===============================================
+        const poFileInput = document.getElementById('poImageFile');
+        poFileInput.addEventListener('change', () => {
+            if(poFileInput.files.length > 0) document.getElementById('poDropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> File Ready (${(poFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
+        });
+
+        window.editPO = function(poId) {
+            const game = allPreOrders.find(g => g.id === poId); if(!game) return;
+            document.getElementById('poFormHeading').innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--ps5-blue);"></i> Edit Pre-Order: ` + game.title;
+            document.getElementById('editPoId').value = game.id;
+            document.getElementById('existingPoImage').value = game.image;
+            document.getElementById('poUploadBtn').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Update Pre-Order`;
+            document.getElementById('poCancelEditBtn').style.display = 'block';
+
+            document.getElementById('poTitle').value = game.title;
+            document.getElementById('poPlatform').value = game.platform;
+            document.getElementById('poReleaseDate').value = game.releaseDate || '';
+            document.getElementById('poTrailer').value = game.trailerUrl || '';
+            document.getElementById('poPrice').value = game.price || '';
+            document.getElementById('poDesc').value = game.description || '';
+            document.getElementById('poBonus').checked = game.hasBonus || false;
+            document.getElementById('poImageUrlFallback').value = ""; 
+
+            document.querySelectorAll('.po-cat-check').forEach(chk => { chk.checked = game.categories && game.categories.includes(chk.value); });
+            document.getElementById('poDropZoneText').innerHTML = `<span style="color:var(--ps5-blue);"><i class="fa-solid fa-image" style="font-size:24px; display:block; margin-bottom:10px;"></i> Using Existing Database Image</span>`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.cancelPOEdit = function() {
+            document.getElementById('poForm').reset();
+            document.getElementById('editPoId').value = '';
+            document.getElementById('existingPoImage').value = '';
+            document.getElementById('poFormHeading').innerHTML = `<i class="fa-solid fa-calendar-plus" style="color:var(--primary-red);"></i> Add Upcoming Pre-Order`;
+            document.getElementById('poUploadBtn').innerHTML = `<i class="fa-solid fa-calendar-check"></i> Add Pre-Order to Database`;
+            document.getElementById('poCancelEditBtn').style.display = 'none';
+            document.getElementById('poDropZoneText').innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; display:block; margin-bottom:10px;"></i> Option 1: Drag & Drop Image Here (Max 800KB)`;
+        };
+
+        window.deletePO = async function(poId) {
+            if (confirm("Are you sure you want to delete this pre-order?")) {
+                try {
+                    await deleteDoc(doc(db, "preorders", poId));
+                    if(document.getElementById('editPoId').value === poId) cancelPOEdit();
+                } catch (error) { alert("❌ Delete Failed!"); }
             }
         };
 
-        // COUPON CREATION LOGIC
+        document.getElementById('poForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('poUploadBtn');
+            const editId = document.getElementById('editPoId').value;
+            const file = poFileInput.files[0];
+            const fallbackUrl = document.getElementById('poImageUrlFallback').value.trim();
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
+
+            try {
+                let imageUrl = document.getElementById('existingPoImage').value;
+                if (file) {
+                    if(file.size > 800 * 1024) { alert("❌ Image > 800KB."); btn.disabled = false; return; }
+                    imageUrl = await getBase64(file);
+                } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; } 
+                else if (!editId) { alert("⚠️ Provide an image!"); btn.disabled = false; return; }
+
+                const selectedCategories = [];
+                document.querySelectorAll('.po-cat-check:checked').forEach(chk => selectedCategories.push(chk.value));
+
+                const poData = {
+                    title: document.getElementById('poTitle').value,
+                    platform: document.getElementById('poPlatform').value,
+                    releaseDate: document.getElementById('poReleaseDate').value,
+                    trailerUrl: document.getElementById('poTrailer').value,
+                    price: Number(document.getElementById('poPrice').value),
+                    hasBonus: document.getElementById('poBonus').checked,
+                    categories: selectedCategories,
+                    image: imageUrl, 
+                    description: document.getElementById('poDesc').value,
+                };
+
+                if (editId) {
+                    await updateDoc(doc(db, "preorders", editId), poData);
+                    alert("✅ Pre-Order Updated Successfully!");
+                } else {
+                    poData.addedOn = serverTimestamp();
+                    await addDoc(collection(db, "preorders"), poData);
+                    alert("✅ New Pre-Order Uploaded Successfully!");
+                }
+                cancelPOEdit();
+            } catch (error) { alert("❌ Upload Failed!"); } 
+            finally { btn.innerHTML = editId ? "<i class='fa-solid fa-floppy-disk'></i> Update Pre-Order" : "<i class='fa-solid fa-calendar-check'></i> Add Pre-Order to Database"; btn.disabled = false; }
+        });
+
+        // ===============================================
+        // BANNERS, REVIEWS & COUPONS
+        // ===============================================
+        window.deleteReview = async function(reviewId) {
+            if(confirm("Delete this customer review permanently?")) {
+                try { await deleteDoc(doc(db, "reviews", reviewId)); } catch(err) { alert("❌ Failed to delete review."); }
+            }
+        };
+
         document.getElementById('createCouponForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const code = document.getElementById('cpnCode').value.trim().toUpperCase();
             const discount = Number(document.getElementById('cpnDiscount').value);
             const limit = Number(document.getElementById('cpnLimit').value);
             const btn = e.target.querySelector('button');
-
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...'; btn.disabled = true;
 
             try {
@@ -1110,19 +1234,15 @@
             }
         };
 
-        // BANNER RENDER LOGIC
         function renderOfferGameSelection() {
             const pcList = document.getElementById('obPcGamesList');
             const psList = document.getElementById('obPsGamesList');
             pcList.innerHTML = ''; psList.innerHTML = '';
-            
             let pcCount = 0; let psCount = 0;
-
             allGames.forEach(game => {
                 let displayPrice = game.price || game.permanentPrice || game.rentPrice || 0;
                 let origPrice = game.originalPrice || displayPrice;
                 const isChecked = window.currentFeaturedGames.includes(game.id) ? "checked" : "";
-                
                 const cbHtml = `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); margin-bottom:8px; transition:0.3s;">
                     <label style="font-size:11px; font-weight:700; color:white; display:flex; align-items:center; gap:10px; cursor:pointer; flex: 1;">
@@ -1133,11 +1253,8 @@
                     </label>
                     <input type="number" id="salePrice_${game.id}" placeholder="Sale Price ₹" title="Original: ₹${origPrice}" style="width:90px; padding:8px; border-radius:6px; border:1px solid var(--border-dark); background:black; color:white; font-size:11px; font-weight:bold; outline:none; text-align:center;">
                 </div>`;
-                
-                if(game.platform === 'PC') { pcList.innerHTML += cbHtml; pcCount++; } 
-                else { psList.innerHTML += cbHtml; psCount++; }
+                if(game.platform === 'PC') { pcList.innerHTML += cbHtml; pcCount++; } else { psList.innerHTML += cbHtml; psCount++; }
             });
-
             if(pcCount === 0) pcList.innerHTML = '<span style="color:gray; font-size:11px;">No PC games found</span>';
             if(psCount === 0) psList.innerHTML = '<span style="color:gray; font-size:11px;">No PS games found</span>';
         }
@@ -1145,60 +1262,27 @@
         window.loadBannerSettings = function() {
             const slot = document.getElementById('obBannerSlot').value;
             if(bannerUnsubscribe) bannerUnsubscribe();
-            
             bannerUnsubscribe = onSnapshot(doc(db, "settings", slot), (docSnap) => {
-                const imgPreview = document.getElementById('currentBannerImg');
-                const timePreview = document.getElementById('currentBannerTime');
-                const featCount = document.getElementById('currentFeaturedCount');
-                
                 if(docSnap.exists()) {
                     const data = docSnap.data();
-                    
                     document.getElementById('obTagline').value = data.tagline || "";
                     document.getElementById('obTitle').value = data.title || "";
                     document.getElementById('obTitleHighlight').value = data.titleHighlight || "";
                     document.getElementById('obSubtitle').value = data.subtitle || "";
-
-                    if(data.image) { imgPreview.src = data.image; imgPreview.style.display = 'block'; }
-                    else { imgPreview.style.display = 'none'; }
-                    
                     if(data.endTime) {
-                        timePreview.innerText = new Date(data.endTime).toLocaleString();
                         let dt = new Date(data.endTime);
                         let formattedDt = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0') + 'T' + String(dt.getHours()).padStart(2,'0') + ':' + String(dt.getMinutes()).padStart(2,'0');
                         document.getElementById('obTimer').value = formattedDt;
-                    }
-                    else { 
-                        timePreview.innerText = "Not Set"; 
-                        document.getElementById('obTimer').value = '';
-                    }
-                    
-                    if(data.featuredGames) {
-                        window.currentFeaturedGames = data.featuredGames;
-                        featCount.innerText = `${data.featuredGames.length} Games Featured`;
-                    } else {
-                        window.currentFeaturedGames = [];
-                        featCount.innerText = `0 Games Featured`;
-                    }
+                    } else { document.getElementById('obTimer').value = ''; }
+                    window.currentFeaturedGames = data.featuredGames ? data.featuredGames : [];
                 } else {
-                    document.getElementById('obTagline').value = "";
-                    document.getElementById('obTitle').value = "";
-                    document.getElementById('obTitleHighlight').value = "";
-                    document.getElementById('obSubtitle').value = "";
-                    imgPreview.style.display = 'none';
-                    timePreview.innerText = "Not Set";
+                    document.getElementById('offerBannerForm').reset();
                     document.getElementById('obTimer').value = '';
                     window.currentFeaturedGames = [];
-                    featCount.innerText = `0 Games Featured`;
                 }
                 renderOfferGameSelection(); 
             });
         };
-
-        const obFileInput = document.getElementById('obImageFile');
-        obFileInput.addEventListener('change', () => {
-            if(obFileInput.files.length > 0) document.getElementById('obDropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> Image Ready (${(obFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
-        });
 
         document.getElementById('offerBannerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1207,43 +1291,26 @@
             const file = obFileInput.files[0];
             const fallbackUrl = document.getElementById('obImageUrlFallback').value.trim();
             const endTime = document.getElementById('obTimer').value;
-            
-            const tagline = document.getElementById('obTagline').value.trim();
-            const title = document.getElementById('obTitle').value.trim();
-            const titleHighlight = document.getElementById('obTitleHighlight').value.trim();
-            const subtitle = document.getElementById('obSubtitle').value.trim();
-
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; 
-            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
 
             try {
-                let imageUrl = document.getElementById('currentBannerImg').src || "";
-
+                let imageUrl = ""; 
                 if (file) {
-                    if(file.size > 800 * 1024) { 
-                        alert("❌ Error: Image size is too large (max 800KB).");
-                        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; btn.disabled = false; return;
-                    }
+                    if(file.size > 800 * 1024) { alert("❌ Error: Image > 800KB"); btn.disabled = false; return; }
                     imageUrl = await getBase64(file);
-                } else if (fallbackUrl !== "") {
-                    imageUrl = fallbackUrl;
-                }
+                } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; }
 
-                const selectedGames = [];
-                const gameUpdates = [];
-                
+                const selectedGames = []; const gameUpdates = [];
                 document.querySelectorAll('.offer-game-cb:checked').forEach(cb => {
                     selectedGames.push(cb.value);
                     const salePriceInput = document.getElementById('salePrice_' + cb.value).value;
-                    if(salePriceInput && salePriceInput.trim() !== "") {
-                        gameUpdates.push({ id: cb.value, salePrice: Number(salePriceInput) });
-                    }
+                    if(salePriceInput && salePriceInput.trim() !== "") { gameUpdates.push({ id: cb.value, salePrice: Number(salePriceInput) }); }
                 });
 
                 const bannerDataUpdate = {
                     endTime: endTime, featuredGames: selectedGames,
-                    tagline: tagline, title: title, titleHighlight: titleHighlight,
-                    subtitle: subtitle, updatedAt: serverTimestamp()
+                    tagline: document.getElementById('obTagline').value.trim(), title: document.getElementById('obTitle').value.trim(), titleHighlight: document.getElementById('obTitleHighlight').value.trim(),
+                    subtitle: document.getElementById('obSubtitle').value.trim(), updatedAt: serverTimestamp()
                 };
                 if (imageUrl !== "") bannerDataUpdate.image = imageUrl;
 
@@ -1255,128 +1322,22 @@
                         const orig = game.originalPrice || game.price || game.permanentPrice || 1;
                         const discountPct = Math.round(((orig - update.salePrice) / orig) * 100);
                         const discountTag = discountPct > 0 ? `${discountPct}% OFF` : "";
-                        
-                        let updatedGameData = { 
-                            discount: discountTag,
-                            categories: game.categories ? [...new Set([...game.categories, "Offer"])] : ["Offer"]
-                        };
+                        let updatedGameData = { discount: discountTag, categories: game.categories ? [...new Set([...game.categories, "Offer"])] : ["Offer"] };
                         if (game.platform === 'PC') updatedGameData.price = update.salePrice;
                         else updatedGameData.permanentPrice = update.salePrice; 
-                        
                         await updateDoc(doc(db, "games", update.id), updatedGameData);
                     }
                 }
-                
-                alert(`✅ Banner (${slot}) Updated Successfully!`);
-                document.getElementById('obDropZoneText').innerHTML = `<i class="fa-solid fa-image" style="font-size:24px; display:block; margin-bottom:10px;"></i> Option 1: Drag & Drop Image Here (Max 800KB)`;
-            } catch (error) {
-                console.error("Banner Update Error: ", error);
-                alert("❌ Update Failed! Check console for details.");
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; 
-                btn.disabled = false;
-            }
+                alert(`✅ Banner (${slot}) Updated!`);
+            } catch (error) { alert("❌ Update Failed!"); } finally { btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save & Update Banner'; btn.disabled = false; }
         });
 
         window.deleteBanner = async function() {
             const slot = document.getElementById('obBannerSlot').value;
-            if(confirm(`Are you sure you want to completely delete "${slot}"?`)) {
-                try {
-                    await deleteDoc(doc(db, "settings", slot));
-                    alert(`✅ Banner (${slot}) deleted successfully!`);
-                } catch (error) { console.error("Delete Error: ", error); alert("❌ Failed to delete banner."); }
+            if(confirm(`Remove all data for "${slot}"?`)) {
+                try { await deleteDoc(doc(db, "settings", slot)); alert(`✅ Banner cleared!`); } catch (error) {}
             }
         };
-
-    </script>
-    
-    <script>
-        window.toggleEmailInput = function() {
-            const type = document.getElementById('emailRecipientType').value;
-            document.getElementById('singleEmailGroup').style.display = (type === 'single') ? 'block' : 'none';
-        };
-
-        document.getElementById('sendDirectBtn').addEventListener('click', () => {
-            const type = document.getElementById('emailRecipientType').value;
-            const subject = encodeURIComponent(document.getElementById('emailSubject').value);
-            const rawBody = document.getElementById('emailBody').value;
-            
-            const textBody = encodeURIComponent(
-`GAMEFLEX STORE
-Play More. Pay Less.
-
-${rawBody}
-
-------------------------
-Shop Now: https://gameflexstore-d20da.web.app/
-Follow us on Instagram: https://www.instagram.com/gameflex_store4`
-            );
-
-            if (type === 'single') {
-                const target = document.getElementById('targetEmail').value;
-                if(!target) { alert("Please enter an email address."); return; }
-                window.location.href = `mailto:${target}?subject=${subject}&body=${textBody}`;
-            } else {
-                if(!window.allUsers || window.allUsers.length === 0) { alert("No users found in database!"); return; }
-                const emails = window.allUsers.map(u => u.email).filter(e => e).join(',');
-                window.location.href = `mailto:?bcc=${emails}&subject=${subject}&body=${textBody}`;
-            }
-        });
-
-        document.getElementById('generateHtmlBtn').addEventListener('click', () => {
-            const subject = document.getElementById('emailSubject').value;
-            const messageBody = document.getElementById('emailBody').value.replace(/\n/g, "<br>");
-            const customImage = document.getElementById('emailImage').value;
-            
-            let imageHtml = customImage ? `<img src="${customImage}" alt="Promo Banner" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 20px;">` : '';
-            const logoUrl = "https://gameflexstore-d20da.web.app/logo.png";
-
-            const htmlCode = `
-<div style="font-family: 'Arial', sans-serif; background-color: #0b0c10; color: #ffffff; padding: 30px 10px; margin: 0; text-align: center;">
-    <div style="max-width: 600px; margin: 0 auto; background-color: #12141a; border-radius: 12px; overflow: hidden; border: 1px solid #1f222b; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        
-        <div style="padding: 20px; text-align: center; border-bottom: 1px solid #1f222b; background: rgba(5,7,12,0.95);">
-            <img src="${logoUrl}" alt="GameFlex Logo" style="width: 50px; height: 50px; margin-bottom: 10px;">
-            <h1 style="margin: 0; font-size: 24px; font-weight: 800; color: white;">GAMEFLEX<span style="color: #e31825;">_STORE</span></h1>
-            <p style="margin: 5px 0 0; color: #a3a3a3; font-size: 11px; letter-spacing: 2px;">PLAY MORE. PAY LESS.</p>
-        </div>
-
-        <div style="padding: 30px 20px; text-align: center;">
-            ${imageHtml}
-            <h2 style="color: #ffffff; font-size: 22px; margin-top: 0; margin-bottom: 20px;">${subject}</h2>
-            <p style="color: #a3a3a3; font-size: 15px; line-height: 1.6; margin-bottom: 30px; white-space: pre-line;">
-                ${messageBody}
-            </p>
-            
-            <a href="https://gameflexstore-d20da.web.app/" style="display: inline-block; background-color: #e31825; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 15px; text-transform: uppercase;">
-                Start Shopping Now
-            </a>
-        </div>
-
-        <div style="padding: 20px; background-color: #0b0c10; text-align: center; border-top: 1px solid #1f222b;">
-            <p style="color: #a3a3a3; font-size: 12px; margin-bottom: 10px;">Follow us for the latest drops and deals!</p>
-            <a href="https://www.instagram.com/gameflex_store4" style="display: inline-block; color: white; text-decoration: none; font-size: 14px; font-weight: bold; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); padding: 8px 15px; border-radius: 20px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" style="width:16px; vertical-align:middle; margin-right:5px; filter: brightness(0) invert(1);"> Instagram
-            </a>
-            <p style="color: #555; font-size: 10px; margin-top: 20px;">&copy; 2026 GameFlex Store. All Rights Reserved.</p>
-        </div>
-    </div>
-</div>`;
-
-            const newWindow = window.open();
-            newWindow.document.write(`
-                <title>Generated Email Code</title>
-                <body style="background:#0b0c10; color:white; padding:20px; font-family:sans-serif;">
-                    <h2 style="color:#00d2ff;">HTML Email Generated Successfully!</h2>
-                    <p style="color:gray;">Copy the HTML code below and paste it into your bulk email sender.</p>
-                    <textarea style="width:100%; height:300px; padding:15px; border-radius:8px; border:1px solid #1f222b; background:#12141a; color:#00e676; font-family:monospace; outline:none;">${htmlCode}</textarea>
-                    <h3 style="margin-top:30px; color:#ff3333;">Email Preview:</h3>
-                    <div style="border:1px solid #1f222b; background:black; max-width:800px; margin:auto;">
-                        ${htmlCode}
-                    </div>
-                </body>
-            `);
-        });
     </script>
 </body>
 </html>
