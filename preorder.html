@@ -241,7 +241,7 @@
             .po-controls { display: none; } 
 
             /* Filters Mobile */
-            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch; top: 102px;}
+            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch; top: 102px;} 
             .pill-filters { padding-bottom: 10px; }
             .sort-select { width: 100%; }
 
@@ -292,7 +292,6 @@
             </div>
         </a>
 
-        <!-- SEARCH BAR AREA -->
         <div class="search-container">
             <input type="text" id="gameSearch" class="search-input" placeholder="Search games, pre-orders..." autocomplete="off">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
@@ -312,7 +311,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
-            <li><a href="preorder.html" class="active">Pre-Orders</a></li>
+            <li class="active"><a href="preorder.html">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Reviews</a></li>
         </ul>
@@ -379,14 +378,14 @@
         </div>
     </header>
 
-    <!-- FILTER BAR WITH DATA-FILTER ATTRIBUTES -->
+    <!-- FILTER BAR -->
     <div class="filter-section animate-fade-up delay-1" id="preOrderGrid">
         <div class="pill-filters">
             <button class="pill-btn active" data-filter="all">All</button>
             <button class="pill-btn" data-filter="ps5">PS5</button>
             <button class="pill-btn" data-filter="pc">PC</button>
-            <button class="pill-btn" data-filter="2025">Upcoming 2025</button>
             <button class="pill-btn" data-filter="2026">Upcoming 2026</button>
+            <button class="pill-btn" data-filter="2027">Upcoming 2027</button>
             <button class="pill-btn" data-filter="action">Action</button>
             <button class="pill-btn" data-filter="adventure">Adventure</button>
             <button class="pill-btn" data-filter="rpg">RPG</button>
@@ -401,118 +400,20 @@
         </select>
     </div>
 
-    <!-- UPCOMING RELEASES GRID -->
+    <!-- UPCOMING RELEASES GRID (DYNAMIC FROM FIREBASE) -->
     <section class="releases-section animate-fade-up delay-2">
         <div class="section-head">
             <div class="sh-left">
                 <div class="sh-title"><i class="fa-solid fa-gamepad"></i> UPCOMING RELEASES</div>
                 <div class="sh-subtitle">Pre-order now and be among the first to play.</div>
             </div>
-            <a href="#" class="view-all-link">View All <i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
+        <!-- 🚀 THIS GRID WILL POPULATE FROM FIREBASE 🚀 -->
         <div class="game-grid" id="mainGamesGrid">
-            
-            <!-- ADDED DATA-CATEGORY TO ALL CARDS FOR JS FILTERING -->
-            
-            <!-- Card 1: GTA VI -->
-            <div class="game-card" data-category="ps5 2026 action shooter adventure">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop" class="card-img" alt="GTA VI">
-                    <div class="platform-tags"><div class="ptag">PS5</div></div>
-                    <div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">Grand Theft Auto VI</div>
-                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 26 May, 2026</div>
-                    <div class="card-buttons">
-                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                        <button class="btn-prebook" onclick="addToCart('Grand Theft Auto VI (Pre-Order)', 499, 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
-                    </div>
-                </div>
+            <div style="width:100%; text-align:center; padding: 50px 0; color:var(--primary-red); grid-column:1/-1;">
+                <i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Loading live pre-orders...
             </div>
-
-            <!-- Card 2: Wolverine -->
-            <div class="game-card" data-category="ps5 2026 action adventure">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Wolverine">
-                    <div class="platform-tags"><div class="ptag">PS5</div></div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">Marvel's Wolverine</div>
-                    <div class="release-date"><i class="fa-regular fa-calendar"></i> Fall 2026</div>
-                    <div class="card-buttons">
-                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                        <button class="btn-prebook" onclick="addToCart('Marvel Wolverine (Pre-Order)', 499, 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Ghost of Yotei -->
-            <div class="game-card" data-category="ps5 pc 2025 action adventure rpg">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Ghost">
-                    <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">Ghost of Yōtei</div>
-                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 2 Oct, 2025</div>
-                    <div class="card-buttons">
-                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                        <button class="btn-prebook" onclick="addToCart('Ghost of Yotei (Pre-Order)', 499, 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4: Death Stranding 2 -->
-            <div class="game-card" data-category="ps5 2025 action adventure">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Death Stranding 2">
-                    <div class="platform-tags"><div class="ptag">PS5</div></div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">Death Stranding 2</div>
-                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 26 Jun, 2025</div>
-                    <div class="card-buttons">
-                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                        <button class="btn-prebook" onclick="addToCart('Death Stranding 2 (Pre-Order)', 499, 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5: Monster Hunter Wilds -->
-            <div class="game-card" data-category="ps5 pc 2025 action rpg">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Monster Hunter Wilds">
-                    <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">Monster Hunter Wilds</div>
-                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 28 Feb, 2025</div>
-                    <div class="card-buttons">
-                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                        <button class="btn-prebook" onclick="addToCart('Monster Hunter Wilds (Pre-Order)', 499, 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 6: Assassin's Creed Shadows -->
-            <div class="game-card" data-category="ps5 pc 2025 action rpg adventure">
-                <div class="card-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Assassin's Creed Shadows">
-                    <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
-                    <div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">Assassin's Creed Shadows</div>
-                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 20 Mar, 2025</div>
-                    <div class="card-buttons">
-                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                        <button class="btn-prebook" onclick="addToCart('Assassins Creed Shadows (Pre-Order)', 499, 'https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
@@ -541,7 +442,7 @@
         </div>
     </section>
 
-    <!-- SCRIPTS FOR FILTERING AND ANIMATIONS -->
+    <!-- SCRIPTS -->
     <script>
         function scrollToGames() {
             const target = document.getElementById('preOrderGrid');
@@ -549,14 +450,12 @@
             window.scrollTo({top: offset, behavior: 'smooth'});
         }
 
-        // 🚀 NEW JS FILTER LOGIC 🚀
+        // JS FILTER LOGIC
         document.querySelectorAll('.pill-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                // UI update for Active Button
                 document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
 
-                // Filter logic
                 const filterValue = e.target.getAttribute('data-filter');
                 const games = document.querySelectorAll('.game-card');
                 
@@ -595,7 +494,6 @@
 
     <!-- Global Variables & Cart Logic -->
     <script>
-        window.liveGamesDatabase = []; 
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
         
         window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
@@ -621,10 +519,11 @@
         window.updateCartUI();
     </script>
 
-    <!-- FIREBASE MODULE -->
+    <!-- 🚀 FIREBASE MODULE FOR DYNAMIC PRE-ORDERS 🚀 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -636,6 +535,7 @@
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
         const savedUserName = localStorage.getItem('gf_logged_in_user');
@@ -659,6 +559,70 @@
                     };
                 }
             });
+        });
+
+        // 🚀 FETCH PRE-ORDERS FROM DATABASE AND BUILD HTML CARDS 🚀
+        const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"));
+        onSnapshot(qPreOrders, (snapshot) => {
+            const grid = document.getElementById('mainGamesGrid');
+            grid.innerHTML = '';
+            
+            if(snapshot.empty) {
+                grid.innerHTML = '<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No upcoming pre-orders right now. Check back soon!</p>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const game = doc.data();
+                
+                // Construct Category String for filtering
+                let categoriesStr = game.categories ? game.categories.join(' ').toLowerCase() : '';
+                let searchDataCategory = `${categoriesStr} ${game.platform.toLowerCase()}`;
+
+                // Platform Tags UI
+                let platformTagsHtml = '';
+                if(game.platform === 'PS5/PC') {
+                    platformTagsHtml = `<div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div>`;
+                } else if(game.platform === 'PC') {
+                    platformTagsHtml = `<div class="ptag" style="background:white; color:black;">PC</div>`;
+                } else {
+                    platformTagsHtml = `<div class="ptag">${game.platform}</div>`; 
+                }
+
+                // Bonus Badge UI
+                let bonusHtml = game.hasBonus ? `<div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>` : '';
+                
+                // Safe Title for onclick function
+                let escapedTitle = game.title.replace(/'/g, "\\'");
+                
+                // Trailer Button Action
+                let trailerAction = game.trailerUrl ? `window.open('${game.trailerUrl}', '_blank')` : `alert('Trailer coming soon!')`;
+
+                // Build HTML Card
+                let cardHtml = `
+                <div class="game-card animate-fade-up" data-category="${searchDataCategory}">
+                    <div class="card-img-wrapper">
+                        <img src="${game.image}" class="card-img" alt="${game.title}">
+                        <div class="platform-tags">${platformTagsHtml}</div>
+                        ${bonusHtml}
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${game.title}</div>
+                        <div class="release-date"><i class="fa-regular fa-calendar"></i> ${game.releaseDate}</div>
+                        <div class="card-buttons">
+                            <button class="btn-trailer" onclick="${trailerAction}"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                            <button class="btn-prebook" onclick="addToCart('${escapedTitle} (Pre-Order)', ${game.price}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i> Pre-book (₹${game.price})</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+                
+                grid.innerHTML += cardHtml;
+            });
+
+            // Re-apply active filter if needed after database loads
+            const activeFilterBtn = document.querySelector('.pill-btn.active');
+            if(activeFilterBtn) { activeFilterBtn.click(); }
         });
     </script>
 </body>
