@@ -165,14 +165,13 @@
             .form-group { margin-bottom: 15px; min-width: 100%; }
             
             .offer-games-flex { flex-direction: column; gap: 15px; }
-            .banner-action-btns, .email-action-btns { flex-direction: column; gap: 10px; }
+            .banner-action-btns { flex-direction: column; gap: 10px; }
             .btn-update, .btn-remove { width: 100%; font-size: 13px; padding: 12px;}
             
             #loginOverlay { padding: 20px; }
             #loginOverlay h1 { font-size: 24px !important; }
             #loginOverlay p { font-size: 14px !important; }
 
-            /* Touch Press Effect for Mobile */
             .btn-primary:active, .nav-links li:active, .stat-card:active {
                 transform: scale(0.96) !important;
                 transition: 0.1s !important;
@@ -362,8 +361,6 @@
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
                         <h3 style="margin: 0;"><i class="fa-solid fa-server" style="color:var(--ps5-blue); margin-right:8px;"></i> Uploaded Games Database</h3>
-                        
-                        <!-- 🚀 Search Bar in Admin Games List -->
                         <div class="game-search-box">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <input type="text" id="adminGameSearch" placeholder="Search by game title...">
@@ -422,6 +419,7 @@
                         <div class="form-group">
                             <label>Filter Categories (For sorting on Pre-Order page)</label>
                             <div class="category-grid" id="poCategoryCheckboxes">
+                                <!-- UPDATED CATEGORIES: 2026 and 2027 -->
                                 <label><input type="checkbox" value="2026" class="po-cat-check"> Upcoming 2026</label>
                                 <label><input type="checkbox" value="2027" class="po-cat-check"> Upcoming 2027</label>
                                 <label><input type="checkbox" value="action" class="po-cat-check"> Action</label>
@@ -442,7 +440,7 @@
                         <div class="form-group">
                             <label>Game Poster Image</label>
                             <div class="drop-zone" id="poDropZone">
-                                <span id="poDropZoneText" style="font-size:13px; font-weight:600;"><i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; display:block; margin-bottom:10px;"></i> Option 1: Drag & Drop Image Here (Max 800KB)</span>
+                                <span id="poDropZoneText" style="font-size:13px; font-weight:600;"><i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; display:block; margin-bottom:10px;"></i> Option 1: Drag & Drop Image Here (Max 600KB)</span>
                                 <input type="file" id="poImageFile" accept="image/*">
                             </div>
                             <div style="text-align: center; margin: 15px 0; color: var(--text-gray); font-size: 11px; font-weight:800;">--- OR ---</div>
@@ -653,7 +651,8 @@
         // 🚀 BULLETPROOF SECURITY ALLOW LIST 🚀
         const ALLOWED_EMAILS = [
             "sumitroman198@gmail.com",
-            "sudhir017panwar@gmail.com"
+            "sudhir017panwar@gmail.com",
+            "sudhir017@gmail.com"
         ];
         
         let adminDataLoaded = false;
@@ -1113,13 +1112,8 @@
         });
 
         // ===============================================
-        // 🚀 PRE-ORDER CRUD LOGIC 🚀
+        // 🚀 PRE-ORDER CRUD LOGIC (FIXED) 🚀
         // ===============================================
-        const poFileInput = document.getElementById('poImageFile');
-        poFileInput.addEventListener('change', () => {
-            if(poFileInput.files.length > 0) document.getElementById('poDropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> File Ready (${(poFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
-        });
-
         window.editPO = function(poId) {
             const game = allPreOrders.find(g => g.id === poId); if(!game) return;
             document.getElementById('poFormHeading').innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--ps5-blue);"></i> Edit Pre-Order: ` + game.title;
@@ -1161,21 +1155,34 @@
             }
         };
 
+        // Added event listener dynamically inside script to avoid null file input errors
+        const poFileInput = document.getElementById('poImageFile');
+        poFileInput.addEventListener('change', () => {
+            if(poFileInput.files.length > 0) {
+                document.getElementById('poDropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> File Ready (${(poFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
+            }
+        });
+
         document.getElementById('poForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('poUploadBtn');
             const editId = document.getElementById('editPoId').value;
-            const file = poFileInput.files[0];
+            const file = document.getElementById('poImageFile').files[0];
             const fallbackUrl = document.getElementById('poImageUrlFallback').value.trim();
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; 
+            btn.disabled = true;
 
             try {
                 let imageUrl = document.getElementById('existingPoImage').value;
                 if (file) {
-                    if(file.size > 800 * 1024) { alert("❌ Image > 800KB."); btn.disabled = false; return; }
+                    if(file.size > 800 * 1024) { alert("❌ Image > 800KB. Please compress it."); btn.disabled = false; return; }
                     imageUrl = await getBase64(file);
-                } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; } 
-                else if (!editId) { alert("⚠️ Provide an image!"); btn.disabled = false; return; }
+                } else if (fallbackUrl !== "") { 
+                    imageUrl = fallbackUrl; 
+                } else if (!editId && !imageUrl) { 
+                    alert("⚠️ Provide an image (Upload or URL)!"); btn.disabled = false; return; 
+                }
 
                 const selectedCategories = [];
                 document.querySelectorAll('.po-cat-check:checked').forEach(chk => selectedCategories.push(chk.value));
@@ -1201,8 +1208,13 @@
                     alert("✅ New Pre-Order Uploaded Successfully!");
                 }
                 cancelPOEdit();
-            } catch (error) { alert("❌ Upload Failed!"); } 
-            finally { btn.innerHTML = editId ? "<i class='fa-solid fa-floppy-disk'></i> Update Pre-Order" : "<i class='fa-solid fa-calendar-check'></i> Add Pre-Order to Database"; btn.disabled = false; }
+            } catch (error) { 
+                console.error("PO Upload Error:", error);
+                alert("❌ Upload Failed! " + error.message); 
+            } finally { 
+                btn.innerHTML = editId ? "<i class='fa-solid fa-floppy-disk'></i> Update Pre-Order" : "<i class='fa-solid fa-calendar-check'></i> Add Pre-Order to Database"; 
+                btn.disabled = false; 
+            }
         });
 
         // ===============================================
@@ -1288,6 +1300,11 @@
                 renderOfferGameSelection(); 
             });
         };
+
+        const obFileInput = document.getElementById('obImageFile');
+        obFileInput.addEventListener('change', () => {
+            if(obFileInput.files.length > 0) document.getElementById('obDropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> Image Ready (${(obFileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
+        });
 
         document.getElementById('offerBannerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
