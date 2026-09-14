@@ -66,7 +66,7 @@
         .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.2); }
         .login-btn:hover { background: var(--primary-red); box-shadow: var(--theme-glow); transform: translateY(-2px); }
 
-        /* PRE-ORDER HERO SECTION (ADAPTABLE BANNER) */
+        /* PRE-ORDER HERO SECTION */
         .po-hero { 
             position: relative; 
             height: 480px; 
@@ -81,15 +81,13 @@
         .po-hero-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* Make it perfectly adaptable for any game poster */
             background-image: url('https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2070&auto=format&fit=crop'); 
             background-size: cover; 
-            background-position: right center; /* Focuses on the right character usually */
+            background-position: right center; 
             z-index: 0;
             opacity: 0.8;
             transition: background 0.5s ease-in-out;
         }
-        /* Gradient mask for readable text on the left */
         .po-hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(90deg, rgba(11,12,16,1) 0%, rgba(11,12,16,0.9) 30%, rgba(11,12,16,0) 100%);
@@ -138,11 +136,10 @@
 
         .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
         
-        /* CARD DESIGN ADAPTABLE */
         .game-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);}
         .game-card:hover { border-color: rgba(227, 24, 37, 0.4); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(227, 24, 37, 0.05); }
         
-        .card-img-wrapper { position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; } /* Maintains perfect poster ratio */
+        .card-img-wrapper { position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; } 
         .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
         .game-card:hover .card-img { transform: scale(1.05); filter: brightness(1.1); }
         
@@ -186,7 +183,6 @@
         .ab-desc { font-size: 12px; color: var(--text-gray); margin-bottom: 20px; font-weight: 600; }
         .btn-outline-red { background: transparent; border: 2px solid var(--primary-red); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         .btn-outline-red:hover { background: var(--primary-red); box-shadow: var(--theme-glow); }
-        /* Placeholder for right side character */
         .ab-character { position: absolute; right: -20px; bottom: 0; height: 120%; width: 40%; background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=500&auto=format&fit=crop'); background-size: cover; background-position: left; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); z-index: 1; opacity: 0.7;}
 
         /* CART SIDEBAR */
@@ -237,15 +233,15 @@
             /* Hero Mobile */
             .po-hero { height: 420px; padding: 30px 5%; background-position: center; justify-content: center; text-align: center;}
             .po-hero-bg { background-position: center; }
-            .po-hero-overlay { background: rgba(11,12,16,0.75); } /* Full dark overlay for mobile text readability */
+            .po-hero-overlay { background: rgba(11,12,16,0.75); } 
             .po-content { width: 100%; display: flex; flex-direction: column; align-items: center;}
             .po-title { font-size: 38px; margin-bottom: 10px;}
             .po-subtitle { font-size: 12px; margin-bottom: 20px;}
             .po-features-list { justify-content: center; gap: 15px; margin-bottom: 25px; }
-            .po-controls { display: none; } /* Hide dots on mobile to save space */
+            .po-controls { display: none; } 
 
             /* Filters Mobile */
-            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch; top: 102px;} /* Adjust sticky top */
+            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch; top: 102px;}
             .pill-filters { padding-bottom: 10px; }
             .sort-select { width: 100%; }
 
@@ -266,17 +262,17 @@
             /* Bottom Split Mobile */
             .bottom-split-banner { flex-direction: column; padding: 0 5% 40px 5%; gap: 15px; }
             .benefits-box, .action-box { padding: 20px; }
-            .bb-icon-large { display: none; } /* hide large icon to save space */
+            .bb-icon-large { display: none; } 
             .bb-features-row { flex-wrap: wrap; justify-content: center; gap: 15px;}
             .bbf-item { width: 40%; }
             
             .ab-content { max-width: 100%; text-align: center;}
-            .ab-character { display: none; } /* Hide bg character image on mobile to focus on text/button */
+            .ab-character { display: none; } 
             .btn-outline-red { width: 100%; }
 
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
             
-            /* Touch Ripple / Push effect */
+            /* Touch Ripple */
             .game-card:active, .pill-btn:active, .po-hero-btn:active {
                 transform: scale(0.96) !important;
                 transition: 0.1s !important;
@@ -316,7 +312,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
-            <li class="active"><a href="preorder.html">Pre-Orders</a></li>
+            <li><a href="preorder.html" class="active">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Reviews</a></li>
         </ul>
@@ -341,7 +337,6 @@
     </div>
 
     <!-- PRE-ORDER HERO SECTION -->
-    <!-- The background image here is highly adaptable via CSS cover/center properties -->
     <header class="po-hero animate-fade-up">
         <div class="po-hero-bg"></div>
         <div class="po-hero-overlay"></div>
@@ -384,20 +379,19 @@
         </div>
     </header>
 
-    <!-- FILTER BAR -->
+    <!-- FILTER BAR WITH DATA-FILTER ATTRIBUTES -->
     <div class="filter-section animate-fade-up delay-1" id="preOrderGrid">
         <div class="pill-filters">
-            <button class="pill-btn active">All</button>
-            <button class="pill-btn">PS5</button>
-            <button class="pill-btn">PC</button>
-            <button class="pill-btn">Upcoming 2025</button>
-            <button class="pill-btn">Upcoming 2026</button>
-            <button class="pill-btn">Action</button>
-            <button class="pill-btn">Adventure</button>
-            <button class="pill-btn">RPG</button>
-            <button class="pill-btn">Shooter</button>
-            <button class="pill-btn">Racing</button>
-            <button class="pill-btn">More <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:3px;"></i></button>
+            <button class="pill-btn active" data-filter="all">All</button>
+            <button class="pill-btn" data-filter="ps5">PS5</button>
+            <button class="pill-btn" data-filter="pc">PC</button>
+            <button class="pill-btn" data-filter="2025">Upcoming 2025</button>
+            <button class="pill-btn" data-filter="2026">Upcoming 2026</button>
+            <button class="pill-btn" data-filter="action">Action</button>
+            <button class="pill-btn" data-filter="adventure">Adventure</button>
+            <button class="pill-btn" data-filter="rpg">RPG</button>
+            <button class="pill-btn" data-filter="shooter">Shooter</button>
+            <button class="pill-btn" data-filter="racing">Racing</button>
         </div>
         <select class="sort-select">
             <option>Sort by: Release Date</option>
@@ -419,12 +413,11 @@
 
         <div class="game-grid" id="mainGamesGrid">
             
-            <!-- HARDCODED PLACEHOLDER CARDS MATCHING REFERENCE IMAGE FOR PREVIEW -->
+            <!-- ADDED DATA-CATEGORY TO ALL CARDS FOR JS FILTERING -->
             
             <!-- Card 1: GTA VI -->
-            <div class="game-card">
+            <div class="game-card" data-category="ps5 2026 action shooter adventure">
                 <div class="card-img-wrapper">
-                    <!-- Placeholder cover -->
                     <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop" class="card-img" alt="GTA VI">
                     <div class="platform-tags"><div class="ptag">PS5</div></div>
                     <div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>
@@ -440,7 +433,7 @@
             </div>
 
             <!-- Card 2: Wolverine -->
-            <div class="game-card">
+            <div class="game-card" data-category="ps5 2026 action adventure">
                 <div class="card-img-wrapper">
                     <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Wolverine">
                     <div class="platform-tags"><div class="ptag">PS5</div></div>
@@ -456,7 +449,7 @@
             </div>
 
             <!-- Card 3: Ghost of Yotei -->
-            <div class="game-card">
+            <div class="game-card" data-category="ps5 pc 2025 action adventure rpg">
                 <div class="card-img-wrapper">
                     <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Ghost">
                     <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
@@ -472,7 +465,7 @@
             </div>
 
             <!-- Card 4: Death Stranding 2 -->
-            <div class="game-card">
+            <div class="game-card" data-category="ps5 2025 action adventure">
                 <div class="card-img-wrapper">
                     <img src="https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Death Stranding 2">
                     <div class="platform-tags"><div class="ptag">PS5</div></div>
@@ -488,7 +481,7 @@
             </div>
 
             <!-- Card 5: Monster Hunter Wilds -->
-            <div class="game-card">
+            <div class="game-card" data-category="ps5 pc 2025 action rpg">
                 <div class="card-img-wrapper">
                     <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Monster Hunter Wilds">
                     <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
@@ -504,7 +497,7 @@
             </div>
 
             <!-- Card 6: Assassin's Creed Shadows -->
-            <div class="game-card">
+            <div class="game-card" data-category="ps5 pc 2025 action rpg adventure">
                 <div class="card-img-wrapper">
                     <img src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Assassin's Creed Shadows">
                     <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
@@ -548,24 +541,40 @@
         </div>
     </section>
 
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS FOR FILTERING AND ANIMATIONS -->
     <script>
-        // Smooth scroll for hero button
         function scrollToGames() {
             const target = document.getElementById('preOrderGrid');
             const offset = target.getBoundingClientRect().top + window.scrollY - 70;
             window.scrollTo({top: offset, behavior: 'smooth'});
         }
 
-        // Pill filter active state
+        // 🚀 NEW JS FILTER LOGIC 🚀
         document.querySelectorAll('.pill-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                // UI update for Active Button
                 document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
+
+                // Filter logic
+                const filterValue = e.target.getAttribute('data-filter');
+                const games = document.querySelectorAll('.game-card');
+                
+                games.forEach(game => {
+                    if(filterValue === 'all') {
+                        game.style.display = 'flex';
+                    } else {
+                        const categories = game.getAttribute('data-category');
+                        if(categories && categories.includes(filterValue)) {
+                            game.style.display = 'flex';
+                        } else {
+                            game.style.display = 'none';
+                        }
+                    }
+                });
             });
         });
 
-        // Intersection Observer for scroll animations
         document.addEventListener("DOMContentLoaded", function() {
             const animatedElements = document.querySelectorAll('.animate-fade-up');
             const observer = new IntersectionObserver((entries) => {
@@ -586,7 +595,7 @@
 
     <!-- Global Variables & Cart Logic -->
     <script>
-        window.liveGamesDatabase = []; // Populated by Firebase if integrated
+        window.liveGamesDatabase = []; 
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
         
         window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
@@ -612,7 +621,7 @@
         window.updateCartUI();
     </script>
 
-    <!-- FIREBASE MODULE (Standard Include to keep Navbar Sync & Login working) -->
+    <!-- FIREBASE MODULE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
