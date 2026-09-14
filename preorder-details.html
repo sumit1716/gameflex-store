@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pre-Order Details - GameFlex Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e31825;
+            --ps5-blue: #1f6aff;
+            --dark-bg: #0b0c10;
+            --text-light: #ffffff;
+            --text-gray: #a3a3a3;
+            --card-bg: #12141a;
+            --border-dark: #2a2a30;
+            --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
+        }
+
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent;}
+        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a0e15, var(--primary-red)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff3333; }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+
+        /* NAVBAR (MATCHING GLOBAL) */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(227, 24, 37, 0.3); padding: 5px; transition: var(--hover-transition); }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-text .top { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: white; line-height: 1; }
+        .logo-text .bottom { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--primary-red); letter-spacing: 3.5px; margin-top: 2px; }
+
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .nav-links li a:hover { color: var(--primary-red); }
+        
+        .nav-actions { display: flex; align-items: center; gap: 15px; position: relative;}
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
+        .icon-btn:hover { color: var(--primary-red); transform: scale(1.1); }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
+        .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .login-btn:hover { background: var(--primary-red); transform: translateY(-2px); box-shadow: var(--theme-glow); }
+
+        /* PRE-ORDER DETAILS HERO */
+        .po-detail-hero { position: relative; width: 100%; height: 75vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .hero-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(8px) brightness(0.4); transform: scale(1.1); z-index: 0; }
+        .hero-gradient { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, var(--dark-bg) 0%, transparent 100%); z-index: 1; }
+
+        .details-glass { position: relative; z-index: 2; width: 85%; max-width: 1200px; background: rgba(18, 20, 26, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; display: flex; gap: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); margin-top: 50px; }
+        
+        /* LEFT: POSTER */
+        .game-poster-col { flex: 0 0 320px; }
+        .game-poster-img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.05); transition: 0.5s; }
+        .game-poster-img:hover { transform: scale(1.03) translateY(-10px); border-color: rgba(227, 24, 37, 0.5); box-shadow: var(--theme-glow); }
+
+        /* RIGHT: INFO */
+        .game-info-col { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .platform-badge { background: rgba(255,255,255,0.1); color: white; padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.2); }
+        .game-title { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; line-height: 1.1; margin-bottom: 15px; color: white; text-transform: uppercase; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .game-meta { display: flex; gap: 20px; margin-bottom: 25px; align-items: center; flex-wrap: wrap;}
+        .meta-item { display: flex; align-items: center; gap: 8px; color: var(--text-gray); font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
+        .meta-item i { color: var(--primary-red); }
+
+        .game-desc { font-size: 15px; line-height: 1.8; color: #d1d1d1; margin-bottom: 35px; border-left: 3px solid var(--primary-red); padding-left: 15px; }
+
+        .price-section { display: flex; align-items: flex-end; gap: 15px; margin-bottom: 30px; }
+        .price-label { font-size: 12px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .final-price { font-family: 'Orbitron', sans-serif; font-size: 45px; font-weight: 900; color: var(--primary-red); line-height: 1; text-shadow: var(--theme-glow); }
+        
+        .action-btns { display: flex; gap: 20px; flex-wrap: wrap; }
+        .btn-prebook-main { flex: 1; min-width: 200px; background: linear-gradient(90deg, #c1121d, var(--primary-red)); color: white; border: none; padding: 18px 25px; border-radius: 8px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 25px rgba(227, 24, 37, 0.4); display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .btn-prebook-main:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(227, 24, 37, 0.6); }
+        
+        .btn-trailer-main { flex: 1; min-width: 200px; background: rgba(255,255,255,0.05); color: white; border: 2px solid rgba(255,255,255,0.2); padding: 18px 25px; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 10px; backdrop-filter: blur(5px); }
+        .btn-trailer-main:hover { background: white; color: black; border-color: white; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255,255,255,0.3); }
+
+        /* TRAILER MODAL (YOUTUBE) */
+        .trailer-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); opacity: 0; transition: 0.3s ease; }
+        .trailer-modal-overlay.active { display: flex; opacity: 1; }
+        .trailer-container { position: relative; width: 80%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border-radius: 12px; box-shadow: 0 20px 60px rgba(227, 24, 37, 0.3); border: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; transform: scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .trailer-modal-overlay.active .trailer-container { transform: scale(1); }
+        .trailer-container iframe { width: 100%; height: 100%; border: none; }
+        .close-trailer { position: absolute; top: -45px; right: 0; background: none; border: none; color: white; font-size: 35px; cursor: pointer; transition: 0.3s; }
+        .close-trailer:hover { color: var(--primary-red); transform: rotate(90deg); }
+
+        /* CART SIDEBAR (Standard) */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 998; display: none; backdrop-filter: blur(5px); }
+        .cart-overlay.active { display: block; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s; display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; }
+        .close-cart:hover { color: var(--primary-red); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+
+        /* ========================================================================= */
+        /* 📱 MOBILE RESPONSIVE OPTIMIZATION 📱 */
+        /* ========================================================================= */
+        @media (max-width: 900px) {
+            .po-detail-hero { height: auto; min-height: 100vh; padding: 100px 5% 50px 5%; align-items: flex-start; }
+            .details-glass { flex-direction: column; width: 100%; padding: 25px; gap: 25px; margin-top: 20px; }
+            
+            .game-poster-col { flex: none; width: 100%; max-width: 280px; margin: 0 auto; }
+            
+            .game-title { font-size: 28px; text-align: center; }
+            .platform-badge { display: table; margin: 0 auto 15px auto; }
+            .game-meta { justify-content: center; gap: 10px; }
+            .meta-item { font-size: 11px; padding: 6px 10px; }
+            
+            .game-desc { font-size: 13px; text-align: justify; }
+            
+            .price-section { flex-direction: column; align-items: center; text-align: center; gap: 5px; margin-bottom: 20px;}
+            .final-price { font-size: 38px; }
+
+            .action-btns { flex-direction: column; gap: 15px; }
+            .btn-prebook-main, .btn-trailer-main { width: 100%; padding: 15px; font-size: 14px; }
+            
+            .trailer-container { width: 95%; }
+            .close-trailer { right: 10px; top: -40px; font-size: 30px; }
+
+            /* Navbar Mobile fixes */
+            .navbar { padding: 12px 5%; flex-wrap: wrap; }
+            .nav-links { display: none; } /* Hidden on mobile to save space, assuming hamburger in main app */
+            .search-container { order: 3; width: 100%; margin-top: 10px; }
+            .search-input { width: 100%; border-radius: 8px; }
+            .search-input:focus { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
+            <div class="logo-text">
+                <span class="top">GAMEFLEX</span>
+                <span class="bottom">STORE</span>
+            </div>
+        </a>
+
+        <div class="search-container hide-mobile">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search games, pre-orders..." autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        </div>
+
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span>
+            </button>
+            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2 style="font-family:'Orbitron', sans-serif; font-size:18px; color:white;"><i class="fa-solid fa-cart-shopping" style="color:var(--primary-red);"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <p style="text-align:center; color:gray; margin-top:20px; font-weight:700;">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px; color:white; text-transform:uppercase;">
+                <span>Total:</span><span id="cartTotalPrice">₹0</span>
+            </div>
+            <button onclick="window.location.href='index.html'" style="width:100%; background:var(--primary-red); color:white; border:none; padding:14px; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; letter-spacing:1px; box-shadow:0 4px 15px rgba(227,24,37,0.3);">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- TRAILER YOUTUBE MODAL -->
+    <div class="trailer-modal-overlay" id="trailerModal">
+        <div style="position: relative; width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div class="trailer-container">
+                <button class="close-trailer" onclick="closeTrailer()"><i class="fa-solid fa-circle-xmark"></i></button>
+                <iframe id="youtubePlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN PRE-ORDER DETAILS SECTION -->
+    <div class="po-detail-hero">
+        <!-- Background Image dynamically loaded here -->
+        <img id="pageHeroBg" src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2070&auto=format&fit=crop" class="hero-bg-image">
+        <div class="hero-gradient"></div>
+
+        <div class="details-glass animate-fade-up" id="poDetailsBox" style="display: none;">
+            <!-- Left Poster -->
+            <div class="game-poster-col">
+                <img id="detailImg" src="" class="game-poster-img" alt="Poster">
+            </div>
+
+            <!-- Right Info -->
+            <div class="game-info-col">
+                <span class="platform-badge" id="detailPlatform">Platform</span>
+                <h1 class="game-title" id="detailTitle">Game Title</h1>
+                
+                <div class="game-meta">
+                    <div class="meta-item"><i class="fa-regular fa-calendar"></i> Release: <span id="detailReleaseDate" style="color:white; margin-left:5px;">TBA</span></div>
+                    <div class="meta-item" id="detailBonus" style="display:none; background:rgba(0,210,255,0.1); border-color:rgba(0,210,255,0.3);"><i class="fa-solid fa-gift" style="color:var(--ps5-blue);"></i> <span style="color:var(--ps5-blue);">Exclusive Pre-Order Bonus Included</span></div>
+                </div>
+
+                <p class="game-desc" id="detailDesc">Loading description...</p>
+
+                <div class="price-section">
+                    <div>
+                        <div class="price-label">Pre-Book Token Amount</div>
+                        <div class="final-price" id="detailPrice">₹0</div>
+                    </div>
+                </div>
+
+                <div class="action-btns">
+                    <button class="btn-trailer-main" id="watchTrailerBtn" onclick="openTrailer()">
+                        <i class="fa-brands fa-youtube" style="font-size:20px; color:#ff0000;"></i> Watch Trailer
+                    </button>
+                    <button class="btn-prebook-main" id="preBookBtn" onclick="addToCartFromDetails()">
+                        <i class="fa-solid fa-cart-shopping"></i> Pre-Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" style="position:relative; z-index:10; text-align:center; color:white;">
+            <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color:var(--primary-red); margin-bottom:15px;"></i>
+            <h2 style="font-family:'Orbitron', sans-serif;">ACCESSING DATABASE...</h2>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // --- CART LOGIC ---
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
+        window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
+        
+        window.updateCartUI = () => {
+            const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
+            if (window.cartArray.length === 0) container.innerHTML = '<p style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</p>';
+            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div style="display:flex;gap:15px;background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;border:1px solid var(--border-dark);align-items:center;position:relative;"><img src="${item.img}" style="width:60px;height:60px;object-fit:cover;border-radius:5px;"><div style="flex:1;"><div style="font-size:13px;font-weight:700;margin-bottom:5px;color:white;">${item.title} (x${item.qty})</div><div style="font-size:15px;font-weight:800;color:var(--primary-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button onclick="removeFromCart(${index})" style="background:none;border:none;color:gray;cursor:pointer;font-size:15px;position:absolute;right:12px;top:12px;"><i class="fa-solid fa-trash"></i></button></div>`; });
+            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + tot.toLocaleString('en-IN');
+        };
+        
+        window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
+        window.updateCartUI();
+
+        // --- TRAILER MODAL LOGIC ---
+        let currentTrailerUrl = "";
+        
+        function extractYouTubeID(url) {
+            let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            let match = url.match(regExp);
+            return (match && match[7].length === 11) ? match[7] : false;
+        }
+
+        window.openTrailer = () => {
+            if(!currentTrailerUrl) { alert("Trailer video is not available for this game yet!"); return; }
+            let videoID = extractYouTubeID(currentTrailerUrl);
+            if(videoID) {
+                document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoID}?autoplay=1&rel=0`;
+                document.getElementById('trailerModal').classList.add('active');
+            } else {
+                // If not standard YT link, open in new tab
+                window.open(currentTrailerUrl, '_blank');
+            }
+        };
+
+        window.closeTrailer = () => {
+            document.getElementById('trailerModal').classList.remove('active');
+            setTimeout(() => { document.getElementById('youtubePlayer').src = ""; }, 300); // Stop audio playing in background
+        };
+    </script>
+
+    <!-- 🚀 FIREBASE LOGIC TO FETCH PRE-ORDER DETAILS 🚀 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
+            authDomain: "gameflexstore-d20da.firebaseapp.com",
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Keep Auth button updated
+        onAuthStateChanged(auth, (user) => {
+            const authBtn = document.getElementById('authBtn');
+            if (user) {
+                const firstName = user.displayName.split(' ')[0];
+                authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
+                authBtn.onclick = () => { window.location.href = "profile.html"; };
+            } else {
+                authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
+                authBtn.onclick = () => { window.location.href = "index.html"; };
+            }
+        });
+
+        let loadedGame = null;
+
+        async function fetchPreOrderDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const poId = urlParams.get('id');
+            
+            if(!poId) {
+                alert("Game ID missing. Redirecting to Pre-Orders page.");
+                window.location.href = "preorder.html";
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "preorders", poId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    loadedGame = docSnap.data();
+                    
+                    // Update UI Elements
+                    document.title = `${loadedGame.title} - GameFlex Pre-Order`;
+                    document.getElementById('pageHeroBg').src = loadedGame.image;
+                    document.getElementById('detailImg').src = loadedGame.image;
+                    document.getElementById('detailTitle').innerText = loadedGame.title;
+                    document.getElementById('detailPlatform').innerText = loadedGame.platform;
+                    document.getElementById('detailReleaseDate').innerText = loadedGame.releaseDate;
+                    document.getElementById('detailDesc').innerText = loadedGame.description;
+                    document.getElementById('detailPrice').innerText = `₹${loadedGame.price}`;
+                    
+                    if(loadedGame.hasBonus) { document.getElementById('detailBonus').style.display = 'flex'; }
+                    
+                    currentTrailerUrl = loadedGame.trailerUrl || "";
+                    if(!currentTrailerUrl) { 
+                        document.getElementById('watchTrailerBtn').style.opacity = '0.5';
+                        document.getElementById('watchTrailerBtn').innerHTML = `<i class="fa-solid fa-video-slash"></i> Trailer Unavailable`;
+                    }
+
+                    // Show content, hide loader
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('poDetailsBox').style.display = 'flex';
+                } else {
+                    alert("Game not found! It may have been removed.");
+                    window.location.href = "preorder.html";
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                alert("Error connecting to server. Please try again.");
+            }
+        }
+
+        window.addToCartFromDetails = function() {
+            if(!loadedGame) return;
+            const titleWithTag = `${loadedGame.title} (Pre-Order Token)`;
+            window.addToCart(titleWithTag, loadedGame.price, loadedGame.image);
+        };
+
+        // Initialize Fetch
+        fetchPreOrderDetails();
+    </script>
+</body>
+</html>
