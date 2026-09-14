@@ -118,23 +118,23 @@
         .admin-link-btn:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(227, 24, 37, 0.05); }
         
         .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.2); }
-        .login-btn:hover { background: var(--primary-red); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(227, 24, 37, 0.4); }
+        .login-btn:hover { background: var(--primary-red); box-shadow: var(--theme-glow); transform: translateY(-2px); }
 
         /* ONBOARDING MODAL */
         .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .onboarding-modal { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 15px 40px rgba(0,0,0,0.6); text-align: center; position: relative; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 400px; }
-        .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; }
+        .onboarding-modal { background: rgba(18,20,26,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 30px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.8); text-align: center; position: relative; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 400px; }
+        .onboarding-modal h2 { color: var(--primary-red); margin-bottom: 10px; font-weight: 800; text-shadow: 0 0 10px rgba(227,24,37,0.3); }
         .onboarding-modal p { color: var(--text-gray); font-size: 13px; margin-bottom: 20px; }
         .onboarding-group { margin-bottom: 15px; text-align: left; }
         .onboarding-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
         .onboarding-input { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: white; border-radius: 6px; outline: none; font-size: 14px; font-family: 'Montserrat', sans-serif; transition: 0.3s; }
-        .onboarding-input:focus { border-color: var(--primary-red); background: rgba(0,0,0,0.5); }
+        .onboarding-input:focus { border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227,24,37,0.2); background: rgba(0,0,0,0.5); }
         .radio-group { display: flex; gap: 10px; margin-top: 5px; }
         .radio-card { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.3s; color: var(--text-gray); }
         .radio-card input { display: none; }
-        .radio-card.selected { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.15); color: white; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.2); }
-        .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.3); }
-        .onboarding-submit:hover { background: #c1121d; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(227, 24, 37, 0.5); }
+        .radio-card.selected { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.15); color: white; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.2); transform: translateY(-2px); }
+        .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
+        .onboarding-submit:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); }
 
         /* 🔥 ENHANCED PAYMENT MODAL 🚀 */
         @keyframes pulse-border {
@@ -173,6 +173,7 @@
         .remove-item { background: rgba(227, 24, 37, 0.1); border: 1px solid rgba(227, 24, 37, 0.2); color: var(--primary-red); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 13px; transition: 0.3s; position: absolute; right: 15px; top: 15px; display: flex; justify-content: center; align-items: center; }
         .remove-item:hover { background: var(--primary-red); color: white; transform: scale(1.1) rotate(15deg); box-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
         .empty-cart-msg { text-align: center; color: var(--text-gray); font-size: 15px; margin-top: 50px; font-weight: 600; line-height: 1.5; }
+        
         .coupon-section { margin: 15px 20px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.15); border-radius: 10px; transition: 0.3s; }
         .coupon-section:hover { border-color: rgba(227, 24, 37, 0.4); background: rgba(255,255,255,0.04); }
         .cart-footer { padding: 25px 20px; border-top: 1px solid var(--border-dark); background: rgba(8, 11, 16, 0.98); }
@@ -293,7 +294,8 @@
         @media (max-width: 768px) {
             
             .navbar { 
-                display: grid; grid-template-columns: 1fr auto; 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
                 grid-template-areas: "logo actions" "search search" "links links"; 
                 gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);
             }
@@ -305,15 +307,10 @@
             .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
             
             .hide-mobile { display: none; }
-            .login-btn, .admin-link-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; box-shadow: none; }
+            .login-btn, .admin-link-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; box-shadow: none; border-color: transparent;}
             .login-btn i, .admin-link-btn i { margin: 0; }
-            
-            .circular-progress { width: 32px; height: 32px; }
-            .progress-logo { width: 20px; height: 20px; }
-            .token-text { display: block !important; font-size: 7px; } 
-            .token-tracker-container { margin: 0; display: flex !important; flex-direction: column; gap: 0px; } 
 
-            .search-container { grid-area: search; width: 100%; margin: 0; }
+            .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
             .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
             .search-input:focus { width: 100%; box-shadow: inset 0 0 10px rgba(227,24,37,0.2); }
 
@@ -391,6 +388,9 @@
             .payment-modal { width: 90% !important; padding: 25px 15px; border-radius: 12px; }
             .qr-container { width: 180px; height: 180px; }
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
+            .coupon-section { margin: 10px 15px;}
+            .coupon-section input { width: 60%; font-size: 11px; padding: 8px;}
+            .coupon-section button { width: 35%; font-size: 11px; padding: 8px;}
             
             .footer-section { padding: 40px 5% 30px 5%; margin-top: 40px; }
             .footer-section h3 { font-size: 20px; }
@@ -513,8 +513,9 @@
             <li class="active"><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
+            <!-- LINK TO PREORDER PAGE ADDED HERE -->
+            <li><a href="preorder.html">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
-            <li><a href="#">Pre-Orders</a></li>
             <li><a href="reviews.html">Community Reviews</a></li>
         </ul>
     </nav>
@@ -523,7 +524,7 @@
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <h2 style="font-family: 'Orbitron', sans-serif;"><i class="fa-solid fa-cart-shopping"></i> Neural Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer">
@@ -610,11 +611,12 @@
                 <h3>Special Offers</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <div class="cat-card">
-                <div class="cat-img" style="background-image: url('https://via.placeholder.com/200x120/000/fff?text=Pre-Orders+Image');"></div>
+            <!-- PREORDER IMAGE UPDATED HERE -->
+            <a href="preorder.html" class="cat-card">
+                <div class="cat-img" style="background-image: url('preorder.png');"></div>
                 <h3>Pre-Orders</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-            </div>
+            </a>
         </div>
     </section>
 
@@ -674,11 +676,11 @@
     </section>
 
     <!-- FOOTER CONTACT SECTION -->
-    <footer class="footer-section">
+    <footer class="footer-section animate-fade-up delay-1">
         <h3>Need Help or Custom Games?</h3>
         <p>We are available 24/7 to assist you with your orders, game credentials, and any other queries. Drop us a message!</p>
         <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
-            <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+            <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Chat on WhatsApp
         </a>
         <div class="copyright">
             &copy; 2026 GameFlex Store. All Rights Reserved.
@@ -692,6 +694,7 @@
 
     <!-- PARALLAX & ANIMATION SCRIPT -->
     <script>
+        // Hero Parallax Effect (Desktop only)
         window.addEventListener('scroll', function() {
             if (window.innerWidth > 768) {
                 let scrollPosition = window.pageYOffset;
@@ -703,6 +706,7 @@
             }
         });
 
+        // Intersection Observer for scroll animations
         window.observeAnimations = function() {
             const animatedElements = document.querySelectorAll('.animate-fade-up:not(.observed)');
             const observer = new IntersectionObserver((entries, obs) => {
@@ -766,13 +770,16 @@
             document.getElementById('tokenTracker').style.display = 'flex';
         }
 
+        // FETCH REVIEWS
         const qReviews = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(2));
         onSnapshot(qReviews, (snapshot) => {
             const reviewsGrid = document.getElementById('homeReviewsGrid');
+            
             if(snapshot.empty) {
                 reviewsGrid.innerHTML = '<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No community reviews yet.</p>';
                 return;
             }
+            
             reviewsGrid.innerHTML = '';
             snapshot.forEach((doc) => {
                 const data = doc.data();
@@ -782,6 +789,7 @@
                     if(i <= (data.rating || 5)) starsHTML += '<i class="fa-solid fa-star"></i>';
                     else starsHTML += '<i class="fa-regular fa-star" style="color:#444;"></i>';
                 }
+                
                 reviewsGrid.innerHTML += `
                     <div class="review-card">
                         <div class="reviewer-info">
@@ -797,6 +805,7 @@
             });
         });
 
+        // FETCH GAMES 
         const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             const pcGrid = document.getElementById('pcGamesGrid');
@@ -821,6 +830,7 @@
 
             snapshot.forEach((gameDoc) => {
                 const game = gameDoc.data();
+                
                 let rent = game.rentalPrice || game.rentPrice || 0;
                 let perm = game.permanentPrice || game.permPrice || 0;
                 let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
@@ -832,6 +842,7 @@
                 let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
                 let oldPrice = game.originalPrice ? `<span class="old-price" style="margin-left:8px;">₹${game.originalPrice}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
+
                 let isOffer = (game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%" && game.discount !== "");
 
                 if (game.platform === 'PC') {
@@ -868,9 +879,13 @@
             visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('visitorId', visitorId);
         }
-        function pingActive() { setDoc(doc(db, "live_visitors", visitorId), { timestamp: serverTimestamp() }, { merge: true }); }
-        pingActive(); setInterval(pingActive, 60000); 
+        function pingActive() {
+            setDoc(doc(db, "live_visitors", visitorId), { timestamp: serverTimestamp() }, { merge: true });
+        }
+        pingActive();
+        setInterval(pingActive, 60000); 
 
+        // AUTHENTICATION AND TOKENS
         setPersistence(auth, browserLocalPersistence).then(() => {
             onAuthStateChanged(auth, async (user) => {
                 const authBtn = document.getElementById('authBtn');
@@ -974,7 +989,7 @@
             
             const confirmBtn = document.getElementById('confirmPaymentBtn');
             confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            confirmBtn.innerText = "Processing Order...";
 
             let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
 
@@ -1060,16 +1075,16 @@
                         if (discountPct === 100) {
                              msg.innerText = `🎉 100% FREE Giveaway Applied!`;
                         } else {
-                             msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount} (${discountPct}% OFF)`;
+                             msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
                         }
                     } else {
                         window.appliedDiscount = 0; window.activeCouponCode = "";
-                        msg.style.color = "#ff3333"; msg.innerText = "❌ Promo code is Expired or Usage Limit Reached.";
+                        msg.style.color = "#ff3333"; msg.innerText = "❌ Promo code Expired or Limit Reached.";
                     }
                 } else {
                     if (code === "GAMEFLEX10") {
                         window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
-                        msg.style.color = "#00e676"; msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount} (10% OFF)`;
+                        msg.style.color = "#00e676"; msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
                     } else {
                         window.appliedDiscount = 0; window.activeCouponCode = "";
                         msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid promo code.";

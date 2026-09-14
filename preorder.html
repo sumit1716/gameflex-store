@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pre-Orders - GameFlex Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Orbitron for Gaming Fonts, Montserrat for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e31825;
+            --ps5-blue: #1f6aff;
+            --dark-bg: #0b0c10;
+            --text-light: #ffffff;
+            --text-gray: #a3a3a3;
+            --card-bg: #12141a;
+            --border-dark: #2a2a30;
+            --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
+        }
+
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent;}
+        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a0e15, var(--primary-red)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff3333; }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* NAVBAR (MATCHING GLOBAL) */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(227, 24, 37, 0.3); padding: 5px; transition: var(--hover-transition); }
+        .logo:hover .logo-icon { transform: scale(1.05) rotate(5deg); border-color: var(--primary-red); box-shadow: 0 0 15px rgba(227, 24, 37, 0.4); }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-text .top { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: white; line-height: 1; letter-spacing: 1px; }
+        .logo-text .bottom { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--primary-red); letter-spacing: 3.5px; margin-top: 2px; }
+
+        .nav-links { display: flex; gap: 25px; list-style: none; }
+        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
+        .nav-links li a:hover, .nav-links li a.active { color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); }
+        .nav-links li a.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); box-shadow: 0 0 5px var(--primary-red); }
+        
+        .search-container { position: relative; display: flex; align-items: center; margin-right: 5px; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 9px 35px 9px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
+        .search-input::placeholder { color: var(--text-gray); transition: 0.3s; }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        
+        .nav-actions { display: flex; align-items: center; gap: 15px; position: relative;}
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
+        .icon-btn:hover { color: var(--primary-red); transform: scale(1.1); filter: drop-shadow(0 0 8px var(--primary-red)); }
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; box-shadow: 0 2px 5px rgba(227, 24, 37, 0.5); }
+        .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.2); }
+        .login-btn:hover { background: var(--primary-red); box-shadow: var(--theme-glow); transform: translateY(-2px); }
+
+        /* PRE-ORDER HERO SECTION (ADAPTABLE BANNER) */
+        .po-hero { 
+            position: relative; 
+            height: 480px; 
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 5%; 
+            background-color: #0b0c10;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .po-hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Make it perfectly adaptable for any game poster */
+            background-image: url('https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2070&auto=format&fit=crop'); 
+            background-size: cover; 
+            background-position: right center; /* Focuses on the right character usually */
+            z-index: 0;
+            opacity: 0.8;
+            transition: background 0.5s ease-in-out;
+        }
+        /* Gradient mask for readable text on the left */
+        .po-hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(11,12,16,1) 0%, rgba(11,12,16,0.9) 30%, rgba(11,12,16,0) 100%);
+            z-index: 1;
+        }
+        
+        .po-content { position: relative; z-index: 2; max-width: 650px; }
+        .po-title { font-family: 'Orbitron', sans-serif; font-size: 65px; font-weight: 900; line-height: 1; margin-bottom: 5px; text-transform: uppercase; color: white; letter-spacing: 2px;}
+        .po-title span { color: var(--primary-red); text-shadow: var(--theme-glow); }
+        .po-subtitle { color: var(--text-light); font-size: 18px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; opacity: 0.9;}
+        
+        .po-features-list { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 35px; }
+        .po-feat { display: flex; align-items: center; gap: 10px; }
+        .po-feat-icon { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--primary-red); display: flex; justify-content: center; align-items: center; color: var(--primary-red); font-size: 14px; box-shadow: inset 0 0 8px rgba(227,24,37,0.2); }
+        .po-feat-text { display: flex; flex-direction: column; }
+        .po-feat-text span:first-child { font-size: 11px; color: var(--text-light); font-weight: 700; text-transform: uppercase;}
+        .po-feat-text span:last-child { font-size: 10px; color: var(--text-gray); }
+
+        .po-hero-btn { background: var(--primary-red); color: white; border: none; padding: 15px 30px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
+        .po-hero-btn:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); transform: translateX(5px); }
+
+        .po-controls { position: absolute; bottom: 30px; left: 5%; display: flex; align-items: center; gap: 15px; z-index: 2;}
+        .po-dots { display: flex; gap: 8px; }
+        .po-dot { width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .po-dot.active { width: 25px; border-radius: 5px; background: var(--primary-red); box-shadow: 0 0 8px var(--primary-red); }
+
+        /* FILTERS BAR */
+        .filter-section { padding: 25px 5%; background: var(--dark-bg); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; position: sticky; top: 76px; z-index: 90; }
+        .pill-filters { display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 5px; flex: 1; }
+        .pill-filters::-webkit-scrollbar { display: none; }
+        .pill-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: var(--text-gray); padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; white-space: nowrap; }
+        .pill-btn:hover { background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.2); }
+        .pill-btn.active { background: var(--primary-red); border-color: var(--primary-red); color: white; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.3); }
+        
+        .sort-select { background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 20px; border-radius: 30px; font-size: 13px; outline: none; cursor: pointer; font-weight: 600; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 15px; padding-right: 40px;}
+
+        /* UPCOMING RELEASES GRID */
+        .releases-section { padding: 40px 5% 60px 5%; }
+        .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;}
+        .sh-left { display: flex; flex-direction: column; gap: 5px; }
+        .sh-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .sh-title i { color: var(--primary-red); }
+        .sh-subtitle { color: var(--text-gray); font-size: 13px; font-weight: 600;}
+        .view-all-link { color: var(--primary-red); font-size: 13px; font-weight: 700; text-decoration: none; transition: 0.3s; text-transform: uppercase; }
+        .view-all-link:hover { color: #ff3333; text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); transform: translateX(5px); display: inline-block; }
+
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        
+        /* CARD DESIGN ADAPTABLE */
+        .game-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);}
+        .game-card:hover { border-color: rgba(227, 24, 37, 0.4); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(227, 24, 37, 0.05); }
+        
+        .card-img-wrapper { position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; } /* Maintains perfect poster ratio */
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .game-card:hover .card-img { transform: scale(1.05); filter: brightness(1.1); }
+        
+        .platform-tags { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; z-index: 2; }
+        .ptag { background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; }
+        
+        .bonus-badge { position: absolute; bottom: -15px; right: 15px; background: #00439c; color: white; width: 50px; height: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 8px; z-index: 5; border: 2px solid var(--card-bg); box-shadow: 0 4px 10px rgba(0,0,0,0.5); transform: rotate(10deg); transition: 0.3s;}
+        .game-card:hover .bonus-badge { transform: rotate(0deg) scale(1.1); background: var(--ps5-blue); }
+        .bonus-badge i { font-size: 14px; margin-bottom: 2px;}
+        .bonus-badge span { font-size: 8px; font-weight: 800; text-align: center; line-height: 1; }
+
+        .card-info { padding: 20px 15px; display: flex; flex-direction: column; flex-grow: 1; position: relative; z-index: 3; background: var(--card-bg); }
+        .card-title { font-size: 15px; font-weight: 800; margin-bottom: 5px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .release-date { font-size: 12px; font-weight: 700; color: var(--text-gray); display: flex; align-items: center; gap: 6px; margin-bottom: 15px; }
+        .release-date i { color: var(--primary-red); }
+        
+        .card-buttons { display: flex; gap: 10px; margin-top: auto; }
+        .btn-trailer { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center; }
+        .btn-trailer:hover { background: rgba(255,255,255,0.1); border-color: white; }
+        .btn-prebook { flex: 1; background: var(--primary-red); border: none; color: white; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.3);}
+        .btn-prebook:hover { background: #c1121d; box-shadow: 0 6px 15px rgba(227, 24, 37, 0.5); }
+
+        /* BOTTOM SPLIT BANNER */
+        .bottom-split-banner { display: flex; gap: 20px; padding: 0 5% 60px 5%; }
+        
+        .benefits-box { flex: 1.2; background: linear-gradient(135deg, #09132b, #050810); border: 1px solid rgba(31,106,255,0.2); border-radius: 12px; padding: 30px; display: flex; align-items: center; gap: 30px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        .benefits-box::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: radial-gradient(circle at left, rgba(31,106,255,0.1), transparent 50%); pointer-events: none;}
+        .bb-icon-large { font-size: 80px; color: rgba(255,255,255,0.05); text-shadow: 0 0 20px rgba(31,106,255,0.2); z-index: 2;}
+        .bb-content { z-index: 2; flex: 1; }
+        .bb-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 800; color: white; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+        .bb-features-row { display: flex; justify-content: space-between; gap: 10px; }
+        .bbf-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+        .bbf-item i { font-size: 20px; color: var(--ps5-blue); }
+        .bbf-item span { font-size: 10px; color: var(--text-gray); font-weight: 600; text-transform: uppercase; }
+
+        .action-box { flex: 1; background: linear-gradient(135deg, #1f0b0c, #0b0c10); border: 1px solid rgba(227, 24, 37, 0.2); border-radius: 12px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        .action-box::before { content: ''; position: absolute; right: 0; top: 0; width: 100%; height: 100%; background: radial-gradient(circle at right, rgba(227, 24, 37, 0.1), transparent 50%); pointer-events: none;}
+        .ab-content { position: relative; z-index: 2; max-width: 70%; }
+        .ab-title { font-size: 22px; font-weight: 900; color: white; line-height: 1.2; margin-bottom: 10px; text-transform: uppercase;}
+        .ab-title span { color: var(--primary-red); display: block; }
+        .ab-desc { font-size: 12px; color: var(--text-gray); margin-bottom: 20px; font-weight: 600; }
+        .btn-outline-red { background: transparent; border: 2px solid var(--primary-red); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .btn-outline-red:hover { background: var(--primary-red); box-shadow: var(--theme-glow); }
+        /* Placeholder for right side character */
+        .ab-character { position: absolute; right: -20px; bottom: 0; height: 120%; width: 40%; background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=500&auto=format&fit=crop'); background-size: cover; background-position: left; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); z-index: 1; opacity: 0.7;}
+
+        /* CART SIDEBAR */
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(5px); }
+        .cart-overlay.active { display: block; opacity: 1; }
+        .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
+        .cart-header h2 { font-size: 18px; font-weight: 800; color: white; display: flex; align-items: center; gap: 10px;}
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .close-cart:hover { color: var(--primary-red); transform: rotate(90deg); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
+
+        /* ========================================================================= */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
+        /* ========================================================================= */
+        @media (max-width: 768px) {
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: "logo actions" "search search" "links links"; 
+                gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);
+            }
+            .logo { grid-area: logo; gap: 8px; }
+            .logo-icon { width: 32px; height: 32px; padding: 3px; border-radius: 8px; }
+            .logo-text .top { font-size: 16px; }
+            .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
+
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            .hide-mobile { display: none; }
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; box-shadow: none; border-color: transparent;}
+            .login-btn i { margin: 0; }
+
+            .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
+            .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
+            .search-input:focus { width: 100%; box-shadow: inset 0 0 10px rgba(227,24,37,0.2); }
+
+            .nav-links { 
+                grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; 
+                background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); 
+                gap: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory;
+            }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; width: auto; scroll-snap-align: start; }
+            .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
+            
+            /* Hero Mobile */
+            .po-hero { height: 420px; padding: 30px 5%; background-position: center; justify-content: center; text-align: center;}
+            .po-hero-bg { background-position: center; }
+            .po-hero-overlay { background: rgba(11,12,16,0.75); } /* Full dark overlay for mobile text readability */
+            .po-content { width: 100%; display: flex; flex-direction: column; align-items: center;}
+            .po-title { font-size: 38px; margin-bottom: 10px;}
+            .po-subtitle { font-size: 12px; margin-bottom: 20px;}
+            .po-features-list { justify-content: center; gap: 15px; margin-bottom: 25px; }
+            .po-controls { display: none; } /* Hide dots on mobile to save space */
+
+            /* Filters Mobile */
+            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch; top: 102px;} /* Adjust sticky top */
+            .pill-filters { padding-bottom: 10px; }
+            .sort-select { width: 100%; }
+
+            /* Grid Mobile */
+            .releases-section { padding: 25px 5% 40px 5%; }
+            .game-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            
+            /* Mobile Card Adjustments */
+            .card-info { padding: 10px; }
+            .card-title { font-size: 12px; margin-bottom: 4px;}
+            .release-date { font-size: 9px; margin-bottom: 10px;}
+            .bonus-badge { width: 35px; height: 35px; bottom: -5px; right: 5px; border-width: 1px;}
+            .bonus-badge i { font-size: 10px; margin-bottom: 1px;}
+            .bonus-badge span { font-size: 6px; }
+            .card-buttons { flex-direction: column; gap: 5px;}
+            .btn-trailer, .btn-prebook { padding: 8px; font-size: 10px; }
+
+            /* Bottom Split Mobile */
+            .bottom-split-banner { flex-direction: column; padding: 0 5% 40px 5%; gap: 15px; }
+            .benefits-box, .action-box { padding: 20px; }
+            .bb-icon-large { display: none; } /* hide large icon to save space */
+            .bb-features-row { flex-wrap: wrap; justify-content: center; gap: 15px;}
+            .bbf-item { width: 40%; }
+            
+            .ab-content { max-width: 100%; text-align: center;}
+            .ab-character { display: none; } /* Hide bg character image on mobile to focus on text/button */
+            .btn-outline-red { width: 100%; }
+
+            .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
+            
+            /* Touch Ripple / Push effect */
+            .game-card:active, .pill-btn:active, .po-hero-btn:active {
+                transform: scale(0.96) !important;
+                transition: 0.1s !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
+            <div class="logo-text">
+                <span class="top">GAMEFLEX</span>
+                <span class="bottom">STORE</span>
+            </div>
+        </a>
+
+        <!-- SEARCH BAR AREA -->
+        <div class="search-container">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search games, pre-orders..." autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span>
+            </button>
+            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
+            </button>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pc.html">PC Games</a></li>
+            <li><a href="ps5.html">PlayStation</a></li>
+            <li class="active"><a href="preorder.html">Pre-Orders</a></li>
+            <li><a href="offer.html">Offers</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
+        </ul>
+    </nav>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2><i class="fa-solid fa-cart-shopping" style="color:var(--primary-red);"></i> Your Cart</h2>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <p style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px; color:white; text-transform:uppercase;">
+                <span>Total:</span><span id="cartTotalPrice">₹0</span>
+            </div>
+            <button onclick="window.location.href='index.html'" style="width:100%; background:var(--primary-red); color:white; border:none; padding:14px; border-radius:6px; font-weight:800; cursor:pointer; text-transform:uppercase; letter-spacing:1px; box-shadow:0 4px 15px rgba(227,24,37,0.3);">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- PRE-ORDER HERO SECTION -->
+    <!-- The background image here is highly adaptable via CSS cover/center properties -->
+    <header class="po-hero animate-fade-up">
+        <div class="po-hero-bg"></div>
+        <div class="po-hero-overlay"></div>
+        
+        <div class="po-content">
+            <h1 class="po-title">PRE-ORDER</h1>
+            <div class="po-subtitle">BE READY FOR WHAT'S NEXT</div>
+            
+            <div class="po-features-list">
+                <div class="po-feat">
+                    <div class="po-feat-icon"><i class="fa-solid fa-gift"></i></div>
+                    <div class="po-feat-text"><span>Exclusive</span><span>Pre-Order Bonuses</span></div>
+                </div>
+                <div class="po-feat">
+                    <div class="po-feat-icon"><i class="fa-regular fa-clock"></i></div>
+                    <div class="po-feat-text"><span>Early</span><span>Access</span></div>
+                </div>
+                <div class="po-feat">
+                    <div class="po-feat-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="po-feat-text"><span>Secure</span><span>& Genuine</span></div>
+                </div>
+                <div class="po-feat">
+                    <div class="po-feat-icon"><i class="fa-solid fa-percent"></i></div>
+                    <div class="po-feat-text"><span>Best</span><span>Prices</span></div>
+                </div>
+            </div>
+
+            <button class="po-hero-btn" onclick="scrollToGames()">
+                EXPLORE UPCOMING GAMES <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="po-controls">
+            <div class="po-dots">
+                <div class="po-dot active"></div>
+                <div class="po-dot"></div>
+                <div class="po-dot"></div>
+                <div class="po-dot"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- FILTER BAR -->
+    <div class="filter-section animate-fade-up delay-1" id="preOrderGrid">
+        <div class="pill-filters">
+            <button class="pill-btn active">All</button>
+            <button class="pill-btn">PS5</button>
+            <button class="pill-btn">PC</button>
+            <button class="pill-btn">Upcoming 2025</button>
+            <button class="pill-btn">Upcoming 2026</button>
+            <button class="pill-btn">Action</button>
+            <button class="pill-btn">Adventure</button>
+            <button class="pill-btn">RPG</button>
+            <button class="pill-btn">Shooter</button>
+            <button class="pill-btn">Racing</button>
+            <button class="pill-btn">More <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:3px;"></i></button>
+        </div>
+        <select class="sort-select">
+            <option>Sort by: Release Date</option>
+            <option>Hype Level</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+        </select>
+    </div>
+
+    <!-- UPCOMING RELEASES GRID -->
+    <section class="releases-section animate-fade-up delay-2">
+        <div class="section-head">
+            <div class="sh-left">
+                <div class="sh-title"><i class="fa-solid fa-gamepad"></i> UPCOMING RELEASES</div>
+                <div class="sh-subtitle">Pre-order now and be among the first to play.</div>
+            </div>
+            <a href="#" class="view-all-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <div class="game-grid" id="mainGamesGrid">
+            
+            <!-- HARDCODED PLACEHOLDER CARDS MATCHING REFERENCE IMAGE FOR PREVIEW -->
+            
+            <!-- Card 1: GTA VI -->
+            <div class="game-card">
+                <div class="card-img-wrapper">
+                    <!-- Placeholder cover -->
+                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop" class="card-img" alt="GTA VI">
+                    <div class="platform-tags"><div class="ptag">PS5</div></div>
+                    <div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Grand Theft Auto VI</div>
+                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 26 May, 2026</div>
+                    <div class="card-buttons">
+                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                        <button class="btn-prebook" onclick="addToCart('Grand Theft Auto VI (Pre-Order)', 499, 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Wolverine -->
+            <div class="game-card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Wolverine">
+                    <div class="platform-tags"><div class="ptag">PS5</div></div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Marvel's Wolverine</div>
+                    <div class="release-date"><i class="fa-regular fa-calendar"></i> Fall 2026</div>
+                    <div class="card-buttons">
+                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                        <button class="btn-prebook" onclick="addToCart('Marvel Wolverine (Pre-Order)', 499, 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Ghost of Yotei -->
+            <div class="game-card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Ghost">
+                    <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Ghost of Yōtei</div>
+                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 2 Oct, 2025</div>
+                    <div class="card-buttons">
+                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                        <button class="btn-prebook" onclick="addToCart('Ghost of Yotei (Pre-Order)', 499, 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Death Stranding 2 -->
+            <div class="game-card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Death Stranding 2">
+                    <div class="platform-tags"><div class="ptag">PS5</div></div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Death Stranding 2</div>
+                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 26 Jun, 2025</div>
+                    <div class="card-buttons">
+                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                        <button class="btn-prebook" onclick="addToCart('Death Stranding 2 (Pre-Order)', 499, 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Monster Hunter Wilds -->
+            <div class="game-card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Monster Hunter Wilds">
+                    <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Monster Hunter Wilds</div>
+                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 28 Feb, 2025</div>
+                    <div class="card-buttons">
+                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                        <button class="btn-prebook" onclick="addToCart('Monster Hunter Wilds (Pre-Order)', 499, 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Assassin's Creed Shadows -->
+            <div class="game-card">
+                <div class="card-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=600&auto=format&fit=crop" class="card-img" alt="Assassin's Creed Shadows">
+                    <div class="platform-tags"><div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div></div>
+                    <div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">Assassin's Creed Shadows</div>
+                    <div class="release-date"><i class="fa-regular fa-calendar"></i> 20 Mar, 2025</div>
+                    <div class="card-buttons">
+                        <button class="btn-trailer"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
+                        <button class="btn-prebook" onclick="addToCart('Assassins Creed Shadows (Pre-Order)', 499, 'https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=200&auto=format&fit=crop')"><i class="fa-solid fa-cart-shopping"></i> Pre-book</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BOTTOM SPLIT BANNER -->
+    <section class="bottom-split-banner animate-fade-up delay-3">
+        <div class="benefits-box">
+            <i class="fa-brands fa-playstation bb-icon-large"></i>
+            <div class="bb-content">
+                <div class="bb-title">PRE-ORDER BENEFITS</div>
+                <div class="bb-features-row">
+                    <div class="bbf-item"><i class="fa-regular fa-clock"></i><span>Early Access</span></div>
+                    <div class="bbf-item"><i class="fa-solid fa-shield-heart"></i><span>Exclusive Content</span></div>
+                    <div class="bbf-item"><i class="fa-solid fa-gift"></i><span>Special Bonuses</span></div>
+                    <div class="bbf-item"><i class="fa-solid fa-headset"></i><span>Priority Support</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <div class="ab-character"></div>
+            <div class="ab-content">
+                <div class="ab-title">DON'T JUST PLAY.<br><span>BE THE FIRST.</span></div>
+                <div class="ab-desc">Pre-order now and get exclusive in-game rewards.</div>
+                <button class="btn-outline-red" onclick="window.scrollTo({top:0, behavior:'smooth'})">View All Pre-Orders <i class="fa-solid fa-arrow-right" style="margin-left:5px;"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Smooth scroll for hero button
+        function scrollToGames() {
+            const target = document.getElementById('preOrderGrid');
+            const offset = target.getBoundingClientRect().top + window.scrollY - 70;
+            window.scrollTo({top: offset, behavior: 'smooth'});
+        }
+
+        // Pill filter active state
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        document.addEventListener("DOMContentLoaded", function() {
+            const animatedElements = document.querySelectorAll('.animate-fade-up');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        });
+    </script>
+
+    <!-- Global Variables & Cart Logic -->
+    <script>
+        window.liveGamesDatabase = []; // Populated by Firebase if integrated
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
+        
+        window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
+        
+        window.addToCart = (title, price, imgUrl) => {
+            const ex = window.cartArray.find(i => i.title === title); 
+            if(ex) ex.qty += 1; else window.cartArray.push({ title, price: Number(price), img: imgUrl, qty: 1 });
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); 
+            window.updateCartUI(); 
+            if (navigator.vibrate) navigator.vibrate(50);
+            window.toggleCart(); 
+        };
+        
+        window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
+        
+        window.updateCartUI = () => {
+            const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
+            if (window.cartArray.length === 0) container.innerHTML = '<p style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</p>';
+            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div style="display:flex;gap:15px;background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;border:1px solid var(--border-dark);align-items:center;position:relative;"><img src="${item.img}" style="width:60px;height:60px;object-fit:cover;border-radius:5px;"><div style="flex:1;"><div style="font-size:13px;font-weight:700;margin-bottom:5px;color:white;">${item.title} (x${item.qty})</div><div style="font-size:15px;font-weight:800;color:var(--primary-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button onclick="removeFromCart(${index})" style="background:none;border:none;color:gray;cursor:pointer;font-size:15px;position:absolute;right:12px;top:12px;"><i class="fa-solid fa-trash"></i></button></div>`; });
+            
+            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + tot.toLocaleString('en-IN');
+        };
+        window.updateCartUI();
+    </script>
+
+    <!-- FIREBASE MODULE (Standard Include to keep Navbar Sync & Login working) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
+            authDomain: "gameflexstore-d20da.firebaseapp.com",
+            projectId: "gameflexstore-d20da",
+            storageBucket: "gameflexstore-d20da.firebasestorage.app",
+            messagingSenderId: "108900412542",
+            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const savedUserName = localStorage.getItem('gf_logged_in_user');
+        if(savedUserName) {
+            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
+        }
+
+        setPersistence(auth, browserLocalPersistence).then(() => {
+            onAuthStateChanged(auth, (user) => {
+                const authBtn = document.getElementById('authBtn');
+                if (user) {
+                    const firstName = user.displayName.split(' ')[0];
+                    localStorage.setItem('gf_logged_in_user', firstName); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
+                    authBtn.onclick = () => { window.location.href = "profile.html"; };
+                } else {
+                    localStorage.removeItem('gf_logged_in_user'); 
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
+                    authBtn.onclick = async () => {
+                        try { await signInWithPopup(auth, provider); } catch (err) { alert("Login failed: " + err.message); }
+                    };
+                }
+            });
+        });
+    </script>
+</body>
+</html>
