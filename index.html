@@ -62,7 +62,7 @@
 
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.92); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         
-        .logo { order: 1; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo { order: 1; display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink:0;}
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(227, 24, 37, 0.3); padding: 5px; transition: var(--hover-transition); box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.1); }
         .logo:hover .logo-icon { transform: scale(1.05) rotate(5deg); border-color: var(--primary-red); box-shadow: 0 0 15px rgba(227, 24, 37, 0.4), inset 0 0 10px rgba(227, 24, 37, 0.2); }
         .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
@@ -75,12 +75,12 @@
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); }
         .nav-links li.active a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); box-shadow: 0 0 5px var(--primary-red); }
         
-        /* STANDARDIZED SEARCH BAR */
-        .search-container { order: 3; position: relative; display: flex; align-items: center; margin: 0 20px; flex: 1; max-width: 450px; }
-        .search-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 40px 10px 15px; border-radius: 20px; outline: none; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; font-family: 'Montserrat', sans-serif; }
-        .search-input:focus { border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
+        .search-container { order: 3; position: relative; display: flex; align-items: center; margin-right: 15px; }
+        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 9px 35px 9px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; }
+        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
         .search-input::placeholder { color: var(--text-gray); transition: 0.3s; }
-        .search-icon { position: absolute; right: 15px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-input:focus::placeholder { opacity: 0.5; }
+        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
         .search-input:focus + .search-icon { color: var(--primary-red); }
         
         .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: rgba(18, 20, 26, 0.98); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; backdrop-filter: blur(10px); }
@@ -95,7 +95,7 @@
         .search-item-price { font-size: 12px; font-weight: 800; color: var(--primary-red); }
         .search-platform { font-size: 9px; padding: 2px 5px; background: rgba(255,255,255,0.1); border-radius: 3px; display: inline-block; width: fit-content; color: var(--text-gray); }
 
-        .nav-actions { order: 4; display: flex; align-items: center; gap: 15px; position: relative; }
+        .nav-actions { order: 4; display: flex; align-items: center; gap: 15px; position: relative; flex-shrink:0;}
         
         .token-tracker-container { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 2px; margin-right: 5px; cursor: pointer; transition: var(--hover-transition); }
         .token-tracker-container:hover { transform: scale(1.05); }
@@ -107,9 +107,6 @@
         .token-text { font-size: 8px; font-weight: 800; color: #FFD700; text-align: center; line-height: 1.1; text-transform: uppercase; text-shadow: 0 0 5px rgba(255,215,0,0.3);}
         .token-text span { color: var(--text-light); font-size: 9px; font-weight: 700; text-shadow: none; }
 
-        .claim-btn { display: none; width: 100%; background: linear-gradient(45deg, #00C9FF, #92FE9D); color: #000; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 201, 255, 0.3); }
-        .claim-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 201, 255, 0.5); }
-
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; }
         .icon-btn:hover { color: var(--primary-red); transform: scale(1.1); }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; box-shadow: 0 2px 5px rgba(227, 24, 37, 0.5); }
@@ -118,7 +115,7 @@
         .admin-link-btn:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(227, 24, 37, 0.05); }
         
         .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.2); }
-        .login-btn:hover { background: var(--primary-red); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(227, 24, 37, 0.4); }
+        .login-btn:hover { background: var(--primary-red); box-shadow: var(--theme-glow); transform: translateY(-2px); }
 
         /* ONBOARDING MODAL */
         .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
@@ -136,24 +133,19 @@
         .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
         .onboarding-submit:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); }
 
-        /* 🔥 ENHANCED PAYMENT MODAL 🚀 */
-        @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 0 rgba(227, 24, 37, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(227, 24, 37, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(227, 24, 37, 0); }
-        }
+        /* PAYMENT MODAL */
         .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .payment-modal { background: linear-gradient(145deg, #12141a, #1a1d24); border: 2px solid var(--primary-red); border-radius: 16px; padding: 35px 25px; width: 380px; max-width: 95%; box-shadow: 0 0 30px rgba(227, 24, 37, 0.2), 0 15px 40px rgba(0,0,0,0.8); text-align: center; position: relative; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .close-payment { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: var(--text-gray); width: 35px; height: 35px; border-radius: 50%; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .close-payment:hover { background: var(--primary-red); color: white; transform: rotate(90deg); border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); }
         .payment-modal h2 { font-family: 'Orbitron', sans-serif; color: white; font-size: 22px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px rgba(227, 24, 37, 0.4); }
         .payment-methods-icons { display: flex; justify-content: center; gap: 20px; margin: 10px 0 15px 0; font-size: 24px; color: var(--text-gray); }
-        .qr-container { background: white; padding: 15px; border-radius: 12px; margin: 15px auto; width: 220px; height: 220px; border: 3px dashed var(--primary-red); box-shadow: 0 5px 20px rgba(227, 24, 37, 0.2); animation: pulse-border 2s infinite; }
+        .qr-container { background: white; padding: 15px; border-radius: 12px; margin: 15px auto; width: 220px; height: 220px; border: 3px dashed var(--primary-red); box-shadow: 0 5px 20px rgba(227, 24, 37, 0.2); }
         .qr-container img { width: 100%; height: 100%; object-fit: contain; }
         .confirm-pay-btn { width: 100%; background: linear-gradient(90deg, #00c853, #00e676); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 15px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
         .confirm-pay-btn:hover { background: linear-gradient(90deg, #00e676, #69f0ae); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 200, 83, 0.5); }
 
-        /* 🔥 ENHANCED CART SIDEBAR 🔥 */
+        /* CART SIDEBAR */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; display: none; opacity: 0; transition: 0.4s ease; backdrop-filter: blur(8px); }
         .cart-overlay.active { display: block; opacity: 1; }
         .cart-sidebar { position: fixed; top: 0; right: -420px; width: 400px; max-width: 100%; height: 100vh; background: rgba(11, 12, 16, 0.95); z-index: 1000; box-shadow: -15px 0 50px rgba(0,0,0,0.9); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(227, 24, 37, 0.3); backdrop-filter: blur(20px); }
@@ -218,10 +210,9 @@
         .cat-arrow { width: 35px; height: 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-light); transition: 0.4s; background: rgba(0,0,0,0.2); }
         .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); transform: translateX(5px); }
 
-        /* 🚀 CRAZY HOVER CAR/DELIVERY ANIMATION SECTION 🚀 */
+        /* 🚀 CRAZY HOVER CAR/DELIVERY ANIMATION SECTION (FIXED & FASTER) 🚀 */
         .coming-soon-delivery { width: 100%; padding: 40px 0; background: linear-gradient(to bottom, #0b0c10, #110000, #0b0c10); border-top: 1px solid rgba(227, 24, 37, 0.2); border-bottom: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; position: relative; margin-top: 20px;}
         
-        /* The glowing road/laser track */
         .delivery-track { position: absolute; top: 65%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary-red), transparent); box-shadow: 0 0 15px var(--primary-red); z-index: 1;}
         .delivery-track::after { content:''; position:absolute; top:-10px; left:0; width:100%; height:20px; background: radial-gradient(ellipse at center, rgba(227,24,37,0.2) 0%, transparent 70%); }
         
@@ -230,10 +221,10 @@
         .delivery-header h3 i { color: var(--primary-red); margin-right: 10px; }
         .delivery-header p { font-size: 12px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase;}
 
-        /* The Infinite Marquee Container */
         .marquee-wrapper { width: 100%; overflow: hidden; position: relative; z-index: 3; }
         
-        .marquee-track { display: flex; width: max-content; animation: scrollLeft 35s linear infinite; }
+        /* 🚀 SPEED INCREASED HERE (20s instead of 35s) */
+        .marquee-track { display: flex; width: max-content; animation: scrollLeft 20s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
         
         @keyframes scrollLeft {
@@ -241,23 +232,19 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* The "Car/Hoverboard" carrying the game */
-        .delivery-vehicle { position: relative; width: 200px; margin: 0 30px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; }
+        /* The Cyber Truck + Game Poster Container */
+        .delivery-vehicle { position: relative; width: 220px; margin: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; cursor: pointer; transition: 0.3s; padding-bottom: 50px;}
         .delivery-vehicle:hover { transform: translateY(-15px) scale(1.05); }
-        .delivery-vehicle:hover .vehicle-base { box-shadow: 0 15px 30px rgba(227, 24, 37, 0.6); border-color: var(--primary-red);}
         
-        .carried-game-img { width: 140px; height: 180px; object-fit: cover; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 2; position: relative; transition: 0.3s; transform-origin: bottom center;}
+        /* Game Poster */
+        .carried-game-img { width: 110px; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid var(--primary-red); box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 2; position: relative; margin-bottom: -15px;}
         
-        /* The futuristic base plate (Car/Hoverboard) */
-        .vehicle-base { width: 160px; height: 15px; background: linear-gradient(90deg, #222, #444, #222); border-radius: 20px; border: 1px solid #555; position: relative; margin-top: -5px; z-index: 3; box-shadow: 0 5px 15px rgba(227, 24, 37, 0.3); transition: 0.3s; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;}
-        /* Neon Thrusters on the vehicle */
-        .thruster { width: 25px; height: 4px; background: var(--ps5-blue); border-radius: 10px; box-shadow: 0 0 10px var(--ps5-blue); animation: thrust Pulse 0.5s infinite alternate; }
-        
-        @keyframes thrustPulse { 0% { opacity: 0.6; box-shadow: 0 0 5px var(--ps5-blue); } 100% { opacity: 1; box-shadow: 0 0 15px var(--ps5-blue), 0 0 30px var(--ps5-blue); } }
+        /* 🔥 THE CYBERPUNK CAR/TRUCK IMAGE 🔥 */
+        .vehicle-car-img { width: 180px; position: absolute; bottom: 35px; z-index: 3; filter: drop-shadow(0 15px 15px rgba(227, 24, 37, 0.4)); pointer-events: none; }
 
-        .delivery-info { text-align: center; margin-top: 15px; width: 100%; }
-        .delivery-title { color: white; font-size: 12px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
-        .delivery-date { color: var(--primary-red); font-size: 10px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
+        .delivery-info { text-align: center; margin-top: 10px; width: 100%; position:relative; z-index:4;}
+        .delivery-title { color: white; font-size: 13px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
+        .delivery-date { color: var(--primary-red); font-size: 11px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
 
 
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
@@ -330,7 +317,7 @@
         .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
         /* ========================================================================= */
-        /* 📱 PRO MOBILE LAYOUT 📱 */
+        /* 📱 PRO MOBILE LAYOUT (THE FIXES APPLIED HERE) 📱 */
         /* ========================================================================= */
         @media (max-width: 768px) {
             
@@ -345,16 +332,18 @@
             .logo-text .top { font-size: 18px; }
             .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
 
-            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
-            
+            /* 🚀 FIX: Mobile Navbar spacing & Cart visibility */
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
             .hide-mobile { display: none !important; }
-            .login-btn, .admin-link-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 16px; box-shadow: none; border-color: transparent; background: rgba(255,255,255,0.05); color:white;}
-            .login-btn i, .admin-link-btn i { margin: 0; font-size: 16px;}
             
-            .circular-progress { width: 32px; height: 32px; }
-            .progress-logo { width: 20px; height: 20px; }
-            .token-text { display: block !important; font-size: 7px; } 
-            .token-tracker-container { margin: 0; display: flex !important; flex-direction: column; gap: 0px; } 
+            .login-btn, .admin-link-btn, .icon-btn { padding: 0; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 13px; box-shadow: none; border: 1px solid transparent; background: rgba(255,255,255,0.05); color:white;}
+            .login-btn i, .admin-link-btn i, .icon-btn i { margin: 0; font-size: 13px;}
+            
+            /* 🚀 FIX: Hide big token text on mobile to save space */
+            .token-text { display: none !important; } 
+            .circular-progress { width: 30px; height: 30px; }
+            .progress-logo { width: 18px; height: 18px; }
+            .token-tracker-container { margin: 0; } 
 
             .search-container { grid-area: search; width: 100%; margin: 0; max-width: 100%;}
             .search-input { width: 100%; border-radius: 8px; padding: 12px 40px 12px 15px; background: rgba(255,255,255,0.08); font-size: 14px;}
@@ -363,7 +352,7 @@
             .nav-links { 
                 grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; 
                 background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); 
-                gap: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory;
+                gap: 20px; scrollbar-width: none; 
             }
             .nav-links::-webkit-scrollbar { display: none; }
             .nav-links li { flex: 0 0 auto; width: auto; scroll-snap-align: start; }
@@ -384,7 +373,7 @@
             
             .category-grid { 
                 display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 15px; padding-bottom: 15px; padding-right: 5%;
-                -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: flex-start;
+                scrollbar-width: none; justify-content: flex-start;
             }
             .category-grid::-webkit-scrollbar { display: none; }
             .cat-card { flex: 0 0 auto; width: 140px; padding: 15px 10px; scroll-snap-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.05); }
@@ -394,10 +383,10 @@
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
 
-            /* Animation Shrink for mobile */
-            .carried-game-img { width: 100px; height: 130px; }
-            .vehicle-base { width: 120px; height: 10px;}
-            .delivery-vehicle { width: 140px; margin: 0 15px;}
+            /* 🚀 FIX: Mobile Animation Shrink */
+            .carried-game-img { width: 90px; height: 120px; margin-bottom: -10px;}
+            .vehicle-car-img { width: 140px; bottom: 25px;}
+            .delivery-vehicle { width: 150px; margin: 0 15px; padding-bottom: 40px;}
             .delivery-header h3 { font-size: 18px; }
 
             .home-products-section { padding: 40px 5%; }
@@ -436,14 +425,18 @@
             .old-price { font-size: 10px; }
             .cart-btn-blue { width: 100%; height: 28px; font-size: 12px; margin-top: 5px; border-radius: 4px; background: var(--ps5-blue); color: white; border: none;}
 
+            /* Enhanced UI Mobile Fixes */
             .payment-modal { width: 90% !important; padding: 25px 15px; border-radius: 12px; }
             .qr-container { width: 180px; height: 180px; }
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
+            .coupon-section { margin: 10px 15px;}
+            .coupon-section input { width: 60%; font-size: 11px; padding: 8px;}
+            .coupon-section button { width: 35%; font-size: 11px; padding: 8px;}
             
             .footer-section { padding: 40px 5% 30px 5%; margin-top: 40px; }
             .footer-section h3 { font-size: 20px; }
             .wa-contact-btn { font-size: 14px; padding: 12px 25px; }
-            .floating-wa { bottom: 25px; right: 25px; width: 55px; height: 55px; font-size: 30px; }
+            .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 28px; }
         }
     </style>
 </head>
@@ -485,7 +478,6 @@
             
             <h2><i class="fa-solid fa-qrcode" style="color: #ff3333;"></i> Secure Checkout</h2>
             
-            <!-- Added Payment Method Trust Badges -->
             <div class="payment-methods-icons">
                 <i class="fa-brands fa-google-pay" title="Google Pay" style="color: #ffffff;"></i>
                 <i class="fa-solid fa-wallet" title="Paytm" style="color: #00baf2;"></i>
@@ -530,7 +522,6 @@
         </div>
 
         <div class="nav-actions">
-            
             <div id="tokenTracker" class="token-tracker-container" title="Click to view Token Info" onclick="showTokenInfo()" style="display: none;">
                 <div class="circular-progress">
                     <svg viewBox="0 0 44 44">
@@ -571,14 +562,13 @@
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
+            <h2 style="font-family: 'Orbitron', sans-serif;"><i class="fa-solid fa-cart-shopping"></i> Neural Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer">
             <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
         
-        <!-- Enhanced Coupon Section -->
         <div class="coupon-section">
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="couponInput" placeholder="Enter Promo Code" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px;">
@@ -666,7 +656,7 @@
         </div>
     </section>
 
-    <!-- 🚀 NEW CRAZY PRE-ORDER DELIVERY ANIMATION SECTION 🚀 -->
+    <!-- 🚀 NEW CRAZY PRE-ORDER DELIVERY ANIMATION SECTION (FAST CARS) 🚀 -->
     <section class="coming-soon-delivery animate-fade-up delay-3">
         <div class="delivery-header">
             <h3><i class="fa-solid fa-truck-fast"></i> UPCOMING DROPS</h3>
@@ -675,9 +665,8 @@
         
         <div class="marquee-wrapper">
             <div class="delivery-track"></div>
-            <!-- The Double track ensures infinite loop without jumps -->
+            <!-- Faster scrolling animation -->
             <div class="marquee-track" id="preOrderMarquee">
-                <!-- Data will be injected here via JavaScript from Firebase -->
                 <div style="color:gray; width:100vw; text-align:center; position:relative; z-index:5; padding-top:20px;">Fetching incoming drops from database...</div>
             </div>
         </div>
@@ -837,12 +826,10 @@
         const qReviews = query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(2));
         onSnapshot(qReviews, (snapshot) => {
             const reviewsGrid = document.getElementById('homeReviewsGrid');
-            
             if(snapshot.empty) {
                 reviewsGrid.innerHTML = '<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No community reviews yet.</p>';
                 return;
             }
-            
             reviewsGrid.innerHTML = '';
             snapshot.forEach((doc) => {
                 const data = doc.data();
@@ -868,31 +855,27 @@
             });
         });
 
-        // 🚀 FETCH PRE-ORDERS FOR MARQUEE ANIMATION 🚀
+        // 🚀 FETCH PRE-ORDERS FOR MAGIC TRUCK ANIMATION 🚀
         const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"), limit(8));
         onSnapshot(qPreOrders, (snapshot) => {
             const marquee = document.getElementById('preOrderMarquee');
             marquee.innerHTML = '';
             
             if(snapshot.empty) {
-                document.querySelector('.coming-soon-delivery').style.display = 'none'; // Hide section if no pre-orders
+                document.querySelector('.coming-soon-delivery').style.display = 'none';
                 return;
             }
 
             let gamesHtml = '';
+            // Make sure to use the futuristic transparent truck as the carrier
             snapshot.forEach((doc) => {
                 const game = doc.data();
                 const gameId = doc.id;
                 
-                // Building the hover vehicle HTML
                 gamesHtml += `
                     <div class="delivery-vehicle" onclick="window.location.href='preorder-details.html?id=${gameId}'">
                         <img src="${game.image}" class="carried-game-img" alt="${game.title}">
-                        <div class="vehicle-base">
-                            <div class="thruster"></div>
-                            <div style="width:50%; height:2px; background:rgba(255,255,255,0.2);"></div>
-                            <div class="thruster"></div>
-                        </div>
+                        <img src="https://cdn-icons-png.flaticon.com/512/5759/5759931.png" class="vehicle-car-img" alt="Cyber Truck">
                         <div class="delivery-info">
                             <div class="delivery-title">${game.title}</div>
                             <div class="delivery-date">ARRIVING: ${game.releaseDate}</div>
@@ -904,7 +887,6 @@
             // Double the content to create a seamless infinite loop
             marquee.innerHTML = gamesHtml + gamesHtml;
         });
-
 
         // FETCH REGULAR GAMES 
         const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
@@ -1141,8 +1123,6 @@
                 } catch (e) { console.error("Reward error", e); }
             }
         };
-
-        window.currentTokensGlobal = () => window.currentTokens;
 
         window.applyCoupon = async function() {
             const code = document.getElementById('couponInput').value.trim().toUpperCase();
