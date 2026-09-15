@@ -75,12 +75,12 @@
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); }
         .nav-links li.active a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); box-shadow: 0 0 5px var(--primary-red); }
         
-        .search-container { order: 3; position: relative; display: flex; align-items: center; margin-right: 15px; }
-        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 9px 35px 9px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; }
-        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
+        /* STANDARDIZED SEARCH BAR */
+        .search-container { order: 3; position: relative; display: flex; align-items: center; margin: 0 20px; flex: 1; max-width: 450px; }
+        .search-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 40px 10px 15px; border-radius: 20px; outline: none; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
         .search-input::placeholder { color: var(--text-gray); transition: 0.3s; }
-        .search-input:focus::placeholder { opacity: 0.5; }
-        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-icon { position: absolute; right: 15px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
         .search-input:focus + .search-icon { color: var(--primary-red); }
         
         .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: rgba(18, 20, 26, 0.98); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; backdrop-filter: blur(10px); }
@@ -118,7 +118,7 @@
         .admin-link-btn:hover { border-color: var(--primary-red); color: var(--primary-red); background: rgba(227, 24, 37, 0.05); }
         
         .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.2); }
-        .login-btn:hover { background: var(--primary-red); box-shadow: var(--theme-glow); transform: translateY(-2px); }
+        .login-btn:hover { background: var(--primary-red); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(227, 24, 37, 0.4); }
 
         /* ONBOARDING MODAL */
         .onboarding-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
@@ -218,6 +218,48 @@
         .cat-arrow { width: 35px; height: 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-light); transition: 0.4s; background: rgba(0,0,0,0.2); }
         .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); transform: translateX(5px); }
 
+        /* 🚀 CRAZY HOVER CAR/DELIVERY ANIMATION SECTION 🚀 */
+        .coming-soon-delivery { width: 100%; padding: 40px 0; background: linear-gradient(to bottom, #0b0c10, #110000, #0b0c10); border-top: 1px solid rgba(227, 24, 37, 0.2); border-bottom: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; position: relative; margin-top: 20px;}
+        
+        /* The glowing road/laser track */
+        .delivery-track { position: absolute; top: 65%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary-red), transparent); box-shadow: 0 0 15px var(--primary-red); z-index: 1;}
+        .delivery-track::after { content:''; position:absolute; top:-10px; left:0; width:100%; height:20px; background: radial-gradient(ellipse at center, rgba(227,24,37,0.2) 0%, transparent 70%); }
+        
+        .delivery-header { text-align: center; margin-bottom: 25px; position: relative; z-index: 5;}
+        .delivery-header h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px rgba(227, 24, 37, 0.5);}
+        .delivery-header h3 i { color: var(--primary-red); margin-right: 10px; }
+        .delivery-header p { font-size: 12px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase;}
+
+        /* The Infinite Marquee Container */
+        .marquee-wrapper { width: 100%; overflow: hidden; position: relative; z-index: 3; }
+        
+        .marquee-track { display: flex; width: max-content; animation: scrollLeft 35s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+        
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* The "Car/Hoverboard" carrying the game */
+        .delivery-vehicle { position: relative; width: 200px; margin: 0 30px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; }
+        .delivery-vehicle:hover { transform: translateY(-15px) scale(1.05); }
+        .delivery-vehicle:hover .vehicle-base { box-shadow: 0 15px 30px rgba(227, 24, 37, 0.6); border-color: var(--primary-red);}
+        
+        .carried-game-img { width: 140px; height: 180px; object-fit: cover; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 2; position: relative; transition: 0.3s; transform-origin: bottom center;}
+        
+        /* The futuristic base plate (Car/Hoverboard) */
+        .vehicle-base { width: 160px; height: 15px; background: linear-gradient(90deg, #222, #444, #222); border-radius: 20px; border: 1px solid #555; position: relative; margin-top: -5px; z-index: 3; box-shadow: 0 5px 15px rgba(227, 24, 37, 0.3); transition: 0.3s; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;}
+        /* Neon Thrusters on the vehicle */
+        .thruster { width: 25px; height: 4px; background: var(--ps5-blue); border-radius: 10px; box-shadow: 0 0 10px var(--ps5-blue); animation: thrust Pulse 0.5s infinite alternate; }
+        
+        @keyframes thrustPulse { 0% { opacity: 0.6; box-shadow: 0 0 5px var(--ps5-blue); } 100% { opacity: 1; box-shadow: 0 0 15px var(--ps5-blue), 0 0 30px var(--ps5-blue); } }
+
+        .delivery-info { text-align: center; margin-top: 15px; width: 100%; }
+        .delivery-title { color: white; font-size: 12px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
+        .delivery-date { color: var(--primary-red); font-size: 10px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
+
+
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
         .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
         .home-products-section.offers-bg { background: linear-gradient(to bottom, #140404, #0b0c10); } 
@@ -288,9 +330,8 @@
         .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
         /* ========================================================================= */
-        /* 📱 PRO MOBILE LAYOUT (Safely Kept intact, added touch ripples) 📱 */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
         /* ========================================================================= */
-        
         @media (max-width: 768px) {
             
             .navbar { 
@@ -300,18 +341,23 @@
                 gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);
             }
             .logo { grid-area: logo; gap: 8px; }
-            .logo-icon { width: 32px; height: 32px; padding: 3px; border-radius: 8px; }
-            .logo-text .top { font-size: 16px; }
+            .logo-icon { width: 35px; height: 35px; padding: 4px; border-radius: 8px; }
+            .logo-text .top { font-size: 18px; }
             .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
 
-            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
             
-            .hide-mobile { display: none; }
-            .login-btn, .admin-link-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; box-shadow: none; border-color: transparent;}
-            .login-btn i, .admin-link-btn i { margin: 0; }
+            .hide-mobile { display: none !important; }
+            .login-btn, .admin-link-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 16px; box-shadow: none; border-color: transparent; background: rgba(255,255,255,0.05); color:white;}
+            .login-btn i, .admin-link-btn i { margin: 0; font-size: 16px;}
+            
+            .circular-progress { width: 32px; height: 32px; }
+            .progress-logo { width: 20px; height: 20px; }
+            .token-text { display: block !important; font-size: 7px; } 
+            .token-tracker-container { margin: 0; display: flex !important; flex-direction: column; gap: 0px; } 
 
-            .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
-            .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
+            .search-container { grid-area: search; width: 100%; margin: 0; max-width: 100%;}
+            .search-input { width: 100%; border-radius: 8px; padding: 12px 40px 12px 15px; background: rgba(255,255,255,0.08); font-size: 14px;}
             .search-input:focus { width: 100%; box-shadow: inset 0 0 10px rgba(227,24,37,0.2); }
 
             .nav-links { 
@@ -347,6 +393,12 @@
             .cat-img { height: 90px; margin-bottom: 10px; }
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
+
+            /* Animation Shrink for mobile */
+            .carried-game-img { width: 100px; height: 130px; }
+            .vehicle-base { width: 120px; height: 10px;}
+            .delivery-vehicle { width: 140px; margin: 0 15px;}
+            .delivery-header h3 { font-size: 18px; }
 
             .home-products-section { padding: 40px 5%; }
             .sec-title-bar { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 25px; }
@@ -384,18 +436,14 @@
             .old-price { font-size: 10px; }
             .cart-btn-blue { width: 100%; height: 28px; font-size: 12px; margin-top: 5px; border-radius: 4px; background: var(--ps5-blue); color: white; border: none;}
 
-            /* Enhanced UI Mobile Fixes */
             .payment-modal { width: 90% !important; padding: 25px 15px; border-radius: 12px; }
             .qr-container { width: 180px; height: 180px; }
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
-            .coupon-section { margin: 10px 15px;}
-            .coupon-section input { width: 60%; font-size: 11px; padding: 8px;}
-            .coupon-section button { width: 35%; font-size: 11px; padding: 8px;}
             
             .footer-section { padding: 40px 5% 30px 5%; margin-top: 40px; }
             .footer-section h3 { font-size: 20px; }
             .wa-contact-btn { font-size: 14px; padding: 12px 25px; }
-            .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 28px; }
+            .floating-wa { bottom: 25px; right: 25px; width: 55px; height: 55px; font-size: 30px; }
         }
     </style>
 </head>
@@ -501,7 +549,7 @@
                 <i class="fa-solid fa-shield-halved"></i> <span class="hide-mobile">Admin</span>
             </a>
             <button class="login-btn" id="authBtn">
-                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login / Sign Up</span>
+                <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
             </button>
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-cart-shopping"></i>
@@ -513,7 +561,6 @@
             <li class="active"><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
-            <!-- LINK TO PREORDER PAGE ADDED HERE -->
             <li><a href="preorder.html">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Community Reviews</a></li>
@@ -524,7 +571,7 @@
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2 style="font-family: 'Orbitron', sans-serif;"><i class="fa-solid fa-cart-shopping"></i> Neural Cart</h2>
+            <h2><i class="fa-solid fa-cart-shopping"></i> Your Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer">
@@ -611,7 +658,6 @@
                 <h3>Special Offers</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
-            <!-- PREORDER IMAGE UPDATED HERE -->
             <a href="preorder.html" class="cat-card">
                 <div class="cat-img" style="background-image: url('preorder.png');"></div>
                 <h3>Pre-Orders</h3>
@@ -620,8 +666,25 @@
         </div>
     </section>
 
+    <!-- 🚀 NEW CRAZY PRE-ORDER DELIVERY ANIMATION SECTION 🚀 -->
+    <section class="coming-soon-delivery animate-fade-up delay-3">
+        <div class="delivery-header">
+            <h3><i class="fa-solid fa-truck-fast"></i> UPCOMING DROPS</h3>
+            <p>Pre-book the hottest releases before they arrive</p>
+        </div>
+        
+        <div class="marquee-wrapper">
+            <div class="delivery-track"></div>
+            <!-- The Double track ensures infinite loop without jumps -->
+            <div class="marquee-track" id="preOrderMarquee">
+                <!-- Data will be injected here via JavaScript from Firebase -->
+                <div style="color:gray; width:100vw; text-align:center; position:relative; z-index:5; padding-top:20px;">Fetching incoming drops from database...</div>
+            </div>
+        </div>
+    </section>
+
     <!-- PC SECTION -->
-    <section id="pc-section" class="home-products-section animate-fade-up delay-3">
+    <section id="pc-section" class="home-products-section animate-fade-up delay-1">
         <div class="sec-title-bar">
             <div class="title-left red-title"><span></span> POPULAR PC GAMES</div>
             <a href="pc.html" class="view-all red-link">View PC Store &rarr;</a>
@@ -636,7 +699,7 @@
     </section>
 
     <!-- PS5 SECTION -->
-    <section id="ps5-section" class="home-products-section ps5-bg animate-fade-up delay-1">
+    <section id="ps5-section" class="home-products-section ps5-bg animate-fade-up delay-2">
         <div class="sec-title-bar">
             <div class="title-left blue-title"><span></span> PLAYSTATION GAMES</div>
             <a href="ps5.html" class="view-all blue-link">View PlayStation Store &rarr;</a>
@@ -651,7 +714,7 @@
     </section>
 
     <!-- OFFERS SECTION -->
-    <section id="offers-home-section" class="home-products-section offers-bg animate-fade-up delay-2">
+    <section id="offers-home-section" class="home-products-section offers-bg animate-fade-up delay-3">
         <div class="sec-title-bar">
             <div class="title-left gold-title"><span></span> 🔥 SPECIAL OFFERS & DEALS</div>
             <a href="offer.html" class="view-all gold-link">View All Offers &rarr;</a>
@@ -665,7 +728,7 @@
         </div>
     </section>
 
-    <section id="reviews-section" class="home-products-section reviews-bg animate-fade-up delay-3">
+    <section id="reviews-section" class="home-products-section reviews-bg animate-fade-up delay-1">
         <div class="sec-title-bar">
             <div class="title-left white-title"><span></span> 💬 COMMUNITY REVIEWS</div>
             <a href="reviews.html" class="view-all white-link">View All Reviews &rarr;</a>
@@ -676,7 +739,7 @@
     </section>
 
     <!-- FOOTER CONTACT SECTION -->
-    <footer class="footer-section animate-fade-up delay-1">
+    <footer class="footer-section animate-fade-up delay-2">
         <h3>Need Help or Custom Games?</h3>
         <p>We are available 24/7 to assist you with your orders, game credentials, and any other queries. Drop us a message!</p>
         <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
@@ -805,7 +868,45 @@
             });
         });
 
-        // FETCH GAMES 
+        // 🚀 FETCH PRE-ORDERS FOR MARQUEE ANIMATION 🚀
+        const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"), limit(8));
+        onSnapshot(qPreOrders, (snapshot) => {
+            const marquee = document.getElementById('preOrderMarquee');
+            marquee.innerHTML = '';
+            
+            if(snapshot.empty) {
+                document.querySelector('.coming-soon-delivery').style.display = 'none'; // Hide section if no pre-orders
+                return;
+            }
+
+            let gamesHtml = '';
+            snapshot.forEach((doc) => {
+                const game = doc.data();
+                const gameId = doc.id;
+                
+                // Building the hover vehicle HTML
+                gamesHtml += `
+                    <div class="delivery-vehicle" onclick="window.location.href='preorder-details.html?id=${gameId}'">
+                        <img src="${game.image}" class="carried-game-img" alt="${game.title}">
+                        <div class="vehicle-base">
+                            <div class="thruster"></div>
+                            <div style="width:50%; height:2px; background:rgba(255,255,255,0.2);"></div>
+                            <div class="thruster"></div>
+                        </div>
+                        <div class="delivery-info">
+                            <div class="delivery-title">${game.title}</div>
+                            <div class="delivery-date">ARRIVING: ${game.releaseDate}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Double the content to create a seamless infinite loop
+            marquee.innerHTML = gamesHtml + gamesHtml;
+        });
+
+
+        // FETCH REGULAR GAMES 
         const qGames = query(collection(db, "games"), orderBy("addedOn", "desc"));
         onSnapshot(qGames, (snapshot) => {
             const pcGrid = document.getElementById('pcGamesGrid');
@@ -920,7 +1021,7 @@
                     document.getElementById('tokenTracker').style.display = 'none';
                     document.getElementById('onboardingOverlay').style.display = 'none';
                     
-                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login / Sign Up</span>`;
+                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
                     authBtn.onclick = loginUser;
                 }
             });
