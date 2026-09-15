@@ -109,11 +109,6 @@
         .po-hero-btn { background: var(--primary-red); color: white; border: none; padding: 15px 30px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
         .po-hero-btn:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); transform: translateX(5px); }
 
-        .po-controls { position: absolute; bottom: 30px; left: 5%; display: flex; align-items: center; gap: 15px; z-index: 2;}
-        .po-dots { display: flex; gap: 8px; }
-        .po-dot { width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; transition: 0.3s; }
-        .po-dot.active { width: 25px; border-radius: 5px; background: var(--primary-red); box-shadow: 0 0 8px var(--primary-red); }
-
         /* FILTERS BAR */
         .filter-section { padding: 25px 5%; background: var(--dark-bg); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; position: sticky; top: 76px; z-index: 90; }
         .pill-filters { display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 5px; flex: 1; }
@@ -131,36 +126,37 @@
         .sh-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
         .sh-title i { color: var(--primary-red); }
         .sh-subtitle { color: var(--text-gray); font-size: 13px; font-weight: 600;}
-        .view-all-link { color: var(--primary-red); font-size: 13px; font-weight: 700; text-decoration: none; transition: 0.3s; text-transform: uppercase; }
-        .view-all-link:hover { color: #ff3333; text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); transform: translateX(5px); display: inline-block; }
 
         .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
         
-        .game-card { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);}
-        .game-card:hover { border-color: rgba(227, 24, 37, 0.4); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(227, 24, 37, 0.05); }
+        /* 🚀 ENHANCED GAME CARD UI 🚀 */
+        .game-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);}
+        .game-card:hover { border-color: rgba(227, 24, 37, 0.4); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(227, 24, 37, 0.05); }
         
         .card-img-wrapper { position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; } 
         .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
         .game-card:hover .card-img { transform: scale(1.05); filter: brightness(1.1); }
         
         .platform-tags { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; z-index: 2; }
-        .ptag { background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; }
+        .ptag { background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; text-transform:uppercase; letter-spacing:0.5px;}
         
         .bonus-badge { position: absolute; bottom: -15px; right: 15px; background: #00439c; color: white; width: 50px; height: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 8px; z-index: 5; border: 2px solid var(--card-bg); box-shadow: 0 4px 10px rgba(0,0,0,0.5); transform: rotate(10deg); transition: 0.3s;}
         .game-card:hover .bonus-badge { transform: rotate(0deg) scale(1.1); background: var(--ps5-blue); }
         .bonus-badge i { font-size: 14px; margin-bottom: 2px;}
         .bonus-badge span { font-size: 8px; font-weight: 800; text-align: center; line-height: 1; }
 
-        .card-info { padding: 20px 15px; display: flex; flex-direction: column; flex-grow: 1; position: relative; z-index: 3; background: var(--card-bg); }
-        .card-title { font-size: 15px; font-weight: 800; margin-bottom: 5px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-info { padding: 20px 15px; display: flex; flex-direction: column; flex-grow: 1; position: relative; z-index: 3; background: transparent; }
+        .card-title { font-size: 15px; font-weight: 800; margin-bottom: 5px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform:uppercase;}
         .release-date { font-size: 12px; font-weight: 700; color: var(--text-gray); display: flex; align-items: center; gap: 6px; margin-bottom: 15px; }
         .release-date i { color: var(--primary-red); }
         
         .card-buttons { display: flex; gap: 10px; margin-top: auto; }
-        .btn-trailer { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center; }
-        .btn-trailer:hover { background: rgba(255,255,255,0.1); border-color: white; }
-        .btn-prebook { flex: 1; background: var(--primary-red); border: none; color: white; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(227, 24, 37, 0.3);}
-        .btn-prebook:hover { background: #c1121d; box-shadow: 0 6px 15px rgba(227, 24, 37, 0.5); }
+        .btn-trailer { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center; }
+        .btn-trailer:hover { background: white; color: black; border-color: white; }
+        
+        /* Prebook button with inner shadow effect */
+        .btn-prebook { flex: 1; background: var(--primary-red); border: none; color: white; padding: 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 6px; box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 4px 10px rgba(227, 24, 37, 0.3);}
+        .btn-prebook:hover { background: #c1121d; box-shadow: inset 0 0 10px rgba(0,0,0,0.4), 0 6px 15px rgba(227, 24, 37, 0.5); }
 
         /* BOTTOM SPLIT BANNER */
         .bottom-split-banner { display: flex; gap: 20px; padding: 0 5% 60px 5%; }
@@ -183,7 +179,6 @@
         .ab-desc { font-size: 12px; color: var(--text-gray); margin-bottom: 20px; font-weight: 600; }
         .btn-outline-red { background: transparent; border: 2px solid var(--primary-red); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         .btn-outline-red:hover { background: var(--primary-red); box-shadow: var(--theme-glow); }
-        .ab-character { position: absolute; right: -20px; bottom: 0; height: 120%; width: 40%; background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=500&auto=format&fit=crop'); background-size: cover; background-position: left; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); z-index: 1; opacity: 0.7;}
 
         /* CART SIDEBAR */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.3s; backdrop-filter: blur(5px); }
@@ -191,9 +186,8 @@
         .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: var(--card-bg); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid var(--border-dark); }
         .cart-sidebar.open { right: 0; }
         .cart-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); }
-        .cart-header h2 { font-size: 18px; font-weight: 800; color: white; display: flex; align-items: center; gap: 10px;}
-        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
-        .close-cart:hover { color: var(--primary-red); transform: rotate(90deg); }
+        .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; }
+        .close-cart:hover { color: var(--primary-red); }
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
 
@@ -201,79 +195,53 @@
         /* 📱 PRO MOBILE LAYOUT 📱 */
         /* ========================================================================= */
         @media (max-width: 768px) {
-            .navbar { 
-                display: grid; 
-                grid-template-columns: 1fr auto; 
-                grid-template-areas: "logo actions" "search search" "links links"; 
-                gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);
-            }
+            .navbar { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "logo actions" "search search" "links links"; gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);}
             .logo { grid-area: logo; gap: 8px; }
-            .logo-icon { width: 32px; height: 32px; padding: 3px; border-radius: 8px; }
-            .logo-text .top { font-size: 16px; }
-            .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
-
             .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
             .hide-mobile { display: none; }
             .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; font-size: 14px; box-shadow: none; border-color: transparent;}
-            .login-btn i { margin: 0; }
-
+            
             .search-container { grid-area: search; width: 100%; margin: 0; margin-top: 5px; }
             .search-input { width: 100%; border-radius: 8px; padding: 10px 35px 10px 15px; }
-            .search-input:focus { width: 100%; box-shadow: inset 0 0 10px rgba(227,24,37,0.2); }
-
-            .nav-links { 
-                grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; 
-                background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); 
-                gap: 20px; -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x mandatory;
-            }
-            .nav-links::-webkit-scrollbar { display: none; }
-            .nav-links li { flex: 0 0 auto; width: auto; scroll-snap-align: start; }
-            .nav-links li a { font-size: 13px; white-space: nowrap; padding-bottom: 2px; }
             
-            /* Hero Mobile */
+            .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; height: auto; background: transparent; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; scrollbar-width: none; }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-links li { flex: 0 0 auto; }
+            
             .po-hero { height: 420px; padding: 30px 5%; background-position: center; justify-content: center; text-align: center;}
-            .po-hero-bg { background-position: center; }
-            .po-hero-overlay { background: rgba(11,12,16,0.75); } 
             .po-content { width: 100%; display: flex; flex-direction: column; align-items: center;}
             .po-title { font-size: 38px; margin-bottom: 10px;}
             .po-subtitle { font-size: 12px; margin-bottom: 20px;}
             .po-features-list { justify-content: center; gap: 15px; margin-bottom: 25px; }
-            .po-controls { display: none; } 
 
-            /* Filters Mobile */
-            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch; top: 102px;} 
+            .filter-section { padding: 15px 5%; flex-direction: column; align-items: stretch;}
             .pill-filters { padding-bottom: 10px; }
-            .sort-select { width: 100%; }
-
-            /* Grid Mobile */
+            
             .releases-section { padding: 25px 5% 40px 5%; }
             .game-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             
-            /* Mobile Card Adjustments */
             .card-info { padding: 10px; }
-            .card-title { font-size: 12px; margin-bottom: 4px;}
+            .card-title { font-size: 11px; margin-bottom: 4px;}
             .release-date { font-size: 9px; margin-bottom: 10px;}
             .bonus-badge { width: 35px; height: 35px; bottom: -5px; right: 5px; border-width: 1px;}
             .bonus-badge i { font-size: 10px; margin-bottom: 1px;}
             .bonus-badge span { font-size: 6px; }
+            
             .card-buttons { flex-direction: column; gap: 5px;}
             .btn-trailer, .btn-prebook { padding: 8px; font-size: 10px; }
 
-            /* Bottom Split Mobile */
             .bottom-split-banner { flex-direction: column; padding: 0 5% 40px 5%; gap: 15px; }
             .benefits-box, .action-box { padding: 20px; }
             .bb-icon-large { display: none; } 
             .bb-features-row { flex-wrap: wrap; justify-content: center; gap: 15px;}
             .bbf-item { width: 40%; }
-            
             .ab-content { max-width: 100%; text-align: center;}
-            .ab-character { display: none; } 
             .btn-outline-red { width: 100%; }
 
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
             
-            /* Touch Ripple */
-            .game-card:active, .pill-btn:active, .po-hero-btn:active {
+            /* Mobile Touch Ripple */
+            .game-card:active, .pill-btn:active {
                 transform: scale(0.96) !important;
                 transition: 0.1s !important;
             }
@@ -292,10 +260,9 @@
             </div>
         </a>
 
-        <div class="search-container">
-            <input type="text" id="gameSearch" class="search-input" placeholder="Search games, pre-orders..." autocomplete="off">
+        <div class="search-container hide-mobile">
+            <input type="text" id="gameSearch" class="search-input" placeholder="Search pre-orders..." autocomplete="off">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
 
         <div class="nav-actions">
@@ -321,11 +288,11 @@
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2><i class="fa-solid fa-cart-shopping" style="color:var(--primary-red);"></i> Your Cart</h2>
+            <h2 style="font-family:'Orbitron', sans-serif; color:white; font-size:18px;"><i class="fa-solid fa-cart-shopping" style="color:var(--primary-red);"></i> Your Cart</h2>
             <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="cart-items" id="cartItemsContainer">
-            <p style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</p>
+            <p style="text-align:center; color:gray; margin-top:20px; font-weight:700;">Your cart is empty.</p>
         </div>
         <div class="cart-footer">
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; margin-bottom:15px; color:white; text-transform:uppercase;">
@@ -335,15 +302,13 @@
         </div>
     </div>
 
-    <!-- PRE-ORDER HERO SECTION -->
+    <!-- PRE-ORDER HERO -->
     <header class="po-hero animate-fade-up">
         <div class="po-hero-bg"></div>
         <div class="po-hero-overlay"></div>
-        
         <div class="po-content">
             <h1 class="po-title">PRE-ORDER</h1>
             <div class="po-subtitle">BE READY FOR WHAT'S NEXT</div>
-            
             <div class="po-features-list">
                 <div class="po-feat">
                     <div class="po-feat-icon"><i class="fa-solid fa-gift"></i></div>
@@ -353,27 +318,6 @@
                     <div class="po-feat-icon"><i class="fa-regular fa-clock"></i></div>
                     <div class="po-feat-text"><span>Early</span><span>Access</span></div>
                 </div>
-                <div class="po-feat">
-                    <div class="po-feat-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                    <div class="po-feat-text"><span>Secure</span><span>& Genuine</span></div>
-                </div>
-                <div class="po-feat">
-                    <div class="po-feat-icon"><i class="fa-solid fa-percent"></i></div>
-                    <div class="po-feat-text"><span>Best</span><span>Prices</span></div>
-                </div>
-            </div>
-
-            <button class="po-hero-btn" onclick="scrollToGames()">
-                EXPLORE UPCOMING GAMES <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-
-        <div class="po-controls">
-            <div class="po-dots">
-                <div class="po-dot active"></div>
-                <div class="po-dot"></div>
-                <div class="po-dot"></div>
-                <div class="po-dot"></div>
             </div>
         </div>
     </header>
@@ -392,24 +336,17 @@
             <button class="pill-btn" data-filter="shooter">Shooter</button>
             <button class="pill-btn" data-filter="racing">Racing</button>
         </div>
-        <select class="sort-select">
-            <option>Sort by: Release Date</option>
-            <option>Hype Level</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-        </select>
     </div>
 
-    <!-- UPCOMING RELEASES GRID (DYNAMIC FROM FIREBASE) -->
+    <!-- UPCOMING RELEASES GRID -->
     <section class="releases-section animate-fade-up delay-2">
         <div class="section-head">
             <div class="sh-left">
                 <div class="sh-title"><i class="fa-solid fa-gamepad"></i> UPCOMING RELEASES</div>
-                <div class="sh-subtitle">Pre-order now and be among the first to play.</div>
+                <div class="sh-subtitle">Click on any game card to view cinematic trailer and details.</div>
             </div>
         </div>
 
-        <!-- 🚀 THIS GRID WILL POPULATE FROM FIREBASE 🚀 -->
         <div class="game-grid" id="mainGamesGrid">
             <div style="width:100%; text-align:center; padding: 50px 0; color:var(--primary-red); grid-column:1/-1;">
                 <i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Loading live pre-orders...
@@ -444,13 +381,6 @@
 
     <!-- SCRIPTS -->
     <script>
-        function scrollToGames() {
-            const target = document.getElementById('preOrderGrid');
-            const offset = target.getBoundingClientRect().top + window.scrollY - 70;
-            window.scrollTo({top: offset, behavior: 'smooth'});
-        }
-
-        // JS FILTER LOGIC
         document.querySelectorAll('.pill-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
@@ -473,31 +403,23 @@
                 });
             });
         });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const animatedElements = document.querySelectorAll('.animate-fade-up');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animationPlayState = 'running';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            animatedElements.forEach(el => {
-                el.style.animationPlayState = 'paused';
-                observer.observe(el);
-            });
-        });
     </script>
 
-    <!-- Global Variables & Cart Logic -->
     <script>
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
-        
         window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
         
+        window.updateCartUI = () => {
+            const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
+            if (window.cartArray.length === 0) container.innerHTML = '<p style="text-align:center; color:gray; margin-top:20px; font-weight:700;">Your cart is empty.</p>';
+            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div style="display:flex;gap:15px;background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;border:1px solid var(--border-dark);align-items:center;position:relative;"><img src="${item.img}" style="width:60px;height:60px;object-fit:cover;border-radius:5px;"><div style="flex:1;"><div style="font-size:13px;font-weight:700;margin-bottom:5px;color:white;">${item.title} (x${item.qty})</div><div style="font-size:15px;font-weight:800;color:var(--primary-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button onclick="removeFromCart(${index})" style="background:none;border:none;color:gray;cursor:pointer;font-size:15px;position:absolute;right:12px;top:12px;"><i class="fa-solid fa-trash"></i></button></div>`; });
+            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + tot.toLocaleString('en-IN');
+        };
+        
+        window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
+        window.updateCartUI();
+
+        // Used by the Pre-book button directly from the card
         window.addToCart = (title, price, imgUrl) => {
             const ex = window.cartArray.find(i => i.title === title); 
             if(ex) ex.qty += 1; else window.cartArray.push({ title, price: Number(price), img: imgUrl, qty: 1 });
@@ -506,20 +428,9 @@
             if (navigator.vibrate) navigator.vibrate(50);
             window.toggleCart(); 
         };
-        
-        window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
-        
-        window.updateCartUI = () => {
-            const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
-            if (window.cartArray.length === 0) container.innerHTML = '<p style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</p>';
-            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div style="display:flex;gap:15px;background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;border:1px solid var(--border-dark);align-items:center;position:relative;"><img src="${item.img}" style="width:60px;height:60px;object-fit:cover;border-radius:5px;"><div style="flex:1;"><div style="font-size:13px;font-weight:700;margin-bottom:5px;color:white;">${item.title} (x${item.qty})</div><div style="font-size:15px;font-weight:800;color:var(--primary-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button onclick="removeFromCart(${index})" style="background:none;border:none;color:gray;cursor:pointer;font-size:15px;position:absolute;right:12px;top:12px;"><i class="fa-solid fa-trash"></i></button></div>`; });
-            
-            document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + tot.toLocaleString('en-IN');
-        };
-        window.updateCartUI();
     </script>
 
-    <!-- 🚀 FIREBASE MODULE FOR DYNAMIC PRE-ORDERS 🚀 -->
+    <!-- 🚀 FIREBASE MODULE - CLICKABLE CARDS 🚀 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -538,69 +449,47 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        const savedUserName = localStorage.getItem('gf_logged_in_user');
-        if(savedUserName) {
-            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
-        }
-
-        setPersistence(auth, browserLocalPersistence).then(() => {
-            onAuthStateChanged(auth, (user) => {
-                const authBtn = document.getElementById('authBtn');
-                if (user) {
-                    const firstName = user.displayName.split(' ')[0];
-                    localStorage.setItem('gf_logged_in_user', firstName); 
-                    authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
-                    authBtn.onclick = () => { window.location.href = "profile.html"; };
-                } else {
-                    localStorage.removeItem('gf_logged_in_user'); 
-                    authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
-                    authBtn.onclick = async () => {
-                        try { await signInWithPopup(auth, provider); } catch (err) { alert("Login failed: " + err.message); }
-                    };
-                }
-            });
+        onAuthStateChanged(auth, (user) => {
+            const authBtn = document.getElementById('authBtn');
+            if (user) {
+                const firstName = user.displayName.split(' ')[0];
+                authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
+                authBtn.onclick = () => { window.location.href = "profile.html"; };
+            } else {
+                authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
+                authBtn.onclick = async () => {
+                    try { await signInWithPopup(auth, provider); } catch (err) { alert("Login failed: " + err.message); }
+                };
+            }
         });
 
-        // 🚀 FETCH PRE-ORDERS FROM DATABASE AND BUILD HTML CARDS 🚀
         const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"));
         onSnapshot(qPreOrders, (snapshot) => {
             const grid = document.getElementById('mainGamesGrid');
             grid.innerHTML = '';
             
             if(snapshot.empty) {
-                grid.innerHTML = '<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No upcoming pre-orders right now. Check back soon!</p>';
+                grid.innerHTML = '<p style="color:gray; width:100%; text-align:center; grid-column:1/-1;">No upcoming pre-orders right now.</p>';
                 return;
             }
 
-            snapshot.forEach((doc) => {
-                const game = doc.data();
+            snapshot.forEach((docSnap) => {
+                const game = docSnap.data();
+                const gameId = docSnap.id;
                 
-                // Construct Category String for filtering
                 let categoriesStr = game.categories ? game.categories.join(' ').toLowerCase() : '';
                 let searchDataCategory = `${categoriesStr} ${game.platform.toLowerCase()}`;
 
-                // Platform Tags UI
-                let platformTagsHtml = '';
-                if(game.platform === 'PS5/PC') {
-                    platformTagsHtml = `<div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div>`;
-                } else if(game.platform === 'PC') {
-                    platformTagsHtml = `<div class="ptag" style="background:white; color:black;">PC</div>`;
-                } else {
-                    platformTagsHtml = `<div class="ptag">${game.platform}</div>`; 
-                }
+                let platformTagsHtml = game.platform === 'PS5/PC' 
+                    ? `<div class="ptag">PS5</div><div class="ptag" style="background:white; color:black;">PC</div>` 
+                    : `<div class="ptag">${game.platform}</div>`;
 
-                // Bonus Badge UI
                 let bonusHtml = game.hasBonus ? `<div class="bonus-badge"><i class="fa-solid fa-shield-heart"></i><span>Bonus<br>Content</span></div>` : '';
-                
-                // Safe Title for onclick function
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-                
-                // Trailer Button Action
-                let trailerAction = game.trailerUrl ? `window.open('${game.trailerUrl}', '_blank')` : `alert('Trailer coming soon!')`;
 
-                // Build HTML Card
+                // 🚀 LINKING MAGIC APPLIED HERE 🚀
                 let cardHtml = `
-                <div class="game-card animate-fade-up" data-category="${searchDataCategory}">
+                <div class="game-card animate-fade-up" data-category="${searchDataCategory}" onclick="window.location.href='preorder-details.html?id=${gameId}'">
                     <div class="card-img-wrapper">
                         <img src="${game.image}" class="card-img" alt="${game.title}">
                         <div class="platform-tags">${platformTagsHtml}</div>
@@ -609,18 +498,19 @@
                     <div class="card-info">
                         <div class="card-title">${game.title}</div>
                         <div class="release-date"><i class="fa-regular fa-calendar"></i> ${game.releaseDate}</div>
-                        <div class="card-buttons">
-                            <button class="btn-trailer" onclick="${trailerAction}"><i class="fa-brands fa-youtube"></i> Watch Trailer</button>
-                            <button class="btn-prebook" onclick="addToCart('${escapedTitle} (Pre-Order)', ${game.price}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i> Pre-book (₹${game.price})</button>
+                        
+                        <!-- Buttons container (event.stopPropagation prevents card click when clicking buttons) -->
+                        <div class="card-buttons" onclick="event.stopPropagation()">
+                            <button class="btn-trailer" onclick="window.location.href='preorder-details.html?id=${gameId}'"><i class="fa-brands fa-youtube"></i> Trailer</button>
+                            <button class="btn-prebook" onclick="addToCart('${escapedTitle} (Pre-Order)', ${game.price}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i> ₹${game.price}</button>
                         </div>
                     </div>
                 </div>
                 `;
-                
                 grid.innerHTML += cardHtml;
             });
-
-            // Re-apply active filter if needed after database loads
+            
+            // Reapply filter
             const activeFilterBtn = document.querySelector('.pill-btn.active');
             if(activeFilterBtn) { activeFilterBtn.click(); }
         });
