@@ -60,8 +60,8 @@
         .top-bar a { color: var(--primary-red); text-decoration: none; font-weight: 600; transition: var(--hover-transition); }
         .top-bar a:hover { color: #ff3333; text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); }
 
+        /* NAVBAR */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.92); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        
         .logo { order: 1; display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink:0;}
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(227, 24, 37, 0.3); padding: 5px; transition: var(--hover-transition); box-shadow: inset 0 0 10px rgba(227, 24, 37, 0.1); }
         .logo:hover .logo-icon { transform: scale(1.05) rotate(5deg); border-color: var(--primary-red); box-shadow: 0 0 15px rgba(227, 24, 37, 0.4), inset 0 0 10px rgba(227, 24, 37, 0.2); }
@@ -75,12 +75,11 @@
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); }
         .nav-links li.active a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); box-shadow: 0 0 5px var(--primary-red); }
         
-        .search-container { order: 3; position: relative; display: flex; align-items: center; margin-right: 15px; }
-        .search-input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 9px 35px 9px 15px; border-radius: 20px; outline: none; width: 180px; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; }
-        .search-input:focus { width: 280px; border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
+        .search-container { order: 3; position: relative; display: flex; align-items: center; margin: 0 20px; flex: 1; max-width: 450px; }
+        .search-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 40px 10px 15px; border-radius: 20px; outline: none; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
         .search-input::placeholder { color: var(--text-gray); transition: 0.3s; }
-        .search-input:focus::placeholder { opacity: 0.5; }
-        .search-icon { position: absolute; right: 12px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-icon { position: absolute; right: 15px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
         .search-input:focus + .search-icon { color: var(--primary-red); }
         
         .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: rgba(18, 20, 26, 0.98); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; backdrop-filter: blur(10px); }
@@ -210,7 +209,7 @@
         .cat-arrow { width: 35px; height: 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-light); transition: 0.4s; background: rgba(0,0,0,0.2); }
         .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); transform: translateX(5px); }
 
-        /* 🚀 CRAZY HOVER CAR/DELIVERY ANIMATION SECTION (FIXED & FASTER) 🚀 */
+        /* 🚀 CRAZY CSS HOVERBOARD DELIVERY ANIMATION SECTION 🚀 */
         .coming-soon-delivery { width: 100%; padding: 40px 0; background: linear-gradient(to bottom, #0b0c10, #110000, #0b0c10); border-top: 1px solid rgba(227, 24, 37, 0.2); border-bottom: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; position: relative; margin-top: 20px;}
         
         .delivery-track { position: absolute; top: 65%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary-red), transparent); box-shadow: 0 0 15px var(--primary-red); z-index: 1;}
@@ -223,7 +222,7 @@
 
         .marquee-wrapper { width: 100%; overflow: hidden; position: relative; z-index: 3; }
         
-        /* 🚀 SPEED INCREASED HERE (20s instead of 35s) */
+        /* Faster Smooth Animation Loop */
         .marquee-track { display: flex; width: max-content; animation: scrollLeft 20s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
         
@@ -232,17 +231,26 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* The Cyber Truck + Game Poster Container */
-        .delivery-vehicle { position: relative; width: 220px; margin: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; cursor: pointer; transition: 0.3s; padding-bottom: 50px;}
-        .delivery-vehicle:hover { transform: translateY(-15px) scale(1.05); }
+        /* Hoverboard & Poster Setup */
+        .delivery-vehicle { position: relative; width: 220px; margin: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px;}
+        .delivery-vehicle:hover { transform: translateY(-15px) scale(1.08); z-index: 10; }
         
         /* Game Poster */
-        .carried-game-img { width: 110px; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid var(--primary-red); box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 2; position: relative; margin-bottom: -15px;}
+        .carried-game-img { width: 130px; height: 170px; object-fit: cover; border-radius: 8px; border: 2px solid var(--primary-red); box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 3; position: relative; margin-bottom: -10px; transition: 0.3s; transform-origin: bottom center;}
         
-        /* 🔥 THE CYBERPUNK CAR/TRUCK IMAGE 🔥 */
-        .vehicle-car-img { width: 180px; position: absolute; bottom: 35px; z-index: 3; filter: drop-shadow(0 15px 15px rgba(227, 24, 37, 0.4)); pointer-events: none; }
+        /* 🔥 PURE CSS GLOWING HOVERBOARD BASE 🔥 */
+        .css-hoverboard { width: 170px; height: 18px; background: linear-gradient(90deg, #111, #333, #111); border-radius: 10px; border: 1px solid #555; position: relative; z-index: 2; display: flex; justify-content: space-around; align-items: flex-end; padding-bottom: -5px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), 0 5px 15px rgba(227, 24, 37, 0.4); transition: 0.3s;}
+        
+        /* Floating Thrusters (Fire/Glow) */
+        .hover-fire { width: 30px; height: 20px; background: radial-gradient(ellipse at top, var(--ps5-blue) 0%, transparent 70%); border-radius: 50%; opacity: 0.8; animation: pulseFire 0.4s infinite alternate; position: relative; bottom: -12px;}
+        .hover-fire:nth-child(2) { background: radial-gradient(ellipse at top, var(--primary-red) 0%, transparent 70%); animation-delay: 0.2s;}
+        
+        @keyframes pulseFire { 0% { opacity: 0.6; transform: scaleY(0.8); } 100% { opacity: 1; transform: scaleY(1.3); box-shadow: 0 5px 15px var(--ps5-blue); } }
 
-        .delivery-info { text-align: center; margin-top: 10px; width: 100%; position:relative; z-index:4;}
+        .delivery-vehicle:hover .css-hoverboard { box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), 0 10px 25px rgba(227, 24, 37, 0.8); border-color: var(--primary-red);}
+        .delivery-vehicle:hover .hover-fire { background: radial-gradient(ellipse at top, var(--primary-red) 0%, transparent 70%); box-shadow: 0 10px 20px var(--primary-red); }
+
+        .delivery-info { text-align: center; margin-top: 25px; width: 100%; position:relative; z-index:4;}
         .delivery-title { color: white; font-size: 13px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
         .delivery-date { color: var(--primary-red); font-size: 11px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
 
@@ -332,14 +340,14 @@
             .logo-text .top { font-size: 18px; }
             .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
 
-            /* 🚀 FIX: Mobile Navbar spacing & Cart visibility */
-            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+            /* Action Buttons Fix - Hidden text, circular icons */
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
             .hide-mobile { display: none !important; }
             
-            .login-btn, .admin-link-btn, .icon-btn { padding: 0; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 13px; box-shadow: none; border: 1px solid transparent; background: rgba(255,255,255,0.05); color:white;}
-            .login-btn i, .admin-link-btn i, .icon-btn i { margin: 0; font-size: 13px;}
+            .login-btn, .admin-link-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 16px; box-shadow: none; border: 1px solid transparent; background: rgba(255,255,255,0.05); color:white;}
+            .login-btn i, .admin-link-btn i, .icon-btn i { margin: 0; font-size: 16px;}
             
-            /* 🚀 FIX: Hide big token text on mobile to save space */
+            /* Hide big token text on mobile to save space */
             .token-text { display: none !important; } 
             .circular-progress { width: 30px; height: 30px; }
             .progress-logo { width: 18px; height: 18px; }
@@ -383,10 +391,10 @@
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
 
-            /* 🚀 FIX: Mobile Animation Shrink */
-            .carried-game-img { width: 90px; height: 120px; margin-bottom: -10px;}
-            .vehicle-car-img { width: 140px; bottom: 25px;}
-            .delivery-vehicle { width: 150px; margin: 0 15px; padding-bottom: 40px;}
+            /* 🚀 CSS Hoverboard Fix for Mobile */
+            .carried-game-img { width: 100px; height: 140px; margin-bottom: -10px;}
+            .css-hoverboard { width: 130px; height: 12px;}
+            .delivery-vehicle { width: 140px; margin: 0 15px; padding-bottom: 30px;}
             .delivery-header h3 { font-size: 18px; }
 
             .home-products-section { padding: 40px 5%; }
@@ -436,7 +444,7 @@
             .footer-section { padding: 40px 5% 30px 5%; margin-top: 40px; }
             .footer-section h3 { font-size: 20px; }
             .wa-contact-btn { font-size: 14px; padding: 12px 25px; }
-            .floating-wa { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 28px; }
+            .floating-wa { bottom: 25px; right: 25px; width: 55px; height: 55px; font-size: 30px; }
         }
     </style>
 </head>
@@ -569,6 +577,7 @@
             <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
         
+        <!-- Enhanced Coupon Section -->
         <div class="coupon-section">
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="couponInput" placeholder="Enter Promo Code" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px;">
@@ -656,7 +665,7 @@
         </div>
     </section>
 
-    <!-- 🚀 NEW CRAZY PRE-ORDER DELIVERY ANIMATION SECTION (FAST CARS) 🚀 -->
+    <!-- 🚀 NEW CRAZY CSS HOVERBOARD DELIVERY ANIMATION SECTION 🚀 -->
     <section class="coming-soon-delivery animate-fade-up delay-3">
         <div class="delivery-header">
             <h3><i class="fa-solid fa-truck-fast"></i> UPCOMING DROPS</h3>
@@ -667,6 +676,7 @@
             <div class="delivery-track"></div>
             <!-- Faster scrolling animation -->
             <div class="marquee-track" id="preOrderMarquee">
+                <!-- Dynamically Populated by Firebase -->
                 <div style="color:gray; width:100vw; text-align:center; position:relative; z-index:5; padding-top:20px;">Fetching incoming drops from database...</div>
             </div>
         </div>
@@ -780,7 +790,8 @@
     </script>
 
     <script>
-        window.liveGamesDatabase = [];
+        window.regularGamesDB = [];
+        window.preOrderGamesDB = [];
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
         window.appliedDiscount = 0; 
         window.activeCouponCode = "";
@@ -855,11 +866,12 @@
             });
         });
 
-        // 🚀 FETCH PRE-ORDERS FOR MAGIC TRUCK ANIMATION 🚀
+        // 🚀 FETCH PRE-ORDERS FOR MAGIC TRUCK ANIMATION & SEARCH BAR 🚀
         const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"), limit(8));
         onSnapshot(qPreOrders, (snapshot) => {
             const marquee = document.getElementById('preOrderMarquee');
             marquee.innerHTML = '';
+            window.preOrderGamesDB = []; // Reset pre-order search DB
             
             if(snapshot.empty) {
                 document.querySelector('.coming-soon-delivery').style.display = 'none';
@@ -867,15 +879,26 @@
             }
 
             let gamesHtml = '';
-            // Make sure to use the futuristic transparent truck as the carrier
+            // Live fetch and CSS Hoverboard 
             snapshot.forEach((doc) => {
                 const game = doc.data();
                 const gameId = doc.id;
                 
+                // Add to search database
+                window.preOrderGamesDB.push({
+                    title: game.title, price: `₹${game.price} (Pre-Book)`, platform: game.platform, img: game.image, link: `preorder-details.html?id=${gameId}`
+                });
+
                 gamesHtml += `
                     <div class="delivery-vehicle" onclick="window.location.href='preorder-details.html?id=${gameId}'">
                         <img src="${game.image}" class="carried-game-img" alt="${game.title}">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5759/5759931.png" class="vehicle-car-img" alt="Cyber Truck">
+                        
+                        <!-- PURE CSS GLOWING HOVERBOARD -->
+                        <div class="css-hoverboard">
+                            <div class="hover-fire"></div>
+                            <div class="hover-fire"></div>
+                        </div>
+                        
                         <div class="delivery-info">
                             <div class="delivery-title">${game.title}</div>
                             <div class="delivery-date">ARRIVING: ${game.releaseDate}</div>
@@ -898,7 +921,7 @@
             let pcHTML = '';
             let ps5HTML = '';
             let offersHTML = '';
-            window.liveGamesDatabase = []; 
+            window.regularGamesDB = []; // Reset regular search DB
 
             let pcCount = 0;
             let ps5Count = 0;
@@ -918,7 +941,8 @@
                 let perm = game.permanentPrice || game.permPrice || 0;
                 let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
-                window.liveGamesDatabase.push({
+                // Add to regular games search DB
+                window.regularGamesDB.push({
                     title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
                 });
 
@@ -1188,7 +1212,10 @@
             const query = this.value.toLowerCase().trim();
             searchDropdown.innerHTML = ''; 
             if (query.length > 0) {
-                const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query));
+                // Combine both regular games and pre-orders for search
+                const combinedDB = [...window.regularGamesDB, ...window.preOrderGamesDB];
+                const filteredGames = combinedDB.filter(game => game.title.toLowerCase().includes(query));
+                
                 searchDropdown.style.display = 'block';
                 if (filteredGames.length > 0) {
                     filteredGames.forEach(game => {
