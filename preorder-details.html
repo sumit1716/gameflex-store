@@ -34,7 +34,7 @@
         }
         .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
 
-        /* NAVBAR (MATCHING GLOBAL) */
+        /* NAVBAR (MATCHING GLOBAL PREMIUM UI) */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(11, 12, 16, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(227, 24, 37, 0.3); padding: 5px; transition: var(--hover-transition); }
@@ -43,33 +43,37 @@
         .logo-text .top { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: white; line-height: 1; }
         .logo-text .bottom { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--primary-red); letter-spacing: 3.5px; margin-top: 2px; }
 
-        .nav-links { display: flex; gap: 25px; list-style: none; }
-        .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .nav-links li a:hover { color: var(--primary-red); }
-        
+        /* STANDARDIZED SEARCH BAR */
+        .search-container { position: relative; display: flex; align-items: center; margin: 0 20px; flex: 1; max-width: 450px; }
+        .search-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 40px 10px 15px; border-radius: 20px; outline: none; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; font-family: 'Montserrat', sans-serif; }
+        .search-input:focus { border-color: var(--primary-red); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 15px rgba(227, 24, 37, 0.2); }
+        .search-input::placeholder { color: var(--text-gray); transition: 0.3s; }
+        .search-icon { position: absolute; right: 15px; color: var(--text-gray); font-size: 14px; pointer-events: none; transition: 0.3s; }
+        .search-input:focus + .search-icon { color: var(--primary-red); }
+
         .nav-actions { display: flex; align-items: center; gap: 15px; position: relative;}
-        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
+        .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; }
         .icon-btn:hover { color: var(--primary-red); transform: scale(1.1); }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--primary-red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; }
         .login-btn { background: transparent; border: 1px solid var(--primary-red); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: var(--primary-red); transform: translateY(-2px); box-shadow: var(--theme-glow); }
 
         /* PRE-ORDER DETAILS HERO */
-        .po-detail-hero { position: relative; width: 100%; height: 75vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .hero-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(8px) brightness(0.4); transform: scale(1.1); z-index: 0; }
-        .hero-gradient { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, var(--dark-bg) 0%, transparent 100%); z-index: 1; }
+        .po-detail-hero { position: relative; width: 100%; height: auto; min-height: 85vh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 60px 5%; }
+        .hero-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(10px) brightness(0.3); transform: scale(1.1); z-index: 0; }
+        .hero-gradient { position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; background: linear-gradient(to top, var(--dark-bg) 0%, transparent 100%); z-index: 1; }
 
-        .details-glass { position: relative; z-index: 2; width: 85%; max-width: 1200px; background: rgba(18, 20, 26, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; display: flex; gap: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); margin-top: 50px; }
+        .details-glass { position: relative; z-index: 2; width: 100%; max-width: 1200px; background: rgba(18, 20, 26, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; display: flex; gap: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
         
         /* LEFT: POSTER */
         .game-poster-col { flex: 0 0 320px; }
-        .game-poster-img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.05); transition: 0.5s; }
+        .game-poster-img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.05); transition: 0.5s; object-fit: cover; aspect-ratio: 3/4;}
         .game-poster-img:hover { transform: scale(1.03) translateY(-10px); border-color: rgba(227, 24, 37, 0.5); box-shadow: var(--theme-glow); }
 
         /* RIGHT: INFO */
         .game-info-col { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .platform-badge { background: rgba(255,255,255,0.1); color: white; padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.2); }
-        .game-title { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; line-height: 1.1; margin-bottom: 15px; color: white; text-transform: uppercase; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        .game-title { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; line-height: 1.2; margin-bottom: 15px; color: white; text-transform: uppercase; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
         .game-meta { display: flex; gap: 20px; margin-bottom: 25px; align-items: center; flex-wrap: wrap;}
         .meta-item { display: flex; align-items: center; gap: 8px; color: var(--text-gray); font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .meta-item i { color: var(--primary-red); }
@@ -90,7 +94,7 @@
         /* TRAILER MODAL (YOUTUBE) */
         .trailer-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); opacity: 0; transition: 0.3s ease; }
         .trailer-modal-overlay.active { display: flex; opacity: 1; }
-        .trailer-container { position: relative; width: 80%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border-radius: 12px; box-shadow: 0 20px 60px rgba(227, 24, 37, 0.3); border: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; transform: scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .trailer-container { position: relative; width: 90%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border-radius: 12px; box-shadow: 0 20px 60px rgba(227, 24, 37, 0.3); border: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; transform: scale(0.9); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .trailer-modal-overlay.active .trailer-container { transform: scale(1); }
         .trailer-container iframe { width: 100%; height: 100%; border: none; }
         .close-trailer { position: absolute; top: -45px; right: 0; background: none; border: none; color: white; font-size: 35px; cursor: pointer; transition: 0.3s; }
@@ -108,42 +112,68 @@
         .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: #080b12; }
 
         /* ========================================================================= */
-        /* 📱 MOBILE RESPONSIVE OPTIMIZATION 📱 */
+        /* 📱 MOBILE RESPONSIVE OPTIMIZATION (THE FIX) 📱 */
         /* ========================================================================= */
-        @media (max-width: 900px) {
-            .po-detail-hero { height: auto; min-height: 100vh; padding: 100px 5% 50px 5%; align-items: flex-start; }
-            .details-glass { flex-direction: column; width: 100%; padding: 25px; gap: 25px; margin-top: 20px; }
+        @media (max-width: 768px) {
+            /* Fix Mobile Navbar */
+            .navbar { 
+                display: grid; 
+                grid-template-columns: 1fr auto; 
+                grid-template-areas: "logo actions" "search search";
+                gap: 15px; 
+                padding: 15px 5%; 
+                background: rgba(11,12,16,0.98);
+            }
+            .logo { grid-area: logo; gap: 8px; }
+            .logo-icon { width: 35px; height: 35px; padding: 4px; border-radius: 8px; }
+            .logo-text .top { font-size: 18px; }
+            .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
+
+            .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
             
-            .game-poster-col { flex: none; width: 100%; max-width: 280px; margin: 0 auto; }
+            /* Hidden text on mobile for small screen */
+            .hide-mobile { display: none !important; }
+            
+            /* Make login & cart buttons circular and clean on mobile */
+            .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 16px; box-shadow: none; border-color: transparent; background: rgba(255,255,255,0.05);}
+            .login-btn i { margin: 0; }
+            .login-btn:hover { background: var(--primary-red); }
+
+            /* Fix Search bar taking up space and background */
+            .search-container { grid-area: search; width: 100%; margin: 0; max-width: 100%; }
+            .search-input { width: 100%; border-radius: 8px; padding: 12px 40px 12px 15px; background: rgba(255,255,255,0.08); font-size: 14px;}
+            .search-icon { right: 15px; }
+
+            /* Fix Detail Section */
+            .po-detail-hero { padding-top: 20px; padding-bottom: 40px; }
+            .details-glass { flex-direction: column; width: 100%; padding: 25px; gap: 20px; margin-top: 0; border: none; border-radius: 12px;}
+            
+            .game-poster-col { flex: none; width: 100%; max-width: 250px; margin: 0 auto; }
+            .game-poster-img { box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
             
             .game-title { font-size: 28px; text-align: center; }
             .platform-badge { display: table; margin: 0 auto 15px auto; }
             .game-meta { justify-content: center; gap: 10px; }
-            .meta-item { font-size: 11px; padding: 6px 10px; }
+            .meta-item { font-size: 11px; padding: 8px 12px; }
             
             .game-desc { font-size: 13px; text-align: justify; }
             
-            .price-section { flex-direction: column; align-items: center; text-align: center; gap: 5px; margin-bottom: 20px;}
+            .price-section { flex-direction: column; align-items: center; text-align: center; gap: 5px; margin-bottom: 25px;}
             .final-price { font-size: 38px; }
 
             .action-btns { flex-direction: column; gap: 15px; }
-            .btn-prebook-main, .btn-trailer-main { width: 100%; padding: 15px; font-size: 14px; }
+            .btn-prebook-main, .btn-trailer-main { width: 100%; padding: 16px; font-size: 14px; }
             
-            .trailer-container { width: 95%; }
+            .trailer-container { width: 100%; border-radius: 8px;}
             .close-trailer { right: 10px; top: -40px; font-size: 30px; }
-
-            /* Navbar Mobile fixes */
-            .navbar { padding: 12px 5%; flex-wrap: wrap; }
-            .nav-links { display: none; } /* Hidden on mobile to save space, assuming hamburger in main app */
-            .search-container { order: 3; width: 100%; margin-top: 10px; }
-            .search-input { width: 100%; border-radius: 8px; }
-            .search-input:focus { width: 100%; }
+            
+            .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (FIXED RESPONSIVENESS) -->
     <nav class="navbar">
         <a href="index.html" class="logo">
             <div class="logo-icon"><img src="logo.png" alt="GameFlex"></div>
@@ -153,7 +183,7 @@
             </div>
         </a>
 
-        <div class="search-container hide-mobile">
+        <div class="search-container">
             <input type="text" id="gameSearch" class="search-input" placeholder="Search games, pre-orders..." autocomplete="off">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
         </div>
@@ -162,7 +192,7 @@
             <button class="icon-btn" onclick="toggleCart()">
                 <i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartBadgeCount">0</span>
             </button>
-            <button class="login-btn" id="authBtn" onclick="window.location.href='index.html'">
+            <button class="login-btn" id="authBtn">
                 <i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>
             </button>
         </div>
@@ -198,7 +228,6 @@
 
     <!-- MAIN PRE-ORDER DETAILS SECTION -->
     <div class="po-detail-hero">
-        <!-- Background Image dynamically loaded here -->
         <img id="pageHeroBg" src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=2070&auto=format&fit=crop" class="hero-bg-image">
         <div class="hero-gradient"></div>
 
@@ -215,7 +244,7 @@
                 
                 <div class="game-meta">
                     <div class="meta-item"><i class="fa-regular fa-calendar"></i> Release: <span id="detailReleaseDate" style="color:white; margin-left:5px;">TBA</span></div>
-                    <div class="meta-item" id="detailBonus" style="display:none; background:rgba(0,210,255,0.1); border-color:rgba(0,210,255,0.3);"><i class="fa-solid fa-gift" style="color:var(--ps5-blue);"></i> <span style="color:var(--ps5-blue);">Exclusive Pre-Order Bonus Included</span></div>
+                    <div class="meta-item" id="detailBonus" style="display:none; background:rgba(0,210,255,0.1); border-color:rgba(0,210,255,0.3);"><i class="fa-solid fa-gift" style="color:var(--ps5-blue);"></i> <span style="color:var(--ps5-blue);">Exclusive Bonus Included</span></div>
                 </div>
 
                 <p class="game-desc" id="detailDesc">Loading description...</p>
@@ -261,6 +290,16 @@
         window.removeFromCart = (index) => { window.cartArray.splice(index, 1); localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); window.updateCartUI(); };
         window.updateCartUI();
 
+        // Used by details page
+        window.addToCart = (title, price, imgUrl) => {
+            const ex = window.cartArray.find(i => i.title === title); 
+            if(ex) ex.qty += 1; else window.cartArray.push({ title, price: Number(price), img: imgUrl, qty: 1 });
+            localStorage.setItem('gf_cart', JSON.stringify(window.cartArray)); 
+            window.updateCartUI(); 
+            if (navigator.vibrate) navigator.vibrate(50);
+            window.toggleCart(); 
+        };
+
         // --- TRAILER MODAL LOGIC ---
         let currentTrailerUrl = "";
         
@@ -277,14 +316,14 @@
                 document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoID}?autoplay=1&rel=0`;
                 document.getElementById('trailerModal').classList.add('active');
             } else {
-                // If not standard YT link, open in new tab
+                // Not standard YT link, open in new tab
                 window.open(currentTrailerUrl, '_blank');
             }
         };
 
         window.closeTrailer = () => {
             document.getElementById('trailerModal').classList.remove('active');
-            setTimeout(() => { document.getElementById('youtubePlayer').src = ""; }, 300); // Stop audio playing in background
+            setTimeout(() => { document.getElementById('youtubePlayer').src = ""; }, 300); // Stop audio playing
         };
     </script>
 
@@ -306,7 +345,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Keep Auth button updated
+        // Keep Auth button updated and cleanly hide long names on mobile
         onAuthStateChanged(auth, (user) => {
             const authBtn = document.getElementById('authBtn');
             if (user) {
