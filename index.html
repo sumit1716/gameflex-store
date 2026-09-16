@@ -209,21 +209,20 @@
         .cat-arrow { width: 35px; height: 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-light); transition: 0.4s; background: rgba(0,0,0,0.2); }
         .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); transform: translateX(5px); }
 
-        /* 🚀 CRAZY CSS HOVERBOARD DELIVERY ANIMATION SECTION 🚀 */
+        /* 🚀 CRAZY FLOATING HOLOGRAM ANIMATION (PURE CSS) 🚀 */
         .coming-soon-delivery { width: 100%; padding: 40px 0; background: linear-gradient(to bottom, #0b0c10, #110000, #0b0c10); border-top: 1px solid rgba(227, 24, 37, 0.2); border-bottom: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; position: relative; margin-top: 20px;}
         
-        .delivery-track { position: absolute; top: 65%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary-red), transparent); box-shadow: 0 0 15px var(--primary-red); z-index: 1;}
-        .delivery-track::after { content:''; position:absolute; top:-10px; left:0; width:100%; height:20px; background: radial-gradient(ellipse at center, rgba(227,24,37,0.2) 0%, transparent 70%); }
+        .delivery-track { position: absolute; top: 75%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(227,24,37,0.8), transparent); box-shadow: 0 0 20px var(--primary-red); z-index: 1;}
         
-        .delivery-header { text-align: center; margin-bottom: 25px; position: relative; z-index: 5;}
+        .delivery-header { text-align: center; margin-bottom: 35px; position: relative; z-index: 5;}
         .delivery-header h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px rgba(227, 24, 37, 0.5);}
         .delivery-header h3 i { color: var(--primary-red); margin-right: 10px; }
         .delivery-header p { font-size: 12px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase;}
 
         .marquee-wrapper { width: 100%; overflow: hidden; position: relative; z-index: 3; }
         
-        /* Faster Smooth Animation Loop */
-        .marquee-track { display: flex; width: max-content; animation: scrollLeft 20s linear infinite; }
+        /* 🚀 FAST SPEED: 10 SECONDS LOOP 🚀 */
+        .marquee-track { display: flex; width: max-content; animation: scrollLeft 10s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
         
         @keyframes scrollLeft {
@@ -231,26 +230,23 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Hoverboard & Poster Setup */
-        .delivery-vehicle { position: relative; width: 220px; margin: 0 40px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px;}
+        /* The Premium Floating Poster Concept */
+        .delivery-vehicle { position: relative; width: 220px; margin: 0 35px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 30px;}
         .delivery-vehicle:hover { transform: translateY(-15px) scale(1.08); z-index: 10; }
         
-        /* Game Poster */
-        .carried-game-img { width: 130px; height: 170px; object-fit: cover; border-radius: 8px; border: 2px solid var(--primary-red); box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 3; position: relative; margin-bottom: -10px; transition: 0.3s; transform-origin: bottom center;}
+        /* The Floating Image */
+        .carried-game-img { width: 150px; height: 200px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.8); z-index: 3; position: relative; animation: floatUp 3s ease-in-out infinite alternate;}
         
-        /* 🔥 PURE CSS GLOWING HOVERBOARD BASE 🔥 */
-        .css-hoverboard { width: 170px; height: 18px; background: linear-gradient(90deg, #111, #333, #111); border-radius: 10px; border: 1px solid #555; position: relative; z-index: 2; display: flex; justify-content: space-around; align-items: flex-end; padding-bottom: -5px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), 0 5px 15px rgba(227, 24, 37, 0.4); transition: 0.3s;}
-        
-        /* Floating Thrusters (Fire/Glow) */
-        .hover-fire { width: 30px; height: 20px; background: radial-gradient(ellipse at top, var(--ps5-blue) 0%, transparent 70%); border-radius: 50%; opacity: 0.8; animation: pulseFire 0.4s infinite alternate; position: relative; bottom: -12px;}
-        .hover-fire:nth-child(2) { background: radial-gradient(ellipse at top, var(--primary-red) 0%, transparent 70%); animation-delay: 0.2s;}
-        
-        @keyframes pulseFire { 0% { opacity: 0.6; transform: scaleY(0.8); } 100% { opacity: 1; transform: scaleY(1.3); box-shadow: 0 5px 15px var(--ps5-blue); } }
+        /* The Hologram Reflection / Base Glow */
+        .hologram-shadow { width: 120px; height: 10px; background: radial-gradient(ellipse at center, rgba(227,24,37,0.8) 0%, transparent 70%); border-radius: 50%; position: absolute; bottom: 85px; z-index: 2; animation: shadowPulse 3s ease-in-out infinite alternate; filter: blur(3px);}
 
-        .delivery-vehicle:hover .css-hoverboard { box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), 0 10px 25px rgba(227, 24, 37, 0.8); border-color: var(--primary-red);}
-        .delivery-vehicle:hover .hover-fire { background: radial-gradient(ellipse at top, var(--primary-red) 0%, transparent 70%); box-shadow: 0 10px 20px var(--primary-red); }
+        .delivery-vehicle:hover .carried-game-img { border-color: var(--primary-red); box-shadow: 0 10px 40px rgba(227, 24, 37, 0.5); animation-play-state: paused; }
+        .delivery-vehicle:hover .hologram-shadow { background: radial-gradient(ellipse at center, rgba(227,24,37,1) 0%, transparent 70%); animation-play-state: paused; }
 
-        .delivery-info { text-align: center; margin-top: 25px; width: 100%; position:relative; z-index:4;}
+        @keyframes floatUp { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
+        @keyframes shadowPulse { 0% { transform: scale(1); opacity:0.8;} 100% { transform: scale(0.7); opacity:0.3;} }
+
+        .delivery-info { text-align: center; margin-top: 15px; width: 100%; position:relative; z-index:4;}
         .delivery-title { color: white; font-size: 13px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
         .delivery-date { color: var(--primary-red); font-size: 11px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
 
@@ -325,7 +321,7 @@
         .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
         /* ========================================================================= */
-        /* 📱 PRO MOBILE LAYOUT (THE FIXES APPLIED HERE) 📱 */
+        /* 📱 PRO MOBILE LAYOUT 📱 */
         /* ========================================================================= */
         @media (max-width: 768px) {
             
@@ -340,14 +336,12 @@
             .logo-text .top { font-size: 18px; }
             .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
 
-            /* Action Buttons Fix - Hidden text, circular icons */
             .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
             .hide-mobile { display: none !important; }
             
             .login-btn, .admin-link-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 16px; box-shadow: none; border: 1px solid transparent; background: rgba(255,255,255,0.05); color:white;}
             .login-btn i, .admin-link-btn i, .icon-btn i { margin: 0; font-size: 16px;}
             
-            /* Hide big token text on mobile to save space */
             .token-text { display: none !important; } 
             .circular-progress { width: 30px; height: 30px; }
             .progress-logo { width: 18px; height: 18px; }
@@ -391,10 +385,10 @@
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
 
-            /* 🚀 CSS Hoverboard Fix for Mobile */
-            .carried-game-img { width: 100px; height: 140px; margin-bottom: -10px;}
-            .css-hoverboard { width: 130px; height: 12px;}
-            .delivery-vehicle { width: 140px; margin: 0 15px; padding-bottom: 30px;}
+            /* 🚀 FIX: Mobile Animation Shrink for Clean Float */
+            .carried-game-img { width: 100px; height: 130px;}
+            .hologram-shadow { width: 80px; bottom: 70px;}
+            .delivery-vehicle { width: 130px; margin: 0 15px; padding-bottom: 30px;}
             .delivery-header h3 { font-size: 18px; }
 
             .home-products-section { padding: 40px 5%; }
@@ -420,11 +414,22 @@
             .prod-card.ps5-theme:active { border-color: rgba(31, 106, 255, 0.4) !important; box-shadow: inset 0 0 10px rgba(31, 106, 255, 0.2) !important;}
             
             .prod-img { height: 130px; }
-            .prod-info { padding: 12px 10px; }
+            /* Add padding bottom safely so button fits inside perfectly */
+            .prod-info { padding: 12px 10px 15px 10px; }
             .prod-title { font-size: 11px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
             
             .prod-price-red { font-size: 15px; margin-bottom: 12px; }
-            .buy-btn-red { padding: 10px 8px; font-size: 11px; background: var(--primary-red); color: white;}
+            
+            /* 🚀 FIX: BIG CLEAN ADD TO CART BUTTON FOR MOBILE */
+            .buy-btn-red { 
+                width: 100%; 
+                padding: 10px; 
+                font-size: 11px; 
+                background: var(--primary-red); 
+                color: white; 
+                border-radius: 6px; 
+                margin-top: 5px;
+            }
             .buy-btn-red::before { display: none; }
             
             .price-flex { margin-bottom: 8px; flex-direction: column; align-items: flex-start; gap: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px;}
@@ -433,7 +438,6 @@
             .old-price { font-size: 10px; }
             .cart-btn-blue { width: 100%; height: 28px; font-size: 12px; margin-top: 5px; border-radius: 4px; background: var(--ps5-blue); color: white; border: none;}
 
-            /* Enhanced UI Mobile Fixes */
             .payment-modal { width: 90% !important; padding: 25px 15px; border-radius: 12px; }
             .qr-container { width: 180px; height: 180px; }
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
@@ -577,7 +581,6 @@
             <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
         
-        <!-- Enhanced Coupon Section -->
         <div class="coupon-section">
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="couponInput" placeholder="Enter Promo Code" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px;">
@@ -665,10 +668,10 @@
         </div>
     </section>
 
-    <!-- 🚀 NEW CRAZY CSS HOVERBOARD DELIVERY ANIMATION SECTION 🚀 -->
+    <!-- 🚀 NEW CRAZY FLOATING HOLOGRAM ANIMATION 🚀 -->
     <section class="coming-soon-delivery animate-fade-up delay-3">
         <div class="delivery-header">
-            <h3><i class="fa-solid fa-truck-fast"></i> UPCOMING DROPS</h3>
+            <h3><i class="fa-solid fa-fire"></i> UPCOMING DROPS</h3>
             <p>Pre-book the hottest releases before they arrive</p>
         </div>
         
@@ -866,38 +869,35 @@
             });
         });
 
-        // 🚀 FETCH PRE-ORDERS FOR MAGIC TRUCK ANIMATION & SEARCH BAR 🚀
+        // 🚀 FETCH PRE-ORDERS FOR PURE CSS HOLOGRAM ANIMATION 🚀
         const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"), limit(8));
         onSnapshot(qPreOrders, (snapshot) => {
             const marquee = document.getElementById('preOrderMarquee');
             marquee.innerHTML = '';
-            window.preOrderGamesDB = []; // Reset pre-order search DB
+            window.preOrderGamesDB = []; 
             
             if(snapshot.empty) {
                 document.querySelector('.coming-soon-delivery').style.display = 'none';
                 return;
             }
 
-            let gamesHtml = '';
-            // Live fetch and CSS Hoverboard 
+            let uniqueGamesHtml = '';
+            
+            // Generate HTML only for the games present in DB (No arbitrary repetition in the array)
             snapshot.forEach((doc) => {
                 const game = doc.data();
                 const gameId = doc.id;
                 
-                // Add to search database
                 window.preOrderGamesDB.push({
                     title: game.title, price: `₹${game.price} (Pre-Book)`, platform: game.platform, img: game.image, link: `preorder-details.html?id=${gameId}`
                 });
 
-                gamesHtml += `
+                uniqueGamesHtml += `
                     <div class="delivery-vehicle" onclick="window.location.href='preorder-details.html?id=${gameId}'">
                         <img src="${game.image}" class="carried-game-img" alt="${game.title}">
                         
-                        <!-- PURE CSS GLOWING HOVERBOARD -->
-                        <div class="css-hoverboard">
-                            <div class="hover-fire"></div>
-                            <div class="hover-fire"></div>
-                        </div>
+                        <!-- PURE CSS HOLOGRAM SHADOW -->
+                        <div class="hologram-shadow"></div>
                         
                         <div class="delivery-info">
                             <div class="delivery-title">${game.title}</div>
@@ -907,8 +907,9 @@
                 `;
             });
 
-            // Double the content to create a seamless infinite loop
-            marquee.innerHTML = gamesHtml + gamesHtml;
+            // To make infinite CSS marquee work smoothly, we duplicate the whole unique block once.
+            // This prevents identical games from being right next to each other.
+            marquee.innerHTML = uniqueGamesHtml + uniqueGamesHtml;
         });
 
         // FETCH REGULAR GAMES 
@@ -921,7 +922,7 @@
             let pcHTML = '';
             let ps5HTML = '';
             let offersHTML = '';
-            window.regularGamesDB = []; // Reset regular search DB
+            window.regularGamesDB = []; 
 
             let pcCount = 0;
             let ps5Count = 0;
@@ -941,7 +942,6 @@
                 let perm = game.permanentPrice || game.permPrice || 0;
                 let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
-                // Add to regular games search DB
                 window.regularGamesDB.push({
                     title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
                 });
@@ -1212,7 +1212,6 @@
             const query = this.value.toLowerCase().trim();
             searchDropdown.innerHTML = ''; 
             if (query.length > 0) {
-                // Combine both regular games and pre-orders for search
                 const combinedDB = [...window.regularGamesDB, ...window.preOrderGamesDB];
                 const filteredGames = combinedDB.filter(game => game.title.toLowerCase().includes(query));
                 
