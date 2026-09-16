@@ -202,7 +202,7 @@
             </div>
             <ul class="nav-links">
                 <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
-                <!-- 🚀 NAYA TAB: AD & PROFIT MANAGER 🚀 -->
+                <!-- 🚀 FINANCE TAB 🚀 -->
                 <li onclick="switchTab('finance', this)"><i class="fa-solid fa-chart-line"></i> Ad & Profit Manager</li>
                 <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
@@ -258,9 +258,8 @@
                 </div>
             </div>
 
-            <!-- 🚀 NEW: 1.5 AD & PROFIT MANAGER (FINANCE) 🚀 -->
+            <!-- 1.5 AD & PROFIT MANAGER (FINANCE) -->
             <div id="financeSection" class="section animate-fade-up" style="display: none;">
-                <!-- Calculator Form -->
                 <div class="card">
                     <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
                         <i class="fa-solid fa-calculator" style="color:var(--finance-green);"></i> Record New Ad Spend & Profit
@@ -288,7 +287,6 @@
                             </div>
                             <div class="form-group">
                                 <label>Actual Net Profit (₹)</label>
-                                <!-- This is calculated automatically and is readonly -->
                                 <input type="text" id="finNetProfit" readonly style="color: #00e676; font-weight: 900; background:rgba(0,230,118,0.05); border-color:rgba(0,230,118,0.3); font-size: 16px;">
                             </div>
                         </div>
@@ -303,7 +301,6 @@
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
                         <h3 style="margin: 0;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--text-gray); margin-right:8px;"></i> Profit & Ad Spend History</h3>
-                        <!-- Optional: Can show a mini stat here like total spent -->
                     </div>
                     
                     <div class="table-responsive">
@@ -461,7 +458,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Platform</label>
-                                <select id="poPlatform">
+                                <!-- 🚀 ADDED ONCHANGE HERE FOR PRE-ORDERS 🚀 -->
+                                <select id="poPlatform" onchange="togglePOPS5Fields()">
                                     <option value="PS5">PlayStation 5</option>
                                     <option value="PC">PC</option>
                                     <option value="PS5/PC">PS5 & PC</option>
@@ -481,6 +479,18 @@
                             <div class="form-group">
                                 <label>Pre-Book Token Price (₹)</label>
                                 <input type="number" id="poPrice" required placeholder="e.g. 499">
+                            </div>
+                        </div>
+
+                        <!-- 🚀 NEW: CONSOLE PRICING BLOCK FOR PRE-ORDERS 🚀 -->
+                        <div class="form-row" id="poPs5PricingBlock" style="display: none; background: rgba(0,210,255,0.02); padding: 20px; border-radius: 8px; border: 1px dashed rgba(0,210,255,0.3);">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label style="color:var(--ps5-blue);">Console 1-Month Rental (₹) <small style="color:gray;">(After Release)</small></label>
+                                <input type="number" id="poRentalPrice" placeholder="e.g. 500">
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label style="color:var(--ps5-blue);">Console Permanent Buy (₹) <small style="color:gray;">(After Release)</small></label>
+                                <input type="number" id="poPermanentPrice" placeholder="e.g. 1500">
                             </div>
                         </div>
 
@@ -822,13 +832,22 @@
             }
         };
 
+        // 🚀 NEW: TOGGLE PS5 PRICING BLOCK FOR PRE-ORDERS 🚀
+        window.togglePOPS5Fields = function() {
+            const platform = document.getElementById('poPlatform').value;
+            if (platform === 'PS5' || platform === 'PS5/PC') {
+                document.getElementById('poPs5PricingBlock').style.display = 'flex';
+            } else {
+                document.getElementById('poPs5PricingBlock').style.display = 'none';
+            }
+        };
+
         window.calculateDiscount = function() {
             const orig = parseFloat(document.getElementById('gOriginalPrice').value) || 0;
             const sell = parseFloat(document.getElementById('gSellingPrice').value) || 0;
             document.getElementById('gDiscount').value = (orig > 0 && sell < orig) ? Math.round(((orig - sell) / orig) * 100) + "% OFF" : "0%";
         };
 
-        // 🚀 NEW: Calculate Net Profit for Finance Form 🚀
         window.calculateNetProfit = function() {
             const totalProfit = parseFloat(document.getElementById('finTotalProfit').value) || 0;
             const adSpend = parseFloat(document.getElementById('finAdSpend').value) || 0;
@@ -883,7 +902,6 @@
                 filterDashboardData();
             });
 
-            // 🚀 FETCH FINANCE LOGS 🚀
             onSnapshot(query(collection(db, "finance_logs"), orderBy("date", "desc")), (snapshot) => {
                 const tbody = document.getElementById('financeTableBody');
                 tbody.innerHTML = '';
@@ -1130,7 +1148,7 @@
         }
 
         // ===============================================
-        // 🚀 NEW: SAVE AND DELETE FINANCE LOGS 🚀
+        // FINANCE LOGS CRUD
         // ===============================================
         document.getElementById('financeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1149,7 +1167,6 @@
             try {
                 await addDoc(collection(db, "finance_logs"), logData);
                 alert("✅ Record saved successfully!");
-                // Keep date, clear other fields
                 document.getElementById('finCampaignName').value = '';
                 document.getElementById('finTotalProfit').value = '';
                 document.getElementById('finAdSpend').value = '';
@@ -1289,6 +1306,13 @@
             document.getElementById('poBonus').checked = game.hasBonus || false;
             document.getElementById('poImageUrlFallback').value = ""; 
 
+            // 🚀 POPULATE NEW PS5 PRE-ORDER PRICING 🚀
+            if(game.platform === 'PS5' || game.platform === 'PS5/PC') {
+                document.getElementById('poRentalPrice').value = game.rentalPrice || '';
+                document.getElementById('poPermanentPrice').value = game.permanentPrice || '';
+            }
+            togglePOPS5Fields();
+
             document.querySelectorAll('.po-cat-check').forEach(chk => { chk.checked = game.categories && game.categories.includes(chk.value); });
             document.getElementById('poDropZoneText').innerHTML = `<span style="color:var(--ps5-blue);"><i class="fa-solid fa-image" style="font-size:24px; display:block; margin-bottom:10px;"></i> Using Existing Database Image</span>`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1302,6 +1326,9 @@
             document.getElementById('poUploadBtn').innerHTML = `<i class="fa-solid fa-calendar-check"></i> Add Pre-Order to Database`;
             document.getElementById('poCancelEditBtn').style.display = 'none';
             document.getElementById('poDropZoneText').innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; display:block; margin-bottom:10px;"></i> Option 1: Drag & Drop Image Here (Max 800KB)`;
+            
+            // 🚀 HIDE PS5 PRICING BLOCK ON CANCEL 🚀
+            document.getElementById('poPs5PricingBlock').style.display = 'none';
         };
 
         window.deletePO = async function(poId) {
@@ -1355,6 +1382,12 @@
                     image: imageUrl, 
                     description: document.getElementById('poDesc').value,
                 };
+
+                // 🚀 ADD RENTAL AND PERMANENT PRICES IF PS5 OR PS5/PC IS SELECTED 🚀
+                if(poData.platform === 'PS5' || poData.platform === 'PS5/PC') {
+                    poData.rentalPrice = Number(document.getElementById('poRentalPrice').value) || 0;
+                    poData.permanentPrice = Number(document.getElementById('poPermanentPrice').value) || 0;
+                }
 
                 if (editId) {
                     await updateDoc(doc(db, "preorders", editId), poData);
