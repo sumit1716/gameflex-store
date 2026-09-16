@@ -20,6 +20,7 @@
             --text-gray: #8b94a5;
             --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
+            --finance-green: #00e676;
         }
 
         body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--dark-bg); color: var(--text-light); overflow-x: hidden; scroll-behavior: smooth; }
@@ -81,7 +82,7 @@
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-gray); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border-dark); background: rgba(255,255,255,0.03); color: white; font-weight: 600; box-sizing: border-box; outline: none; transition: 0.3s; font-family: inherit;}
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--ps5-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); background: rgba(0,0,0,0.5);}
-        .form-group input[type="datetime-local"] { cursor: pointer; color-scheme: dark; } 
+        .form-group input[type="datetime-local"], .form-group input[type="date"] { cursor: pointer; color-scheme: dark; } 
         
         .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 8px; border: 1px solid var(--border-dark); }
         .category-grid label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: white; cursor: pointer; margin: 0; text-transform: none; font-weight: 600;}
@@ -201,12 +202,11 @@
             </div>
             <ul class="nav-links">
                 <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
+                <!-- 🚀 NAYA TAB: AD & PROFIT MANAGER 🚀 -->
+                <li onclick="switchTab('finance', this)"><i class="fa-solid fa-chart-line"></i> Ad & Profit Manager</li>
                 <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
-                
-                <!-- 🚀 PRE-ORDER DB TAB 🚀 -->
                 <li onclick="switchTab('managepo', this)"><i class="fa-solid fa-calendar-plus"></i> Pre-Orders DB</li>
-                
                 <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Reviews</li>
                 <li onclick="switchTab('offerbanner', this)"><i class="fa-solid fa-bullhorn"></i> Banners</li>
                 <li onclick="switchTab('coupons', this)"><i class="fa-solid fa-ticket"></i> Coupons</li>
@@ -252,6 +252,74 @@
                             <thead><tr><th>Date</th><th>Customer Details</th><th>Games Purchased</th><th>Amount Paid</th></tr></thead>
                             <tbody id="reportTableBody">
                                 <tr><td colspan="4" style="text-align: center; color: gray;">Loading real data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🚀 NEW: 1.5 AD & PROFIT MANAGER (FINANCE) 🚀 -->
+            <div id="financeSection" class="section animate-fade-up" style="display: none;">
+                <!-- Calculator Form -->
+                <div class="card">
+                    <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
+                        <i class="fa-solid fa-calculator" style="color:var(--finance-green);"></i> Record New Ad Spend & Profit
+                    </h3>
+                    <form id="financeForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="finDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Ad Campaign Name</label>
+                                <input type="text" id="finCampaignName" required placeholder="e.g. GTA 6 Instagram Ad">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Total Profit / Sales (₹)</label>
+                                <input type="number" id="finTotalProfit" oninput="calculateNetProfit()" required placeholder="e.g. 5000">
+                            </div>
+                            <div class="form-group">
+                                <label>Ad Spend / Cost (₹)</label>
+                                <input type="number" id="finAdSpend" oninput="calculateNetProfit()" required placeholder="e.g. 1000">
+                            </div>
+                            <div class="form-group">
+                                <label>Actual Net Profit (₹)</label>
+                                <!-- This is calculated automatically and is readonly -->
+                                <input type="text" id="finNetProfit" readonly style="color: #00e676; font-weight: 900; background:rgba(0,230,118,0.05); border-color:rgba(0,230,118,0.3); font-size: 16px;">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="saveFinanceBtn" style="width: 100%; background: #00e676; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); color: black;">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Record
+                        </button>
+                    </form>
+                </div>
+
+                <!-- History Table -->
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
+                        <h3 style="margin: 0;"><i class="fa-solid fa-clock-rotate-left" style="color:var(--text-gray); margin-right:8px;"></i> Profit & Ad Spend History</h3>
+                        <!-- Optional: Can show a mini stat here like total spent -->
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Campaign Name</th>
+                                    <th>Total Profit</th>
+                                    <th style="color: #ff3333;">Ad Spend (-)</th>
+                                    <th style="color: #00e676;">Net Profit</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="financeTableBody">
+                                <tr><td colspan="6" style="text-align: center; color: gray;">Loading history...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -378,7 +446,7 @@
                 </div>
             </div>
 
-            <!-- 🚀 3.5. NEW MANAGE PRE-ORDERS SECTION 🚀 -->
+            <!-- 3.5. MANAGE PRE-ORDERS SECTION -->
             <div id="managepoSection" class="section animate-fade-up" style="display: none;">
                 <div class="card" id="poFormCard">
                     <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;" id="poFormHeading"><i class="fa-solid fa-calendar-plus" style="color:var(--primary-red);"></i> Add Upcoming Pre-Order</h3>
@@ -419,7 +487,6 @@
                         <div class="form-group">
                             <label>Filter Categories (For sorting on Pre-Order page)</label>
                             <div class="category-grid" id="poCategoryCheckboxes">
-                                <!-- UPDATED CATEGORIES: 2026 and 2027 -->
                                 <label><input type="checkbox" value="2026" class="po-cat-check"> Upcoming 2026</label>
                                 <label><input type="checkbox" value="2027" class="po-cat-check"> Upcoming 2027</label>
                                 <label><input type="checkbox" value="action" class="po-cat-check"> Action</label>
@@ -702,6 +769,9 @@
         const today = new Date();
         document.getElementById('monthPicker').value = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
 
+        // Set default date for Finance Form
+        document.getElementById('finDate').valueAsDate = new Date();
+
         window.switchTab = function(tabId, element) {
             document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
             document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
@@ -709,6 +779,7 @@
             element.classList.add('active');
             const titles = { 
                 'dashboard': 'Dashboard & Report', 
+                'finance': 'Ad & Profit Manager', 
                 'orders': 'Live Orders', 
                 'manage': 'Manage Games Database',
                 'managepo': 'Manage Pre-Orders DB',
@@ -757,6 +828,26 @@
             document.getElementById('gDiscount').value = (orig > 0 && sell < orig) ? Math.round(((orig - sell) / orig) * 100) + "% OFF" : "0%";
         };
 
+        // 🚀 NEW: Calculate Net Profit for Finance Form 🚀
+        window.calculateNetProfit = function() {
+            const totalProfit = parseFloat(document.getElementById('finTotalProfit').value) || 0;
+            const adSpend = parseFloat(document.getElementById('finAdSpend').value) || 0;
+            const netProfit = totalProfit - adSpend;
+            
+            const netInput = document.getElementById('finNetProfit');
+            netInput.value = netProfit;
+            
+            if (netProfit < 0) {
+                netInput.style.color = "#ff3333";
+                netInput.style.backgroundColor = "rgba(227,24,37,0.05)";
+                netInput.style.borderColor = "rgba(227,24,37,0.3)";
+            } else {
+                netInput.style.color = "#00e676";
+                netInput.style.backgroundColor = "rgba(0,230,118,0.05)";
+                netInput.style.borderColor = "rgba(0,230,118,0.3)";
+            }
+        };
+
         const fileInput = document.getElementById('gImageFile');
         fileInput.addEventListener('change', () => {
             if(fileInput.files.length > 0) document.getElementById('dropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> File Ready (${(fileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
@@ -790,6 +881,32 @@
                 });
                 renderAllOrdersTable(); 
                 filterDashboardData();
+            });
+
+            // 🚀 FETCH FINANCE LOGS 🚀
+            onSnapshot(query(collection(db, "finance_logs"), orderBy("date", "desc")), (snapshot) => {
+                const tbody = document.getElementById('financeTableBody');
+                tbody.innerHTML = '';
+                if(snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: gray;">No finance logs found. Add one above.</td></tr>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const log = docSnap.data();
+                    const logId = docSnap.id;
+                    const netColor = log.netProfit < 0 ? '#ff3333' : '#00e676';
+                    
+                    tbody.innerHTML += `<tr>
+                        <td style="font-size:11px;">${log.date}</td>
+                        <td style="font-weight:bold;">${log.campaignName}</td>
+                        <td>₹${log.totalProfit.toLocaleString('en-IN')}</td>
+                        <td style="color: #ff3333; font-weight:bold;">- ₹${log.adSpend.toLocaleString('en-IN')}</td>
+                        <td style="color: ${netColor}; font-weight:900;">₹${log.netProfit.toLocaleString('en-IN')}</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteFinanceLog('${logId}')"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                });
             });
 
             onSnapshot(query(collection(db, "reviews"), orderBy("createdAt", "desc")), (snapshot) => {
@@ -827,7 +944,7 @@
                 renderOfferGameSelection(); 
             });
 
-            // 🚀 FETCH PRE-ORDERS 🚀
+            // FETCH PRE-ORDERS
             onSnapshot(query(collection(db, "preorders"), orderBy("addedOn", "desc")), (snapshot) => {
                 allPreOrders = [];
                 if(snapshot.empty) { 
@@ -910,7 +1027,6 @@
             });
         };
 
-        // 🚀 Render Pre-Orders Table 🚀
         window.renderAdminPOTable = function(searchQuery = "") {
             const tbody = document.getElementById('poTableBody'); 
             tbody.innerHTML = '';
@@ -1014,6 +1130,48 @@
         }
 
         // ===============================================
+        // 🚀 NEW: SAVE AND DELETE FINANCE LOGS 🚀
+        // ===============================================
+        document.getElementById('financeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveFinanceBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+
+            const logData = {
+                date: document.getElementById('finDate').value,
+                campaignName: document.getElementById('finCampaignName').value,
+                totalProfit: Number(document.getElementById('finTotalProfit').value),
+                adSpend: Number(document.getElementById('finAdSpend').value),
+                netProfit: Number(document.getElementById('finNetProfit').value),
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "finance_logs"), logData);
+                alert("✅ Record saved successfully!");
+                // Keep date, clear other fields
+                document.getElementById('finCampaignName').value = '';
+                document.getElementById('finTotalProfit').value = '';
+                document.getElementById('finAdSpend').value = '';
+                document.getElementById('finNetProfit').value = '';
+                document.getElementById('finNetProfit').style.backgroundColor = "rgba(0,230,118,0.05)";
+                document.getElementById('finNetProfit').style.borderColor = "rgba(0,230,118,0.3)";
+            } catch(e) {
+                alert("❌ Failed to save log.");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Record'; btn.disabled = false;
+            }
+        });
+
+        window.deleteFinanceLog = async function(logId) {
+            if(confirm("Delete this financial record permanently?")) {
+                try {
+                    await deleteDoc(doc(db, "finance_logs", logId));
+                } catch(e) { alert("Failed to delete."); }
+            }
+        };
+
+        // ===============================================
         // REGULAR GAMES CRUD LOGIC
         // ===============================================
         window.editGame = function(gameId) {
@@ -1112,7 +1270,7 @@
         });
 
         // ===============================================
-        // 🚀 PRE-ORDER CRUD LOGIC (FIXED) 🚀
+        // PRE-ORDER CRUD LOGIC 
         // ===============================================
         window.editPO = function(poId) {
             const game = allPreOrders.find(g => g.id === poId); if(!game) return;
@@ -1155,7 +1313,6 @@
             }
         };
 
-        // Added event listener dynamically inside script to avoid null file input errors
         const poFileInput = document.getElementById('poImageFile');
         poFileInput.addEventListener('change', () => {
             if(poFileInput.files.length > 0) {
