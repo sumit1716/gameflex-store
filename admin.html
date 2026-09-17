@@ -21,6 +21,7 @@
             --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
             --finance-green: #00e676;
+            --warning-yellow: #ffb703;
         }
 
         body { margin: 0; font-family: 'Montserrat', sans-serif; background: var(--dark-bg); color: var(--text-light); overflow-x: hidden; scroll-behavior: smooth; }
@@ -186,6 +187,8 @@
             <ul class="nav-links">
                 <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
                 <li onclick="switchTab('finance', this)"><i class="fa-solid fa-chart-line"></i> Manage Finance</li>
+                <!-- 🚀 NAYA TAB: CUSTOMER TRACKER 🚀 -->
+                <li onclick="switchTab('customers', this)"><i class="fa-solid fa-users"></i> Access Tracker</li>
                 <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
                 <li onclick="switchTab('managepo', this)"><i class="fa-solid fa-calendar-plus"></i> Pre-Orders DB</li>
@@ -240,7 +243,98 @@
                 </div>
             </div>
 
-            <!-- 🚀 1.5 FINANCE MANAGER (UPGRADED: PROFIT ADD/SUBTRACT) 🚀 -->
+            <!-- 🚀 1.5 CUSTOMER ACCESS TRACKER (PERMANENT / RENTALS) 🚀 -->
+            <div id="customersSection" class="section animate-fade-up" style="display: none;">
+                <div class="card">
+                    <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
+                        <i class="fa-solid fa-user-plus" style="color:var(--ps5-blue);"></i> Track Customer Access
+                    </h3>
+                    <form id="customerForm">
+                        <input type="hidden" id="editCustId" value="">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Customer Name</label>
+                                <input type="text" id="custName" required placeholder="e.g. Rahul Sharma">
+                            </div>
+                            <div class="form-group">
+                                <label>WhatsApp / Contact Number</label>
+                                <input type="text" id="custContact" required placeholder="e.g. 9876543210">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Select Platform</label>
+                                <select id="custPlatform" required>
+                                    <option value="PS5">PlayStation 5</option>
+                                    <option value="PS4">PlayStation 4</option>
+                                    <option value="PC">PC Games</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Access Type</label>
+                                <select id="custAccessType" required onchange="toggleRentalDate()">
+                                    <option value="Permanent">Permanent Access</option>
+                                    <option value="Rental">Rental (Time-Limited)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Games Assigned (Comma Separated)</label>
+                                <textarea id="custGames" rows="2" required placeholder="e.g. GTA 5, Spider-Man 2, RDR2"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date of Purchase / Access Given</label>
+                                <input type="date" id="custStartDate" required>
+                            </div>
+                            <div class="form-group" id="rentalEndDateGroup" style="display:none;">
+                                <label style="color:var(--primary-red);">Rental End Date (Take Game Back)</label>
+                                <input type="date" id="custEndDate" style="border-color:var(--primary-red);">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="saveCustBtn" style="width: 100%; background: var(--ps5-blue); color: black;">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Customer Record
+                        </button>
+                        <button type="button" class="btn-primary" id="cancelCustEditBtn" style="display:none; width: 100%; margin-top:10px; background:#444; box-shadow:none;" onclick="cancelCustEdit()">Cancel Edit</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
+                        <h3 style="margin: 0;"><i class="fa-solid fa-users" style="color:var(--text-gray); margin-right:8px;"></i> Customer Access Database</h3>
+                        <div class="game-search-box" style="margin-bottom: 0;">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="custSearch" placeholder="Search by name or number..." oninput="filterCustomerTable()">
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Customer & Contact</th>
+                                    <th>Platform</th>
+                                    <th>Games Owned/Rented</th>
+                                    <th>Access Details</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTableBody">
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Loading customers...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1.6 FINANCE MANAGER -->
             <div id="financeSection" class="section animate-fade-up" style="display: none;">
                 <div class="card" id="financeFormCard">
                     <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
@@ -263,8 +357,8 @@
                             <div class="form-group">
                                 <label>Transaction Type</label>
                                 <select id="finType" onchange="calculateNetProfit()">
-                                    <option value="add">Profit Added (+)</option>
-                                    <option value="sub">Ad Spend / Loss (-)</option>
+                                    <option value="add">Add Profit (+)</option>
+                                    <option value="sub">Add Expense / Ad Spend (-)</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -761,10 +855,12 @@
         window.currentFeaturedGames = []; 
         let bannerUnsubscribe = null;
         let financeLogsArray = [];
+        let customersArray = []; // For Access Tracker
         
         const today = new Date();
         document.getElementById('monthPicker').value = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
         document.getElementById('finDate').valueAsDate = new Date();
+        document.getElementById('custStartDate').valueAsDate = new Date(); // Customer start date
 
         window.switchTab = function(tabId, element) {
             document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
@@ -774,6 +870,7 @@
             const titles = { 
                 'dashboard': 'Dashboard & Report', 
                 'finance': 'Manage Finance', 
+                'customers': 'Customer Access Tracker', // Added
                 'orders': 'Live Orders', 
                 'manage': 'Manage Games Database',
                 'managepo': 'Manage Pre-Orders DB',
@@ -831,7 +928,6 @@
             document.getElementById('gDiscount').value = (orig > 0 && sell < orig) ? Math.round(((orig - sell) / orig) * 100) + "% OFF" : "0%";
         };
 
-        // 🚀 UPGRADED: FINANCE LOGIC (PLUS AND MINUS) 🚀
         window.calculateNetProfit = function() {
             const amount = parseFloat(document.getElementById('finAmount').value) || 0;
             const type = document.getElementById('finType').value;
@@ -851,12 +947,152 @@
             }
         };
 
+        // 🚀 CUSTOMER ACCESS TRACKER LOGIC 🚀
+        window.toggleRentalDate = function() {
+            const type = document.getElementById('custAccessType').value;
+            if(type === 'Rental') {
+                document.getElementById('rentalEndDateGroup').style.display = 'block';
+                // Auto-set to +30 days
+                let d = new Date(document.getElementById('custStartDate').value || Date.now());
+                d.setDate(d.getDate() + 30);
+                document.getElementById('custEndDate').valueAsDate = d;
+            } else {
+                document.getElementById('rentalEndDateGroup').style.display = 'none';
+            }
+        };
+
+        document.getElementById('customerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveCustBtn');
+            const editId = document.getElementById('editCustId').value;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+
+            const accessType = document.getElementById('custAccessType').value;
+            const custData = {
+                name: document.getElementById('custName').value,
+                contact: document.getElementById('custContact').value,
+                platform: document.getElementById('custPlatform').value,
+                accessType: accessType,
+                games: document.getElementById('custGames').value,
+                startDate: document.getElementById('custStartDate').value,
+                endDate: accessType === 'Rental' ? document.getElementById('custEndDate').value : null,
+                updatedAt: serverTimestamp()
+            };
+
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, "customer_access", editId), custData);
+                    alert("✅ Customer updated successfully!");
+                } else {
+                    custData.createdAt = serverTimestamp();
+                    await addDoc(collection(db, "customer_access"), custData);
+                    alert("✅ New Customer saved!");
+                }
+                cancelCustEdit();
+            } catch(e) {
+                alert("❌ Failed to save.");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Customer Record'; btn.disabled = false;
+            }
+        });
+
+        window.editCustomer = function(id) {
+            const cust = customersArray.find(c => c.id === id);
+            if(!cust) return;
+            
+            document.getElementById('editCustId').value = cust.id;
+            document.getElementById('custName').value = cust.name;
+            document.getElementById('custContact').value = cust.contact;
+            document.getElementById('custPlatform').value = cust.platform;
+            document.getElementById('custAccessType').value = cust.accessType;
+            document.getElementById('custGames').value = cust.games;
+            document.getElementById('custStartDate').value = cust.startDate;
+            
+            toggleRentalDate();
+            if(cust.accessType === 'Rental' && cust.endDate) {
+                document.getElementById('custEndDate').value = cust.endDate;
+            }
+
+            document.getElementById('saveCustBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Customer';
+            document.getElementById('cancelCustEditBtn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.cancelCustEdit = function() {
+            document.getElementById('customerForm').reset();
+            document.getElementById('editCustId').value = '';
+            document.getElementById('custStartDate').valueAsDate = new Date();
+            toggleRentalDate();
+            document.getElementById('saveCustBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Customer Record';
+            document.getElementById('cancelCustEditBtn').style.display = 'none';
+        };
+
+        window.deleteCustomer = async function(id) {
+            if(confirm("Remove this customer from the access list?")) {
+                try {
+                    await deleteDoc(doc(db, "customer_access", id));
+                    if(document.getElementById('editCustId').value === id) cancelCustEdit();
+                } catch(e) { alert("Delete failed."); }
+            }
+        };
+
+        window.filterCustomerTable = function() {
+            const query = document.getElementById('custSearch').value.toLowerCase();
+            const filtered = customersArray.filter(c => c.name.toLowerCase().includes(query) || c.contact.includes(query) || c.games.toLowerCase().includes(query));
+            renderCustomerTable(filtered);
+        };
+
+        function renderCustomerTable(dataArray) {
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = '';
+            if(dataArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: gray;">No customers found.</td></tr>';
+                return;
+            }
+            
+            dataArray.forEach(cust => {
+                let badgeClass = cust.accessType === 'Permanent' ? 'status-completed' : 'status-pending';
+                let accessDetails = `<strong>Start:</strong> ${cust.startDate}`;
+                if(cust.accessType === 'Rental') {
+                    // Check if expired
+                    let isExpired = new Date(cust.endDate) < new Date();
+                    let color = isExpired ? '#ff3333' : '#ffc107';
+                    accessDetails += `<br><span style="color:${color};"><strong>End:</strong> ${cust.endDate} ${isExpired ? '(Expired)' : ''}</span>`;
+                }
+
+                tbody.innerHTML += `<tr>
+                    <td><strong>${cust.name}</strong><br><a href="https://wa.me/91${cust.contact}" target="_blank" style="color:var(--finance-green); text-decoration:none; font-size:11px;"><i class="fa-brands fa-whatsapp"></i> ${cust.contact}</a></td>
+                    <td><span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold;">${cust.platform}</span></td>
+                    <td style="max-width:200px; color:#ccc; font-size:11px;">${cust.games}</td>
+                    <td style="font-size:11px;">
+                        <span class="status-badge ${badgeClass}" style="margin-bottom:5px;">${cust.accessType}</span><br>
+                        ${accessDetails}
+                    </td>
+                    <td>
+                        <button class="btn-edit" onclick="editCustomer('${cust.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-delete" onclick="deleteCustomer('${cust.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+
         const fileInput = document.getElementById('gImageFile');
         fileInput.addEventListener('change', () => {
             if(fileInput.files.length > 0) document.getElementById('dropZoneText').innerHTML = `<span style="color:#00e676;"><i class="fa-solid fa-check-circle" style="font-size:24px; display:block; margin-bottom:10px;"></i> File Ready (${(fileInput.files[0].size/1024).toFixed(0)} KB)</span>`;
         });
 
         function initializeAdminPanelData() {
+            
+            // 🚀 LOAD CUSTOMERS DB 🚀
+            onSnapshot(query(collection(db, "customer_access"), orderBy("createdAt", "desc")), (snapshot) => {
+                customersArray = [];
+                snapshot.forEach(docSnap => {
+                    customersArray.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderCustomerTable(customersArray);
+            });
+
             onSnapshot(collection(db, "users"), (snapshot) => {
                 window.allUsers = []; 
                 let liveCount = 0;
@@ -882,7 +1118,6 @@
                 filterDashboardData();
             });
 
-            // 🚀 UPGRADED: FINANCE LOGIC (PLUS AND MINUS) RENDER 🚀
             onSnapshot(query(collection(db, "finance_logs"), orderBy("date", "desc")), (snapshot) => {
                 const tbody = document.getElementById('financeTableBody');
                 tbody.innerHTML = '';
@@ -1146,74 +1381,6 @@
                 reader.onerror = error => reject(error);
             });
         }
-
-        // ===============================================
-        // 🚀 UPGRADED FINANCE LOGS CRUD (+ / -) 🚀
-        // ===============================================
-        
-        window.editFinanceLog = function(logId) {
-            const log = financeLogsArray.find(l => l.id === logId);
-            if(!log) return;
-            
-            document.getElementById('editFinId').value = log.id;
-            document.getElementById('finDate').value = log.date;
-            document.getElementById('finCampaignName').value = log.title;
-            document.getElementById('finType').value = log.type;
-            document.getElementById('finAmount').value = log.amount;
-            calculateNetProfit();
-
-            document.getElementById('saveFinanceBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Transaction';
-            document.getElementById('cancelFinEditBtn').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        window.cancelFinEdit = function() {
-            document.getElementById('financeForm').reset();
-            document.getElementById('editFinId').value = '';
-            document.getElementById('finDate').valueAsDate = new Date();
-            document.getElementById('finNetProfit').value = '';
-            document.getElementById('saveFinanceBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction';
-            document.getElementById('cancelFinEditBtn').style.display = 'none';
-        };
-
-        document.getElementById('financeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('saveFinanceBtn');
-            const editId = document.getElementById('editFinId').value;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-
-            const logData = {
-                date: document.getElementById('finDate').value,
-                title: document.getElementById('finCampaignName').value,
-                type: document.getElementById('finType').value,
-                amount: Number(document.getElementById('finAmount').value)
-            };
-
-            try {
-                if (editId) {
-                    await updateDoc(doc(db, "finance_logs", editId), logData);
-                    alert("✅ Transaction updated successfully!");
-                } else {
-                    logData.createdAt = serverTimestamp();
-                    await addDoc(collection(db, "finance_logs"), logData);
-                    alert("✅ Record saved successfully!");
-                }
-                cancelFinEdit();
-            } catch(e) {
-                alert("❌ Failed to save log.");
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction'; btn.disabled = false;
-            }
-        });
-
-        window.deleteFinanceLog = async function(logId) {
-            if(confirm("Delete this financial record permanently?")) {
-                try {
-                    await deleteDoc(doc(db, "finance_logs", logId));
-                    if(document.getElementById('editFinId').value === logId) cancelFinEdit();
-                } catch(e) { alert("Failed to delete."); }
-            }
-        };
 
         // ===============================================
         // REGULAR GAMES CRUD LOGIC
@@ -1545,7 +1712,7 @@
 
                 const bannerDataUpdate = {
                     endTime: endTime, featuredGames: selectedGames,
-                    tagline: document.getElementById('obTagline').value,
+                    tagline: document.getElementById('obTagline').value, 
                     title: document.getElementById('obTitle').value,
                     titleHighlight: document.getElementById('obTitleHighlight').value,
                     subtitle: document.getElementById('obSubtitle').value, 
