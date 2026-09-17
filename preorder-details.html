@@ -78,7 +78,13 @@
         .meta-item { display: flex; align-items: center; gap: 8px; color: var(--text-gray); font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .meta-item i { color: var(--primary-red); }
 
-        .game-desc { font-size: 15px; line-height: 1.8; color: #d1d1d1; margin-bottom: 35px; border-left: 3px solid var(--primary-red); padding-left: 15px; }
+        .game-desc { font-size: 15px; line-height: 1.8; color: #d1d1d1; margin-bottom: 25px; border-left: 3px solid var(--primary-red); padding-left: 15px; }
+
+        /* 🚀 NEW RENTAL/BUY TABS UI 🚀 */
+        .pdp-edition-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;}
+        .pdp-tab-btn { flex: 1; min-width: 150px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: var(--text-gray); padding: 12px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center; }
+        .pdp-tab-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.05); }
+        .pdp-tab-btn.active-tab { border-color: var(--primary-red); background: rgba(227, 24, 37, 0.15); color: #fff; box-shadow: 0 0 10px rgba(227, 24, 37, 0.2); }
 
         .price-section { display: flex; align-items: flex-end; gap: 15px; margin-bottom: 30px; }
         .price-label { font-size: 12px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
@@ -249,9 +255,14 @@
 
                 <p class="game-desc" id="detailDesc">Loading description...</p>
 
+                <!-- 🚀 NEW RENTAL/BUY TABS (ONLY FOR CONSOLES) 🚀 -->
+                <div class="pdp-edition-tabs" id="poOptionTabs">
+                    <!-- Populated dynamically by JS if platform is PS5 -->
+                </div>
+
                 <div class="price-section">
                     <div>
-                        <div class="price-label">Pre-Book Token Amount</div>
+                        <div class="price-label">Booking Amount</div>
                         <div class="final-price" id="detailPrice">₹0</div>
                     </div>
                 </div>
@@ -316,7 +327,6 @@
                 document.getElementById('youtubePlayer').src = `https://www.youtube.com/embed/${videoID}?autoplay=1&rel=0`;
                 document.getElementById('trailerModal').classList.add('active');
             } else {
-                // Not standard YT link, open in new tab
                 window.open(currentTrailerUrl, '_blank');
             }
         };
@@ -325,9 +335,26 @@
             document.getElementById('trailerModal').classList.remove('active');
             setTimeout(() => { document.getElementById('youtubePlayer').src = ""; }, 300); // Stop audio playing
         };
+
+        // 🚀 DYNAMIC PRE-ORDER PRICING UI LOGIC 🚀
+        window.poActiveOption = 'standard';
+        window.poActivePrice = 0;
+
+        window.changePoOption = function(type, price) {
+            window.poActiveOption = type;
+            window.poActivePrice = Number(price);
+            
+            // Switch active tab styling
+            document.querySelectorAll('.pdp-tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+            if(type === 'rent') document.getElementById('tabPoRent').classList.add('active-tab');
+            if(type === 'permanent') document.getElementById('tabPoPerm').classList.add('active-tab');
+            
+            // Update displayed price
+            document.getElementById('detailPrice').innerText = `₹${window.poActivePrice}`;
+        };
     </script>
 
-    <!-- 🚀 FIREBASE LOGIC TO FETCH PRE-ORDER DETAILS 🚀 -->
+    <!-- 🚀 FIREBASE MODULE - CLICKABLE CARDS 🚀 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -385,7 +412,6 @@
                     document.getElementById('detailPlatform').innerText = loadedGame.platform;
                     document.getElementById('detailReleaseDate').innerText = loadedGame.releaseDate;
                     document.getElementById('detailDesc').innerText = loadedGame.description;
-                    document.getElementById('detailPrice').innerText = `₹${loadedGame.price}`;
                     
                     if(loadedGame.hasBonus) { document.getElementById('detailBonus').style.display = 'flex'; }
                     
@@ -393,6 +419,36 @@
                     if(!currentTrailerUrl) { 
                         document.getElementById('watchTrailerBtn').style.opacity = '0.5';
                         document.getElementById('watchTrailerBtn').innerHTML = `<i class="fa-solid fa-video-slash"></i> Trailer Unavailable`;
+                    }
+
+                    // 🚀 RENTAL VS PERMANENT PRICING LOGIC 🚀
+                    const optionTabs = document.getElementById('poOptionTabs');
+                    
+                    // Default fallback base price is the pre-book token price
+                    window.poActivePrice = loadedGame.price;
+
+                    if (loadedGame.platform === 'PS5' || loadedGame.platform === 'PS5/PC') {
+                        // Console Platform -> Show Rent / Buy Options
+                        let pRent = Number(loadedGame.rentalPrice || 0);
+                        let pPerm = Number(loadedGame.permanentPrice || 0);
+                        
+                        // If admin didn't set prices, fallback to main price
+                        if(pRent === 0) pRent = loadedGame.price;
+                        if(pPerm === 0) pPerm = loadedGame.price;
+
+                        window.poActiveOption = 'permanent';
+                        window.poActivePrice = pPerm;
+
+                        optionTabs.innerHTML = `
+                            <button class="pdp-tab-btn" id="tabPoRent" onclick="changePoOption('rent', ${pRent})">1-Month Rental (₹${pRent})</button>
+                            <button class="pdp-tab-btn active-tab" id="tabPoPerm" onclick="changePoOption('permanent', ${pPerm})">Permanent Buy (₹${pPerm})</button>
+                        `;
+                        document.getElementById('detailPrice').innerText = `₹${pPerm}`;
+                    } else {
+                        // PC Platform -> Just Standard Pre-Book Option
+                        window.poActiveOption = 'standard';
+                        optionTabs.innerHTML = `<button class="pdp-tab-btn active-tab">Standard Pre-Order</button>`;
+                        document.getElementById('detailPrice').innerText = `₹${loadedGame.price}`;
                     }
 
                     // Show content, hide loader
@@ -408,10 +464,25 @@
             }
         }
 
+        // 🚀 UPDATED ADD TO CART LOGIC FOR PRE-ORDERS 🚀
         window.addToCartFromDetails = function() {
             if(!loadedGame) return;
-            const titleWithTag = `${loadedGame.title} (Pre-Order Token)`;
-            window.addToCart(titleWithTag, loadedGame.price, loadedGame.image);
+            
+            let cartTitle = loadedGame.title;
+            
+            // Append access type to cart title for clarity
+            if (loadedGame.platform === 'PS5' || loadedGame.platform === 'PS5/PC') {
+                if (window.poActiveOption === 'rent') {
+                    cartTitle += ' (Pre-Order: 1 Mo. Rental)';
+                } else {
+                    cartTitle += ' (Pre-Order: Permanent Buy)';
+                }
+            } else {
+                cartTitle += ' (PC Pre-Order Token)';
+            }
+            
+            const escapedTitle = cartTitle.replace(/'/g, "\\'");
+            window.addToCart(escapedTitle, window.poActivePrice, loadedGame.image);
         };
 
         // Initialize Fetch
