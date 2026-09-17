@@ -34,6 +34,10 @@
         @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; }
 
+        /* URGENT PENDING ANIMATION */
+        @keyframes pulseAlert { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+        .urgent-pending { animation: pulseAlert 1.5s infinite; background: #e31825 !important; color: white !important; border-color: #ff3333 !important; }
+
         #adminWrapper { display: none; width: 100%; height: 100vh; }
         
         .sidebar { width: 260px; background: linear-gradient(160deg, #12141a, #0b0c10); height: 100vh; padding: 25px 20px; box-sizing: border-box; border-right: 1px solid var(--border-dark); flex-shrink: 0; overflow-y: auto; box-shadow: 5px 0 20px rgba(0,0,0,0.5); }
@@ -299,7 +303,6 @@
                             </div>
                         </div>
                         
-                        <!-- Fixed Type: Changed from button to submit so event listener triggers properly -->
                         <button type="submit" class="btn-primary" id="saveCustBtn" style="width: 100%; background: var(--ps5-blue); color: black;">
                             <i class="fa-solid fa-floppy-disk"></i> Save Customer Record
                         </button>
@@ -335,7 +338,7 @@
                 </div>
             </div>
 
-            <!-- 🚀 1.6 FINANCE MANAGER (FULLY FIXED AMOUNT ONLY UI) 🚀 -->
+            <!-- 🚀 1.6 FINANCE MANAGER (3 INPUTS: SALES, AD SPEND, EXPENSES) 🚀 -->
             <div id="financeSection" class="section animate-fade-up" style="display: none;">
                 <div class="card" id="financeFormCard">
                     <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
@@ -349,31 +352,36 @@
                                 <input type="date" id="finDate" required>
                             </div>
                             <div class="form-group">
-                                <label>Transaction Title (e.g. Ad Spend or Game Sale)</label>
-                                <input type="text" id="finCampaignName" required placeholder="What is this for?">
+                                <label>Record Title / Month Name</label>
+                                <input type="text" id="finCampaignName" required placeholder="e.g. Sales Report for Sept 2026">
                             </div>
                         </div>
 
+                        <!-- 🚀 NEW INCOME / EXPENSE BLOCKS 🚀 -->
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Transaction Type</label>
-                                <select id="finType" onchange="calculateNetProfit()">
-                                    <option value="add">Add Profit (+)</option>
-                                    <option value="sub">Add Expense / Ad Spend (-)</option>
-                                </select>
+                                <label style="color: #00e676;">Income / Money Added (+) ₹</label>
+                                <input type="number" id="finIncome" oninput="calculateNetProfit()" placeholder="e.g. 50000" style="border-color: #00e676;">
                             </div>
                             <div class="form-group">
-                                <label>Amount (₹)</label>
-                                <input type="number" id="finAmount" oninput="calculateNetProfit()" required placeholder="e.g. 5000">
+                                <label style="color: #ff3333;">Ad Spend (-) ₹</label>
+                                <input type="number" id="finAdSpend" oninput="calculateNetProfit()" placeholder="e.g. 5000" style="border-color: #ff3333;">
                             </div>
                             <div class="form-group">
-                                <label>Transaction Impact</label>
-                                <input type="text" id="finNetProfit" readonly style="color: #00e676; font-weight: 900; background:rgba(0,230,118,0.05); border-color:rgba(0,230,118,0.3); font-size: 16px;">
+                                <label style="color: #ff3333;">Other Expenses (-) ₹</label>
+                                <input type="number" id="finOtherExpense" oninput="calculateNetProfit()" placeholder="e.g. 1000" style="border-color: #ff3333;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group" style="flex:1;">
+                                <label>Final Net Profit / Loss</label>
+                                <input type="text" id="finNetProfit" readonly style="color: #00e676; font-weight: 900; background:rgba(0,230,118,0.05); border-color:rgba(0,230,118,0.3); font-size: 18px; text-align:center;">
                             </div>
                         </div>
                         
                         <button type="submit" class="btn-primary" id="saveFinanceBtn" style="width: 100%; background: #00e676; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); color: black;">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Transaction
+                            <i class="fa-solid fa-floppy-disk"></i> Save Transaction Record
                         </button>
                         <button type="button" class="btn-primary" id="cancelFinEditBtn" style="display:none; width: 100%; margin-top:10px; background:#444; box-shadow:none;" onclick="cancelFinEdit()">Cancel Edit</button>
                     </form>
@@ -393,13 +401,14 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Title</th>
-                                    <th>Type</th>
-                                    <th>Amount</th>
+                                    <th style="color:#00e676;">Income</th>
+                                    <th style="color:#ff3333;">Expenses</th>
+                                    <th>Net Profit</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="financeTableBody">
-                                <tr><td colspan="5" style="text-align: center; color: gray;">Loading history...</td></tr>
+                                <tr><td colspan="6" style="text-align: center; color: gray;">Loading history...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -806,6 +815,15 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         
+        // Export DB reference to window
+        window.db = db;
+        window.serverTimestamp = serverTimestamp;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.doc = doc;
+        window.updateDoc = updateDoc;
+        window.deleteDoc = deleteDoc;
+        
         const ALLOWED_EMAILS = [
             "sumitroman198@gmail.com",
             "sudhir017panwar@gmail.com",
@@ -929,23 +947,27 @@
             document.getElementById('gDiscount').value = (orig > 0 && sell < orig) ? Math.round(((orig - sell) / orig) * 100) + "% OFF" : "0%";
         };
 
-        // 🚀 UPGRADED: FINANCE LOGIC (PLUS AND MINUS) 🚀
+        // 🚀 UPGRADED: FINANCE LOGIC (3 INPUTS) 🚀
         window.calculateNetProfit = function() {
-            const amount = parseFloat(document.getElementById('finAmount').value) || 0;
-            const type = document.getElementById('finType').value;
+            const income = parseFloat(document.getElementById('finIncome').value) || 0;
+            const adSpend = parseFloat(document.getElementById('finAdSpend').value) || 0;
+            const extraExpense = parseFloat(document.getElementById('finOtherExpense').value) || 0;
+            
+            const totalExpense = adSpend + extraExpense;
+            const netProfit = income - totalExpense;
             
             const netInput = document.getElementById('finNetProfit');
             
-            if (type === 'add') {
-                netInput.value = "+" + amount;
-                netInput.style.color = "#00e676";
-                netInput.style.backgroundColor = "rgba(0,230,118,0.05)";
-                netInput.style.borderColor = "rgba(0,230,118,0.3)";
-            } else {
-                netInput.value = "-" + amount;
+            if (netProfit < 0) {
+                netInput.value = "LOSS: -₹" + Math.abs(netProfit);
                 netInput.style.color = "#ff3333";
                 netInput.style.backgroundColor = "rgba(227,24,37,0.05)";
                 netInput.style.borderColor = "rgba(227,24,37,0.3)";
+            } else {
+                netInput.value = "PROFIT: +₹" + netProfit;
+                netInput.style.color = "#00e676";
+                netInput.style.backgroundColor = "rgba(0,230,118,0.05)";
+                netInput.style.borderColor = "rgba(0,230,118,0.3)";
             }
         };
 
@@ -962,7 +984,6 @@
             }
         };
 
-        // 🚀 FIXED: Added submit listener specifically for customer form 🚀
         document.getElementById('customerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveCustBtn');
@@ -978,16 +999,16 @@
                 games: document.getElementById('custGames').value,
                 startDate: document.getElementById('custStartDate').value,
                 endDate: accessType === 'Rental' ? document.getElementById('custEndDate').value : null,
-                updatedAt: serverTimestamp()
+                updatedAt: window.serverTimestamp()
             };
 
             try {
                 if (editId) {
-                    await updateDoc(doc(db, "customer_access", editId), custData);
+                    await window.updateDoc(window.doc(window.db, "customer_access", editId), custData);
                     alert("✅ Customer updated successfully!");
                 } else {
-                    custData.createdAt = serverTimestamp();
-                    await addDoc(collection(db, "customer_access"), custData);
+                    custData.createdAt = window.serverTimestamp();
+                    await window.addDoc(window.collection(window.db, "customer_access"), custData);
                     alert("✅ New Customer saved!");
                 }
                 window.cancelCustEdit();
@@ -1033,7 +1054,7 @@
         window.deleteCustomer = async function(id) {
             if(confirm("Remove this customer from the access list?")) {
                 try {
-                    await deleteDoc(doc(db, "customer_access", id));
+                    await window.deleteDoc(window.doc(window.db, "customer_access", id));
                     if(document.getElementById('editCustId').value === id) window.cancelCustEdit();
                 } catch(e) { alert("Delete failed."); }
             }
@@ -1053,21 +1074,54 @@
                 return;
             }
             
-            dataArray.forEach(cust => {
+            // --- NEW SORTING LOGIC ---
+            // Move users with expiring/expired rentals to the top
+            let sortedData = [...dataArray].sort((a, b) => {
+                const getPriority = (cust) => {
+                    if (cust.accessType === 'Rental' && cust.endDate) {
+                        const daysLeft = (new Date(cust.endDate) - new Date()) / (1000 * 60 * 60 * 24);
+                        if (daysLeft <= 2) return 1; // High priority
+                    }
+                    return 0; // Normal priority
+                };
+                
+                const pA = getPriority(a);
+                const pB = getPriority(b);
+                if (pA !== pB) return pB - pA;
+                
+                // fallback to creation date (newest first)
+                return (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0);
+            });
+            
+            sortedData.forEach(cust => {
                 let badgeClass = cust.accessType === 'Permanent' ? 'status-completed' : 'status-pending';
                 let accessDetails = `<strong>Start:</strong> ${cust.startDate}`;
+                let actionBadge = '';
+                let rowStyle = '';
+
                 if(cust.accessType === 'Rental') {
-                    let isExpired = new Date(cust.endDate) < new Date();
-                    let color = isExpired ? '#ff3333' : '#ffc107';
-                    accessDetails += `<br><span style="color:${color};"><strong>End:</strong> ${cust.endDate} ${isExpired ? '(Expired)' : ''}</span>`;
+                    let daysLeft = (new Date(cust.endDate) - new Date()) / (1000 * 60 * 60 * 24);
+                    let isExpired = daysLeft < 0;
+                    let isExpiringSoon = daysLeft <= 2;
+                    let color = isExpired ? '#ff3333' : (isExpiringSoon ? '#ffb703' : '#00e676');
+                    
+                    accessDetails += `<br><span style="color:${color};"><strong>End:</strong> ${cust.endDate} ${isExpired ? '(Expired)' : (isExpiringSoon ? '(Expiring Soon)' : '')}</span>`;
+
+                    // PENDING / URGENT STYLING
+                    if (isExpiringSoon) {
+                        badgeClass = 'status-pending urgent-pending';
+                        actionBadge = `<br><span class="status-badge urgent-pending" style="margin-top:5px; box-shadow: 0 0 10px rgba(227,24,37,0.5);">🚨 PENDING REMOVAL</span>`;
+                        rowStyle = `background: rgba(227, 24, 37, 0.05);`; 
+                    }
                 }
 
-                tbody.innerHTML += `<tr>
+                tbody.innerHTML += `<tr style="${rowStyle}">
                     <td><strong>${cust.name}</strong><br><a href="https://wa.me/91${cust.contact}" target="_blank" style="color:var(--finance-green); text-decoration:none; font-size:11px;"><i class="fa-brands fa-whatsapp"></i> ${cust.contact}</a></td>
                     <td><span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold;">${cust.platform}</span></td>
                     <td style="max-width:200px; color:#ccc; font-size:11px;">${cust.games}</td>
-                    <td style="font-size:11px;">
-                        <span class="status-badge ${badgeClass}" style="margin-bottom:5px;">${cust.accessType}</span><br>
+                    <td style="font-size:11px; line-height: 1.5;">
+                        <span class="status-badge ${badgeClass}" style="margin-bottom:5px;">${cust.accessType}</span>
+                        ${actionBadge}<br>
                         ${accessDetails}
                     </td>
                     <td>
@@ -1085,12 +1139,26 @@
 
         function initializeAdminPanelData() {
             
-            // 🚀 LOAD CUSTOMERS DB 🚀
+            // 🚀 LOAD CUSTOMERS DB (WITH SORTING PRIORITY) 🚀
             onSnapshot(query(collection(db, "customer_access"), orderBy("createdAt", "desc")), (snapshot) => {
                 customersArray = [];
                 snapshot.forEach(docSnap => {
                     customersArray.push({ id: docSnap.id, ...docSnap.data() });
                 });
+                
+                // Sort logic: Overdue/Ending soon rentals come first
+                customersArray.sort((a, b) => {
+                    let today = new Date();
+                    let getScore = (cust) => {
+                        if(cust.accessType !== 'Rental') return 9999; // Normal
+                        let diff = Math.ceil((new Date(cust.endDate) - today) / (1000 * 60 * 60 * 24));
+                        if(diff < 0) return -100; // Expired (Highest priority)
+                        if(diff <= 2) return diff; // Ending soon
+                        return 9999; // Valid rental
+                    };
+                    return getScore(a) - getScore(b);
+                });
+                
                 renderCustomerTable(customersArray);
             });
 
@@ -1119,7 +1187,7 @@
                 filterDashboardData();
             });
 
-            // 🚀 UPGRADED FINANCE RENDER 🚀
+            // 🚀 FINANCE RENDER (WITH 3 INPUT CALCULATION) 🚀
             onSnapshot(query(collection(db, "finance_logs"), orderBy("createdAt", "desc")), (snapshot) => {
                 const tbody = document.getElementById('financeTableBody');
                 tbody.innerHTML = '';
@@ -1127,7 +1195,7 @@
                 let totalBalance = 0;
 
                 if(snapshot.empty) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: gray;">No finance logs found. Add one above.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: gray;">No finance logs found. Add one above.</td></tr>';
                     document.getElementById('finTotalBalance').innerText = '₹0';
                     return;
                 }
@@ -1137,22 +1205,33 @@
                     const logId = docSnap.id;
                     financeLogsArray.push({ id: logId, ...log });
 
-                    let amtColor, typeBadge;
-                    if(log.type === 'add') {
-                        totalBalance += log.amount;
-                        amtColor = '#00e676';
-                        typeBadge = `<span style="background:rgba(0,230,118,0.1); color:#00e676; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold;">Profit (+)</span>`;
-                    } else {
-                        totalBalance -= log.amount;
-                        amtColor = '#ff3333';
-                        typeBadge = `<span style="background:rgba(227,24,37,0.1); color:#ff3333; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold;">Loss/Ad (-)</span>`;
+                    // Default variables for old data
+                    let income = log.income || 0;
+                    let adSpend = log.adSpend || 0;
+                    let extraExpense = log.extraExpense || 0;
+
+                    // If old structure (log.amount and log.type exist), map it to new structure for display
+                    if(log.amount !== undefined && log.type !== undefined) {
+                        if(log.type === 'add') income = log.amount;
+                        else adSpend = log.amount;
                     }
+
+                    let totalExpense = adSpend + extraExpense;
+                    let netForLog = income - totalExpense;
+                    totalBalance += netForLog;
+
+                    let netColor = netForLog < 0 ? '#ff3333' : '#00e676';
+                    let netDisplay = netForLog < 0 ? `- ₹${Math.abs(netForLog)}` : `+ ₹${netForLog}`;
+                    
+                    let incomeHtml = income > 0 ? `+ ₹${income}` : '-';
+                    let expenseHtml = totalExpense > 0 ? `- ₹${totalExpense}` : '-';
                     
                     tbody.innerHTML += `<tr>
                         <td style="font-size:11px;">${log.date}</td>
                         <td style="font-weight:bold;">${log.title}</td>
-                        <td>${typeBadge}</td>
-                        <td style="color: ${amtColor}; font-weight:900;">₹${log.amount.toLocaleString('en-IN')}</td>
+                        <td style="color: #00e676; font-weight:bold;">${incomeHtml}</td>
+                        <td style="color: #ff3333; font-weight:bold;">${expenseHtml}</td>
+                        <td style="color: ${netColor}; font-weight:900;">${netDisplay}</td>
                         <td>
                             <button class="btn-edit" onclick="editFinanceLog('${logId}')"><i class="fa-solid fa-pen"></i></button>
                             <button class="btn-delete" onclick="deleteFinanceLog('${logId}')"><i class="fa-solid fa-trash"></i></button>
@@ -1365,10 +1444,10 @@
         window.approveOrder = async function(bookingId, userId, totalAmount) {
             if(confirm("Confirm payment received? This will approve the order and credit tokens to the user.")) {
                 try {
-                    await updateDoc(doc(db, "bookings", bookingId), { status: "Completed" });
+                    await window.updateDoc(window.doc(window.db, "bookings", bookingId), { status: "Completed" });
                     const earnedTokens = Math.floor(totalAmount / 100) * 10;
                     if (earnedTokens > 0) {
-                        await setDoc(doc(db, "users", userId), { tokens: increment(earnedTokens) }, { merge: true });
+                        await window.setDoc(window.doc(window.db, "users", userId), { tokens: window.increment(earnedTokens) }, { merge: true });
                     }
                     alert(`✅ Order Approved! ${earnedTokens} tokens added to user.`);
                 } catch (error) { alert("❌ Failed to approve order."); }
@@ -1396,23 +1475,24 @@
             const logData = {
                 date: document.getElementById('finDate').value,
                 title: document.getElementById('finCampaignName').value,
-                type: document.getElementById('finType').value,
-                amount: Number(document.getElementById('finAmount').value)
+                income: Number(document.getElementById('finIncome').value) || 0,
+                adSpend: Number(document.getElementById('finAdSpend').value) || 0,
+                extraExpense: Number(document.getElementById('finOtherExpense').value) || 0
             };
 
-            if(!logData.title || logData.amount === 0) {
-                alert("Please enter a valid title and amount.");
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction'; btn.disabled = false;
+            if(!logData.title) {
+                alert("Please enter a valid title.");
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction Record'; btn.disabled = false;
                 return;
             }
 
             try {
                 if (editId) {
-                    await updateDoc(doc(db, "finance_logs", editId), logData);
+                    await window.updateDoc(window.doc(window.db, "finance_logs", editId), logData);
                     alert("✅ Transaction updated successfully!");
                 } else {
-                    logData.createdAt = serverTimestamp();
-                    await addDoc(collection(db, "finance_logs"), logData);
+                    logData.createdAt = window.serverTimestamp();
+                    await window.addDoc(window.collection(window.db, "finance_logs"), logData);
                     alert("✅ Record saved successfully!");
                 }
                 window.cancelFinEdit();
@@ -1420,7 +1500,7 @@
                 console.error("Finance save error:", error);
                 alert("❌ Failed to save log.");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction'; btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction Record'; btn.disabled = false;
             }
         });
 
@@ -1431,8 +1511,23 @@
             document.getElementById('editFinId').value = log.id;
             document.getElementById('finDate').value = log.date;
             document.getElementById('finCampaignName').value = log.title;
-            document.getElementById('finType').value = log.type;
-            document.getElementById('finAmount').value = log.amount;
+            
+            // Map old structure to new structure if needed
+            if(log.amount !== undefined && log.type !== undefined) {
+                if(log.type === 'add') {
+                    document.getElementById('finIncome').value = log.amount;
+                    document.getElementById('finAdSpend').value = '';
+                } else {
+                    document.getElementById('finIncome').value = '';
+                    document.getElementById('finAdSpend').value = log.amount;
+                }
+                document.getElementById('finOtherExpense').value = '';
+            } else {
+                document.getElementById('finIncome').value = log.income || '';
+                document.getElementById('finAdSpend').value = log.adSpend || '';
+                document.getElementById('finOtherExpense').value = log.extraExpense || '';
+            }
+            
             window.calculateNetProfit();
 
             document.getElementById('saveFinanceBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Transaction';
@@ -1447,14 +1542,14 @@
             document.getElementById('finNetProfit').value = '';
             document.getElementById('finNetProfit').style.backgroundColor = "rgba(0,230,118,0.05)";
             document.getElementById('finNetProfit').style.borderColor = "rgba(0,230,118,0.3)";
-            document.getElementById('saveFinanceBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction';
+            document.getElementById('saveFinanceBtn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Transaction Record';
             document.getElementById('cancelFinEditBtn').style.display = 'none';
         };
 
         window.deleteFinanceLog = async function(logId) {
             if(confirm("Delete this financial record permanently?")) {
                 try {
-                    await deleteDoc(doc(db, "finance_logs", logId));
+                    await window.deleteDoc(window.doc(window.db, "finance_logs", logId));
                     if(document.getElementById('editFinId').value === logId) window.cancelFinEdit();
                 } catch(e) { alert("Failed to delete."); }
             }
@@ -1503,7 +1598,7 @@
         window.deleteGame = async function(gameId) {
             if (confirm("Are you sure you want to completely delete this game from the database?")) {
                 try {
-                    await deleteDoc(doc(db, "games", gameId));
+                    await window.deleteDoc(window.doc(window.db, "games", gameId));
                     if(document.getElementById('editGameId').value === gameId) cancelEdit();
                 } catch (error) { alert("❌ Delete Failed!"); }
             }
@@ -1546,11 +1641,11 @@
                 }
 
                 if (editId) {
-                    await updateDoc(doc(db, "games", editId), gameData);
+                    await window.updateDoc(window.doc(window.db, "games", editId), gameData);
                     alert("✅ Game Updated Successfully!");
                 } else {
-                    gameData.addedOn = serverTimestamp();
-                    await addDoc(collection(db, "games"), gameData);
+                    gameData.addedOn = window.serverTimestamp();
+                    await window.addDoc(window.collection(window.db, "games"), gameData);
                     alert("✅ New Game Uploaded Successfully!");
                 }
                 cancelEdit();
@@ -1603,7 +1698,7 @@
         window.deletePO = async function(poId) {
             if (confirm("Are you sure you want to delete this pre-order?")) {
                 try {
-                    await deleteDoc(doc(db, "preorders", poId));
+                    await window.deleteDoc(window.doc(window.db, "preorders", poId));
                     if(document.getElementById('editPoId').value === poId) cancelPOEdit();
                 } catch (error) { alert("❌ Delete Failed!"); }
             }
@@ -1658,11 +1753,11 @@
                 }
 
                 if (editId) {
-                    await updateDoc(doc(db, "preorders", editId), poData);
+                    await window.updateDoc(window.doc(window.db, "preorders", editId), poData);
                     alert("✅ Pre-Order Updated Successfully!");
                 } else {
-                    poData.addedOn = serverTimestamp();
-                    await addDoc(collection(db, "preorders"), poData);
+                    poData.addedOn = window.serverTimestamp();
+                    await window.addDoc(window.collection(window.db, "preorders"), poData);
                     alert("✅ New Pre-Order Uploaded Successfully!");
                 }
                 cancelPOEdit();
@@ -1680,7 +1775,7 @@
         // ===============================================
         window.deleteReview = async function(reviewId) {
             if(confirm("Delete this customer review permanently?")) {
-                try { await deleteDoc(doc(db, "reviews", reviewId)); } catch(err) { alert("❌ Failed to delete review."); }
+                try { await window.deleteDoc(window.doc(window.db, "reviews", reviewId)); } catch(err) { alert("❌ Failed to delete review."); }
             }
         };
 
@@ -1693,9 +1788,9 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...'; btn.disabled = true;
 
             try {
-                await setDoc(doc(db, "coupons", code), {
+                await window.setDoc(window.doc(window.db, "coupons", code), {
                     code: code, discountPercent: discount, usageLimit: limit,
-                    usedCount: 0, active: true, createdAt: serverTimestamp()
+                    usedCount: 0, active: true, createdAt: window.serverTimestamp()
                 });
                 alert(`✅ Coupon ${code} Activated!`);
                 e.target.reset();
@@ -1705,7 +1800,7 @@
 
         window.deleteCoupon = async function(codeId) {
             if(confirm(`Permanently delete the coupon ${codeId}?`)) {
-                try { await deleteDoc(doc(db, "coupons", codeId)); } catch(e) {}
+                try { await window.deleteDoc(window.doc(window.db, "coupons", codeId)); } catch(e) {}
             }
         };
 
@@ -1737,7 +1832,7 @@
         window.loadBannerSettings = function() {
             const slot = document.getElementById('obBannerSlot').value;
             if(bannerUnsubscribe) bannerUnsubscribe();
-            bannerUnsubscribe = onSnapshot(doc(db, "settings", slot), (docSnap) => {
+            bannerUnsubscribe = onSnapshot(window.doc(window.db, "settings", slot), (docSnap) => {
                 if(docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('obTagline').value = data.tagline !== undefined ? data.tagline : "";
@@ -1794,11 +1889,11 @@
                     title: document.getElementById('obTitle').value,
                     titleHighlight: document.getElementById('obTitleHighlight').value,
                     subtitle: document.getElementById('obSubtitle').value, 
-                    updatedAt: serverTimestamp()
+                    updatedAt: window.serverTimestamp()
                 };
                 if (imageUrl !== "") bannerDataUpdate.image = imageUrl;
 
-                await setDoc(doc(db, "settings", slot), bannerDataUpdate, { merge: true });
+                await window.setDoc(window.doc(window.db, "settings", slot), bannerDataUpdate, { merge: true });
 
                 for(let update of gameUpdates) {
                     const game = allGames.find(g => g.id === update.id);
@@ -1820,7 +1915,7 @@
                         } else {
                             updatedGameData.permanentPrice = update.salePrice; 
                         }
-                        await updateDoc(doc(db, "games", update.id), updatedGameData);
+                        await window.updateDoc(window.doc(window.db, "games", update.id), updatedGameData);
                     }
                 }
                 alert(`✅ Banner (${slot}) Updated! Game prices overridden for the sale.`);
@@ -1836,7 +1931,7 @@
             const slot = document.getElementById('obBannerSlot').value;
             if(confirm(`Remove all text, images, and data for "${slot}"? This will hide the banner from the frontend.`)) {
                 try { 
-                    await deleteDoc(doc(db, "settings", slot)); 
+                    await window.deleteDoc(window.doc(window.db, "settings", slot)); 
                     alert(`✅ Banner cleared and removed!`); 
                     
                     document.getElementById('offerBannerForm').reset();
