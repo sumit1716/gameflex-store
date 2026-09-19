@@ -605,7 +605,7 @@
 
     <!-- MAIN HOME SECTIONS -->
     <header class="hero">
-        <video autoplay loop muted playsinline class="hero-bg-video">
+        <video id="mainBgVideo" autoplay loop muted playsinline class="hero-bg-video">
             <source src="Video_background.mp4" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
@@ -758,6 +758,17 @@
 
     <!-- PARALLAX & ANIMATION SCRIPT -->
     <script>
+        // Force play video on load to fix autoplay blocking
+        document.addEventListener("DOMContentLoaded", function() {
+            var bgVideo = document.getElementById("mainBgVideo");
+            if (bgVideo) {
+                bgVideo.muted = true;
+                bgVideo.play().catch(function(err) {
+                    console.log("Autoplay was blocked or failed:", err);
+                });
+            }
+        });
+
         // Hero Parallax Effect (Desktop only)
         window.addEventListener('scroll', function() {
             if (window.innerWidth > 768) {
