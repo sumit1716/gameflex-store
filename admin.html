@@ -191,7 +191,6 @@
             <ul class="nav-links">
                 <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
                 <li onclick="switchTab('finance', this)"><i class="fa-solid fa-chart-line"></i> Manage Finance</li>
-                <!-- 🚀 CUSTOMER TRACKER 🚀 -->
                 <li onclick="switchTab('customers', this)"><i class="fa-solid fa-users"></i> Access Tracker</li>
                 <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
@@ -815,7 +814,7 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         
-        // Export DB reference to window
+        // 🚀 EXPORT DB REFERENCE TO WINDOW (THIS WAS THE BUG!) 🚀
         window.db = db;
         window.serverTimestamp = serverTimestamp;
         window.addDoc = addDoc;
@@ -823,6 +822,9 @@
         window.doc = doc;
         window.updateDoc = updateDoc;
         window.deleteDoc = deleteDoc;
+        window.setDoc = setDoc;          // FIXED!
+        window.increment = increment;    // FIXED!
+        window.getDoc = getDoc;          // FIXED!
         
         const ALLOWED_EMAILS = [
             "sumitroman198@gmail.com",
