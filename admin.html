@@ -1897,10 +1897,12 @@
 
                 await window.setDoc(window.doc(window.db, "settings", slot), bannerDataUpdate, { merge: true });
 
+                // FIX FOR PLAYSTATION PRICING
                 for(let update of gameUpdates) {
                     const game = allGames.find(g => g.id === update.id);
                     if(game) {
-                        const currentPrice = game.platform === 'PC' ? game.price : (game.permanentPrice || 0);
+                        // Ab PlayStation ke liye permanent ki jagah rental price pick karega
+                        const currentPrice = game.platform === 'PC' ? game.price : (game.rentalPrice || game.rentPrice || 0);
                         const orig = game.originalPrice ? game.originalPrice : currentPrice; 
                         
                         const discountPct = Math.round(((orig - update.salePrice) / orig) * 100);
@@ -1915,7 +1917,8 @@
                         if (game.platform === 'PC') {
                             updatedGameData.price = update.salePrice;
                         } else {
-                            updatedGameData.permanentPrice = update.salePrice; 
+                            // Yahan ab PermanentPrice ki jagah RentalPrice update hoga
+                            updatedGameData.rentalPrice = update.salePrice; 
                         }
                         await window.updateDoc(window.doc(window.db, "games", update.id), updatedGameData);
                     }
