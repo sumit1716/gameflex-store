@@ -1339,7 +1339,6 @@
             filteredGames.forEach(game => {
                 let pBadge = game.platform === 'PC' ? `<span style="background:rgba(227,24,37,0.1); color:var(--primary-red); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">PC</span>` : `<span style="background:rgba(31,106,255,0.1); color:var(--ps5-blue); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">${game.platform}</span>`;
                 
-                // FIX: Admin game table mein bhi PS5 ka rental price show karega
                 let displayPrice = game.platform === 'PC' ? `₹${game.price || 0}` : `₹${game.rentalPrice || game.rentPrice || 0} (Rent)`;
                 
                 tbody.innerHTML += `<tr>
@@ -1791,7 +1790,6 @@
             pcList.innerHTML = ''; psList.innerHTML = '';
             let pcCount = 0; let psCount = 0;
             allGames.forEach(game => {
-                // FIX: PS5 games ke liye yahan selection list mein Rent Price dikhayega (Pehle Permanent dikha raha tha)
                 let displayPrice = game.platform === 'PC' ? (game.price || 0) : (game.rentalPrice || game.rentPrice || 0);
                 let origPrice = game.originalPrice || displayPrice;
                 
@@ -1910,12 +1908,35 @@
             }
         });
 
+        // 🚀 FIX: AUTO-REVERT PRICES ON BANNER DELETE 🚀
         window.deleteBanner = async function() {
             const slot = document.getElementById('obBannerSlot').value;
-            if(confirm(`Remove all text, images, and data for "${slot}"? This will hide the banner from the frontend.`)) {
+            if(confirm(`Remove all text, images, and data for "${slot}"? This will hide the banner from the frontend AND revert prices back to normal.`)) {
                 try { 
+                    // 1. PEECHLE SABHI GAMES KE PRICE WAPAS NORMAL KARO
+                    if (window.currentFeaturedGames && window.currentFeaturedGames.length > 0) {
+                        for (let gameId of window.currentFeaturedGames) {
+                            const game = allGames.find(g => g.id === gameId);
+                            if (game && game.originalPrice) {
+                                let revertData = {
+                                    discount: "", // Offer tag hata do
+                                    categories: game.categories ? game.categories.filter(c => c !== "Offer") : [] // Offer category hata do
+                                };
+                                
+                                if (game.platform === 'PC') {
+                                    revertData.price = game.originalPrice; // PC ka original price
+                                } else {
+                                    revertData.rentalPrice = game.originalPrice; // PS ka original rental price
+                                }
+                                
+                                await window.updateDoc(window.doc(window.db, "games", gameId), revertData);
+                            }
+                        }
+                    }
+
+                    // 2. BANNER KO DELETE KARO
                     await window.deleteDoc(window.doc(window.db, "settings", slot)); 
-                    alert(`✅ Banner cleared and removed!`); 
+                    alert(`✅ Banner cleared and all featured game prices reverted to normal!`); 
                     
                     document.getElementById('offerBannerForm').reset();
                     document.getElementById('obTimer').value = '';
@@ -1923,7 +1944,7 @@
                     renderOfferGameSelection();
                 } catch (error) {
                     console.error("Banner Delete Error:", error);
-                    alert("Failed to delete banner.");
+                    alert("Failed to delete banner or revert prices.");
                 }
             }
         };
