@@ -656,10 +656,14 @@
                     
                     slideContentEl.innerHTML = htmlStr;
 
-                    // Set global timer if this is the first active banner with a time
+                    // 🚀 FIX: Timer Parse Issue in Safari/Mobile 🚀
+                    // Pehle HTML input ka format '2026-09-20T12:00' aata tha, usko proper parse karna padta hai
                     if(slot === 'offerBanner1' && data.endTime && !window.targetEndTime) {
-                        window.targetEndTime = data.endTime;
-                        document.getElementById('mainTimerArea').style.display = 'flex';
+                        let parsedTime = new Date(data.endTime);
+                        if (!isNaN(parsedTime.getTime())) {
+                            window.targetEndTime = data.endTime;
+                            document.getElementById('mainTimerArea').style.display = 'flex';
+                        }
                     }
                 } else {
                     // Default Fallbacks if banner deleted
@@ -702,9 +706,17 @@
             const data = window.bannersData[slotId];
             if(data && data.featuredGames && data.featuredGames.length > 0) {
                 window.currentBannerFilter = data.featuredGames;
+                
+                // Set Timer from the specific banner clicked
                 if(data.endTime) {
-                    window.targetEndTime = data.endTime; 
-                    document.getElementById('mainTimerArea').style.display = 'flex';
+                    let parsedTime = new Date(data.endTime);
+                    if (!isNaN(parsedTime.getTime())) {
+                        window.targetEndTime = data.endTime; 
+                        document.getElementById('mainTimerArea').style.display = 'flex';
+                    }
+                } else {
+                    document.getElementById('mainTimerArea').style.display = 'none';
+                    window.targetEndTime = null;
                 }
             } else {
                 window.currentBannerFilter = []; 
@@ -756,8 +768,13 @@
             }
 
             const sortVal = document.getElementById('sortSelect').value;
-            if(sortVal === 'priceLow') filtered.sort((a,b) => (a.price || a.permanentPrice || 0) - (b.price || b.permanentPrice || 0));
-            if(sortVal === 'priceHigh') filtered.sort((a,b) => (b.price || b.permanentPrice || 0) - (a.price || a.permanentPrice || 0));
+            // FIX: Sorting by rental price for PlayStation games
+            if(sortVal === 'priceLow') {
+                filtered.sort((a,b) => (a.platform === 'PC' ? a.price : a.rentalPrice || 0) - (b.platform === 'PC' ? b.price : b.rentalPrice || 0));
+            }
+            if(sortVal === 'priceHigh') {
+                filtered.sort((a,b) => (b.platform === 'PC' ? b.price : b.rentalPrice || 0) - (a.platform === 'PC' ? a.price : a.rentalPrice || 0));
+            }
 
             if(filtered.length === 0) {
                 grid.innerHTML = `<p style="color:gray; width:100%; text-align:center; grid-column: 1/-1;">No offers found for your selection.</p>`;
@@ -769,10 +786,13 @@
                 let badge = game.discount ? `<div class="badge-discount">${game.discount}</div>` : '';
                 let platformBadge = `<div class="badge-platform">${game.platform}</div>`;
                 
-                // 🚀 SHOW ORIGINAL PRICE (CROSS) AND NEW SALE PRICE PROPERLY 🚀
+                // 🚀 FIX: SHOW RENTAL PRICE INSTEAD OF PERMANENT FOR PLAYSTATION GAMES 🚀
+                let finalPrice = game.platform === 'PC' ? (game.price || 0) : (game.rentalPrice || game.rentPrice || 0);
                 let oldP = game.originalPrice ? `<span class="old-price">₹${game.originalPrice}</span>` : '';
-                let finalPrice = game.platform === 'PC' ? game.price : (game.permanentPrice || game.rentPrice || 0);
                 
+                // Agar original price save karna bhool gaya toh usko UI me mat dikhao
+                if(game.originalPrice == finalPrice) oldP = ''; 
+
                 let escapedTitle = game.title.replace(/'/g, "\\'");
 
                 grid.innerHTML += `
@@ -865,17 +885,32 @@
             if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; 
         });
 
-        // --- DYNAMIC COUNTDOWN TIMER ---
+        // --- 🚀 FIX: DYNAMIC COUNTDOWN TIMER FOR ALL BROWSERS 🚀 ---
         function updateTimer() {
             if(!window.targetEndTime) {
                 document.getElementById('mainTimerArea').style.display = 'none';
                 return; 
             }
-            document.getElementById('mainTimerArea').style.display = 'flex';
             
+            // Format time correctly to avoid "NaN" in some browsers
+            let timeString = window.targetEndTime;
+            // Replace 'T' with space and '-' with '/' for broad compatibility
+            let parsedTime = new Date(timeString.replace('T', ' ').replace(/-/g, '/')).getTime();
+            
+            // Fallback parsing if first method fails
+            if (isNaN(parsedTime)) {
+                parsedTime = new Date(window.targetEndTime).getTime();
+            }
+
             const now = new Date().getTime();
-            const target = new Date(window.targetEndTime).getTime();
-            const timeLeft = target - now;
+            const timeLeft = parsedTime - now;
+
+            if (isNaN(timeLeft)) {
+                document.getElementById('mainTimerArea').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('mainTimerArea').style.display = 'flex';
 
             if(timeLeft <= 0) {
                 document.getElementById('t-days').innerText = "00";
@@ -896,6 +931,8 @@
             document.getElementById('t-secs').innerText = String(secs).padStart(2, '0');
         }
         setInterval(updateTimer, 1000);
+        // Start immediately
+        updateTimer();
 
         function copyCode() {
             const code = document.getElementById('promoCode').innerText;
