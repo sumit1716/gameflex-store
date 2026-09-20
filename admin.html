@@ -814,7 +814,6 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         
-        // 🚀 EXPORT DB REFERENCE TO WINDOW (THIS WAS THE BUG!) 🚀
         window.db = db;
         window.serverTimestamp = serverTimestamp;
         window.addDoc = addDoc;
@@ -822,9 +821,9 @@
         window.doc = doc;
         window.updateDoc = updateDoc;
         window.deleteDoc = deleteDoc;
-        window.setDoc = setDoc;          // FIXED!
-        window.increment = increment;    // FIXED!
-        window.getDoc = getDoc;          // FIXED!
+        window.setDoc = setDoc;          
+        window.increment = increment;    
+        window.getDoc = getDoc;          
         
         const ALLOWED_EMAILS = [
             "sumitroman198@gmail.com",
@@ -949,7 +948,6 @@
             document.getElementById('gDiscount').value = (orig > 0 && sell < orig) ? Math.round(((orig - sell) / orig) * 100) + "% OFF" : "0%";
         };
 
-        // 🚀 UPGRADED: FINANCE LOGIC (3 INPUTS) 🚀
         window.calculateNetProfit = function() {
             const income = parseFloat(document.getElementById('finIncome').value) || 0;
             const adSpend = parseFloat(document.getElementById('finAdSpend').value) || 0;
@@ -973,7 +971,6 @@
             }
         };
 
-        // 🚀 CUSTOMER ACCESS TRACKER LOGIC 🚀
         window.toggleRentalDate = function() {
             const type = document.getElementById('custAccessType').value;
             if(type === 'Rental') {
@@ -1076,22 +1073,19 @@
                 return;
             }
             
-            // --- NEW SORTING LOGIC ---
-            // Move users with expiring/expired rentals to the top
             let sortedData = [...dataArray].sort((a, b) => {
                 const getPriority = (cust) => {
                     if (cust.accessType === 'Rental' && cust.endDate) {
                         const daysLeft = (new Date(cust.endDate) - new Date()) / (1000 * 60 * 60 * 24);
-                        if (daysLeft <= 2) return 1; // High priority
+                        if (daysLeft <= 2) return 1; 
                     }
-                    return 0; // Normal priority
+                    return 0; 
                 };
                 
                 const pA = getPriority(a);
                 const pB = getPriority(b);
                 if (pA !== pB) return pB - pA;
                 
-                // fallback to creation date (newest first)
                 return (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0);
             });
             
@@ -1109,7 +1103,6 @@
                     
                     accessDetails += `<br><span style="color:${color};"><strong>End:</strong> ${cust.endDate} ${isExpired ? '(Expired)' : (isExpiringSoon ? '(Expiring Soon)' : '')}</span>`;
 
-                    // PENDING / URGENT STYLING
                     if (isExpiringSoon) {
                         badgeClass = 'status-pending urgent-pending';
                         actionBadge = `<br><span class="status-badge urgent-pending" style="margin-top:5px; box-shadow: 0 0 10px rgba(227,24,37,0.5);">🚨 PENDING REMOVAL</span>`;
@@ -1141,22 +1134,20 @@
 
         function initializeAdminPanelData() {
             
-            // 🚀 LOAD CUSTOMERS DB (WITH SORTING PRIORITY) 🚀
             onSnapshot(query(collection(db, "customer_access"), orderBy("createdAt", "desc")), (snapshot) => {
                 customersArray = [];
                 snapshot.forEach(docSnap => {
                     customersArray.push({ id: docSnap.id, ...docSnap.data() });
                 });
                 
-                // Sort logic: Overdue/Ending soon rentals come first
                 customersArray.sort((a, b) => {
                     let today = new Date();
                     let getScore = (cust) => {
-                        if(cust.accessType !== 'Rental') return 9999; // Normal
+                        if(cust.accessType !== 'Rental') return 9999; 
                         let diff = Math.ceil((new Date(cust.endDate) - today) / (1000 * 60 * 60 * 24));
-                        if(diff < 0) return -100; // Expired (Highest priority)
-                        if(diff <= 2) return diff; // Ending soon
-                        return 9999; // Valid rental
+                        if(diff < 0) return -100; 
+                        if(diff <= 2) return diff; 
+                        return 9999; 
                     };
                     return getScore(a) - getScore(b);
                 });
@@ -1189,7 +1180,6 @@
                 filterDashboardData();
             });
 
-            // 🚀 FINANCE RENDER (WITH 3 INPUT CALCULATION) 🚀
             onSnapshot(query(collection(db, "finance_logs"), orderBy("createdAt", "desc")), (snapshot) => {
                 const tbody = document.getElementById('financeTableBody');
                 tbody.innerHTML = '';
@@ -1207,12 +1197,10 @@
                     const logId = docSnap.id;
                     financeLogsArray.push({ id: logId, ...log });
 
-                    // Default variables for old data
                     let income = log.income || 0;
                     let adSpend = log.adSpend || 0;
                     let extraExpense = log.extraExpense || 0;
 
-                    // If old structure (log.amount and log.type exist), map it to new structure for display
                     if(log.amount !== undefined && log.type !== undefined) {
                         if(log.type === 'add') income = log.amount;
                         else adSpend = log.amount;
@@ -1350,11 +1338,15 @@
             }
             filteredGames.forEach(game => {
                 let pBadge = game.platform === 'PC' ? `<span style="background:rgba(227,24,37,0.1); color:var(--primary-red); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">PC</span>` : `<span style="background:rgba(31,106,255,0.1); color:var(--ps5-blue); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">${game.platform}</span>`;
+                
+                // FIX: Admin game table mein bhi PS5 ka rental price show karega
+                let displayPrice = game.platform === 'PC' ? `₹${game.price || 0}` : `₹${game.rentalPrice || game.rentPrice || 0} (Rent)`;
+                
                 tbody.innerHTML += `<tr>
                     <td><img src="${game.image}" style="width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border:1px solid var(--border-dark);"></td>
                     <td style="font-weight:600; font-size:13px;">${game.title}</td>
                     <td>${pBadge}</td>
-                    <td style="font-weight:700;">₹${game.price || game.permanentPrice || game.rentPrice || 0}</td>
+                    <td style="font-weight:700;">${displayPrice}</td>
                     <td>
                         <button class="btn-edit" onclick="editGame('${game.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
                         <button class="btn-delete" onclick="deleteGame('${game.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -1456,18 +1448,6 @@
             }
         };
 
-        function getBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-
-        // ===============================================
-        // 🚀 FIXED FINANCE LOGS SAVE EVENT 🚀
-        // ===============================================
         document.getElementById('financeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveFinanceBtn');
@@ -1514,7 +1494,6 @@
             document.getElementById('finDate').value = log.date;
             document.getElementById('finCampaignName').value = log.title;
             
-            // Map old structure to new structure if needed
             if(log.amount !== undefined && log.type !== undefined) {
                 if(log.type === 'add') {
                     document.getElementById('finIncome').value = log.amount;
@@ -1557,9 +1536,6 @@
             }
         };
 
-        // ===============================================
-        // REGULAR GAMES CRUD LOGIC
-        // ===============================================
         window.editGame = function(gameId) {
             const game = allGames.find(g => g.id === gameId); if(!game) return;
             document.getElementById('formHeading').innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--ps5-blue);"></i> Edit Game: ` + game.title;
@@ -1605,6 +1581,15 @@
                 } catch (error) { alert("❌ Delete Failed!"); }
             }
         };
+
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
 
         document.getElementById('gameForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1655,9 +1640,6 @@
             finally { btn.innerHTML = editId ? "<i class='fa-solid fa-floppy-disk'></i> Update Game" : "<i class='fa-solid fa-database'></i> Upload Game"; btn.disabled = false; }
         });
 
-        // ===============================================
-        // PRE-ORDER CRUD LOGIC 
-        // ===============================================
         window.editPO = function(poId) {
             const game = allPreOrders.find(g => g.id === poId); if(!game) return;
             document.getElementById('poFormHeading').innerHTML = `<i class="fa-solid fa-pen-to-square" style="color:var(--ps5-blue);"></i> Edit Pre-Order: ` + game.title;
@@ -1772,9 +1754,6 @@
             }
         });
 
-        // ===============================================
-        // BANNERS, REVIEWS & COUPONS
-        // ===============================================
         window.deleteReview = async function(reviewId) {
             if(confirm("Delete this customer review permanently?")) {
                 try { await window.deleteDoc(window.doc(window.db, "reviews", reviewId)); } catch(err) { alert("❌ Failed to delete review."); }
@@ -1812,8 +1791,10 @@
             pcList.innerHTML = ''; psList.innerHTML = '';
             let pcCount = 0; let psCount = 0;
             allGames.forEach(game => {
-                let displayPrice = game.price || game.permanentPrice || game.rentPrice || 0;
+                // FIX: PS5 games ke liye yahan selection list mein Rent Price dikhayega (Pehle Permanent dikha raha tha)
+                let displayPrice = game.platform === 'PC' ? (game.price || 0) : (game.rentalPrice || game.rentPrice || 0);
                 let origPrice = game.originalPrice || displayPrice;
+                
                 const isChecked = window.currentFeaturedGames.includes(game.id) ? "checked" : "";
                 const cbHtml = `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); margin-bottom:8px; transition:0.3s;">
@@ -1897,11 +1878,9 @@
 
                 await window.setDoc(window.doc(window.db, "settings", slot), bannerDataUpdate, { merge: true });
 
-                // FIX FOR PLAYSTATION PRICING
                 for(let update of gameUpdates) {
                     const game = allGames.find(g => g.id === update.id);
                     if(game) {
-                        // Ab PlayStation ke liye permanent ki jagah rental price pick karega
                         const currentPrice = game.platform === 'PC' ? game.price : (game.rentalPrice || game.rentPrice || 0);
                         const orig = game.originalPrice ? game.originalPrice : currentPrice; 
                         
@@ -1917,7 +1896,6 @@
                         if (game.platform === 'PC') {
                             updatedGameData.price = update.salePrice;
                         } else {
-                            // Yahan ab PermanentPrice ki jagah RentalPrice update hoga
                             updatedGameData.rentalPrice = update.salePrice; 
                         }
                         await window.updateDoc(window.doc(window.db, "games", update.id), updatedGameData);
