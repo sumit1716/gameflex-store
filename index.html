@@ -254,7 +254,6 @@
         .delivery-title { color: white; font-size: 13px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
         .delivery-date { color: var(--primary-red); font-size: 11px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
 
-
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
         .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
         .home-products-section.offers-bg { background: linear-gradient(to bottom, #140404, #0b0c10); } 
@@ -289,8 +288,7 @@
         .prod-card:hover .prod-img { transform: scale(1.06); filter: brightness(1.1); }
 
         .prod-info { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; position: relative; z-index: 3; background: transparent; }
-        .prod-title { font-size: 15px; font-weight: 700; margin-bottom: 15px; color: var(--text-light); line-height: 1.3; text-transform: uppercase;}
-        .prod-price-red { font-size: 20px; font-weight: 900; color: var(--primary-red); margin-bottom: 18px; text-shadow: 0 0 8px rgba(227, 24, 37, 0.2); }
+        .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: var(--text-light); line-height: 1.3; text-transform: uppercase;}
         
         /* 🚀 FIXED BUTTONS FOR PC GAMES */
         .buy-btn-red { display: block; width: 100%; background: transparent; color: white; border: 2px solid var(--primary-red); padding: 12px; border-radius: 6px; font-weight: 900; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; overflow: hidden; margin-top: auto;}
@@ -304,6 +302,7 @@
         .price-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .price-col { display: flex; flex-direction: row; gap: 8px; align-items: center; }
         .current-price { font-size: 16px; font-weight: 900; color: var(--ps5-blue); text-shadow: 0 0 8px rgba(31, 106, 255, 0.2);}
+        .curr-price { font-size: 20px; font-weight: 900; color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.2);}
         .old-price { font-size: 11px; font-weight: 700; color: var(--text-gray); text-decoration: line-through; opacity: 0.8;}
         
         .action-buttons-row { display: flex; gap: 8px; margin-top: 15px; }
@@ -431,10 +430,10 @@
             .prod-info { padding: 12px 10px 15px 10px; }
             .prod-title { font-size: 11px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
             
-            .prod-price-red { font-size: 15px; margin-bottom: 12px; }
             .card-genre-tag { font-size: 9px; margin-bottom: 8px;}
             
             .current-price { font-size: 14px; }
+            .curr-price { font-size: 16px; }
             .action-buttons-row { margin-top: 10px; gap: 6px; }
             .btn-rent, .btn-buy { padding: 8px 0; font-size: 10px; }
             
@@ -972,114 +971,95 @@
                 });
 
                 let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
-                let oldPrice = game.originalPrice ? `<span class="old-price" style="margin-left:8px;">₹${game.originalPrice}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-
                 let isOffer = (game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%" && game.discount !== "");
 
-                // 🚀 FIX: HOME PAGE WILL ALWAYS SHOW NORMAL PRICE IN PC/PS5 GRIDS 🚀
-                let normalPcPrice = game.originalPrice ? game.originalPrice : game.price;
-                let normalPsRent = game.originalPrice ? game.originalPrice : rent;
+                // 🚀 FIX: PREMIUM STYLING AND DISCOUNT FORMAT FOR ALL HOME PAGE GRIDS 🚀
                 let genresText = game.categories ? game.categories.filter(c => c !== "Offer").join(' • ') : 'Action';
                 if(genresText === '') genresText = 'Action';
+                let platformBadge = `<div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>`;
 
-                // PC GAMES GRID (Normal Price Always)
                 if (game.platform === 'PC') {
-                    if(pcCount < 8) {
-                        pcHTML += `
-                        <div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                            <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                            <div class="prod-info">
-                                <div class="prod-title">${game.title}</div>
-                                <div class="prod-price-red">₹${normalPcPrice}</div>
-                                <button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${normalPcPrice}, '${game.image}')">Add to Cart</button>
+                    let finalPrice = game.price || 0;
+                    let oldP = game.originalPrice ? `<span class="old-price" style="margin-left:8px;">₹${game.originalPrice}</span>` : '';
+                    if (game.originalPrice == finalPrice) oldP = '';
+
+                    let cardHtml = `
+                    <div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
+                        ${isOffer ? badgeHTML : ''}
+                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
+                        <div class="prod-info">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <div class="card-genre-tag"><i class="fa-solid fa-layer-group"></i> ${genresText}</div>
+                                ${platformBadge}
                             </div>
-                        </div>`;
+                            <div class="prod-title">${game.title}</div>
+                            
+                            <div class="price-row" style="border-bottom:none; margin-bottom:15px; padding-bottom:0; display:flex; align-items:flex-end; gap:8px;">
+                                <div class="price-col">
+                                    <span class="curr-price" style="font-size: 20px; font-weight: 900; color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.2);">₹${finalPrice}</span>
+                                    ${oldP}
+                                </div>
+                            </div>
+                            
+                            <button class="buy-btn-red" style="margin-top:auto;" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${finalPrice}, '${game.image}')">
+                                <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>`;
+
+                    if(pcCount < 8) {
+                        pcHTML += cardHtml;
                         pcCount++;
                     }
                     if(isOffer && offerCount < 8) {
-                        offersHTML += `
-                        <div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                            ${badgeHTML}
-                            <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                            <div class="prod-info">
-                                <div class="prod-title">${game.title}</div>
-                                <div class="prod-price-red">₹${game.price} ${oldPrice}</div>
-                                <button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button>
-                            </div>
-                        </div>`;
+                        offersHTML += cardHtml;
                         offerCount++;
                     }
                 } 
-                // PLAYSTATION GAMES GRID (Normal Price Always & Custom Layout)
                 else {
-                    if(ps5Count < 8) {
-                        ps5HTML += `
-                        <div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                            <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                            <div class="prod-info">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                                    <div class="card-genre-tag"><i class="fa-solid fa-layer-group"></i> ${genresText}</div>
-                                    <div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>
+                    let oldP = game.originalPrice ? `<span class="old-price" style="margin-left:4px;">₹${game.originalPrice}</span>` : '';
+                    if (game.originalPrice == rent) oldP = '';
+
+                    let cardHtml = `
+                    <div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
+                        ${isOffer ? badgeHTML : ''}
+                        <div class="prod-img" style="background-image: url('${game.image}');"></div>
+                        <div class="prod-info">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <div class="card-genre-tag"><i class="fa-solid fa-layer-group"></i> ${genresText}</div>
+                                ${platformBadge}
+                            </div>
+                            <div class="prod-title">${game.title}</div>
+                            
+                            <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
+                                <div style="display:flex; flex-direction:column; gap:2px;">
+                                    <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
+                                    <div><span class="current-price">₹${rent}</span> ${oldP}</div>
                                 </div>
-                                <div class="prod-title">${game.title}</div>
-                                
-                                <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
-                                    <div style="display:flex; flex-direction:column; gap:2px;">
-                                        <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
-                                        <span class="current-price">₹${normalPsRent}</span>
-                                    </div>
-                                    <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
-                                        <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
-                                        <span class="current-price" style="color:white; text-shadow:none;">₹${perm}</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="action-buttons-row">
-                                    <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${normalPsRent}, '${game.image}')">
-                                        <i class="fa-solid fa-clock"></i> Rent
-                                    </button>
-                                    <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')">
-                                        <i class="fa-solid fa-cart-shopping"></i> Buy
-                                    </button>
+                                <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
+                                    <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
+                                    <span class="current-price" style="color:white; text-shadow:none;">₹${perm}</span>
                                 </div>
                             </div>
-                        </div>`;
+                            
+                            <div class="action-buttons-row">
+                                <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')">
+                                    <i class="fa-solid fa-clock"></i> Rent
+                                </button>
+                                <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')">
+                                    <i class="fa-solid fa-cart-shopping"></i> Buy
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    if(ps5Count < 8) {
+                        ps5HTML += cardHtml;
                         ps5Count++;
                     }
                     if(isOffer && offerCount < 8) {
-                        offersHTML += `
-                        <div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                            ${badgeHTML}
-                            <div class="prod-img" style="background-image: url('${game.image}');"></div>
-                            <div class="prod-info">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                                    <div class="card-genre-tag"><i class="fa-solid fa-layer-group"></i> ${genresText}</div>
-                                    <div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>
-                                </div>
-                                <div class="prod-title">${game.title}</div>
-                                
-                                <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
-                                    <div style="display:flex; flex-direction:column; gap:2px;">
-                                        <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
-                                        <span class="current-price">₹${rent}</span>
-                                    </div>
-                                    <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
-                                        <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
-                                        <span class="current-price" style="color:white; text-shadow:none;">₹${perm}</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="action-buttons-row">
-                                    <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')">
-                                        <i class="fa-solid fa-clock"></i> Rent
-                                    </button>
-                                    <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')">
-                                        <i class="fa-solid fa-cart-shopping"></i> Buy
-                                    </button>
-                                </div>
-                            </div>
-                        </div>`;
+                        offersHTML += cardHtml;
                         offerCount++;
                     }
                 }
