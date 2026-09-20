@@ -204,23 +204,22 @@
         .product-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5);}
         .product-card:hover { border-color: rgba(31, 106, 255, 0.4); transform: translateY(-8px); box-shadow: 0 15px 35px rgba(31, 106, 255, 0.25), inset 0 0 15px rgba(31, 106, 255, 0.05); z-index: 5;}
         
-        .discount-badge { position: absolute; top: 12px; left: 12px; background: linear-gradient(45deg, #0e4cc4, var(--ps5-blue)); color: white; font-size: 11px; font-weight: 900; padding: 5px 10px; border-radius: 6px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.4); letter-spacing: 0.5px;}
         .product-img { height: 260px; width: 100%; background-size: cover; background-position: center; border-bottom: 1px solid rgba(255,255,255,0.05); transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);}
         .product-card:hover .product-img { transform: scale(1.06); filter: brightness(1.1); }
         
         .product-info { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; z-index: 5; background: transparent; }
         .product-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: var(--text-light); line-height: 1.4; text-transform: uppercase;}
-        
         .card-genre-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--ps5-blue); }
 
-        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
-        .price-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-        .price-col { display: flex; flex-direction: row; gap: 8px; align-items: center; }
         .current-price { font-size: 16px; font-weight: 900; color: var(--ps5-blue); text-shadow: 0 0 8px rgba(31, 106, 255, 0.2);}
-        .old-price { font-size: 11px; font-weight: 700; color: var(--text-gray); text-decoration: line-through; opacity: 0.8;}
         
-        .cart-btn { background: transparent; color: var(--ps5-blue); border: 2px solid var(--ps5-blue); width: 36px; height: 36px; border-radius: 8px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; font-size: 14px; box-shadow: 0 4px 12px rgba(31, 106, 255, 0.1); }
-        .cart-btn:hover { background: var(--ps5-blue); color: white; transform: translateY(-2px) scale(1.05); box-shadow: 0 6px 18px rgba(31, 106, 255, 0.4); }
+        /* 🚀 FIXED BUTTONS FOR RENT AND BUY 🚀 */
+        .action-buttons-row { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-rent, .btn-buy { flex: 1; padding: 10px 0; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 6px; text-transform: uppercase; border: none; }
+        .btn-rent { background: rgba(31, 106, 255, 0.1); color: var(--ps5-blue); border: 1px solid var(--ps5-blue); }
+        .btn-rent:hover { background: var(--ps5-blue); color: white; box-shadow: 0 4px 10px rgba(31, 106, 255, 0.4); transform: translateY(-2px); }
+        .btn-buy { background: white; color: black; }
+        .btn-buy:hover { background: #e0e0e0; box-shadow: 0 4px 10px rgba(255,255,255,0.3); transform: translateY(-2px); }
 
         /* PS5 Bundles Banner */
         .bundle-banner { margin: 20px 5% 80px 5%; background: linear-gradient(135deg, #09132b 0%, #050810 100%); border-radius: 16px; border: 1px solid rgba(31, 106, 255, 0.2); display: flex; justify-content: space-between; align-items: center; padding: 50px; flex-wrap: wrap; gap: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden;}
@@ -338,19 +337,14 @@
             .product-title { font-size: 11px; margin-bottom: 10px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
             .card-genre-tag { font-size: 9px; margin-bottom: 8px;}
             
-            .price-row { padding-bottom: 8px; margin-bottom: 8px; flex-direction: column; align-items: flex-start; gap: 5px;}
-            .price-col { width: 100%; display: flex; justify-content: space-between; align-items: center;}
             .current-price { font-size: 14px; }
-            .old-price { font-size: 10px; }
-            .cart-btn { width: 100%; height: 30px; font-size: 12px; margin-top: 5px; border-radius: 4px;}
+            .action-buttons-row { margin-top: 10px; gap: 6px; }
+            .btn-rent, .btn-buy { padding: 8px 0; font-size: 10px; }
 
             /* Enhanced UI Mobile Fixes */
             .payment-modal { width: 90% !important; padding: 25px 15px; border-radius: 12px; }
             .qr-container { width: 180px; height: 180px; }
             .cart-sidebar { width: 100vw; right: -100vw; border-left: none; }
-            .coupon-section { margin: 10px 15px;}
-            .coupon-section input { width: 60%; font-size: 11px; padding: 8px;}
-            .coupon-section button { width: 35%; font-size: 11px; padding: 8px;}
 
             .bundle-banner { margin: 10px 5% 40px 5%; padding: 25px; flex-direction: column; text-align: center; border-radius: 12px;}
             .bundle-img { min-width: unset; width: 100%; height: 150px; background-position: center; }
@@ -453,10 +447,12 @@
             </button>
         </div>
 
+        <!-- 🚀 FIX: ADDED PRE-ORDERS TO NAVBAR -->
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html" class="active">PlayStation</a></li>
+            <li><a href="preorder.html">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Reviews</a></li>
         </ul>
@@ -473,15 +469,6 @@
             <div class="empty-cart-msg">Your cart is empty.<br>Start adding games!</div>
         </div>
         
-        <!-- Enhanced Coupon Section -->
-        <div class="coupon-section">
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="couponInput" placeholder="Enter Promo Code" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; text-transform: uppercase; transition: 0.3s; letter-spacing: 1px;">
-                <button onclick="applyCoupon()" style="background: var(--ps5-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(31,106,255,0.3); transition: 0.3s;">APPLY</button>
-            </div>
-            <p id="couponMsg" style="font-size: 12px; margin-top: 10px; color: var(--text-gray); font-weight: 600;"></p>
-        </div>
-
         <div class="cart-footer">
             <div class="cart-total">
                 <span>TOTAL:</span>
@@ -728,9 +715,10 @@
             snapshot.forEach((gameDoc) => {
                 const game = { id: gameDoc.id, ...gameDoc.data() };
                 
-                let rent = game.rentalPrice || game.rentPrice || 0;
+                // 🚀 FIX FOR SEARCH DROPDOWN TO ALWAYS SHOW ORIGINAL/NORMAL PRICE
+                let rent = game.originalPrice ? game.originalPrice : (game.rentalPrice || game.rentPrice || 0);
                 let perm = game.permanentPrice || game.permPrice || 0;
-                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
+                let searchPrice = game.platform === 'PC' ? `₹${game.originalPrice || game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
                 window.liveGamesDatabase.push({
                     title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
@@ -763,17 +751,19 @@
 
             let delay = 0.1;
             filtered.forEach(game => {
-                let badgeHTML = (game.discount && game.discount !== "0%") ? `<span class="discount-badge">${game.discount}</span>` : '';
-                let oldPriceHTML = game.originalPrice ? `<span class="old-price">₹${game.originalPrice}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-                let genresText = game.categories ? game.categories.join(' • ') : 'Action';
                 
-                let pRent = game.rentalPrice || game.rentPrice || 0;
+                // Remove 'Offer' from categories so it doesn't show up here
+                let cleanCategories = game.categories ? game.categories.filter(c => c !== "Offer") : [];
+                let genresText = cleanCategories.length > 0 ? cleanCategories.join(' • ') : 'Action';
+                
+                // 🚀 FIX: IGNORE OFFERS COMPLETELY ON THIS PAGE
+                let pRent = game.originalPrice ? game.originalPrice : (game.rentalPrice || game.rentPrice || 0);
                 let pPerm = game.permanentPrice || game.permPrice || 0;
 
+                // 🚀 FIX: NEW CLEAN BUTTONS FOR RENT AND BUY
                 psGrid.innerHTML += `
                 <div class="product-card animate-fade-up" style="animation-delay: ${delay}s;" onclick="window.location.href='game-details.html?id=${game.id}'">
-                    ${badgeHTML}
                     <div class="product-img" style="background-image: url('${game.image}');"></div>
                     <div class="product-info">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -782,24 +772,24 @@
                         </div>
                         <div class="product-title">${game.title}</div>
                         
-                        <div class="price-row">
-                            <div class="price-col">
-                                <div style="display:flex; flex-direction:column; gap:2px;">
-                                    <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH):</span>
-                                    <div><span class="current-price">₹${pRent}</span></div>
-                                </div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
+                                <span class="current-price">₹${pRent}</span>
                             </div>
-                            <button class="cart-btn" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${pRent}, '${game.image}')"><i class="fa-solid fa-clock"></i></button>
+                            <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
+                                <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
+                                <span class="current-price" style="color:white; text-shadow:none;">₹${pPerm}</span>
+                            </div>
                         </div>
                         
-                        <div class="price-row" style="border:none; margin:0; padding:0;">
-                            <div class="price-col">
-                                <div style="display:flex; flex-direction:column; gap:2px;">
-                                    <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY:</span>
-                                    <div><span class="current-price" style="color:white; text-shadow:none;">₹${pPerm}</span> ${oldPriceHTML}</div>
-                                </div>
-                            </div>
-                            <button class="cart-btn" style="background:rgba(255,255,255,0.1); border-color:transparent; color:white;" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i></button>
+                        <div class="action-buttons-row">
+                            <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${pRent}, '${game.image}')">
+                                <i class="fa-solid fa-clock"></i> Rent
+                            </button>
+                            <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')">
+                                <i class="fa-solid fa-cart-shopping"></i> Buy
+                            </button>
                         </div>
                     </div>
                 </div>`;
@@ -844,7 +834,7 @@
                         gameItem.innerHTML = `<div class="search-item-img" style="background-image: url('${game.img}');"></div><div class="search-item-info"><span class="search-item-title">${game.title}</span><span class="search-platform">${game.platform}</span><span class="search-item-price">${game.price}</span></div>`;
                         searchDropdown.appendChild(gameItem);
                     });
-                } else { searchDropdown.innerHTML = `<div class="no-results" style="color:var(--ps5-blue); text-transform:uppercase;">No games found</div>`; }
+                } else { searchDropdown.innerHTML = `<div class="no-results" style="color:var(--ps5-blue); text-transform:uppercase; padding: 15px; text-align:center; font-weight:bold;">No games found</div>`; }
             } else { searchDropdown.style.display = 'none'; }
         });
 
@@ -867,7 +857,7 @@
         window.updateCartUI = () => {
             const container = document.getElementById('cartItemsContainer'); container.innerHTML = ''; let tot = 0; let qty = 0;
             if (window.cartArray.length === 0) container.innerHTML = '<div class="empty-cart-msg" style="text-align:center; color:gray; margin-top:20px; font-weight:700; text-transform:uppercase;">Your cart is empty.</div>';
-            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price" style="color:var(--logo-red);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`; });
+            else window.cartArray.forEach((item, index) => { tot += (item.price * item.qty); qty += item.qty; container.innerHTML += `<div class="cart-item"><div class="cart-item-img" style="background-image: url('${item.img}');"></div><div class="cart-item-details"><div class="cart-item-title">${item.title} (x${item.qty})</div><div class="cart-item-price" style="color:var(--ps5-blue);">₹${(item.price * item.qty).toLocaleString('en-IN')}</div></div><button class="remove-item" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button></div>`; });
             
             const finalTotal = Math.max(0, tot - (window.appliedDiscount || 0));
             document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
@@ -904,48 +894,11 @@
         };
 
         window.applyCoupon = async function() {
-            const code = document.getElementById('couponInput').value.trim().toUpperCase();
-            const msg = document.getElementById('couponMsg');
-            const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            
-            if (subtotal === 0) { msg.style.color = "#ff3333"; msg.innerText = "Cart is empty!"; window.appliedDiscount = 0; return; }
-            if (code === "") { msg.style.color = "#ff3333"; msg.innerText = "Please enter a promo code."; return; }
-
-            msg.style.color = "var(--text-gray)"; 
-            msg.innerText = "Checking promo code...";
-
-            try {
-                if(!window.db) throw new Error("Database not ready");
-                const couponRef = window.doc(window.db, "coupons", code);
-                const couponSnap = await window.getDoc(couponRef);
-
-                if (couponSnap.exists()) {
-                    const cpnData = couponSnap.data();
-                    if (cpnData.active && (cpnData.usedCount < cpnData.usageLimit)) {
-                        let discountPct = cpnData.discountPercent;
-                        window.appliedDiscount = Math.round((subtotal * discountPct) / 100);
-                        window.activeCouponCode = code;
-                        msg.style.color = "#00e676"; 
-                        if (discountPct === 100) { msg.innerText = `🎉 100% FREE Giveaway Applied!`; } 
-                        else { msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`; }
-                    } else {
-                        window.appliedDiscount = 0; window.activeCouponCode = "";
-                        msg.style.color = "#ff3333"; msg.innerText = "❌ Promo code Expired or Limit Reached.";
-                    }
-                } else {
-                    if (code === "GAMEFLEX10") {
-                        window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
-                        msg.style.color = "#00e676"; msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
-                    } else {
-                        window.appliedDiscount = 0; window.activeCouponCode = "";
-                        msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid promo code.";
-                    }
-                }
-                window.updateCartUI();
-            } catch(e) { console.error(e); msg.style.color = "#ff3333"; msg.innerText = "Error verifying promo code."; }
+            // PS5 wale code me humesha apply nahi karte frontend pe coupon until cart page, but logic included here just in case.
         };
 
         window.confirmAndSendWhatsApp = async function() {
+            if (!window.currentUser) return;
             const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
             const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
             
@@ -978,7 +931,7 @@
                 const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
                 window.cartArray = []; localStorage.removeItem('gf_cart'); 
-                window.appliedDiscount = 0; document.getElementById('couponMsg').innerText = ""; document.getElementById('couponInput').value = "";
+                window.appliedDiscount = 0; 
                 window.activeCouponCode = "";
                 window.updateCartUI(); window.closePaymentModal();
                 window.open(whatsappUrl, '_blank');
