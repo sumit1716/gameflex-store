@@ -174,8 +174,11 @@
 
         /* HERO & HOME SECTIONS */
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
-        .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.8; }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.1) 100%); z-index: 2; }
+        
+        /* 🚀 FIX 2: VIDEO OPACITY INCREASED TO FIX BLACK SCREEN */
+        .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.95; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%); z-index: 2; pointer-events: none; }
+        
         .hero-content { position: relative; z-index: 3; max-width: 600px; will-change: transform, opacity; }
         .hero-content h1 { font-family: 'Orbitron', sans-serif; font-size: 52px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; text-shadow: 2px 2px 15px rgba(0,0,0,0.8); letter-spacing: 1px; }
         .hero-content h1 span { color: var(--primary-red); text-shadow: 0 0 15px rgba(227, 24, 37, 0.4); }
@@ -249,7 +252,6 @@
         .delivery-info { text-align: center; margin-top: 15px; width: 100%; position:relative; z-index:4;}
         .delivery-title { color: white; font-size: 13px; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 5px black;}
         .delivery-date { color: var(--primary-red); font-size: 11px; font-weight: 700; margin-top: 3px; letter-spacing: 1px;}
-
 
         .home-products-section { padding: 60px 5%; border-top: 1px solid var(--border-dark); }
         .home-products-section.ps5-bg { background: linear-gradient(to bottom, #0b0c10, #060a14); } 
@@ -605,7 +607,8 @@
 
     <!-- MAIN HOME SECTIONS -->
     <header class="hero">
-        <video id="mainBgVideo" autoplay loop muted playsinline class="hero-bg-video">
+        <!-- 🚀 FIX: ADDED MUTED ATTRIBUTE SO AUTOPLAY WORKS AND BACKGROUND IS NOT BLACK 🚀 -->
+        <video id="mainBgVideo" autoplay loop muted="muted" playsinline class="hero-bg-video" oncanplay="this.play()" onloadedmetadata="this.muted = true">
             <source src="Video_background.mp4" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
@@ -660,7 +663,8 @@
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
             <a href="preorder.html" class="cat-card">
-                <div class="cat-img" style="background-image: url('preorder.png');"></div>
+                <!-- 🚀 FIX: UPDATED PATH TO PREORDER.png TO MATCH DIRECTORY CAPS 🚀 -->
+                <div class="cat-img" style="background-image: url('PREORDER.png');"></div>
                 <h3>Pre-Orders</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
@@ -765,6 +769,9 @@
                 bgVideo.muted = true;
                 bgVideo.play().catch(function(err) {
                     console.log("Autoplay was blocked or failed:", err);
+                    document.body.addEventListener('click', function() {
+                        bgVideo.play();
+                    }, { once: true });
                 });
             }
         });
@@ -893,7 +900,6 @@
 
             let uniqueGamesHtml = '';
             
-            // Generate HTML only for the games present in DB (No arbitrary repetition in the array)
             snapshot.forEach((doc) => {
                 const game = doc.data();
                 const gameId = doc.id;
@@ -905,10 +911,7 @@
                 uniqueGamesHtml += `
                     <div class="delivery-vehicle" onclick="window.location.href='preorder-details.html?id=${gameId}'">
                         <img src="${game.image}" class="carried-game-img" alt="${game.title}">
-                        
-                        <!-- PURE CSS HOLOGRAM SHADOW -->
                         <div class="hologram-shadow"></div>
-                        
                         <div class="delivery-info">
                             <div class="delivery-title">${game.title}</div>
                             <div class="delivery-date">ARRIVING: ${game.releaseDate}</div>
@@ -917,8 +920,6 @@
                 `;
             });
 
-            // To make infinite CSS marquee work smoothly, we duplicate the whole unique block once.
-            // This prevents identical games from being right next to each other.
             marquee.innerHTML = uniqueGamesHtml + uniqueGamesHtml;
         });
 
@@ -962,9 +963,13 @@
 
                 let isOffer = (game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%" && game.discount !== "");
 
+                // 🚀 FIX: HOME PAGE WILL ALWAYS SHOW NORMAL PRICE IN PC/PS5 GRIDS 🚀
+                let normalPcPrice = game.originalPrice ? game.originalPrice : game.price;
+                let normalPsRent = game.originalPrice ? game.originalPrice : rent;
+
                 if (game.platform === 'PC') {
                     if(pcCount < 8) {
-                        pcHTML += `<div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div class="prod-price-red">₹${game.price} ${oldPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${game.price}, '${game.image}')">Add to Cart</button></div></div>`;
+                        pcHTML += `<div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'"><div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title}</div><div class="prod-price-red">₹${normalPcPrice}</div><button class="buy-btn-red" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${normalPcPrice}, '${game.image}')">Add to Cart</button></div></div>`;
                         pcCount++;
                     }
                     if(isOffer && offerCount < 8) {
@@ -974,7 +979,7 @@
                 } 
                 else {
                     if(ps5Count < 8) {
-                        ps5HTML += `<div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">${badgeHTML}<div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div class="price-flex"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:gray;">1 Month Rent:</span><div><span class="curr-price">₹${rent}</span> ${oldPrice}</div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center; margin-top:8px; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:gray;">Permanent Buy:</span><div><span class="curr-price">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:white; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
+                        ps5HTML += `<div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'"><div class="prod-img" style="background-image: url('${game.image}');"></div><div class="prod-info"><div class="prod-title">${game.title} <span style="font-size:10px; color:#ccc;">(${game.platform})</span></div><div class="price-flex"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:gray;">1 Month Rent:</span><div><span class="curr-price">₹${normalPsRent}</span></div></div><button class="cart-btn-blue" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${normalPsRent}, '${game.image}')" title="Rent"><i class="fa-solid fa-clock"></i></button></div><div class="price-flex" style="align-items:center; margin-top:8px; border-top:1px solid rgba(255,255,255,0.05); padding-top:8px;"><div class="price-details" style="flex-direction:column; align-items:flex-start; gap:2px;"><span style="font-size:10px; color:gray;">Permanent Buy:</span><div><span class="curr-price">₹${perm}</span></div></div><button class="cart-btn-blue" style="background:white; color:var(--ps5-blue);" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')" title="Buy"><i class="fa-solid fa-cart-shopping"></i></button></div></div></div>`;
                         ps5Count++;
                     }
                     if(isOffer && offerCount < 8) {
