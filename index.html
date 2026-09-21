@@ -175,9 +175,9 @@
         /* HERO & HOME SECTIONS */
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
         
-        /* 🚀 FIX: VIDEO OVERLAY BLUR & AUTOPLAY SETTINGS 🚀 */
-        .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.9); }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.1) 100%); z-index: 2; pointer-events: none; }
+        /* 🚀 FIX: VIDEO OVERLAY PREMIUM DOT-MATRIX BLUR EFFECT & AUTOPLAY SETTINGS 🚀 */
+        .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.1) 100%), radial-gradient(rgba(0,0,0,0.4) 1px, transparent 1px); background-size: 100% 100%, 3px 3px; z-index: 2; pointer-events: none; }
         .hero-vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(0,0,0,0.9); z-index: 3; pointer-events: none; }
         
         .hero-content { position: relative; z-index: 4; max-width: 600px; will-change: transform, opacity; }
@@ -290,20 +290,14 @@
         .prod-info { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; position: relative; z-index: 3; background: transparent; }
         .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: var(--text-light); line-height: 1.3; text-transform: uppercase;}
         
-        /* 🚀 FIXED BUTTONS FOR PC GAMES */
-        .buy-btn-red { display: block; width: 100%; background: transparent; color: white; border: 2px solid var(--primary-red); padding: 12px; border-radius: 6px; font-weight: 900; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; overflow: hidden; margin-top: auto;}
-        .buy-btn-red::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--primary-red); transition: 0.4s; z-index: -1; }
-        .buy-btn-red:hover::before { left: 0; }
-        .buy-btn-red:hover { box-shadow: var(--theme-glow); border-color: transparent; }
-        
-        /* 🚀 FIXED BUTTONS FOR RENT AND BUY (PS GAMES) 🚀 */
+        /* 🚀 NEW: FIXED PRICE AND BUTTONS CSS 🚀 */
         .card-genre-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--ps5-blue); }
         .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
-        .price-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
         .price-col { display: flex; flex-direction: row; gap: 8px; align-items: center; }
+        
+        .old-price { font-size: 11px; font-weight: 700; color: var(--text-gray); text-decoration: line-through; opacity: 0.8;}
         .current-price { font-size: 16px; font-weight: 900; color: var(--ps5-blue); text-shadow: 0 0 8px rgba(31, 106, 255, 0.2);}
         .curr-price { font-size: 20px; font-weight: 900; color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.2);}
-        .old-price { font-size: 11px; font-weight: 700; color: var(--text-gray); text-decoration: line-through; opacity: 0.8;}
         
         .action-buttons-row { display: flex; gap: 8px; margin-top: 15px; }
         .btn-rent, .btn-buy { flex: 1; padding: 10px 0; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 6px; text-transform: uppercase; border: none; }
@@ -311,6 +305,11 @@
         .btn-rent:hover { background: var(--ps5-blue); color: white; box-shadow: 0 4px 10px rgba(31, 106, 255, 0.4); transform: translateY(-2px); }
         .btn-buy { background: white; color: black; }
         .btn-buy:hover { background: #e0e0e0; box-shadow: 0 4px 10px rgba(255,255,255,0.3); transform: translateY(-2px); }
+        
+        .buy-btn-red { display: block; width: 100%; background: transparent; color: white; border: 2px solid var(--primary-red); padding: 12px; border-radius: 6px; font-weight: 900; text-align: center; cursor: pointer; transition: 0.3s; position: relative; z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; overflow: hidden; margin-top: auto;}
+        .buy-btn-red::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--primary-red); transition: 0.4s; z-index: -1; }
+        .buy-btn-red:hover::before { left: 0; }
+        .buy-btn-red:hover { box-shadow: var(--theme-glow); border-color: transparent; }
 
         .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         .review-card { background: linear-gradient(145deg, var(--card-bg), #161922); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; transition: var(--hover-transition); box-shadow: 0 4px 15px rgba(0,0,0,0.4); border-top: 2px solid var(--primary-red);}
@@ -429,7 +428,6 @@
             .prod-img { height: 160px; }
             .prod-info { padding: 12px 10px 15px 10px; }
             .prod-title { font-size: 11px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-            
             .card-genre-tag { font-size: 9px; margin-bottom: 8px;}
             
             .current-price { font-size: 14px; }
@@ -607,9 +605,9 @@
 
     <!-- MAIN HOME SECTIONS -->
     <header class="hero">
-        <!-- 🚀 FIX: STRONG AUTOPLAY POLICY FOR CHROME/SAFARI & ADDED VIGNETTE BLUR EFFECT 🚀 -->
-        <video id="mainBgVideo" autoplay loop muted playsinline preload="auto" class="hero-bg-video">
-            <source src="Video_background.mp4" type="video/mp4">
+        <!-- 🚀 FIX: VIDEO OVERLAY BLUR & AUTOPLAY SETTINGS FOR ALL BROWSERS 🚀 -->
+        <video id="mainBgVideo" autoplay loop muted="muted" playsinline preload="auto" class="hero-bg-video" oncanplay="this.play()" onloadedmetadata="this.muted = true">
+            <source src="Video_background.MP4" type="video/mp4">
         </video>
         <div class="hero-overlay"></div>
         <div class="hero-vignette"></div>
@@ -665,7 +663,7 @@
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
             </a>
             <a href="preorder.html" class="cat-card">
-                <!-- 🚀 FIX: IMAGE PATH NAME UPDATED TO UPPERCASE 🚀 -->
+                <!-- 🚀 FIX: PREORDER.png IS NOW EXACT CASE 🚀 -->
                 <div class="cat-img" style="background-image: url('PREORDER.png');"></div>
                 <h3>Pre-Orders</h3>
                 <div class="cat-arrow"><i class="fa-solid fa-arrow-right"></i></div>
@@ -764,26 +762,16 @@
 
     <!-- PARALLAX & ANIMATION SCRIPT -->
     <script>
-        // Force play video on load to fix autoplay blocking
+        // 🚀 FIX: Fallback for Autoplay strict policies
         document.addEventListener("DOMContentLoaded", function() {
             var bgVideo = document.getElementById("mainBgVideo");
             if (bgVideo) {
-                // Ensure muted and playsinline for iOS/Chrome strict policies
-                bgVideo.muted = true;
-                bgVideo.setAttribute('playsinline', '');
-                
                 let playPromise = bgVideo.play();
-                
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
                         console.log("Autoplay prevented by browser. Retrying on user interaction.");
-                        // Fallback: Start video on first user interaction if blocked
-                        window.addEventListener('click', function() {
-                            bgVideo.play();
-                        }, { once: true });
-                        window.addEventListener('touchstart', function() {
-                            bgVideo.play();
-                        }, { once: true });
+                        window.addEventListener('click', function() { bgVideo.play(); }, { once: true });
+                        window.addEventListener('touchstart', function() { bgVideo.play(); }, { once: true });
                     });
                 }
             }
@@ -974,15 +962,15 @@
                 let escapedTitle = game.title.replace(/'/g, "\\'");
                 let isOffer = (game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%" && game.discount !== "");
 
-                // 🚀 FIX: PREMIUM STYLING AND DISCOUNT FORMAT FOR ALL HOME PAGE GRIDS 🚀
                 let genresText = game.categories ? game.categories.filter(c => c !== "Offer").join(' • ') : 'Action';
                 if(genresText === '') genresText = 'Action';
                 let platformBadge = `<div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>`;
 
+                // 🚀 FIX: LOGIC FOR OLD PRICE CROSSED-OUT ON HOME PAGE 🚀
                 if (game.platform === 'PC') {
-                    let finalPrice = game.price || 0;
-                    let oldP = game.originalPrice ? `<span class="old-price" style="margin-left:8px;">₹${game.originalPrice}</span>` : '';
-                    if (game.originalPrice == finalPrice) oldP = '';
+                    let finalPcPrice = game.price || 0;
+                    let originalPcPrice = game.originalPrice || finalPcPrice;
+                    let oldPcPriceHtml = (originalPcPrice > finalPcPrice) ? `<span class="old-price" style="margin-left:8px;">₹${originalPcPrice}</span>` : '';
 
                     let cardHtml = `
                     <div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
@@ -997,12 +985,12 @@
                             
                             <div class="price-row" style="border-bottom:none; margin-bottom:15px; padding-bottom:0; display:flex; align-items:flex-end; gap:8px;">
                                 <div class="price-col">
-                                    <span class="curr-price" style="font-size: 20px; font-weight: 900; color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.2);">₹${finalPrice}</span>
-                                    ${oldP}
+                                    <span class="curr-price" style="font-size: 20px; font-weight: 900; color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.2);">₹${finalPcPrice}</span>
+                                    ${oldPcPriceHtml}
                                 </div>
                             </div>
                             
-                            <button class="buy-btn-red" style="margin-top:auto;" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${finalPrice}, '${game.image}')">
+                            <button class="buy-btn-red" style="margin-top:auto;" onclick="event.stopPropagation(); addToCart('${escapedTitle}', ${finalPcPrice}, '${game.image}')">
                                 <i class="fa-solid fa-cart-shopping"></i> Add to Cart
                             </button>
                         </div>
@@ -1018,8 +1006,9 @@
                     }
                 } 
                 else {
-                    let oldP = game.originalPrice ? `<span class="old-price" style="margin-left:4px;">₹${game.originalPrice}</span>` : '';
-                    if (game.originalPrice == rent) oldP = '';
+                    let finalPsRent = rent || 0;
+                    let originalPsRent = game.originalPrice || finalPsRent;
+                    let oldPsRentHtml = (originalPsRent > finalPsRent) ? `<span class="old-price" style="margin-left:4px;">₹${originalPsRent}</span>` : '';
 
                     let cardHtml = `
                     <div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
@@ -1035,7 +1024,7 @@
                             <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
                                 <div style="display:flex; flex-direction:column; gap:2px;">
                                     <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
-                                    <div><span class="current-price">₹${rent}</span> ${oldP}</div>
+                                    <div><span class="current-price">₹${finalPsRent}</span> ${oldPsRentHtml}</div>
                                 </div>
                                 <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
                                     <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
@@ -1044,7 +1033,7 @@
                             </div>
                             
                             <div class="action-buttons-row">
-                                <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${rent}, '${game.image}')">
+                                <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${finalPsRent}, '${game.image}')">
                                     <i class="fa-solid fa-clock"></i> Rent
                                 </button>
                                 <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${perm}, '${game.image}')">
