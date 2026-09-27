@@ -363,7 +363,7 @@
 </head>
 <body class="theme-ps5">
 
-    <!-- Onboarding Modal -->
+    <!-- Onboarding Modal (With Referral Update) -->
     <div id="onboardingOverlay" class="onboarding-overlay">
         <div class="onboarding-modal">
             <h2>Welcome to GameFlex!</h2>
@@ -387,6 +387,11 @@
                         </label>
                     </div>
                 </div>
+                <!-- 🚀 REFERRAL CODE FIELD 🚀 -->
+                <div class="onboarding-group">
+                    <label>Referral Code (Optional)</label>
+                    <input type="text" id="obReferral" class="onboarding-input" placeholder="Enter code for 50 Bonus Tokens" style="text-transform: uppercase; letter-spacing: 1px;">
+                </div>
                 <button type="submit" class="onboarding-submit">Save & Start Gaming</button>
             </form>
         </div>
@@ -399,7 +404,6 @@
             
             <h2><i class="fa-solid fa-qrcode" style="color: var(--ps5-blue);"></i> Secure Checkout</h2>
             
-            <!-- Added Payment Method Trust Badges -->
             <div class="payment-methods-icons">
                 <i class="fa-brands fa-google-pay" title="Google Pay" style="color: #ffffff;"></i>
                 <i class="fa-solid fa-wallet" title="Paytm" style="color: #00baf2;"></i>
@@ -447,7 +451,6 @@
             </button>
         </div>
 
-        <!-- 🚀 FIX: ADDED PRE-ORDERS TO NAVBAR -->
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
@@ -562,15 +565,7 @@
             <a href="#" class="view-all-link">View All &rarr;</a>
         </div>
         <div class="products-grid" id="psGamesGrid">
-            <!-- 🚀 SKELETON LOADERS -->
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
         </div>
     </section>
 
@@ -589,41 +584,23 @@
     <section class="why-choose animate-fade-up delay-2">
         <div class="section-title" style="margin-bottom: 20px; font-size: 16px;"><span></span> WHY CHOOSE GAMEFLEX_STORE?</div>
         <div class="why-choose-row">
-            <div class="why-item">
-                <i class="fa-regular fa-circle-check"></i>
-                <div class="why-text"><h4>100% Genuine</h4><p>Original & Trusted</p></div>
-            </div>
-            <div class="why-item">
-                <i class="fa-solid fa-bolt"></i>
-                <div class="why-text"><h4>Instant Delivery</h4><p>Quick & Easy</p></div>
-            </div>
-            <div class="why-item">
-                <i class="fa-solid fa-tag"></i>
-                <div class="why-text"><h4>Best Prices</h4><p>Affordable Always</p></div>
-            </div>
-            <div class="why-item">
-                <i class="fa-solid fa-headset"></i>
-                <div class="why-text"><h4>24/7 Support</h4><p>We're Here to Help</p></div>
-            </div>
+            <div class="why-item"><i class="fa-regular fa-circle-check"></i><div class="why-text"><h4>100% Genuine</h4><p>Original & Trusted</p></div></div>
+            <div class="why-item"><i class="fa-solid fa-bolt"></i><div class="why-text"><h4>Instant Delivery</h4><p>Quick & Easy</p></div></div>
+            <div class="why-item"><i class="fa-solid fa-tag"></i><div class="why-text"><h4>Best Prices</h4><p>Affordable Always</p></div></div>
+            <div class="why-item"><i class="fa-solid fa-headset"></i><div class="why-text"><h4>24/7 Support</h4><p>We're Here to Help</p></div></div>
         </div>
     </section>
 
-    <!-- 🚀 NEW: FOOTER CONTACT SECTION -->
+    <!-- FOOTER CONTACT SECTION -->
     <footer class="footer-section animate-fade-up delay-1">
         <h3>Need Help or Custom Games?</h3>
         <p>We are available 24/7 to assist you with your orders, game credentials, and any other queries. Drop us a message!</p>
-        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
-            <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Chat on WhatsApp
-        </a>
-        <div class="copyright">
-            &copy; 2026 GameFlex Store. All Rights Reserved.
-        </div>
+        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn"><i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Chat on WhatsApp</a>
+        <div class="copyright">&copy; 2026 GameFlex Store. All Rights Reserved.</div>
     </footer>
 
-    <!-- 🚀 NEW: FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Chat with us on WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Chat with us on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
 
     <!-- Intersection Observer Script for Scroll Animations -->
     <script>
@@ -659,16 +636,15 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, doc, getDoc, setDoc, addDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, getDoc, getDocs, setDoc, addDoc, serverTimestamp, increment, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0", 
             authDomain: "gameflexstore-d20da.firebaseapp.com", 
             projectId: "gameflexstore-d20da",
-            storageBucket: "gameflexstore-d20da.firebasestorage.app",
-            messagingSenderId: "108900412542",
-            appId: "1:108900412542:web:8a2bd0114fc2037164fc2f"
+            storageBucket: "gameflexstore-d20da.firebasestorage.app"
         };
+        
         const app = initializeApp(firebaseConfig); 
         const auth = getAuth(app);
         window.db = getFirestore(app);
@@ -676,9 +652,7 @@
         window.currentUser = null;
 
         const savedUserName = localStorage.getItem('gf_logged_in_user');
-        if(savedUserName) {
-            document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`;
-        }
+        if(savedUserName) { document.getElementById('authBtn').innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${savedUserName}</span>`; }
 
         setPersistence(auth, browserLocalPersistence).then(() => {
             onAuthStateChanged(auth, (user) => {
@@ -701,70 +675,105 @@
             });
         });
 
+        // 🚀 NEW: REFERRAL ONBOARDING SUBMIT LOGIC 🚀
+        document.getElementById('onboardingForm').onsubmit = async (e) => {
+            e.preventDefault();
+            if (!window.currentUser) return;
+            const name = document.getElementById('obName').value;
+            const refCode = document.getElementById('obReferral').value.trim().toUpperCase();
+            const selectedRadio = document.querySelector('input[name="gamerType"]:checked');
+            if (!selectedRadio) { alert("Please select your gamer type!"); return; }
+            
+            const submitBtn = document.querySelector('.onboarding-submit');
+            submitBtn.innerText = "Saving & Checking Code..."; submitBtn.disabled = true;
+
+            try {
+                let initialTokens = 0;
+                let usedRefCode = "";
+
+                // CHECK REFERRAL CODE IN DATABASE
+                if (refCode !== "") {
+                    const usersRef = collection(window.db, "users");
+                    const q = query(usersRef, where("referralCode", "==", refCode));
+                    const querySnapshot = await getDocs(q);
+                    
+                    if (!querySnapshot.empty) {
+                        const referrerDoc = querySnapshot.docs[0];
+                        const referrerId = referrerDoc.id;
+                        
+                        // Increment Referrer's Stats
+                        await setDoc(doc(window.db, "users", referrerId), {
+                            tokens: increment(50),
+                            referralCount: increment(1),
+                            referralTokensEarned: increment(50)
+                        }, { merge: true });
+
+                        // Give New User 50 Bonus Tokens
+                        initialTokens += 50;
+                        usedRefCode = refCode;
+                        alert("🎉 Referral Code Applied! You got 50 Bonus Tokens!");
+                    } else {
+                        alert("⚠️ Invalid Referral Code. Proceeding without bonus.");
+                    }
+                }
+
+                // SAVE NEW USER DATA
+                await setDoc(doc(window.db, "users", window.currentUser.uid), {
+                    name: name, 
+                    email: window.currentUser.email, 
+                    gamerType: selectedRadio.value, 
+                    tokens: initialTokens, 
+                    referredBy: usedRefCode,
+                    lastLogin: serverTimestamp(), 
+                    createdAt: serverTimestamp() 
+                }, { merge: true });
+
+                document.getElementById('onboardingOverlay').style.display = 'none';
+                alert(`Welcome aboard, ${name}! Your profile is ready.`);
+                window.location.reload();
+
+            } catch (err) { 
+                alert("Error saving profile: " + err.message); 
+            } finally {
+                submitBtn.innerText = "Save & Start Gaming"; submitBtn.disabled = false;
+            }
+        };
+
         // FETCH ALL GAMES FOR SEARCH, BUT FILTER PS FOR GRID
         onSnapshot(query(collection(window.db, "games"), orderBy("addedOn", "desc")), (snapshot) => {
-            window.allLivePsGames = [];
-            window.liveGamesDatabase = []; 
+            window.allLivePsGames = []; window.liveGamesDatabase = []; 
             const psGrid = document.getElementById('psGamesGrid');
-            
-            if(snapshot.empty) {
-                psGrid.innerHTML = `<p style="color:gray; grid-column:1/-1; text-align:center; margin-top:20px;">No PS games found in database.</p>`;
-                return;
-            }
+            if(snapshot.empty) { psGrid.innerHTML = `<p style="color:gray; grid-column:1/-1; text-align:center; margin-top:20px;">No PS games found in database.</p>`; return; }
 
             snapshot.forEach((gameDoc) => {
                 const game = { id: gameDoc.id, ...gameDoc.data() };
-                
-                // 🚀 FIX FOR SEARCH DROPDOWN TO ALWAYS SHOW NORMAL PRICE
-                let rent = game.rentalPrice || game.rentPrice || 0;
-                let perm = game.permanentPrice || game.permPrice || 0;
+                let rent = game.rentalPrice || game.rentPrice || 0; let perm = game.permanentPrice || game.permPrice || 0;
                 let searchPrice = game.platform === 'PC' ? `₹${game.originalPrice || game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
-                window.liveGamesDatabase.push({
-                    title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
-                });
+                window.liveGamesDatabase.push({ title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` });
 
-                if (game.platform === 'PS5' || game.platform === 'PS4' || game.platform === 'PS4/PS5') {
-                    window.allLivePsGames.push(game);
-                }
+                if (game.platform === 'PS5' || game.platform === 'PS4' || game.platform === 'PS4/PS5') { window.allLivePsGames.push(game); }
             });
             window.renderPsGrid();
         });
 
         window.renderPsGrid = function() {
-            const psGrid = document.getElementById('psGamesGrid');
-            psGrid.innerHTML = '';
-
+            const psGrid = document.getElementById('psGamesGrid'); psGrid.innerHTML = '';
             let filtered = window.allLivePsGames;
-            
             if (window.activeCategoryFilter !== 'All') {
-                filtered = filtered.filter(g => {
-                    if (g.categories && Array.isArray(g.categories)) return g.categories.includes(window.activeCategoryFilter);
-                    return false;
-                });
+                filtered = filtered.filter(g => { if (g.categories && Array.isArray(g.categories)) return g.categories.includes(window.activeCategoryFilter); return false; });
             }
-
-            if(filtered.length === 0) {
-                psGrid.innerHTML = `<p style="color:gray; grid-column:1/-1; text-align:center; margin-top:20px;">No PS games found in this category.</p>`;
-                return;
-            }
+            if(filtered.length === 0) { psGrid.innerHTML = `<p style="color:gray; grid-column:1/-1; text-align:center; margin-top:20px;">No PS games found in this category.</p>`; return; }
 
             let delay = 0.1;
             filtered.forEach(game => {
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-                
-                // Remove 'Offer' from categories so it doesn't show up here
                 let cleanCategories = game.categories ? game.categories.filter(c => c !== "Offer") : [];
                 let genresText = cleanCategories.length > 0 ? cleanCategories.join(' • ') : 'Action';
                 
-                // 🚀 FIX: IGNORE OFFERS COMPLETELY AND SHOW CLEAN RENTAL PRICE 🚀
-                let pRent = game.rentalPrice || game.rentPrice || 0;
-                let pPerm = game.permanentPrice || game.permPrice || 0;
-                if (pPerm === 0 && game.platform !== 'PC') {
-                    pPerm = game.price || 0; 
-                }
+                let pRent = game.rentalPrice || game.rentPrice || 0; let pPerm = game.permanentPrice || game.permPrice || 0;
+                if (pPerm === 0 && game.platform !== 'PC') { pPerm = game.price || 0; }
 
-                // 🚀 FIX: NEW CLEAN BUTTONS FOR RENT AND BUY
                 psGrid.innerHTML += `
                 <div class="product-card animate-fade-up" style="animation-delay: ${delay}s;" onclick="window.location.href='game-details.html?id=${game.id}'">
                     <div class="product-img" style="background-image: url('${game.image}');"></div>
@@ -774,25 +783,13 @@
                             <div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>
                         </div>
                         <div class="product-title">${game.title}</div>
-                        
                         <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
-                            <div style="display:flex; flex-direction:column; gap:2px;">
-                                <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
-                                <div><span class="current-price">₹${pRent}</span></div>
-                            </div>
-                            <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
-                                <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
-                                <span class="current-price" style="color:white; text-shadow:none;">₹${pPerm}</span>
-                            </div>
+                            <div style="display:flex; flex-direction:column; gap:2px;"><span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span><div><span class="current-price">₹${pRent}</span></div></div>
+                            <div style="display:flex; flex-direction:column; gap:2px; text-align:right;"><span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span><span class="current-price" style="color:white; text-shadow:none;">₹${pPerm}</span></div>
                         </div>
-                        
                         <div class="action-buttons-row">
-                            <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${pRent}, '${game.image}')">
-                                <i class="fa-solid fa-clock"></i> Rent
-                            </button>
-                            <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')">
-                                <i class="fa-solid fa-cart-shopping"></i> Buy
-                            </button>
+                            <button class="btn-rent" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Rent)', ${pRent}, '${game.image}')"><i class="fa-solid fa-clock"></i> Rent</button>
+                            <button class="btn-buy" onclick="event.stopPropagation(); addToCart('${escapedTitle} (Buy)', ${pPerm}, '${game.image}')"><i class="fa-solid fa-cart-shopping"></i> Buy</button>
                         </div>
                     </div>
                 </div>`;
@@ -803,32 +800,21 @@
 
         window.setCategoryFilter = function(category, element) {
             document.querySelectorAll('.sub-cat-card').forEach(b => b.classList.remove('active'));
-            element.classList.add('active');
-            window.activeCategoryFilter = category;
-            window.renderPsGrid();
+            element.classList.add('active'); window.activeCategoryFilter = category; window.renderPsGrid();
         };
 
-        window.getDoc = getDoc;
-        window.doc = doc;
-        window.setDoc = setDoc;
-        window.addDoc = addDoc;
-        window.collection = collection;
-        window.serverTimestamp = serverTimestamp;
-        window.increment = increment;
+        window.getDoc = getDoc; window.doc = doc; window.setDoc = setDoc; window.addDoc = addDoc; window.collection = collection; window.serverTimestamp = serverTimestamp; window.increment = increment;
 
     </script>
 
     <!-- SEARCH & CART LOGIC -->
     <script>
-        // GLOBAL SEARCH BAR LOGIC
         const searchInput = document.getElementById('gameSearch');
         const searchDropdown = document.getElementById('searchDropdown');
 
         searchInput.addEventListener('input', function() {
-            const query = this.value.toLowerCase().trim();
-            searchDropdown.innerHTML = ''; 
+            const query = this.value.toLowerCase().trim(); searchDropdown.innerHTML = ''; 
             if (query.length > 0) {
-                // Searches ALL games (PC + PS5)
                 const filteredGames = window.liveGamesDatabase.filter(game => game.title.toLowerCase().includes(query) && game.platform !== 'PC');
                 searchDropdown.style.display = 'block';
                 if (filteredGames.length > 0) {
@@ -841,11 +827,8 @@
             } else { searchDropdown.style.display = 'none'; }
         });
 
-        document.addEventListener('click', function(event) { 
-            if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; 
-        });
+        document.addEventListener('click', function(event) { if (!searchInput.contains(event.target) && !searchDropdown.contains(event.target)) searchDropdown.style.display = 'none'; });
 
-        // CART LOGIC
         window.toggleCart = () => { document.getElementById('cartSidebar').classList.toggle('open'); document.getElementById('cartOverlay').classList.toggle('active'); };
         
         window.addToCart = (title, price, imgUrl) => {
@@ -866,7 +849,6 @@
             document.getElementById('cartBadgeCount').innerText = qty; document.getElementById('cartTotalPrice').innerText = '₹' + finalTotal.toLocaleString('en-IN');
         };
 
-        // --- PAYMENT & COUPON LOGIC ---
         window.appliedDiscount = 0; 
         window.activeCouponCode = "";
         const MY_WHATSAPP_NUMBER = "919310885368"; 
@@ -874,11 +856,7 @@
 
         window.proceedToPayment = async function() {
             if (window.cartArray.length === 0) { alert("Cart is empty!"); return; }
-            if (!window.currentUser) { 
-                alert("Please login first to proceed to checkout!"); 
-                document.getElementById('authBtn').click(); 
-                return; 
-            }
+            if (!window.currentUser) { alert("Please login first to proceed to checkout!"); document.getElementById('authBtn').click(); return; }
 
             const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
             const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
@@ -892,13 +870,7 @@
             document.getElementById('paymentOverlay').style.display = 'flex';
         };
 
-        window.closePaymentModal = function() {
-            document.getElementById('paymentOverlay').style.display = 'none';
-        };
-
-        window.applyCoupon = async function() {
-            // PS5 wale code me humesha apply nahi karte frontend pe coupon until cart page, but logic included here just in case.
-        };
+        window.closePaymentModal = function() { document.getElementById('paymentOverlay').style.display = 'none'; };
 
         window.confirmAndSendWhatsApp = async function() {
             if (!window.currentUser) return;
@@ -906,8 +878,7 @@
             const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
             
             const confirmBtn = document.getElementById('confirmPaymentBtn');
-            confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            confirmBtn.disabled = true; confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
 
             let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
 
@@ -933,16 +904,10 @@
                 const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${window.currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
                 const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-                window.cartArray = []; localStorage.removeItem('gf_cart'); 
-                window.appliedDiscount = 0; 
-                window.activeCouponCode = "";
-                window.updateCartUI(); window.closePaymentModal();
-                window.open(whatsappUrl, '_blank');
-            } catch (error) { 
-                console.error("Booking Error: ", error); alert("Failed to save booking. Please try again."); 
-            } finally { 
-                confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; 
-            }
+                window.cartArray = []; localStorage.removeItem('gf_cart'); window.appliedDiscount = 0; window.activeCouponCode = "";
+                window.updateCartUI(); window.closePaymentModal(); window.open(whatsappUrl, '_blank');
+            } catch (error) { console.error("Booking Error: ", error); alert("Failed to save booking. Please try again."); 
+            } finally { confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; }
         };
 
         window.updateCartUI();
