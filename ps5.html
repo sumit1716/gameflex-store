@@ -715,8 +715,8 @@
             snapshot.forEach((gameDoc) => {
                 const game = { id: gameDoc.id, ...gameDoc.data() };
                 
-                // 🚀 FIX FOR SEARCH DROPDOWN TO ALWAYS SHOW ORIGINAL/NORMAL PRICE
-                let rent = game.originalPrice ? game.originalPrice : (game.rentalPrice || game.rentPrice || 0);
+                // 🚀 FIX FOR SEARCH DROPDOWN TO ALWAYS SHOW NORMAL PRICE
+                let rent = game.rentalPrice || game.rentPrice || 0;
                 let perm = game.permanentPrice || game.permPrice || 0;
                 let searchPrice = game.platform === 'PC' ? `₹${game.originalPrice || game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
@@ -757,9 +757,12 @@
                 let cleanCategories = game.categories ? game.categories.filter(c => c !== "Offer") : [];
                 let genresText = cleanCategories.length > 0 ? cleanCategories.join(' • ') : 'Action';
                 
-                // 🚀 FIX: IGNORE OFFERS COMPLETELY ON THIS PAGE
-                let pRent = game.originalPrice ? game.originalPrice : (game.rentalPrice || game.rentPrice || 0);
+                // 🚀 FIX: IGNORE OFFERS COMPLETELY AND SHOW CLEAN RENTAL PRICE 🚀
+                let pRent = game.rentalPrice || game.rentPrice || 0;
                 let pPerm = game.permanentPrice || game.permPrice || 0;
+                if (pPerm === 0 && game.platform !== 'PC') {
+                    pPerm = game.price || 0; 
+                }
 
                 // 🚀 FIX: NEW CLEAN BUTTONS FOR RENT AND BUY
                 psGrid.innerHTML += `
@@ -775,7 +778,7 @@
                         <div style="display:flex; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:12px;">
                             <div style="display:flex; flex-direction:column; gap:2px;">
                                 <span style="font-size:9px; font-weight:700; color:#888;">RENT (1 MONTH)</span>
-                                <span class="current-price">₹${pRent}</span>
+                                <div><span class="current-price">₹${pRent}</span></div>
                             </div>
                             <div style="display:flex; flex-direction:column; gap:2px; text-align:right;">
                                 <span style="font-size:9px; font-weight:700; color:#888;">PERMANENT BUY</span>
