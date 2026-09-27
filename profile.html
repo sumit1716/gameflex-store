@@ -5,60 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Profile - GameFlex Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Added Orbitron for Gaming Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Base Colors */
             --dark-bg: #05070c;
             --card-bg: #12141a;
             --border-dark: #2a2a30;
             --text-light: #ffffff;
             --text-gray: #a3a3a3;
             --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            
-            /* Theme Variables (Will dynamically change via JS) */
-            --theme-color: #e31825; /* Defaults to Red */
+            --theme-color: #e31825;
             --theme-gradient: linear-gradient(135deg, #e31825, #4a0000);
             --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
         }
 
-        /* Dynamic Theme Classes */
-        body.theme-pc { 
-            --theme-color: #e31825; 
-            --theme-gradient: linear-gradient(135deg, #e31825, #4a0000); 
-            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
-        }
-        body.theme-ps5 { 
-            --theme-color: #1f6aff; 
-            --theme-gradient: linear-gradient(135deg, #1f6aff, #09132b); 
-            --theme-glow: 0 0 15px rgba(31, 106, 255, 0.4);
-        }
+        body.theme-pc { --theme-color: #e31825; --theme-gradient: linear-gradient(135deg, #e31825, #4a0000); --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4); }
+        body.theme-ps5 { --theme-color: #1f6aff; --theme-gradient: linear-gradient(135deg, #1f6aff, #09132b); --theme-glow: 0 0 15px rgba(31, 106, 255, 0.4); }
 
         html { scroll-behavior: smooth; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; }
 
-        /* 🚀 Custom Gaming Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: var(--theme-gradient); border-radius: 10px; }
 
-        /* 🚀 Smooth Fade-In-Up Animations */
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
+        .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; } .delay-4 { animation-delay: 0.4s; } .delay-5 { animation-delay: 0.5s; }
 
-        /* Navbar */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(5, 7, 12, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dark); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        
-        /* 🎨 Stylish Dynamic Logo Design */
         .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .logo-icon { width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid var(--theme-color); padding: 5px; transition: var(--hover-transition); box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05); }
         .logo:hover .logo-icon { transform: scale(1.05) rotate(5deg); box-shadow: var(--theme-glow), inset 0 0 10px rgba(255, 255, 255, 0.1); }
@@ -71,32 +47,25 @@
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; position: relative; }
         .nav-links li a:hover { color: var(--theme-color); text-shadow: var(--theme-glow); }
         .nav-actions { display: flex; align-items: center; gap: 15px; position: relative; }
-        
         .icon-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; position: relative; transition: 0.3s; margin-right: 5px; }
         .icon-btn:hover { color: var(--theme-color); filter: drop-shadow(0 0 8px var(--theme-color)); transform: scale(1.1); }
         .cart-badge { position: absolute; top: -5px; right: -10px; background: var(--theme-color); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        
         .login-btn { background: transparent; border: 1px solid var(--theme-color); color: white; padding: 10px 18px; border-radius: 5px; font-weight: 600; cursor: pointer; transition: var(--hover-transition); display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .login-btn:hover { background: var(--theme-color); transform: translateY(-2px); box-shadow: var(--theme-glow); }
 
-        /* Profile Layout */
         .profile-container { display: flex; gap: 30px; padding: 40px 5%; align-items: flex-start; max-width: 1400px; margin: 0 auto; }
         
-        /* Left Sidebar */
         .profile-sidebar { width: 300px; background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px 20px; flex-shrink: 0; position: sticky; top: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .user-avatar-wrapper { text-align: center; margin-bottom: 20px; position: relative; }
         .user-avatar { width: 110px; height: 110px; border-radius: 50%; background: var(--theme-gradient); border: 3px solid var(--theme-color); display: inline-flex; justify-content: center; align-items: center; font-size: 45px; color: white; box-shadow: var(--theme-glow); transition: 0.4s; }
         .profile-sidebar:hover .user-avatar { transform: scale(1.05) rotate(5deg); }
-        
         .user-name-wrapper { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 5px; }
         .user-name { font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; }
         .edit-profile-btn { background: rgba(255,255,255,0.05); border: 1px solid transparent; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--text-gray); cursor: pointer; font-size: 12px; transition: 0.3s; }
         .edit-profile-btn:hover { color: white; background: var(--theme-color); box-shadow: var(--theme-glow); transform: rotate(15deg); }
-        
         .user-email { font-size: 12px; color: var(--text-gray); text-align: center; margin-bottom: 15px; }
         .gamer-tag { display: table; background: rgba(255,255,255,0.05); border: 1px solid var(--theme-color); color: var(--theme-color); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin: 0 auto 30px auto; letter-spacing: 1px; box-shadow: inset 0 0 10px rgba(255,255,255,0.02); }
 
-        /* 🚀 NEW: REFERRAL SECTION STYLES 🚀 */
         .referral-box { background: rgba(0,0,0,0.3); border: 1px dashed var(--theme-color); padding: 15px; border-radius: 10px; margin-bottom: 25px; text-align: center; transition: 0.3s; }
         .referral-box:hover { background: rgba(0,0,0,0.5); box-shadow: inset 0 0 15px rgba(255,255,255,0.05); border-style: solid; }
         .ref-label { font-size: 10px; font-weight: 800; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
@@ -113,44 +82,31 @@
         .sidebar-menu li a i { font-size: 16px; width: 20px; text-align: center; transition: 0.3s; }
         .sidebar-menu li a.active, .sidebar-menu li a:hover { background: rgba(255,255,255,0.05); color: var(--text-light); }
         .sidebar-menu li a.active i, .sidebar-menu li a:hover i { color: var(--theme-color); filter: drop-shadow(0 0 5px var(--theme-color)); transform: scale(1.1); }
-        
         .logout-btn-side { border-top: 1px solid rgba(255,255,255,0.05); margin-top: 15px; padding-top: 15px; }
         .logout-btn-side a { color: #ff4444 !important; }
         .logout-btn-side a:hover { background: rgba(255, 68, 68, 0.1) !important; color: white !important; }
 
-        /* Right Content Area */
         .profile-main { flex: 1; min-width: 0; }
-
-        /* Dynamic Banner */
         .profile-banner { position: relative; width: 100%; height: 240px; border-radius: 16px; overflow: hidden; background: var(--theme-gradient); display: flex; align-items: center; padding: 0 40px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
         .banner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(5,7,12,0.95) 0%, rgba(5,7,12,0.7) 40%, rgba(5,7,12,0) 100%); z-index: 1; }
-        
-        /* FIXED BANNER IMAGE FIT */
         .banner-img { position: absolute; right: 0; top: 0; width: 60%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.8; -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%); mask-image: linear-gradient(to left, black 50%, transparent 100%); transition: 1s ease; }
         .profile-banner:hover .banner-img { transform: scale(1.05); opacity: 1; }
-        
         .banner-content { position: relative; z-index: 3; }
         .welcome-text { font-size: 14px; color: #ccc; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; text-shadow: 1px 1px 5px black;}
         .banner-name { font-family: 'Orbitron', sans-serif; font-size: 42px; font-weight: 900; color: white; margin-bottom: 15px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); text-transform: uppercase; letter-spacing: 1px;}
-        
-        /* Stats Box inside Banner */
         .banner-stats { display: flex; gap: 20px; }
         .b-stat { background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); padding: 12px 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .b-stat:hover { background: rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.2); transform: translateY(-3px); }
         .b-stat span { display: block; font-size: 10px; color: #ccc; margin-bottom: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;}
         .b-stat h4 { font-family: 'Orbitron', sans-serif; font-size: 18px; color: white; font-weight: 800; }
 
-        /* Section Grids */
         .dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 30px; }
-        
         .dash-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; transition: var(--hover-transition); box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
         .dash-card:hover { border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-        
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;}
         .card-title { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;}
         .card-title i { color: var(--theme-color); font-size: 20px; filter: drop-shadow(0 0 5px var(--theme-color)); }
 
-        /* Tokens Card */
         .token-display { display: flex; align-items: center; gap: 20px; }
         .token-icon { width: 65px; height: 65px; background: rgba(255, 215, 0, 0.05); border: 2px solid #FFD700; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); transition: 0.4s; }
         .dash-card:hover .token-icon { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
@@ -159,11 +115,9 @@
         .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 20px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.02); }
         .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #d4af37, #FFD700); border-radius: 4px; width: 0%; transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 0 15px #FFD700; }
 
-        /* Orders List */
         .orders-list { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
         .orders-list::-webkit-scrollbar { width: 5px; } 
         .orders-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-        
         .order-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; transition: var(--hover-transition); cursor: pointer;}
         .order-item:hover { background: rgba(255,255,255,0.05); border-color: var(--theme-color); transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .o-date { font-size: 11px; color: var(--text-gray); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -171,7 +125,6 @@
         .o-price { font-size: 16px; font-weight: 900; color: var(--theme-color); text-align: right; margin-bottom: 5px;}
         .o-status { font-size: 10px; color: #00ff00; font-weight: 800; background: rgba(0,255,0,0.1); padding: 4px 10px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px; text-transform: uppercase;}
 
-        /* My Library Grid */
         .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
         .lib-card { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); aspect-ratio: 3/4; cursor: pointer; transition: var(--hover-transition); background: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .lib-card:hover { border-color: var(--theme-color); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.1) inset; z-index: 5;}
@@ -183,7 +136,6 @@
         .download-btn { font-size: 11px; color: var(--theme-color); font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 6px; text-transform: uppercase; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 4px; justify-content: center; border: 1px solid rgba(255,255,255,0.1);}
         .download-btn:hover { background: var(--theme-color); color: white; }
 
-        /* Cart Sidebar Styles */
         .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; display: none; opacity: 0; transition: 0.4s ease; backdrop-filter: blur(5px); }
         .cart-overlay.active { display: block; opacity: 1; }
         .cart-sidebar { position: fixed; top: 0; right: -400px; width: 350px; max-width: 100%; height: 100vh; background: rgba(18, 20, 26, 0.98); z-index: 1000; box-shadow: -10px 0 40px rgba(0,0,0,0.8); transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
@@ -192,99 +144,59 @@
         .close-cart { background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
         .close-cart:hover { color: var(--theme-color); transform: rotate(90deg); }
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .cart-item { display: flex; gap: 15px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); position: relative; transition: 0.3s; }
-        .cart-item:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); transform: translateX(-5px); }
-        .cart-item-img { width: 60px; height: 60px; background-size: cover; background-position: center; border-radius: 5px; }
-        .cart-item-details { flex: 1; }
-        .cart-item-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 5px; line-height: 1.3; }
-        .cart-item-price { font-size: 15px; font-weight: 800; color: var(--theme-color); }
-        .remove-item { background: none; border: none; color: var(--text-gray); cursor: pointer; font-size: 15px; position: absolute; right: 12px; top: 12px; transition: 0.3s;}
-        .remove-item:hover { color: var(--theme-color); transform: scale(1.2); }
         .cart-footer { padding: 20px; border-top: 1px solid var(--border-dark); background: rgba(8, 11, 16, 0.9); }
         .checkout-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 800; cursor: pointer; transition: var(--hover-transition); text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .checkout-btn:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: var(--theme-glow); }
 
-        /* EDIT PROFILE MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .modal-content { background: var(--card-bg); border: 1px solid var(--border-dark); border-radius: 16px; padding: 35px; width: 420px; max-width: 90%; position: relative; box-shadow: 0 15px 50px rgba(0,0,0,0.6); text-align: left; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .close-modal { position: absolute; top: 18px; right: 20px; background: none; border: none; color: var(--text-gray); font-size: 22px; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: white; transform: rotate(90deg); }
         .modal-content h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; margin-bottom: 25px; color: white; text-align: center; text-transform: uppercase; letter-spacing: 1px;}
-        
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-gray); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
         .form-group input, .form-group select { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); color: white; padding: 14px; border-radius: 8px; outline: none; font-size: 14px; font-weight: 600; font-family: inherit; transition: 0.3s; }
         .form-group input:focus, .form-group select:focus { border-color: var(--theme-color); background: rgba(0,0,0,0.5); box-shadow: 0 0 10px rgba(255,255,255,0.05); }
-        
         .submit-btn { width: 100%; background: var(--theme-color); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
         .submit-btn:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: var(--theme-glow); }
 
-        /* Footer & Contact Us */
         .footer-section { background: #06080d; padding: 60px 5% 40px 5%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; margin-top: 40px;}
         .footer-section h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 15px; color: white; text-transform: uppercase; letter-spacing: 1px; }
         .footer-section p { color: var(--text-gray); font-size: 15px; margin-bottom: 30px; max-width: 550px; margin-left: auto; margin-right: auto; line-height: 1.6; }
         .wa-contact-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 14px 32px; border-radius: 30px; font-weight: 800; text-decoration: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); text-transform: uppercase; letter-spacing: 0.5px; }
         .wa-contact-btn:hover { background: #1ebe5d; transform: translateY(-4px) scale(1.03); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6); }
         .copyright { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 13px; color: #666; }
-        
         .floating-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; text-decoration: none; box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6); z-index: 1000; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .floating-wa:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8); }
 
-        /* ========================================= */
-        /* 📱 PRO MOBILE LAYOUT (Safely Enhanced) 📱 */
-        /* ========================================= */
         @media (max-width: 768px) {
-            
-            /* Navbar Mobile Grid */
-            .navbar { 
-                display: grid; 
-                grid-template-columns: 1fr auto; 
-                grid-template-areas: "logo actions" "links links"; 
-                gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);
-            }
+            .navbar { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "logo actions" "links links"; gap: 12px; padding: 12px 5% 0 5%; background: rgba(11,12,16,0.98);}
             .logo { grid-area: logo; gap: 8px; }
             .logo-icon { width: 32px; height: 32px; padding: 3px; border-radius: 8px; }
             .logo-text .top { font-size: 16px; }
             .logo-text .bottom { font-size: 8px; letter-spacing: 2px; }
-
             .nav-actions { grid-area: actions; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
             .hide-mobile { display: none; }
             .login-btn, .icon-btn { padding: 8px; border-radius: 50%; width: 35px; height: 35px; justify-content: center; font-size: 14px; box-shadow: none; }
             .login-btn i { margin: 0; }
-            
             .nav-links { grid-area: links; display: flex; flex-direction: row; position: static; width: 100%; overflow-x: auto; padding: 5px 0 10px 0; border-top: 1px solid rgba(255,255,255,0.05); gap: 20px; -webkit-overflow-scrolling: touch;}
             .nav-links::-webkit-scrollbar { display: none; }
             .nav-links li { flex: 0 0 auto; width: auto; }
-
-            /* Profile Structure */
             .profile-container { flex-direction: column; padding: 20px 5%; gap: 25px; margin-bottom: 20px;}
             .profile-sidebar { width: 100%; position: static; padding: 25px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-            
-            /* Banner Adjustments */
             .profile-banner { height: 200px; padding: 0 20px; margin-bottom: 20px; }
             .banner-name { font-size: 26px; margin-bottom: 10px; }
             .welcome-text { font-size: 12px; }
             .banner-stats { gap: 12px; }
             .b-stat { padding: 10px 12px; }
             .b-stat h4 { font-size: 16px; }
-
-            /* Dashboard Grids */
             .dashboard-grid { grid-template-columns: 1fr; gap: 20px; margin-bottom: 20px;}
             .dash-card { padding: 20px; }
-            
             .library-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            
-            /* Mobile Touch Ripples */
-            .lib-card:active, .order-item:active, .dash-card:active, .b-stat:active {
-                transform: scale(0.97) !important;
-                border-color: var(--theme-color) !important;
-                transition: 0.1s !important;
-            }
-            .lib-card:hover, .order-item:hover, .dash-card:hover { transform: none; box-shadow: none; } /* disable hover lift */
-
+            .lib-card:active, .order-item:active, .dash-card:active, .b-stat:active { transform: scale(0.97) !important; border-color: var(--theme-color) !important; transition: 0.1s !important; }
+            .lib-card:hover, .order-item:hover, .dash-card:hover { transform: none; box-shadow: none; }
             .cart-sidebar { width: 100%; right: -100%; }
             .modal-content { width: 95%; padding: 25px 20px; }
-
             .footer-section { padding: 40px 5% 30px 5%; }
             .footer-section h3 { font-size: 20px; }
             .wa-contact-btn { font-size: 14px; padding: 12px 25px; }
@@ -294,7 +206,6 @@
 </head>
 <body id="profileBody" class="theme-pc">
 
-    <!-- Navbar -->
     <nav class="navbar">
         <a href="index.html" class="logo">
             <div class="logo-icon"><img src="logo.png" alt="Logo"></div>
@@ -314,7 +225,6 @@
         </ul>
     </nav>
 
-    <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
@@ -328,13 +238,11 @@
         </div>
     </div>
 
-    <!-- Copy Popup Notification -->
     <div id="copyPopup" class="copy-popup"><i class="fa-solid fa-check-circle"></i> Referral Code Copied!</div>
 
     <!-- MAIN PROFILE LAYOUT -->
     <div class="profile-container">
         
-        <!-- Sidebar -->
         <aside class="profile-sidebar animate-fade-up">
             <div class="user-avatar-wrapper">
                 <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
@@ -346,7 +254,7 @@
             <p class="user-email" id="sideEmail">...</p>
             <div class="gamer-tag" id="sideGamerTag">Gamer</div>
 
-            <!-- 🚀 NEW: DYNAMIC REFERRAL CODE SECTION 🚀 -->
+            <!-- 🚀 REFERRAL CODE SECTION 🚀 -->
             <div class="referral-box">
                 <span class="ref-label">Your Referral Code</span>
                 <div class="ref-code-container">
@@ -364,33 +272,20 @@
             </ul>
         </aside>
 
-        <!-- Right Content -->
         <main class="profile-main">
-            
-            <!-- Dynamic Banner -->
             <div class="profile-banner animate-fade-up delay-1">
                 <div class="banner-overlay"></div>
-                <!-- Banner Image Fix -->
                 <img id="bannerImage" src="image1.png.png" alt="Background" class="banner-img" style="display: none;">
-                
                 <div class="banner-content">
                     <div class="welcome-text">Welcome Back,</div>
                     <h1 class="banner-name" id="bannerName">Loading Player...</h1>
-                    
                     <div class="banner-stats">
-                        <div class="b-stat">
-                            <span>System Joined</span>
-                            <h4 id="statDate">-</h4>
-                        </div>
-                        <div class="b-stat">
-                            <span>Total Bounties</span>
-                            <h4 id="statOrders">0</h4>
-                        </div>
+                        <div class="b-stat"><span>System Joined</span><h4 id="statDate">-</h4></div>
+                        <div class="b-stat"><span>Total Bounties</span><h4 id="statOrders">0</h4></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Dashboard Grid -->
             <div class="dashboard-grid">
                 
                 <!-- Tokens Card -->
@@ -402,7 +297,7 @@
                         <div class="token-icon"><i class="fa-solid fa-coins"></i></div>
                         <div>
                             <div class="token-amount" id="displayTokens">0</div>
-                            <div class="token-sub">Tokens Available</div>
+                            <div class="token-sub">Total Tokens Available</div>
                         </div>
                     </div>
                     <div class="progress-bar-bg">
@@ -411,20 +306,37 @@
                     <div style="font-size: 11px; font-weight:bold; color: var(--text-gray); margin-top: 10px; text-align: right;" id="tokenProgressText">0 / 500 XP</div>
                 </div>
 
-                <!-- Recent Orders -->
-                <div class="dash-card animate-fade-up delay-3" id="ordersSection">
+                <!-- 🚀 NEW: REFERRAL STATS CARD 🚀 -->
+                <div class="dash-card animate-fade-up delay-3">
                     <div class="card-header">
-                        <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Transaction Log</div>
+                        <div class="card-title"><i class="fa-solid fa-users"></i> Referral Network</div>
                     </div>
-                    <div class="orders-list" id="ordersContainer">
-                        <p style="color: gray; font-size: 13px; text-align: center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Accessing logs...</p>
+                    <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                        <div style="flex:1; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px; border: 1px solid var(--border-dark); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 900; color: white; text-shadow: 0 0 10px rgba(255,255,255,0.2);" id="statRefCount">0</div>
+                            <div style="font-size: 10px; color: var(--text-gray); text-transform: uppercase; font-weight: 700; margin-top: 5px; letter-spacing: 0.5px;">Friends Invited</div>
+                        </div>
+                        <div style="flex:1; background: rgba(255,215,0,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.2); text-align: center;">
+                            <div style="font-size: 28px; font-weight: 900; color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.3);" id="statRefTokens">0</div>
+                            <div style="font-size: 10px; color: var(--text-gray); text-transform: uppercase; font-weight: 700; margin-top: 5px; letter-spacing: 0.5px;">Tokens Earned</div>
+                        </div>
                     </div>
+                    <p style="font-size: 11px; color: var(--text-gray); text-align: center; font-weight: 600;">Earnings from referrals are added directly to your Total Tokens.</p>
                 </div>
-
             </div>
 
-            <!-- My Library (Purchased Games) -->
-            <div class="dash-card animate-fade-up delay-4" id="librarySection">
+            <!-- Recent Orders -->
+            <div class="dash-card animate-fade-up delay-4" id="ordersSection" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Transaction Log</div>
+                </div>
+                <div class="orders-list" id="ordersContainer">
+                    <p style="color: gray; font-size: 13px; text-align: center; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Accessing logs...</p>
+                </div>
+            </div>
+
+            <!-- My Library -->
+            <div class="dash-card animate-fade-up delay-5" id="librarySection">
                 <div class="card-header">
                     <div class="card-title"><i class="fa-solid fa-gamepad"></i> Digital Vault</div>
                     <span style="font-size: 12px; font-weight:700; color: var(--text-gray); text-transform:uppercase;">Authorized Access</span>
@@ -437,29 +349,20 @@
         </main>
     </div>
 
-    <!-- 🚀 NEW: FOOTER CONTACT SECTION -->
     <footer class="footer-section">
         <h3>Need Network Support?</h3>
         <p>If you face issues with game access or credentials, ping our 24/7 network admins instantly.</p>
-        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn">
-            <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Initialize Comm
-        </a>
-        <div class="copyright">
-            &copy; 2026 GameFlex Cyber Network. All Rights Reserved.
-        </div>
+        <a href="https://wa.me/919310885368" target="_blank" class="wa-contact-btn"><i class="fa-brands fa-whatsapp" style="font-size:20px;"></i> Initialize Comm</a>
+        <div class="copyright">&copy; 2026 GameFlex Cyber Network. All Rights Reserved.</div>
     </footer>
 
-    <!-- 🚀 NEW: FLOATING WHATSAPP BUTTON -->
-    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Secure Comms">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Secure Comms"><i class="fa-brands fa-whatsapp"></i></a>
 
     <!-- EDIT PROFILE MODAL -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
             <h3><i class="fa-solid fa-user-pen" style="color:var(--theme-color);"></i> Modify Profile</h3>
-            
             <form id="editProfileForm">
                 <div class="form-group">
                     <label>Designation (Name)</label>
@@ -477,7 +380,7 @@
         </div>
     </div>
 
-    <!-- Intersection Observer Script for Scroll Animations -->
+    <!-- Intersection Observer Script -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const animatedElements = document.querySelectorAll('.animate-fade-up');
@@ -489,11 +392,7 @@
                     }
                 });
             }, { threshold: 0.1 });
-
-            animatedElements.forEach(el => {
-                el.style.animationPlayState = 'paused';
-                observer.observe(el);
-            });
+            animatedElements.forEach(el => { el.style.animationPlayState = 'paused'; observer.observe(el); });
         });
     </script>
 
@@ -508,16 +407,13 @@
             authDomain: "gameflexstore-d20da.firebaseapp.com",
             projectId: "gameflexstore-d20da"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Globals
         window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || [];
         let currentUser = null;
 
-        // Authentication State
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -528,9 +424,7 @@
             }
         });
 
-        // 🚀 NEW: Generate Referral Code Logic 🚀
         function generateReferralCode(name, uid) {
-            // Extracts first 3 letters of name + last 4 chars of user UID (Makes it unique)
             const cleanName = name.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
             const uniqueId = uid.substring(uid.length - 4).toUpperCase();
             return `GFX-${cleanName}${uniqueId}`;
@@ -538,81 +432,64 @@
 
         async function loadUserProfile(user) {
             try {
-                // 1. Fetch User Document
                 const userRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userRef);
                 let userData = {};
-
                 const displayName = user.displayName || 'Gamer';
                 
                 if (userSnap.exists()) {
                     userData = userSnap.data();
-                    
-                    // IF user doesn't have a referral code yet in DB, create and save it
                     if(!userData.referralCode) {
                         const newRefCode = generateReferralCode(displayName, user.uid);
                         await setDoc(userRef, { referralCode: newRefCode }, { merge: true });
                         userData.referralCode = newRefCode;
                     }
                 } else {
-                    // New User Fallback
                     const newRefCode = generateReferralCode(displayName, user.uid);
-                    userData = { name: displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0, referralCode: newRefCode };
+                    userData = { name: displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0, referralCode: newRefCode, referralCount: 0, referralTokensEarned: 0 };
                     await setDoc(userRef, userData, { merge: true });
                 }
 
-                // 2. Set Basic Info
                 document.getElementById('sideName').innerText = userData.name || displayName;
                 document.getElementById('bannerName').innerText = userData.name || displayName;
                 document.getElementById('sideEmail').innerText = user.email;
                 
                 const gamerType = userData.gamerType || 'PC Gamer';
                 document.getElementById('sideGamerTag').innerText = gamerType;
-
-                // 🚀 SET REFERRAL CODE ON UI 🚀
                 document.getElementById('userReferralCode').innerText = userData.referralCode || "------";
                 
-                // Pre-fill edit modal
                 document.getElementById('editNameInput').value = userData.name || displayName;
                 document.getElementById('editThemeSelect').value = gamerType === 'Both' ? 'PC Gamer' : gamerType;
 
-                // 3. Dynamic Theming Logic based on Gamer Type
                 const body = document.getElementById('profileBody');
                 const bannerImg = document.getElementById('bannerImage');
                 bannerImg.style.display = 'block';
 
                 if (gamerType === 'PC Gamer' || gamerType === 'Both') {
-                    body.className = 'theme-pc';
-                    bannerImg.src = 'image1.png.png'; 
+                    body.className = 'theme-pc'; bannerImg.src = 'image1.png.png'; 
                 } else {
-                    body.className = 'theme-ps5';
-                    bannerImg.src = 'PS5.png'; 
+                    body.className = 'theme-ps5'; bannerImg.src = 'PS5.png'; 
                 }
 
-                // 4. Set Tokens & Progress
                 const tokens = userData.tokens || 0;
                 document.getElementById('displayTokens').innerText = tokens.toLocaleString('en-IN');
-                
                 let percent = (tokens / 500) * 100;
                 if (percent > 100) percent = 100;
                 
-                setTimeout(() => {
-                    document.getElementById('tokenProgressBar').style.width = percent + '%';
-                }, 500);
+                setTimeout(() => { document.getElementById('tokenProgressBar').style.width = percent + '%'; }, 500);
                 document.getElementById('tokenProgressText').innerText = `${tokens} / 500 XP`;
 
-                // Set Join Date
+                // 🚀 UPDATE REFERRAL STATS 🚀
+                document.getElementById('statRefCount').innerText = userData.referralCount || 0;
+                document.getElementById('statRefTokens').innerText = userData.referralTokensEarned || 0;
+
                 if(userData.lastLogin || userData.createdAt) {
                     let dateObj = userData.createdAt ? userData.createdAt.toDate() : (userData.lastLogin ? userData.lastLogin.toDate() : new Date());
                     document.getElementById('statDate').innerText = dateObj.toLocaleDateString('default', { month: 'short', year: 'numeric' });
                 }
 
-                // 5. Fetch Bookings for this User
                 loadUserBookings(user.uid);
-
-            } catch (error) {
-                console.error("Error loading profile:", error);
-            }
+            } catch (error) { console.error("Error loading profile:", error); }
         }
 
         async function loadUserBookings(uid) {
@@ -620,25 +497,15 @@
                 const q = query(collection(db, "bookings"), where("userId", "==", uid));
                 const querySnapshot = await getDocs(q);
                 
-                let ordersHTML = "";
-                let purchasedGames = new Map(); 
-                let orderCount = 0;
-
+                let ordersHTML = ""; let purchasedGames = new Map(); let orderCount = 0;
                 let bookingsData = [];
-                querySnapshot.forEach((doc) => {
-                    bookingsData.push({ id: doc.id, ...doc.data() });
-                });
                 
-                bookingsData.sort((a, b) => {
-                    let timeA = a.createdAt ? a.createdAt.toMillis() : 0;
-                    let timeB = b.createdAt ? b.createdAt.toMillis() : 0;
-                    return timeB - timeA;
-                });
+                querySnapshot.forEach((doc) => { bookingsData.push({ id: doc.id, ...doc.data() }); });
+                bookingsData.sort((a, b) => { return (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0); });
 
                 bookingsData.forEach(booking => {
                     orderCount++;
                     let dateStr = booking.createdAt ? booking.createdAt.toDate().toLocaleDateString() : "Just Now";
-                    
                     let itemsStr = booking.items ? booking.items.map(i => `${i.title} (x${i.qty})`).join(', ') : "Item";
                     
                     ordersHTML += `
@@ -657,30 +524,22 @@
                     if (booking.items && Array.isArray(booking.items)) {
                         booking.items.forEach(item => {
                             let cleanTitle = item.title.replace(' (PC)', '').replace(' (Rent)', '').replace(' (Buy)', '');
-                            if (!purchasedGames.has(cleanTitle) && item.price > 0) { 
-                                purchasedGames.set(cleanTitle, item.img);
-                            }
+                            if (!purchasedGames.has(cleanTitle) && item.price > 0) { purchasedGames.set(cleanTitle, item.img); }
                         });
                     }
                 });
 
                 document.getElementById('statOrders').innerText = orderCount;
-                
                 const ordersContainer = document.getElementById('ordersContainer');
-                if (orderCount === 0) {
-                    ordersContainer.innerHTML = '<p style="color:gray; font-size:13px; text-align:center; padding:20px; font-weight:600; text-transform:uppercase;">No transactions found.</p>';
-                } else {
-                    ordersContainer.innerHTML = ordersHTML;
-                }
+                if (orderCount === 0) { ordersContainer.innerHTML = '<p style="color:gray; font-size:13px; text-align:center; padding:20px; font-weight:600; text-transform:uppercase;">No transactions found.</p>'; } 
+                else { ordersContainer.innerHTML = ordersHTML; }
 
                 const libContainer = document.getElementById('libraryContainer');
-                if (purchasedGames.size === 0) {
-                    libContainer.innerHTML = '<p style="color: gray; font-size: 13px; grid-column: 1/-1; font-weight:600; text-transform:uppercase;">Vault is empty. Acquire games to unlock.</p>';
-                } else {
+                if (purchasedGames.size === 0) { libContainer.innerHTML = '<p style="color: gray; font-size: 13px; grid-column: 1/-1; font-weight:600; text-transform:uppercase;">Vault is empty. Acquire games to unlock.</p>'; } 
+                else {
                     libContainer.innerHTML = "";
                     purchasedGames.forEach((imgUrl, title) => {
                         let actualImg = imgUrl && imgUrl.startsWith('data:image') ? imgUrl : (imgUrl.includes('image1.png.png') || imgUrl.includes('PS5.png') ? imgUrl : 'https://via.placeholder.com/200x300/12141a/fff?text=Game');
-                        
                         libContainer.innerHTML += `
                             <div class="lib-card">
                                 <img src="${actualImg}" alt="Game Cover">
@@ -692,18 +551,12 @@
                         `;
                     });
                 }
-
-            } catch (error) {
-                console.error("Error loading orders:", error);
-                document.getElementById('ordersContainer').innerHTML = '<p style="color:red; font-size:13px; text-align:center;">Failed to connect to database.</p>';
-            }
+            } catch (error) { console.error("Error loading orders:", error); document.getElementById('ordersContainer').innerHTML = '<p style="color:red; font-size:13px; text-align:center;">Failed to connect to database.</p>'; }
         }
 
-        // --- EDIT PROFILE LOGIC ---
         document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if(!currentUser) return;
-
             const btn = document.getElementById('saveProfileBtn');
             btn.innerText = "Updating Data..."; btn.disabled = true;
 
@@ -711,24 +564,13 @@
             const newTheme = document.getElementById('editThemeSelect').value;
 
             try {
-                // Update Firebase Auth Profile (For quick access)
                 await updateProfile(currentUser, { displayName: newName });
-                
-                // Update Firestore Document
-                await setDoc(doc(db, "users", currentUser.uid), {
-                    name: newName,
-                    gamerType: newTheme
-                }, { merge: true });
-
+                await setDoc(doc(db, "users", currentUser.uid), { name: newName, gamerType: newTheme }, { merge: true });
                 alert("System Profile Updated!");
                 closeEditModal();
-                loadUserProfile(currentUser); // Refresh UI
-            } catch (error) {
-                console.error("Error updating profile: ", error);
-                alert("Failed to update system. Try again.");
-            } finally {
-                btn.innerText = "Update Core Data"; btn.disabled = false;
-            }
+                loadUserProfile(currentUser); 
+            } catch (error) { alert("Failed to update system. Try again."); } 
+            finally { btn.innerText = "Update Core Data"; btn.disabled = false; }
         });
 
         window.logoutUser = function() {
@@ -743,7 +585,6 @@
 
     <!-- Modal & Cart UI Script -->
     <script>
-        // 🚀 NEW: Copy Referral Code Logic 🚀
         window.copyReferralCode = function() {
             const code = document.getElementById('userReferralCode').innerText;
             if(code !== "------") {
@@ -755,11 +596,9 @@
             }
         };
 
-        // Modal functions
         window.openEditModal = function() { document.getElementById('editModal').style.display = 'flex'; };
         window.closeEditModal = function() { document.getElementById('editModal').style.display = 'none'; };
 
-        // Cart functions
         window.toggleCart = function() {
             document.getElementById('cartSidebar').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('active');
