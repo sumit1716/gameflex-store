@@ -96,6 +96,17 @@
         .user-email { font-size: 12px; color: var(--text-gray); text-align: center; margin-bottom: 15px; }
         .gamer-tag { display: table; background: rgba(255,255,255,0.05); border: 1px solid var(--theme-color); color: var(--theme-color); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin: 0 auto 30px auto; letter-spacing: 1px; box-shadow: inset 0 0 10px rgba(255,255,255,0.02); }
 
+        /* 🚀 NEW: REFERRAL SECTION STYLES 🚀 */
+        .referral-box { background: rgba(0,0,0,0.3); border: 1px dashed var(--theme-color); padding: 15px; border-radius: 10px; margin-bottom: 25px; text-align: center; transition: 0.3s; }
+        .referral-box:hover { background: rgba(0,0,0,0.5); box-shadow: inset 0 0 15px rgba(255,255,255,0.05); border-style: solid; }
+        .ref-label { font-size: 10px; font-weight: 800; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        .ref-code-container { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; }
+        .ref-code { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: var(--theme-color); letter-spacing: 2px; }
+        .copy-ref-btn { background: transparent; border: none; color: white; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .copy-ref-btn:hover { color: var(--theme-color); transform: scale(1.2); }
+        .ref-desc { font-size: 10px; color: #ccc; line-height: 1.4; font-weight: 600; }
+        .copy-popup { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #00e676; color: black; padding: 10px 20px; border-radius: 30px; font-weight: 800; font-size: 13px; z-index: 10000; display: none; box-shadow: 0 5px 20px rgba(0, 230, 118, 0.4); animation: fadeInUp 0.3s ease; }
+
         .sidebar-menu { list-style: none; }
         .sidebar-menu li { margin-bottom: 5px; }
         .sidebar-menu li a { display: flex; align-items: center; gap: 15px; padding: 12px 15px; color: var(--text-gray); text-decoration: none; font-size: 13px; font-weight: 600; border-radius: 8px; transition: 0.3s; }
@@ -317,6 +328,9 @@
         </div>
     </div>
 
+    <!-- Copy Popup Notification -->
+    <div id="copyPopup" class="copy-popup"><i class="fa-solid fa-check-circle"></i> Referral Code Copied!</div>
+
     <!-- MAIN PROFILE LAYOUT -->
     <div class="profile-container">
         
@@ -331,6 +345,16 @@
             </div>
             <p class="user-email" id="sideEmail">...</p>
             <div class="gamer-tag" id="sideGamerTag">Gamer</div>
+
+            <!-- 🚀 NEW: DYNAMIC REFERRAL CODE SECTION 🚀 -->
+            <div class="referral-box">
+                <span class="ref-label">Your Referral Code</span>
+                <div class="ref-code-container">
+                    <span class="ref-code" id="userReferralCode">------</span>
+                    <button class="copy-ref-btn" onclick="copyReferralCode()" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+                </div>
+                <p class="ref-desc">Share this code with friends. Both get 50 GameFlex Tokens on their first purchase!</p>
+            </div>
 
             <ul class="sidebar-menu">
                 <li><a href="#" class="active"><i class="fa-solid fa-border-all"></i> Overview</a></li>
@@ -473,7 +497,7 @@
         });
     </script>
 
-    <!-- Firebase Script (LOGIC KEPT 100% UNTOUCHED) -->
+    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -504,6 +528,14 @@
             }
         });
 
+        // 🚀 NEW: Generate Referral Code Logic 🚀
+        function generateReferralCode(name, uid) {
+            // Extracts first 3 letters of name + last 4 chars of user UID (Makes it unique)
+            const cleanName = name.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
+            const uniqueId = uid.substring(uid.length - 4).toUpperCase();
+            return `GFX-${cleanName}${uniqueId}`;
+        }
+
         async function loadUserProfile(user) {
             try {
                 // 1. Fetch User Document
@@ -511,23 +543,37 @@
                 const userSnap = await getDoc(userRef);
                 let userData = {};
 
+                const displayName = user.displayName || 'Gamer';
+                
                 if (userSnap.exists()) {
                     userData = userSnap.data();
+                    
+                    // IF user doesn't have a referral code yet in DB, create and save it
+                    if(!userData.referralCode) {
+                        const newRefCode = generateReferralCode(displayName, user.uid);
+                        await setDoc(userRef, { referralCode: newRefCode }, { merge: true });
+                        userData.referralCode = newRefCode;
+                    }
                 } else {
-                    userData = { name: user.displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0 };
+                    // New User Fallback
+                    const newRefCode = generateReferralCode(displayName, user.uid);
+                    userData = { name: displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0, referralCode: newRefCode };
+                    await setDoc(userRef, userData, { merge: true });
                 }
 
                 // 2. Set Basic Info
-                const displayName = userData.name || user.displayName || 'Gamer';
-                document.getElementById('sideName').innerText = displayName;
-                document.getElementById('bannerName').innerText = displayName;
+                document.getElementById('sideName').innerText = userData.name || displayName;
+                document.getElementById('bannerName').innerText = userData.name || displayName;
                 document.getElementById('sideEmail').innerText = user.email;
                 
                 const gamerType = userData.gamerType || 'PC Gamer';
                 document.getElementById('sideGamerTag').innerText = gamerType;
+
+                // 🚀 SET REFERRAL CODE ON UI 🚀
+                document.getElementById('userReferralCode').innerText = userData.referralCode || "------";
                 
                 // Pre-fill edit modal
-                document.getElementById('editNameInput').value = displayName;
+                document.getElementById('editNameInput').value = userData.name || displayName;
                 document.getElementById('editThemeSelect').value = gamerType === 'Both' ? 'PC Gamer' : gamerType;
 
                 // 3. Dynamic Theming Logic based on Gamer Type
@@ -697,6 +743,18 @@
 
     <!-- Modal & Cart UI Script -->
     <script>
+        // 🚀 NEW: Copy Referral Code Logic 🚀
+        window.copyReferralCode = function() {
+            const code = document.getElementById('userReferralCode').innerText;
+            if(code !== "------") {
+                navigator.clipboard.writeText(code).then(() => {
+                    const popup = document.getElementById('copyPopup');
+                    popup.style.display = 'block';
+                    setTimeout(() => { popup.style.display = 'none'; }, 2500);
+                });
+            }
+        };
+
         // Modal functions
         window.openEditModal = function() { document.getElementById('editModal').style.display = 'flex'; };
         window.closeEditModal = function() { document.getElementById('editModal').style.display = 'none'; };
