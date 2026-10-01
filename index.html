@@ -171,11 +171,12 @@
         .cart-total { display: flex; justify-content: space-between; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 800; color: white; margin-bottom: 20px; letter-spacing: 1px; }
         .checkout-btn { width: 100%; background: linear-gradient(90deg, #c1121d, var(--primary-red)); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(227, 24, 37, 0.4); position: relative; overflow: hidden; }
         .checkout-btn:hover { background: linear-gradient(90deg, var(--primary-red), #ff3333); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(227, 24, 37, 0.6); }
+        .claim-btn { display:none; width: 100%; background: linear-gradient(90deg, #FFD700, #ffb703); color: black; border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 15px; text-transform: uppercase; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); }
+        .claim-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6); }
 
         /* HERO & HOME SECTIONS */
         .hero { position: relative; height: 600px; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; padding: 0 5%; }
         
-        /* 🚀 FIX: VIDEO OVERLAY BLUR & AUTOPLAY SETTINGS 🚀 */
         .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.9); }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.1) 100%); z-index: 2; pointer-events: none; }
         .hero-vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(0,0,0,0.9); z-index: 3; pointer-events: none; }
@@ -213,35 +214,21 @@
         .cat-arrow { width: 35px; height: 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-light); transition: 0.4s; background: rgba(0,0,0,0.2); }
         .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); transform: translateX(5px); }
 
-        /* 🚀 CRAZY FLOATING HOLOGRAM ANIMATION (PURE CSS) 🚀 */
         .coming-soon-delivery { width: 100%; padding: 40px 0; background: linear-gradient(to bottom, #0b0c10, #110000, #0b0c10); border-top: 1px solid rgba(227, 24, 37, 0.2); border-bottom: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; position: relative; margin-top: 20px;}
-        
         .delivery-track { position: absolute; top: 75%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(227,24,37,0.8), transparent); box-shadow: 0 0 20px var(--primary-red); z-index: 1;}
-        
         .delivery-header { text-align: center; margin-bottom: 35px; position: relative; z-index: 5;}
         .delivery-header h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 10px rgba(227, 24, 37, 0.5);}
         .delivery-header h3 i { color: var(--primary-red); margin-right: 10px; }
         .delivery-header p { font-size: 12px; color: var(--text-gray); font-weight: 600; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase;}
 
         .marquee-wrapper { width: 100%; overflow: hidden; position: relative; z-index: 3; }
-        
-        /* 🚀 FAST SPEED: 10 SECONDS LOOP 🚀 */
         .marquee-track { display: flex; width: max-content; animation: scrollLeft 10s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
-        
-        @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* The Premium Floating Poster Concept */
         .delivery-vehicle { position: relative; width: 220px; margin: 0 35px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 30px;}
         .delivery-vehicle:hover { transform: translateY(-15px) scale(1.08); z-index: 10; }
-        
-        /* The Floating Image */
         .carried-game-img { width: 150px; height: 200px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.8); z-index: 3; position: relative; animation: floatUp 3s ease-in-out infinite alternate;}
-        
-        /* The Hologram Reflection / Base Glow */
         .hologram-shadow { width: 120px; height: 10px; background: radial-gradient(ellipse at center, rgba(227,24,37,0.8) 0%, transparent 70%); border-radius: 50%; position: absolute; bottom: 85px; z-index: 2; animation: shadowPulse 3s ease-in-out infinite alternate; filter: blur(3px);}
 
         .delivery-vehicle:hover .carried-game-img { border-color: var(--primary-red); box-shadow: 0 10px 40px rgba(227, 24, 37, 0.5); animation-play-state: paused; }
@@ -275,7 +262,6 @@
 
         .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; }
         
-        /* 🚀 Smooth Animated Product Cards */
         .prod-card { background: linear-gradient(160deg, var(--card-bg), #0e1015); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; transition: var(--hover-transition); position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; }
         .prod-card:hover { border-color: rgba(227, 24, 37, 0.4); transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(227, 24, 37, 0.05) inset; z-index: 5; }
         .prod-card.ps5-theme:hover { border-color: rgba(31, 106, 255, 0.4); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(31, 106, 255, 0.05) inset; }
@@ -290,7 +276,6 @@
         .prod-info { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; position: relative; z-index: 3; background: transparent; }
         .prod-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: var(--text-light); line-height: 1.3; text-transform: uppercase;}
         
-        /* 🚀 FIXED PRICE AND BUTTONS CSS 🚀 */
         .card-genre-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px; text-transform: uppercase; color: var(--ps5-blue); }
         .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
         .price-col { display: flex; flex-direction: row; gap: 8px; align-items: center; }
@@ -397,7 +382,6 @@
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
 
-            /* 🚀 FIX: Mobile Animation Shrink for Clean Float */
             .carried-game-img { width: 100px; height: 130px;}
             .hologram-shadow { width: 80px; bottom: 70px;}
             .delivery-vehicle { width: 130px; margin: 0 15px; padding-bottom: 30px;}
@@ -800,7 +784,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // 🚀 FIX: IMPORT 'where' and 'getDocs' added 🚀
+        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -1085,27 +1070,63 @@
             catch (err) { alert("Login failed: " + err.message); }
         }
 
-        // 🚀 UPDATED ONSUBMIT LOGIC: Captures Referral Code 🚀
+        // 🚀 UPDATED ONSUBMIT LOGIC: Captures Referral Code & Gives 50-50 Tokens 🚀
         document.getElementById('onboardingForm').onsubmit = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
             const name = document.getElementById('obName').value;
-            const referralCode = document.getElementById('obReferral') ? document.getElementById('obReferral').value.trim().toUpperCase() : ""; 
+            const referralCodeInput = document.getElementById('obReferral');
+            const referralCode = referralCodeInput ? referralCodeInput.value.trim().toUpperCase() : ""; 
             const selectedRadio = document.querySelector('input[name="gamerType"]:checked');
             if (!selectedRadio) { alert("Please select your gamer type!"); return; }
             const submitBtn = document.querySelector('.onboarding-submit');
-            submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
+            submitBtn.innerText = "Saving & Applying Code..."; submitBtn.disabled = true;
 
             try {
+                let startingTokens = window.currentTokens || 0;
+                let appliedRefCode = "";
+
+                // 🎁 REFERRAL REWARD LOGIC 🎁
+                if (referralCode !== "") {
+                    const usersRef = collection(db, "users");
+                    const q = query(usersRef, where("referralCode", "==", referralCode));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        // Code Valid Hai! Purane user ko 50 tokens aur +1 referral do
+                        const referrerDoc = querySnapshot.docs[0];
+                        const referrerId = referrerDoc.id;
+
+                        await setDoc(doc(db, "users", referrerId), {
+                            tokens: increment(50),
+                            totalReferrals: increment(1)
+                        }, { merge: true });
+
+                        // Naye user ko 50 tokens free do
+                        startingTokens += 50;
+                        appliedRefCode = referralCode;
+                        alert("🎉 Referral Code Applied! You get 50 Free Tokens!");
+                    } else {
+                        alert("❌ Invalid Referral Code! Proceeding without bonus.");
+                    }
+                }
+
+                // Naye user ka khud ka referral code generate karo
+                const cleanName = name.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
+                const uniqueId = currentUser.uid.substring(currentUser.uid.length - 4).toUpperCase();
+                const myNewRefCode = `GFX-${cleanName}${uniqueId}`;
+
                 await setDoc(doc(db, "users", currentUser.uid), {
                     name: name, 
                     email: currentUser.email, 
                     gamerType: selectedRadio.value, 
-                    referredBy: referralCode, // 🚀 Saves the entered referral code
-                    tokens: window.currentTokens || 0, 
+                    referredBy: appliedRefCode, // Kisne refer kiya (khali agar galat tha)
+                    referralCode: myNewRefCode, // Iska khud ka code
+                    tokens: startingTokens, // 0 ya 50 tokens
                     lastLogin: serverTimestamp(), 
                     createdAt: serverTimestamp() 
                 }, { merge: true });
+                
                 document.getElementById('onboardingOverlay').style.display = 'none';
                 alert(`Welcome aboard, ${name}! Your profile is ready.`);
             } catch (err) { 
