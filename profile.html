@@ -306,7 +306,7 @@
                     <div style="font-size: 11px; font-weight:bold; color: var(--text-gray); margin-top: 10px; text-align: right;" id="tokenProgressText">0 / 500 XP</div>
                 </div>
 
-                <!-- 🚀 NEW: REFERRAL STATS CARD 🚀 -->
+                <!-- 🚀 FIXED: REFERRAL STATS CARD 🚀 -->
                 <div class="dash-card animate-fade-up delay-3">
                     <div class="card-header">
                         <div class="card-title"><i class="fa-solid fa-users"></i> Referral Network</div>
@@ -446,7 +446,7 @@
                     }
                 } else {
                     const newRefCode = generateReferralCode(displayName, user.uid);
-                    userData = { name: displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0, referralCode: newRefCode, referralCount: 0, referralTokensEarned: 0 };
+                    userData = { name: displayName, email: user.email, gamerType: 'PC Gamer', tokens: 0, referralCode: newRefCode, totalReferrals: 0 };
                     await setDoc(userRef, userData, { merge: true });
                 }
 
@@ -479,9 +479,10 @@
                 setTimeout(() => { document.getElementById('tokenProgressBar').style.width = percent + '%'; }, 500);
                 document.getElementById('tokenProgressText').innerText = `${tokens} / 500 XP`;
 
-                // 🚀 UPDATE REFERRAL STATS 🚀
-                document.getElementById('statRefCount').innerText = userData.referralCount || 0;
-                document.getElementById('statRefTokens').innerText = userData.referralTokensEarned || 0;
+                // 🚀 FIXED: UPDATE REFERRAL STATS CORRECTLY 🚀
+                let totalRefs = userData.totalReferrals || 0;
+                document.getElementById('statRefCount').innerText = totalRefs;
+                document.getElementById('statRefTokens').innerText = totalRefs * 50;
 
                 if(userData.lastLogin || userData.createdAt) {
                     let dateObj = userData.createdAt ? userData.createdAt.toDate() : (userData.lastLogin ? userData.lastLogin.toDate() : new Date());
