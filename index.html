@@ -274,6 +274,7 @@
         .spin-btn:hover::before { left: 0; }
         .spin-btn:hover { transform: scale(1.05); }
 
+        /* Gacha Specific Modals */
         .gacha-payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         
         .win-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 25000; display: none; justify-content: center; align-items: center; flex-direction: column; opacity: 0; transition: 0.5s; backdrop-filter: blur(15px); }
@@ -874,6 +875,9 @@
     </div>
 
     <div class="win-overlay" id="winOverlay">
+        <!-- 🚀 NEW CLOSE BUTTON TO PLAY AGAIN 🚀 -->
+        <button onclick="closeWinOverlay()" style="position:absolute; top:30px; right:30px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:white; font-size:24px; width:45px; height:45px; border-radius:50%; cursor:pointer; transition:0.3s; z-index: 30000; box-shadow: 0 0 10px rgba(0,0,0,0.5);"><i class="fa-solid fa-xmark"></i></button>
+        
         <div class="win-title" id="winTitleText">JACKPOT!</div>
         <div class="won-game-card" id="wonGameCard">
             <img src="" id="wonImg" class="won-img" alt="Won Game">
@@ -911,49 +915,6 @@
         document.addEventListener("DOMContentLoaded", window.observeAnimations);
     </script>
 
-    <script>
-        window.regularGamesDB = [];
-        window.preOrderGamesDB = [];
-        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
-        window.appliedDiscount = 0; 
-        window.activeCouponCode = "";
-        window.currentTokens = 0;
-
-        window.showTokenInfo = function() {
-            const needed = Math.max(0, 500 - window.currentTokens);
-            if (window.currentTokens >= 500) {
-                alert("🎉 Awesome! You have 500+ tokens. Open your Cart sidebar to claim your Free Game!");
-            } else {
-                alert(`🎮 GameFlex Tokens: You currently have ${window.currentTokens} tokens. Collect ${needed} more tokens to redeem a Brand New Free Game!`);
-            }
-        };
-
-        // 🚀 LIVE GACHA LUCK DATABASE (Waiting for Firebase fetch) 🚀
-        window.lootDatabase = { PC: [], PS5: [] };
-        window.currentGachaPlatform = "PC";
-        window.wonGameData = null;
-        let currentGachaRequestId = null; // Track current request ID
-
-        // Switch platform & auto-update Button Price (PC=149, PS5=499)
-        window.switchGachaPlatform = function(platform) {
-            window.currentGachaPlatform = platform;
-            const container = document.getElementById('gachaZone');
-            const pcBtn = document.getElementById('pcBtn');
-            const psBtn = document.getElementById('psBtn');
-            const spinBtn = document.getElementById('spinBtn');
-
-            if(platform === 'PC') {
-                container.classList.remove('ps-mode');
-                pcBtn.classList.add('active-pc'); psBtn.classList.remove('active-ps');
-                spinBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹149)';
-            } else {
-                container.classList.add('ps-mode');
-                psBtn.classList.add('active-ps'); pcBtn.classList.remove('active-pc');
-                spinBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹499)';
-            }
-        };
-    </script>
-
     <!-- FIREBASE AND MAIN LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -974,7 +935,52 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
         
+        window.db = db;
+        window.updateDoc = setDoc; 
         window.deleteDoc = deleteDoc;
+
+        window.regularGamesDB = [];
+        window.preOrderGamesDB = [];
+        window.cartArray = JSON.parse(localStorage.getItem('gf_cart')) || []; 
+        window.appliedDiscount = 0; 
+        window.activeCouponCode = "";
+        window.currentTokens = 0;
+
+        window.showTokenInfo = function() {
+            const needed = Math.max(0, 500 - window.currentTokens);
+            if (window.currentTokens >= 500) {
+                alert("🎉 Awesome! You have 500+ tokens. Open your Cart sidebar to claim your Free Game!");
+            } else {
+                alert(`🎮 GameFlex Tokens: You currently have ${window.currentTokens} tokens. Collect ${needed} more tokens to redeem a Brand New Free Game!`);
+            }
+        };
+
+        // 🚀 LIVE GACHA LUCK DATABASE 🚀
+        window.lootDatabase = { PC: [], PS5: [] };
+        window.currentGachaPlatform = "PC";
+        window.wonGameData = null;
+        let currentGachaRequestId = null; 
+        let isSpinning = false;
+        let gachaUnsub = null;
+
+        // Switch platform & auto-update Button Price
+        window.switchGachaPlatform = function(platform) {
+            window.currentGachaPlatform = platform;
+            const container = document.getElementById('gachaZone');
+            const pcBtn = document.getElementById('pcBtn');
+            const psBtn = document.getElementById('psBtn');
+            const spinBtn = document.getElementById('spinBtn');
+
+            if(platform === 'PC') {
+                container.classList.remove('ps-mode');
+                pcBtn.classList.add('active-pc'); psBtn.classList.remove('active-ps');
+                if(!isSpinning) spinBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹149)';
+            } else {
+                container.classList.add('ps-mode');
+                psBtn.classList.add('active-ps'); pcBtn.classList.remove('active-pc');
+                if(!isSpinning) spinBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹499)';
+            }
+        };
 
         let currentUser = null;
 
@@ -1408,6 +1414,37 @@
         // 🚀 NEW LOOTDROP SYSTEM (FRONTEND LOGIC) 🚀
         // ==========================================
 
+        window.initiateGachaSpin = function() {
+            if (!currentUser) {
+                alert("Please login first to play LootDrop!");
+                document.getElementById('authBtn').click();
+                return;
+            }
+
+            // 🚀 ALLOW USER TO CANCEL REQUEST THEMSELVES IF STUCK 🚀
+            if (isSpinning) {
+                if(confirm("Do you want to cancel the current waiting request?")) {
+                    if(currentGachaRequestId) {
+                        // Mark as cancelled so admin sees it, and reset UI
+                        setDoc(doc(db, "gacha_requests", currentGachaRequestId), { status: "cancelled" }, { merge: true }).catch(e => console.log(e));
+                    }
+                    resetSpinUI();
+                }
+                return;
+            }
+
+            const spinPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+            document.getElementById('gachaPayTitle').innerText = `Pay ₹${spinPrice}`;
+
+            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${spinPrice}&cu=INR`;
+            document.getElementById('gachaDynamicQRCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('gachaPaymentOverlay').style.display = 'flex';
+        };
+
+        window.closeGachaPayment = function() {
+            document.getElementById('gachaPaymentOverlay').style.display = 'none';
+        };
+
         window.processGachaPayment = async function() {
             const btn = document.getElementById('confirmGachaPaymentBtn');
             btn.innerText = "Sending Request..."; btn.disabled = true;
@@ -1426,7 +1463,6 @@
                     createdAt: serverTimestamp()
                 });
                 
-                // Track current session request id
                 currentGachaRequestId = docRef.id;
 
                 window.closeGachaPayment();
@@ -1436,31 +1472,32 @@
                 startGachaAnimation();
 
             } catch (err) {
-                alert("Failed to process. Please try again.");
+                console.error("Gacha Payment Error:", err);
+                alert("Database Error: " + err.message + "\n\n(Bhai Firestore rules check kar le jo pichle message me diye the!)");
                 btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> I HAVE PAID'; btn.disabled = false;
             }
         };
 
         function startGachaAnimation() {
+            isSpinning = true;
             const cardWrapper = document.getElementById('gachaWrapper');
             const premiumCard = document.getElementById('premiumCard');
             const flash = document.getElementById('boomFlash');
             const btn = document.getElementById('spinBtn');
             
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> WAITING FOR GAME DROP...'; 
-            btn.style.pointerEvents = "none";
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> WAITING FOR DROP (CLICK TO CANCEL)'; 
+            btn.style.pointerEvents = "auto"; // KEEP AUTO SO USER CAN CLICK TO CANCEL
             
-            // Start Violent Shake & Overload Light
             premiumCard.classList.add('is-shaking');
             cardWrapper.classList.add('overloading');
 
-            // 🚀 FAILSAFE & LISTENER 🚀
-            const unsub = onSnapshot(doc(db, "gacha_requests", currentGachaRequestId), (docSnap) => {
+            if(gachaUnsub) gachaUnsub();
+
+            gachaUnsub = onSnapshot(doc(db, "gacha_requests", currentGachaRequestId), (docSnap) => {
                 
                 // 🛑 FAILSAFE: If admin deleted the request directly without clicking Cancel
                 if(!docSnap.exists()) {
-                    unsub(); // Stop listening immediately
-                    
+                    if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
                     premiumCard.classList.remove('is-shaking');
                     cardWrapper.classList.remove('overloading');
                     
@@ -1469,15 +1506,7 @@
                     btn.style.borderColor = "#ff3333";
                     btn.style.color = "#ff3333";
                     
-                    // Reset button after 4 seconds to be fully clickable again
-                    setTimeout(() => {
-                        const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
-                        btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
-                        btn.style.backgroundColor = "transparent";
-                        btn.style.borderColor = "var(--g-color)";
-                        btn.style.color = "white";
-                        btn.style.pointerEvents = "auto";
-                    }, 4000);
+                    setTimeout(() => { resetSpinUI(); }, 4000);
                     return;
                 }
                 
@@ -1491,27 +1520,25 @@
                 }
                 // 2. If Admin ASSIGNS Game
                 else if(data.status === "completed" && data.assignedGame) {
-                    unsub(); // Stop listening
+                    if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
                     window.wonGameData = data.assignedGame;
                     
-                    // 💥 THE BOOM EFFECT 💥
                     premiumCard.classList.remove('is-shaking');
                     cardWrapper.classList.remove('overloading');
                     flash.style.opacity = "1";
                     
-                    btn.style.color = "white"; // Reset color
+                    btn.style.color = "white"; 
                     btn.style.borderColor = "var(--g-color)";
                     
                     setTimeout(() => {
                         flash.style.opacity = "0";
                         showWinScreen(window.wonGameData);
-                        // Delete the request doc to clear it out
                         window.deleteDoc(doc(db, "gacha_requests", docSnap.id)).catch(e => console.log(e));
                     }, 150);
                 } 
                 // 3. 🛑 If Admin CANCELS payment 🛑
                 else if (data.status === "cancelled") {
-                    unsub(); // Stop listening
+                    if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
                     
                     premiumCard.classList.remove('is-shaking');
                     cardWrapper.classList.remove('overloading');
@@ -1521,20 +1548,34 @@
                     btn.style.borderColor = "#ff3333";
                     btn.style.color = "#ff3333";
                     
-                    // Reset button after 5 seconds to be fully clickable again
-                    setTimeout(() => {
-                        const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
-                        btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
-                        btn.style.backgroundColor = "transparent";
-                        btn.style.borderColor = "var(--g-color)";
-                        btn.style.color = "white";
-                        btn.style.pointerEvents = "auto";
-                    }, 5000);
-                    
+                    setTimeout(() => { resetSpinUI(); }, 5000);
                     window.deleteDoc(doc(db, "gacha_requests", docSnap.id)).catch(e => console.log(e));
                 }
             });
         }
+
+        // 🚀 FAILSAFE RESET FUNCTION 🚀
+        window.resetSpinUI = function() {
+            isSpinning = false;
+            if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
+            
+            document.getElementById('gachaWrapper').classList.remove('overloading');
+            document.getElementById('premiumCard').classList.remove('is-shaking');
+            
+            const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+            const btn = document.getElementById('spinBtn');
+            btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
+            btn.style.backgroundColor = "transparent";
+            btn.style.borderColor = "var(--g-color)";
+            btn.style.color = "white";
+            btn.style.pointerEvents = "auto";
+        };
+
+        // 🚀 CLOSE WIN OVERLAY 🚀
+        window.closeWinOverlay = function() {
+            document.getElementById('winOverlay').classList.remove('show');
+            resetSpinUI();
+        };
 
         function showWinScreen(game) {
             document.getElementById('wonImg').src = game.img;
@@ -1556,11 +1597,7 @@
             else { titleText.innerText = "📦 DROP SECURED 📦"; titleText.style.color = "white"; }
 
             document.getElementById('winOverlay').classList.add('show');
-            
-            // Restore button
-            const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
-            document.getElementById('spinBtn').innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
-            document.getElementById('spinBtn').style.pointerEvents = "auto";
+            resetSpinUI(); // Automatically ready the background button for next play
         }
 
         window.claimToVault = async function() {
