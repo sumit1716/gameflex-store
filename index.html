@@ -286,7 +286,10 @@
         
         .won-game-card { width: 280px; background: linear-gradient(160deg, var(--card-bg), #000); border: 2px solid var(--primary-red); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 0 40px rgba(227, 24, 37, 0.6); animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden;}
         .won-game-card.ps-win { border-color: var(--ps5-blue); box-shadow: 0 0 40px rgba(31, 106, 255, 0.6); }
-        .won-img { width: 100%; height: 320px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
+        
+        /* 🚀 IMAGE FIX: NO BLUR/STRETCH 🚀 */
+        .won-img { width: 100%; height: auto; max-height: 280px; object-fit: contain; border-radius: 10px; margin-bottom: 18px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.8)); background: rgba(255,255,255,0.02); }
+        
         .won-name { font-size: 16px; font-weight: 800; color: white; margin-bottom: 8px; line-height: 1.3;}
         .won-value-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .won-value-label { font-size: 11px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; }
@@ -753,7 +756,7 @@
         </div>
     </section>
 
-    <!-- 🚀 THE LOOTDROP ZONE (NEW CARD ANIMATION + DYNAMIC PRICE) 🚀 -->
+    <!-- 🚀 THE LOOTDROP ZONE 🚀 -->
     <section class="gacha-section animate-fade-up delay-2" id="gachaZone">
         <!-- White flash overlay for boom effect -->
         <div class="white-flash" id="boomFlash"></div>
@@ -934,6 +937,7 @@
         window.lootDatabase = { PC: [], PS5: [] };
         window.currentGachaPlatform = "PC";
         window.wonGameData = null;
+        let currentGachaRequestId = null; // Track current request ID
 
         // Switch platform & auto-update Button Price (PC=149, PS5=499)
         window.switchGachaPlatform = function(platform) {
@@ -959,7 +963,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAPuUj6nJZxhsJCJLrsyPwghLhUhS5_4_0",
@@ -974,6 +978,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
+        
+        window.deleteDoc = deleteDoc;
 
         let currentUser = null;
 
@@ -1014,7 +1020,7 @@
             });
         });
 
-        // FETCH PRE-ORDERS FOR PURE CSS HOLOGRAM ANIMATION 
+        // FETCH PRE-ORDERS 
         const qPreOrders = query(collection(db, "preorders"), orderBy("addedOn", "desc"), limit(8));
         onSnapshot(qPreOrders, (snapshot) => {
             const marquee = document.getElementById('preOrderMarquee');
@@ -1404,41 +1410,8 @@
         };
 
         // ==========================================
-        // 🚀 LOOTDROP SYSTEM LOGIC 🚀
+        // 🚀 NEW LOOTDROP SYSTEM (FRONTEND LOGIC) 🚀
         // ==========================================
-
-        // 1. Fetch Real Games from Admin Database
-        onSnapshot(query(collection(db, "gacha_db")), (snapshot) => {
-            window.lootDatabase = { PC: [], PS5: [] };
-            snapshot.forEach(docSnap => {
-                const game = docSnap.data();
-                if(game.platform === 'PC') {
-                    window.lootDatabase.PC.push({ title: game.title, storePrice: game.storePrice, img: game.img, tier: game.tier, chance: game.chance });
-                } else {
-                    window.lootDatabase.PS5.push({ title: game.title, storePrice: game.storePrice, img: game.img, tier: game.tier, chance: game.chance });
-                }
-            });
-        });
-
-        window.initiateGachaSpin = function() {
-            if (!currentUser) {
-                alert("Please login first to play LootDrop!");
-                document.getElementById('authBtn').click();
-                return;
-            }
-
-            // DYNAMIC PRICE LOGIC
-            const spinPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
-            document.getElementById('gachaPayTitle').innerText = `Pay ₹${spinPrice}`;
-
-            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${spinPrice}&cu=INR`;
-            document.getElementById('gachaDynamicQRCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
-            document.getElementById('gachaPaymentOverlay').style.display = 'flex';
-        };
-
-        window.closeGachaPayment = function() {
-            document.getElementById('gachaPaymentOverlay').style.display = 'none';
-        };
 
         window.processGachaPayment = async function() {
             const btn = document.getElementById('confirmGachaPaymentBtn');
@@ -1448,7 +1421,7 @@
 
             try {
                 // Creates a LIVE pending request for the Admin
-                await addDoc(collection(db, "gacha_requests"), {
+                const docRef = await addDoc(collection(db, "gacha_requests"), {
                     userId: currentUser.uid,
                     userName: currentUser.displayName,
                     userEmail: currentUser.email,
@@ -1457,10 +1430,15 @@
                     status: "pending",
                     createdAt: serverTimestamp()
                 });
+                
+                // Track current session request id
+                currentGachaRequestId = docRef.id;
 
                 window.closeGachaPayment();
                 btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> I HAVE PAID'; btn.disabled = false;
-                startGachaAnimation(); // Card starts shaking immediately
+                
+                // Start animation and listener
+                startGachaAnimation();
 
             } catch (err) {
                 alert("Failed to process. Please try again.");
@@ -1481,32 +1459,53 @@
             premiumCard.classList.add('is-shaking');
             cardWrapper.classList.add('overloading');
 
-            // Set up a listener for when Admin approves the request and sends the game
-            const requestQuery = query(collection(db, "gacha_requests"), where("userId", "==", currentUser.uid), where("status", "==", "completed"), limit(1));
-            
-            const unsubscribe = onSnapshot(requestQuery, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added" || change.type === "modified") {
-                        const data = change.doc.data();
-                        
-                        if(data.status === "completed" && data.assignedGame) {
-                            unsubscribe(); // Stop listening
-                            window.wonGameData = data.assignedGame;
-                            
-                            // 💥 THE BOOM EFFECT 💥
-                            premiumCard.classList.remove('is-shaking');
-                            cardWrapper.classList.remove('overloading');
-                            flash.style.opacity = "1";
-                            
-                            setTimeout(() => {
-                                flash.style.opacity = "0";
-                                showWinScreen(window.wonGameData);
-                                // Delete the request doc to clear it out
-                                window.deleteDoc(doc(db, "gacha_requests", change.doc.id));
-                            }, 150);
-                        }
-                    }
-                });
+            // Set up a listener for the Specific Request ID
+            const unsub = onSnapshot(doc(db, "gacha_requests", currentGachaRequestId), (docSnap) => {
+                if(!docSnap.exists()) return;
+                
+                const data = docSnap.data();
+                
+                // If Admin APPROVES and assigns game
+                if(data.status === "completed" && data.assignedGame) {
+                    unsub(); // Stop listening
+                    window.wonGameData = data.assignedGame;
+                    
+                    // 💥 THE BOOM EFFECT 💥
+                    premiumCard.classList.remove('is-shaking');
+                    cardWrapper.classList.remove('overloading');
+                    flash.style.opacity = "1";
+                    
+                    setTimeout(() => {
+                        flash.style.opacity = "0";
+                        showWinScreen(window.wonGameData);
+                        // Delete the request doc to clear it out
+                        window.deleteDoc(doc(db, "gacha_requests", docSnap.id));
+                    }, 150);
+                } 
+                // 🛑 If Admin CANCELS payment 🛑
+                else if (data.status === "cancelled") {
+                    unsub(); // Stop listening
+                    
+                    premiumCard.classList.remove('is-shaking');
+                    cardWrapper.classList.remove('overloading');
+                    
+                    btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> PAYMENT CANCELLED / NOT RECEIVED';
+                    btn.style.backgroundColor = "rgba(227, 24, 37, 0.2)";
+                    btn.style.borderColor = "#ff3333";
+                    btn.style.color = "#ff3333";
+                    
+                    // Reset button after 5 seconds
+                    setTimeout(() => {
+                        const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+                        btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
+                        btn.style.backgroundColor = "transparent";
+                        btn.style.borderColor = "var(--g-color)";
+                        btn.style.color = "white";
+                        btn.style.pointerEvents = "auto";
+                    }, 5000);
+                    
+                    window.deleteDoc(doc(db, "gacha_requests", docSnap.id));
+                }
             });
         }
 
@@ -1540,7 +1539,7 @@
         window.claimToVault = async function() {
             if(!currentUser || !window.wonGameData) return;
             const btn = document.querySelector('.claim-vault-btn');
-            btn.innerText = "Saving to Vault..."; btn.disabled = true;
+            btn.innerText = "Processing..."; btn.disabled = true;
 
             const paidAmount = window.currentGachaPlatform === 'PC' ? 149 : 499;
 
@@ -1556,6 +1555,14 @@
                 });
 
                 alert("Game Added to your Digital Vault! You also earned 10 Tokens.");
+                
+                // 3. Open WhatsApp with Pre-filled Message
+                const message = `Hello Sumit, I just won a LootDrop!\n\n*Customer:* ${currentUser.displayName}\n*Game Won:* ${window.wonGameData.title} (${window.wonGameData.tier})\n*Platform:* ${window.currentGachaPlatform}\n\nPlease send me the game credentials!`;
+                const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+                
+                // Redirect to vault
                 window.location.href = "profile.html";
             } catch (err) {
                 console.error(err); alert("Error claiming game.");

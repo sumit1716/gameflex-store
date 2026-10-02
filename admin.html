@@ -416,15 +416,29 @@
             <!-- 🚀 2. LIVE ORDERS & LOOTDROP APPROVALS 🚀 -->
             <div id="ordersSection" class="section animate-fade-up" style="display: none;">
                 
-                <!-- NEW: LOOTDROP PENDING APPROVALS -->
+                <!-- 🚀 NEW: STEP 1 - LOOTDROP PAYMENT APPROVALS 🚀 -->
+                <div class="card" style="border-color: #e31825; box-shadow: 0 5px 20px rgba(227,24,37,0.1);">
+                    <h3 style="color:#e31825;"><i class="fa-solid fa-money-check-dollar" style="margin-right:8px;"></i> Step 1: LootDrop Payment Approvals</h3>
+                    <p style="font-size:12px; color:gray; margin-top:-5px; margin-bottom:15px;">Verify payment first. Once approved, the request will move to the 'Assign Games' table below.</p>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Time</th><th>Customer Details</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+                            <tbody id="gachaPaymentTable">
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Scanning for payments...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 🚀 NEW: STEP 2 - LOOTDROP GAME ASSIGNMENTS 🚀 -->
                 <div class="card" style="border-color: #FFD700; box-shadow: 0 5px 20px rgba(255,215,0,0.1);">
-                    <h3 style="color:#FFD700;"><i class="fa-solid fa-gift" style="margin-right:8px;"></i> Live LootDrop Requests (Waiting for Games)</h3>
-                    <p style="font-size:12px; color:gray; margin-top:-5px; margin-bottom:15px;">Search your database and assign a game to the user. The user's screen is currently waiting for your drop!</p>
+                    <h3 style="color:#FFD700;"><i class="fa-solid fa-gift" style="margin-right:8px;"></i> Step 2: Live LootDrops (Assign Games)</h3>
+                    <p style="font-size:12px; color:gray; margin-top:-5px; margin-bottom:15px;">Search your database and assign a game. The user's screen is shaking and waiting for your drop!</p>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Time</th><th>Customer Details</th><th>Platform / Amount</th><th>Search & Select Game</th><th>Action</th></tr></thead>
                             <tbody id="lootRequestsTable">
-                                <tr><td colspan="5" style="text-align: center; color: gray;">Scanning for requests...</td></tr>
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Scanning for approved requests...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1079,6 +1093,23 @@
             }
         };
 
+        // 🚀 NEW: CANCEL / APPROVE PAYMENT LOGIC 🚀
+        window.approveGachaPayment = async function(reqId) {
+            if(confirm("Confirm you received the payment for this LootDrop spin?")) {
+                try {
+                    await window.updateDoc(window.doc(window.db, "gacha_requests", reqId), { status: "approved" });
+                } catch(e) { alert("Failed to approve"); }
+            }
+        };
+
+        window.cancelGachaPayment = async function(reqId) {
+            if(confirm("Cancel this request? The user's spin will be rejected and show an error.")) {
+                try {
+                    await window.updateDoc(window.doc(window.db, "gacha_requests", reqId), { status: "cancelled" });
+                } catch(e) { alert("Failed to cancel"); }
+            }
+        };
+
         document.addEventListener('click', function(e) {
             if(!e.target.closest('td[style*="position:relative"]')) {
                 document.querySelectorAll('div[id^="drop_"]').forEach(el => el.style.display = 'none');
@@ -1282,13 +1313,39 @@
                 filterDashboardData();
             });
 
-            // 🚀 LIVE LOOTDROP REQUESTS FETCH 🚀
+            // 🚀 STEP 1: LOOTDROP PAYMENT APPROVALS FETCH 🚀
             onSnapshot(query(collection(db, "gacha_requests"), where("status", "==", "pending")), (snapshot) => {
+                const tbody = document.getElementById('gachaPaymentTable');
+                if(!tbody) return;
+                tbody.innerHTML = '';
+                if(snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:gray;">No pending payments.</td></tr>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const req = docSnap.data();
+                    const timeStr = req.createdAt ? req.createdAt.toDate().toLocaleTimeString() : 'Just now';
+                    tbody.innerHTML += `
+                    <tr>
+                        <td style="font-size:11px;">${timeStr}</td>
+                        <td><strong>${req.userName}</strong><br><small style="color:gray;">${req.userEmail}</small></td>
+                        <td style="color:var(--primary-red); font-weight:bold;">₹${req.amountPaid}</td>
+                        <td><span class="status-badge status-pending">Checking Payment</span></td>
+                        <td>
+                            <button class="btn-approve" onclick="approveGachaPayment('${docSnap.id}')"><i class="fa-solid fa-check"></i> Approve</button>
+                            <button class="btn-delete" style="margin-left:5px;" onclick="cancelGachaPayment('${docSnap.id}')"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                        </td>
+                    </tr>`;
+                });
+            });
+
+            // 🚀 STEP 2: LOOTDROP GAME ASSIGNMENT FETCH (status: approved) 🚀
+            onSnapshot(query(collection(db, "gacha_requests"), where("status", "==", "approved")), (snapshot) => {
                 const tbody = document.getElementById('lootRequestsTable');
                 if(!tbody) return;
                 tbody.innerHTML = '';
                 if(snapshot.empty) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:gray;">No pending LootDrop requests.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:gray;">No pending game assignments.</td></tr>';
                     return;
                 }
                 snapshot.forEach(docSnap => {
@@ -1744,7 +1801,7 @@
                     if(file.size > 800 * 1024) { alert("❌ Error: Image > 800KB."); btn.disabled = false; return; }
                     imageUrl = await getBase64(file);
                 } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; } 
-                else if (!editId) { alert("⚠️ Provide an image!"); btn.disabled = false; return; }
+                else if (!editId) { alert("⚠️️ Provide an image!"); btn.disabled = false; return; }
 
                 const selectedCategories = [];
                 document.querySelectorAll('.cat-check:checked').forEach(chk => selectedCategories.push(chk.value));
