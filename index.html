@@ -973,6 +973,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
+        
+        window.deleteDoc = deleteDoc;
 
         let currentUser = null;
 
@@ -1452,9 +1454,32 @@
             premiumCard.classList.add('is-shaking');
             cardWrapper.classList.add('overloading');
 
-            // Set up a listener for the Specific Request ID
+            // 🚀 FAILSAFE & LISTENER 🚀
             const unsub = onSnapshot(doc(db, "gacha_requests", currentGachaRequestId), (docSnap) => {
-                if(!docSnap.exists()) return;
+                
+                // 🛑 FAILSAFE: If admin deleted the request directly without clicking Cancel
+                if(!docSnap.exists()) {
+                    unsub(); // Stop listening immediately
+                    
+                    premiumCard.classList.remove('is-shaking');
+                    cardWrapper.classList.remove('overloading');
+                    
+                    btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> REQUEST DELETED / TIMEOUT';
+                    btn.style.backgroundColor = "rgba(227, 24, 37, 0.2)";
+                    btn.style.borderColor = "#ff3333";
+                    btn.style.color = "#ff3333";
+                    
+                    // Reset button after 4 seconds to be fully clickable again
+                    setTimeout(() => {
+                        const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+                        btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
+                        btn.style.backgroundColor = "transparent";
+                        btn.style.borderColor = "var(--g-color)";
+                        btn.style.color = "white";
+                        btn.style.pointerEvents = "auto";
+                    }, 4000);
+                    return;
+                }
                 
                 const data = docSnap.data();
                 
@@ -1496,7 +1521,7 @@
                     btn.style.borderColor = "#ff3333";
                     btn.style.color = "#ff3333";
                     
-                    // Reset button after 5 seconds
+                    // Reset button after 5 seconds to be fully clickable again
                     setTimeout(() => {
                         const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
                         btn.innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
