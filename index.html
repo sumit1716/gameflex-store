@@ -20,40 +20,22 @@
         }
 
         html { scroll-behavior: smooth; }
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--dark-bg); }
         ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a0e15, var(--primary-red)); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #ff3333; }
 
-        body { 
-            background-color: var(--dark-bg); color: var(--text-light); 
-            overflow-x: hidden; touch-action: manipulation; -webkit-font-smoothing: antialiased;
-        }
+        body { background-color: var(--dark-bg); color: var(--text-light); overflow-x: hidden; touch-action: manipulation; -webkit-font-smoothing: antialiased; }
 
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
+        .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
 
-        @keyframes shimmer {
-            0% { left: -150%; }
-            100% { left: 150%; }
-        }
+        @keyframes shimmer { 0% { left: -150%; } 100% { left: 150%; } }
         .skeleton-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); border-radius: 12px; height: 320px; position: relative; overflow: hidden; }
-        .skeleton-card::before {
-            content: ""; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-            animation: shimmer 1.5s infinite ease-in-out;
-        }
+        .skeleton-card::before { content: ""; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); animation: shimmer 1.5s infinite ease-in-out; }
 
         .top-bar { background-color: #000; color: var(--text-gray); font-size: 12px; text-align: center; padding: 8px 0; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .top-bar i { color: var(--primary-red); }
@@ -73,7 +55,6 @@
         .nav-links { order: 2; display: flex; gap: 25px; list-style: none; }
         .nav-links li a { color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; transition: 0.3s; }
         .nav-links li a:hover, .nav-links li.active a { color: var(--primary-red); text-shadow: 0 0 8px rgba(227, 24, 37, 0.4); }
-        .nav-links li.active a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: var(--primary-red); box-shadow: 0 0 5px var(--primary-red); }
         
         .search-container { order: 3; position: relative; display: flex; align-items: center; margin: 0 20px; flex: 1; max-width: 450px; }
         .search-input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 40px 10px 15px; border-radius: 20px; outline: none; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); font-size: 13px; font-family: 'Montserrat', sans-serif; }
@@ -132,7 +113,7 @@
         .onboarding-submit { width: 100%; background: var(--primary-red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(227, 24, 37, 0.4); }
         .onboarding-submit:hover { background: #c1121d; box-shadow: 0 6px 20px rgba(227, 24, 37, 0.6); }
 
-        /* PAYMENT MODAL */
+        /* CART PAYMENT MODAL */
         .payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .payment-modal { background: linear-gradient(145deg, #12141a, #1a1d24); border: 2px solid var(--primary-red); border-radius: 16px; padding: 35px 25px; width: 380px; max-width: 95%; box-shadow: 0 0 30px rgba(227, 24, 37, 0.2), 0 15px 40px rgba(0,0,0,0.8); text-align: center; position: relative; animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .close-payment { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); color: var(--text-gray); width: 35px; height: 35px; border-radius: 50%; font-size: 16px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
@@ -213,6 +194,108 @@
         .cat-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 15px; }
         .cat-arrow { width: 35px; height: 35px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; color: var(--text-light); transition: 0.4s; background: rgba(0,0,0,0.2); }
         .cat-card:hover .cat-arrow { background: var(--primary-red); color: white; border-color: var(--primary-red); box-shadow: 0 0 10px rgba(227, 24, 37, 0.5); transform: translateX(5px); }
+
+        /* 🚀 NEW & ENHANCED LOOTDROP (GACHA) SECTION CSS 🚀 */
+        .gacha-section { 
+            --g-color: #e31825; 
+            --g-glow: 0 0 35px rgba(227, 24, 37, 0.8); 
+            margin: 40px 5%; 
+            background: linear-gradient(180deg, #11141c, #08090d); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 20px; 
+            padding: 50px 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            position: relative; 
+            overflow: hidden; 
+            transition: background 0.5s, box-shadow 0.5s; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+        }
+        .gacha-section::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(227, 24, 37, 0.15) 0%, transparent 70%);
+            z-index: 1; pointer-events: none; transition: 0.5s;
+        }
+        .gacha-section.ps-mode { 
+            --g-color: #1f6aff; 
+            --g-glow: 0 0 35px rgba(31, 106, 255, 0.8); 
+        }
+        .gacha-section.ps-mode::before {
+            background: radial-gradient(circle at center, rgba(31, 106, 255, 0.15) 0%, transparent 70%);
+        }
+
+        .gacha-header { text-align: center; margin-bottom: 30px; z-index: 10; position: relative; }
+        .gacha-header h1 { font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-shadow: var(--g-glow); color: white; margin-bottom: 10px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 15px;}
+        .gacha-header h1 i { color: var(--g-color); filter: drop-shadow(var(--g-glow)); transition: 0.3s; font-size: 32px;}
+        .gacha-header p { color: var(--text-gray); font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+
+        .platform-switch { display: flex; background: rgba(0,0,0,0.5); border-radius: 30px; padding: 5px; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); z-index: 10; position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+        .switch-btn { padding: 10px 30px; border: none; background: transparent; color: var(--text-gray); font-weight: 800; font-size: 14px; cursor: pointer; border-radius: 25px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+        .switch-btn.active-pc { background: var(--primary-red); color: white; box-shadow: 0 0 20px rgba(227, 24, 37, 0.6); transform: scale(1.05); }
+        .switch-btn.active-ps { background: var(--ps5-blue); color: white; box-shadow: 0 0 20px rgba(31, 106, 255, 0.6); transform: scale(1.05); }
+
+        /* Premium GameFlex Card */
+        .gacha-card-wrapper { position: relative; width: 220px; height: 320px; display: flex; justify-content: center; align-items: center; margin-bottom: 40px; z-index: 10; perspective: 1000px; }
+        .premium-card { width: 100%; height: 100%; background: linear-gradient(135deg, #1a1c23 0%, #0d0f14 100%); border: 2px solid var(--g-color); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; transition: 0.4s; transform-style: preserve-3d; cursor: pointer; }
+        .premium-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--g-color)); animation: rotateLight 4s linear infinite; opacity: 0.3; }
+        .premium-card::after { content: ''; position: absolute; inset: 3px; background: linear-gradient(135deg, #1a1c23 0%, #0d0f14 100%); border-radius: 12px; z-index: 1; }
+        
+        .card-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+        .card-logo { width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid var(--g-color); margin-bottom: 15px; box-shadow: var(--g-glow); }
+        .card-logo img { width: 40px; height: 40px; object-fit: contain; }
+        .card-text-top { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: white; letter-spacing: 2px; }
+        .card-text-bot { font-size: 10px; color: var(--g-color); font-weight: 800; letter-spacing: 4px; margin-top: 5px; text-transform: uppercase; }
+        
+        .gacha-card-wrapper:hover .premium-card { transform: translateY(-10px) rotateX(5deg) rotateY(5deg); box-shadow: 0 25px 50px rgba(0,0,0,0.9), var(--g-glow); }
+        
+        /* Overload Background Light for Animation */
+        .overload-light { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0px; height: 0px; background: var(--g-color); border-radius: 50%; filter: blur(50px); opacity: 0; z-index: 5; transition: 2.5s cubic-bezier(0.25, 0.8, 0.25, 1); pointer-events: none; }
+        .gacha-card-wrapper.overloading .overload-light { width: 600px; height: 600px; opacity: 0.8; }
+        .white-flash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 20000; opacity: 0; pointer-events: none; transition: opacity 0.1s; }
+
+        @keyframes rotateLight { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Violent Shake */
+        @keyframes violentShake {
+            0% { transform: translate(2px, 2px) rotate(0deg) scale(1); filter: brightness(1); }
+            10% { transform: translate(-3px, -4px) rotate(-3deg) scale(1.02); }
+            20% { transform: translate(-5px, 0px) rotate(3deg) scale(1.05); filter: brightness(1.5) drop-shadow(var(--g-glow)); }
+            30% { transform: translate(5px, 4px) rotate(0deg) scale(1.02); }
+            40% { transform: translate(2px, -2px) rotate(4deg) scale(1.08); filter: brightness(2) drop-shadow(var(--g-glow)); }
+            50% { transform: translate(-2px, 5px) rotate(-2deg) scale(1.05); }
+            60% { transform: translate(-5px, 2px) rotate(0deg) scale(1.1); }
+            70% { transform: translate(5px, 2px) rotate(-4deg) scale(1.05); }
+            80% { transform: translate(-2px, -2px) rotate(4deg) scale(1.15); filter: brightness(3) drop-shadow(var(--g-glow)); }
+            90% { transform: translate(2px, 5px) rotate(0deg) scale(1.08); }
+            100% { transform: translate(2px, -4px) rotate(-2deg) scale(1); }
+        }
+        .is-shaking { animation: violentShake 0.3s infinite; }
+
+        .spin-btn { background: transparent; border: 2px solid var(--g-color); color: white; padding: 18px 50px; border-radius: 8px; font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px; position: relative; overflow: hidden; box-shadow: var(--g-glow); z-index: 10; display: flex; align-items: center; gap: 10px; }
+        .spin-btn::before { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--g-color); transition: 0.4s; z-index: -1; }
+        .spin-btn:hover::before { left: 0; }
+        .spin-btn:hover { transform: scale(1.05); }
+
+        /* Gacha Specific Modals */
+        .gacha-payment-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        
+        .win-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 25000; display: none; justify-content: center; align-items: center; flex-direction: column; opacity: 0; transition: 0.5s; backdrop-filter: blur(15px); }
+        .win-overlay.show { display: flex; opacity: 1; }
+        .win-title { font-family: 'Orbitron', sans-serif; font-size: 45px; font-weight: 900; color: #FFD700; text-shadow: 0 0 25px rgba(255,215,0,0.8); margin-bottom: 25px; animation: fadeInUp 0.5s; text-transform: uppercase; text-align: center; letter-spacing: 2px;}
+        
+        .won-game-card { width: 280px; background: linear-gradient(160deg, var(--card-bg), #000); border: 2px solid var(--primary-red); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 0 40px rgba(227, 24, 37, 0.6); animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden;}
+        .won-game-card.ps-win { border-color: var(--ps5-blue); box-shadow: 0 0 40px rgba(31, 106, 255, 0.6); }
+        .won-img { width: 100%; height: 320px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
+        .won-name { font-size: 16px; font-weight: 800; color: white; margin-bottom: 8px; line-height: 1.3;}
+        .won-value-box { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .won-value-label { font-size: 11px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; }
+        .won-value-amt { color: #00e676; font-weight: 900; font-size: 16px; text-shadow: 0 0 10px rgba(0, 230, 118, 0.4); }
+        
+        .claim-vault-btn { margin-top: 30px; background: linear-gradient(90deg, #00c853, #00e676); color: black; border: none; padding: 16px 40px; border-radius: 30px; font-weight: 900; font-size: 15px; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,230,118,0.4); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .claim-vault-btn:hover { background: linear-gradient(90deg, #00e676, #69f0ae); transform: scale(1.05) translateY(-3px); box-shadow: 0 15px 40px rgba(0,230,118,0.6); }
+
+        @keyframes scaleUp { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         .coming-soon-delivery { width: 100%; padding: 40px 0; background: linear-gradient(to bottom, #0b0c10, #110000, #0b0c10); border-top: 1px solid rgba(227, 24, 37, 0.2); border-bottom: 1px solid rgba(227, 24, 37, 0.2); overflow: hidden; position: relative; margin-top: 20px;}
         .delivery-track { position: absolute; top: 75%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(227,24,37,0.8), transparent); box-shadow: 0 0 20px var(--primary-red); z-index: 1;}
@@ -382,6 +465,21 @@
             .cat-card h3 { font-size: 13px; margin-bottom: 5px; }
             .cat-arrow { display: none; }
 
+            /* Gacha Mobile Adjustments */
+            .gacha-section { margin: 20px 5%; padding: 40px 15px; }
+            .gacha-header h1 { font-size: 24px; gap: 10px;}
+            .gacha-header h1 i { font-size: 22px;}
+            .gacha-header p { font-size: 11px; }
+            .gacha-card-wrapper { width: 180px; height: 260px; margin-bottom: 30px; }
+            .card-logo { width: 50px; height: 50px; margin-bottom: 10px;}
+            .card-logo img { width: 30px; height: 30px; }
+            .card-text-top { font-size: 15px; }
+            .card-text-bot { font-size: 8px; }
+            .spin-btn { font-size: 14px; padding: 15px 30px; width: 100%; justify-content: center;}
+            .win-title { font-size: 28px; }
+            .won-game-card { width: 90%; max-width: 320px; padding: 15px; }
+            .won-img { height: 200px; }
+
             .carried-game-img { width: 100px; height: 130px;}
             .hologram-shadow { width: 80px; bottom: 70px;}
             .delivery-vehicle { width: 130px; margin: 0 15px; padding-bottom: 30px;}
@@ -463,7 +561,6 @@
                         </label>
                     </div>
                 </div>
-                <!-- 🚀 REFERRAL CODE FIELD ADDED HERE 🚀 -->
                 <div class="onboarding-group">
                     <label>Referral Code (Optional)</label>
                     <input type="text" id="obReferral" class="onboarding-input" placeholder="Enter referral code if you have one" style="text-transform: uppercase; letter-spacing: 1px;">
@@ -473,28 +570,22 @@
         </div>
     </div>
 
-    <!-- 🚀 ENHANCED PAYMENT MODAL 🚀 -->
+    <!-- CART PAYMENT MODAL -->
     <div class="payment-overlay" id="paymentOverlay">
         <div class="payment-modal">
             <button class="close-payment" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
-            
             <h2><i class="fa-solid fa-qrcode" style="color: #ff3333;"></i> Secure Checkout</h2>
-            
             <div class="payment-methods-icons">
                 <i class="fa-brands fa-google-pay" title="Google Pay" style="color: #ffffff;"></i>
                 <i class="fa-solid fa-wallet" title="Paytm" style="color: #00baf2;"></i>
                 <i class="fa-solid fa-money-bill-transfer" title="UPI" style="color: #5f259f;"></i>
             </div>
-            
             <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 10px;">Total Amount To Pay:</p>
             <p><span id="paymentTotalAmount" style="color: var(--primary-red); font-weight: 900; font-size: 26px; text-shadow: 0 0 15px rgba(227, 24, 37, 0.4); display: inline-block; margin-bottom: 15px;">₹0</span></p>
-            
             <div class="qr-container">
                 <img id="dynamicQRCode" src="" alt="Scan & Pay UPI QR">
             </div>
-            
             <p style="font-size: 12px; color: var(--text-gray); margin-bottom: 20px; line-height: 1.5;">Scan using any UPI app. Amount is locked.<br><strong style="color: white;">Click below after successful payment.</strong></p>
-            
             <button class="confirm-pay-btn" id="confirmPaymentBtn" onclick="confirmAndSendWhatsApp()">
                 <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)
             </button>
@@ -554,13 +645,14 @@
             <li class="active"><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
+            <!-- REVERTED: Pre-Orders is back -->
             <li><a href="preorder.html">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Community Reviews</a></li>
         </ul>
     </nav>
 
-    <!-- 🚀 ENHANCED CART SIDEBAR 🚀 -->
+    <!-- CART SIDEBAR -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
@@ -606,6 +698,7 @@
             <p>Discover the biggest titles, instant digital delivery, exclusive bundles, and unbeatable prices on PC & PlayStation games.</p>
             <div class="hero-btns">
                 <a href="pc.html" class="btn-primary">Explore Games</a>
+                <!-- REVERTED: View Offers button is back -->
                 <a href="offer.html" class="btn-outline">View Offers</a>
             </div>
         </div>
@@ -659,6 +752,41 @@
         </div>
     </section>
 
+    <!-- 🚀 THE LOOTDROP ZONE (NEW CARD ANIMATION) 🚀 -->
+    <section class="gacha-section animate-fade-up delay-2" id="gachaZone">
+        <!-- White flash overlay for boom effect -->
+        <div class="white-flash" id="boomFlash"></div>
+
+        <div class="gacha-header">
+            <h1 id="mainTitle"><i class="fa-solid fa-bolt"></i> THE LOOTDROP ZONE <i class="fa-solid fa-bolt"></i></h1>
+            <p>Unlock Premium AAA Games. 1% Chance for Jackpot!</p>
+        </div>
+
+        <div class="platform-switch">
+            <button class="switch-btn active-pc" id="pcBtn" onclick="switchGachaPlatform('PC')"><i class="fa-solid fa-desktop"></i> PC</button>
+            <button class="switch-btn" id="psBtn" onclick="switchGachaPlatform('PS5')"><i class="fa-brands fa-playstation"></i> PS5</button>
+        </div>
+
+        <div class="gacha-card-wrapper" id="gachaWrapper">
+            <!-- Overload light behind the card -->
+            <div class="overload-light"></div>
+            
+            <div class="premium-card" id="premiumCard">
+                <div class="card-content">
+                    <div class="card-logo">
+                        <img src="logo.png" alt="GameFlex">
+                    </div>
+                    <div class="card-text-top">GAMEFLEX</div>
+                    <div class="card-text-bot">LootDrop Pass</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="spin-btn" onclick="initiateGachaSpin()" id="spinBtn">
+            <i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹149)
+        </button>
+    </section>
+
     <section class="coming-soon-delivery animate-fade-up delay-3">
         <div class="delivery-header">
             <h3><i class="fa-solid fa-fire"></i> UPCOMING DROPS</h3>
@@ -667,7 +795,6 @@
         
         <div class="marquee-wrapper">
             <div class="delivery-track"></div>
-            <!-- Faster scrolling animation -->
             <div class="marquee-track" id="preOrderMarquee">
                 <div style="color:gray; width:100vw; text-align:center; position:relative; z-index:5; padding-top:20px;">Fetching incoming drops from database...</div>
             </div>
@@ -681,10 +808,7 @@
             <a href="pc.html" class="view-all red-link">View PC Store &rarr;</a>
         </div>
         <div class="prod-grid" id="pcGamesGrid">
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
         </div>
     </section>
 
@@ -695,10 +819,7 @@
             <a href="ps5.html" class="view-all blue-link">View PlayStation Store &rarr;</a>
         </div>
         <div class="prod-grid" id="ps5GamesGrid">
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
         </div>
     </section>
 
@@ -709,10 +830,7 @@
             <a href="offer.html" class="view-all gold-link">View All Offers &rarr;</a>
         </div>
         <div class="prod-grid" id="offersGamesGridHome">
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
         </div>
     </section>
 
@@ -740,6 +858,36 @@
     <a href="https://wa.me/919310885368" target="_blank" class="floating-wa" title="Chat with us on WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
+
+    <!-- 🚀 GACHA SPECIFIC MODALS 🚀 -->
+    <div class="gacha-payment-overlay" id="gachaPaymentOverlay">
+        <div class="payment-modal" style="border-color: #FFD700;">
+            <button class="close-payment" onclick="closeGachaPayment()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color: white; margin-bottom: 10px; font-family:'Orbitron', sans-serif;">Pay ₹149</h2>
+            <p style="color: gray; font-size:12px;">Scan to purchase LootDrop Token</p>
+            <div class="qr-container" style="border-color: #FFD700;">
+                <img id="gachaDynamicQRCode" src="" alt="Scan & Pay UPI QR">
+            </div>
+            <button class="confirm-pay-btn" id="confirmGachaPaymentBtn" onclick="processGachaPayment()" style="background: linear-gradient(90deg, #FFD700, #ffb703); color:black;">
+                <i class="fa-solid fa-check-circle"></i> I HAVE PAID
+            </button>
+        </div>
+    </div>
+
+    <div class="win-overlay" id="winOverlay">
+        <div class="win-title" id="winTitleText">JACKPOT!</div>
+        <div class="won-game-card" id="wonGameCard">
+            <img src="" id="wonImg" class="won-img" alt="Won Game">
+            <div class="won-name" id="wonName">Game Name</div>
+            
+            <div class="won-value-box">
+                <div class="won-value-label">Store Price:</div>
+                <div class="won-value-amt" id="wonValue">₹2999</div>
+            </div>
+
+        </div>
+        <button class="claim-vault-btn" onclick="claimToVault()">Claim to Digital Vault <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
 
     <script>
         window.observeAnimations = function() {
@@ -778,13 +926,46 @@
                 alert(`🎮 GameFlex Tokens: You currently have ${window.currentTokens} tokens. Collect ${needed} more tokens to redeem a Brand New Free Game!`);
             }
         };
+
+        // 🚀 EASILY EDITABLE GACHA LUCK DATABASE 🚀
+        // Yahan par "storePrice" aur "chance" edit kar sakta hai
+        window.lootDatabase = {
+            PC: [
+                { title: "Grand Theft Auto VI (PC)", storePrice: 3999, img: "https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=300&q=80", tier: "JACKPOT", chance: 1 },
+                { title: "Cyberpunk 2077: Ultimate", storePrice: 1499, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80", tier: "EPIC", chance: 9 },
+                { title: "Red Dead Redemption 2", storePrice: 999, img: "https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=300&q=80", tier: "RARE", chance: 30 },
+                { title: "Hollow Knight", storePrice: 450, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80", tier: "COMMON", chance: 60 }
+            ],
+            PS5: [
+                { title: "Spider-Man 2 (PS5)", storePrice: 3500, img: "https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=300&q=80", tier: "JACKPOT", chance: 1 },
+                { title: "God of War Ragnarok", storePrice: 1999, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80", tier: "EPIC", chance: 9 },
+                { title: "Ghost of Tsushima", storePrice: 1200, img: "https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=300&q=80", tier: "RARE", chance: 30 },
+                { title: "Stray", storePrice: 500, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80", tier: "COMMON", chance: 60 }
+            ]
+        };
+        window.currentGachaPlatform = "PC";
+        window.wonGameData = null;
+
+        window.switchGachaPlatform = function(platform) {
+            window.currentGachaPlatform = platform;
+            const container = document.getElementById('gachaZone');
+            const pcBtn = document.getElementById('pcBtn');
+            const psBtn = document.getElementById('psBtn');
+
+            if(platform === 'PC') {
+                container.classList.remove('ps-mode');
+                pcBtn.classList.add('active-pc'); psBtn.classList.remove('active-ps');
+            } else {
+                container.classList.add('ps-mode');
+                psBtn.classList.add('active-ps'); pcBtn.classList.remove('active-pc');
+            }
+        };
     </script>
 
     <!-- FIREBASE AND MAIN LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        // 🚀 FIX: IMPORT 'where' and 'getDocs' added 🚀
         import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp, onSnapshot, increment, query, orderBy, getDoc, limit, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1070,7 +1251,6 @@
             catch (err) { alert("Login failed: " + err.message); }
         }
 
-        // 🚀 UPDATED ONSUBMIT LOGIC: Captures Referral Code & Gives 50-50 Tokens 🚀
         document.getElementById('onboardingForm').onsubmit = async (e) => {
             e.preventDefault();
             if (!currentUser) return;
@@ -1086,23 +1266,15 @@
                 let startingTokens = window.currentTokens || 0;
                 let appliedRefCode = "";
 
-                // 🎁 REFERRAL REWARD LOGIC 🎁
                 if (referralCode !== "") {
                     const usersRef = collection(db, "users");
                     const q = query(usersRef, where("referralCode", "==", referralCode));
                     const querySnapshot = await getDocs(q);
 
                     if (!querySnapshot.empty) {
-                        // Code Valid Hai! Purane user ko 50 tokens aur +1 referral do
                         const referrerDoc = querySnapshot.docs[0];
                         const referrerId = referrerDoc.id;
-
-                        await setDoc(doc(db, "users", referrerId), {
-                            tokens: increment(50),
-                            totalReferrals: increment(1)
-                        }, { merge: true });
-
-                        // Naye user ko 50 tokens free do
+                        await setDoc(doc(db, "users", referrerId), { tokens: increment(50), totalReferrals: increment(1) }, { merge: true });
                         startingTokens += 50;
                         appliedRefCode = referralCode;
                         alert("🎉 Referral Code Applied! You get 50 Free Tokens!");
@@ -1111,29 +1283,20 @@
                     }
                 }
 
-                // Naye user ka khud ka referral code generate karo
                 const cleanName = name.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
                 const uniqueId = currentUser.uid.substring(currentUser.uid.length - 4).toUpperCase();
                 const myNewRefCode = `GFX-${cleanName}${uniqueId}`;
 
                 await setDoc(doc(db, "users", currentUser.uid), {
-                    name: name, 
-                    email: currentUser.email, 
-                    gamerType: selectedRadio.value, 
-                    referredBy: appliedRefCode, // Kisne refer kiya (khali agar galat tha)
-                    referralCode: myNewRefCode, // Iska khud ka code
-                    tokens: startingTokens, // 0 ya 50 tokens
-                    lastLogin: serverTimestamp(), 
-                    createdAt: serverTimestamp() 
+                    name: name, email: currentUser.email, gamerType: selectedRadio.value, 
+                    referredBy: appliedRefCode, referralCode: myNewRefCode, tokens: startingTokens, 
+                    lastLogin: serverTimestamp(), createdAt: serverTimestamp() 
                 }, { merge: true });
                 
                 document.getElementById('onboardingOverlay').style.display = 'none';
                 alert(`Welcome aboard, ${name}! Your profile is ready.`);
-            } catch (err) { 
-                alert("Error saving profile: " + err.message); 
-            } finally {
-                submitBtn.innerText = "Save & Start Gaming"; submitBtn.disabled = false;
-            }
+            } catch (err) { alert("Error saving profile: " + err.message); } 
+            finally { submitBtn.innerText = "Save & Start Gaming"; submitBtn.disabled = false; }
         };
 
         window.selectGamerType = function(element) {
@@ -1170,8 +1333,7 @@
             const total = Math.max(0, subtotal - (window.appliedDiscount || 0));
             
             const confirmBtn = document.getElementById('confirmPaymentBtn');
-            confirmBtn.disabled = true;
-            confirmBtn.innerText = "Processing Order...";
+            confirmBtn.disabled = true; confirmBtn.innerText = "Processing Order...";
 
             let itemNames = window.cartArray.map(i => `${i.title} (x${i.qty})`).join(', ');
 
@@ -1185,30 +1347,18 @@
                 if (window.activeCouponCode && window.activeCouponCode !== "") {
                     const couponRef = doc(db, "coupons", window.activeCouponCode);
                     await setDoc(couponRef, { usedCount: increment(1) }, { merge: true });
-
-                    await addDoc(collection(db, "coupon_usage"), {
-                        userName: currentUser.displayName,
-                        userEmail: currentUser.email,
-                        couponUsed: window.activeCouponCode,
-                        gamesPurchased: itemNames,
-                        discountAmount: window.appliedDiscount,
-                        usedAt: serverTimestamp()
-                    });
+                    await addDoc(collection(db, "coupon_usage"), { userName: currentUser.displayName, userEmail: currentUser.email, couponUsed: window.activeCouponCode, gamesPurchased: itemNames, discountAmount: window.appliedDiscount, usedAt: serverTimestamp() });
                 }
 
                 const message = `Hello Sumit, I have made a payment of ₹${total} for my GameFlex order!\n\n*Customer:* ${currentUser.displayName}\n*Games:* ${itemNames}\n\nPlease verify and send my game credentials!`;
                 const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
                 window.cartArray = []; localStorage.removeItem('gf_cart'); 
-                window.appliedDiscount = 0; document.getElementById('couponMsg').innerText = ""; document.getElementById('couponInput').value = "";
-                window.activeCouponCode = "";
+                window.appliedDiscount = 0; document.getElementById('couponMsg').innerText = ""; document.getElementById('couponInput').value = ""; window.activeCouponCode = "";
                 window.updateCartUI(); closePaymentModal();
                 window.open(whatsappUrl, '_blank');
-            } catch (error) { 
-                console.error("Booking Error: ", error); alert("Failed to save booking"); 
-            } finally { 
-                confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; 
-            }
+            } catch (error) { console.error(error); alert("Failed to save booking"); } 
+            finally { confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; }
         };
 
         window.claimFreeGame = async function() {
@@ -1228,16 +1378,10 @@
             const msg = document.getElementById('couponMsg');
             const subtotal = window.cartArray.reduce((acc, item) => acc + (item.price * item.qty), 0);
             
-            if (subtotal === 0) {
-                msg.style.color = "#ff3333"; msg.innerText = "Cart is empty!"; window.appliedDiscount = 0; return;
-            }
+            if (subtotal === 0) { msg.style.color = "#ff3333"; msg.innerText = "Cart is empty!"; window.appliedDiscount = 0; return; }
+            if (code === "") { msg.style.color = "#ff3333"; msg.innerText = "Please enter a promo code."; return; }
 
-            if (code === "") {
-                msg.style.color = "#ff3333"; msg.innerText = "Please enter a promo code."; return;
-            }
-
-            msg.style.color = "var(--text-gray)"; 
-            msg.innerText = "Checking promo code...";
+            msg.style.color = "var(--text-gray)"; msg.innerText = "Checking promo code...";
 
             try {
                 const couponRef = doc(db, "coupons", code);
@@ -1245,38 +1389,144 @@
 
                 if (couponSnap.exists()) {
                     const cpnData = couponSnap.data();
-                    
                     if (cpnData.active && (cpnData.usedCount < cpnData.usageLimit)) {
                         let discountPct = cpnData.discountPercent;
                         window.appliedDiscount = Math.round((subtotal * discountPct) / 100);
                         window.activeCouponCode = code;
-                        
                         msg.style.color = "#00e676"; 
-                        if (discountPct === 100) {
-                             msg.innerText = `🎉 100% FREE Giveaway Applied!`;
-                        } else {
-                             msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
-                        }
+                        if (discountPct === 100) msg.innerText = `🎉 100% FREE Giveaway Applied!`; else msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
                     } else {
-                        window.appliedDiscount = 0; window.activeCouponCode = "";
-                        msg.style.color = "#ff3333"; msg.innerText = "❌ Promo code Expired or Limit Reached.";
+                        window.appliedDiscount = 0; window.activeCouponCode = ""; msg.style.color = "#ff3333"; msg.innerText = "❌ Promo code Expired or Limit Reached.";
                     }
                 } else {
                     if (code === "GAMEFLEX10") {
                         window.appliedDiscount = Math.round(subtotal * 0.10); window.activeCouponCode = code;
                         msg.style.color = "#00e676"; msg.innerText = `🎉 Code applied! You saved ₹${window.appliedDiscount}`;
                     } else {
-                        window.appliedDiscount = 0; window.activeCouponCode = "";
-                        msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid promo code.";
+                        window.appliedDiscount = 0; window.activeCouponCode = ""; msg.style.color = "#ff3333"; msg.innerText = "❌ Invalid promo code.";
                     }
                 }
                 window.updateCartUI();
-            } catch(e) {
-                console.error(e);
-                msg.style.color = "#ff3333"; msg.innerText = "Error verifying promo code.";
-            }
+            } catch(e) { msg.style.color = "#ff3333"; msg.innerText = "Error verifying promo code."; }
         };
 
+        // ==========================================
+        // 🚀 NEW GACHA (LOOTDROP) CARD SYSTEM LOGIC 🚀
+        // ==========================================
+        window.initiateGachaSpin = function() {
+            if (!currentUser) {
+                alert("Please login first to play LootDrop!");
+                document.getElementById('authBtn').click();
+                return;
+            }
+            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=149&cu=INR`;
+            document.getElementById('gachaDynamicQRCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('gachaPaymentOverlay').style.display = 'flex';
+        };
+
+        window.closeGachaPayment = function() {
+            document.getElementById('gachaPaymentOverlay').style.display = 'none';
+        };
+
+        window.processGachaPayment = function() {
+            const btn = document.getElementById('confirmGachaPaymentBtn');
+            btn.innerText = "Verifying Transaction..."; btn.disabled = true;
+
+            setTimeout(() => {
+                window.closeGachaPayment();
+                btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> I HAVE PAID'; btn.disabled = false;
+                startGachaAnimation();
+            }, 1500);
+        };
+
+        function startGachaAnimation() {
+            const cardWrapper = document.getElementById('gachaWrapper');
+            const premiumCard = document.getElementById('premiumCard');
+            const flash = document.getElementById('boomFlash');
+            const btn = document.getElementById('spinBtn');
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> DECRYPTING...'; 
+            btn.style.pointerEvents = "none";
+            
+            // Start Violent Shake & Overload Light
+            premiumCard.classList.add('is-shaking');
+            cardWrapper.classList.add('overloading');
+
+            // Wait 3.5 seconds for heavy suspense, then BOOM!
+            setTimeout(() => {
+                premiumCard.classList.remove('is-shaking');
+                cardWrapper.classList.remove('overloading');
+                
+                // FLASH WHITE LIGHT
+                flash.style.opacity = "1";
+                
+                setTimeout(() => {
+                    flash.style.opacity = "0";
+                    pickRandomGachaGame();
+                }, 150); // Flash duration
+                
+            }, 3500);
+        }
+
+        function pickRandomGachaGame() {
+            const pool = window.lootDatabase[window.currentGachaPlatform];
+            const rand = Math.random() * 100;
+            let cumulative = 0;
+            let selected = pool[pool.length - 1]; 
+
+            for(let i=0; i<pool.length; i++) {
+                cumulative += pool[i].chance;
+                if(rand <= cumulative) {
+                    selected = pool[i];
+                    break;
+                }
+            }
+            window.wonGameData = selected;
+            showWinScreen(selected);
+        }
+
+        function showWinScreen(game) {
+            document.getElementById('wonImg').src = game.img;
+            document.getElementById('wonName').innerText = game.title;
+            document.getElementById('wonValue').innerText = `₹${game.storePrice}`;
+            
+            const titleText = document.getElementById('winTitleText');
+            const card = document.getElementById('wonGameCard');
+            
+            if(window.currentGachaPlatform === 'PS5') {
+                card.classList.add('ps-win');
+            } else {
+                card.classList.remove('ps-win');
+            }
+
+            if(game.tier === "JACKPOT") { titleText.innerText = "🎰 MEGA JACKPOT! 🎰"; titleText.style.color = "#FFD700"; }
+            else if(game.tier === "EPIC") { titleText.innerText = "🔥 EPIC DROP 🔥"; titleText.style.color = "#ff3333"; }
+            else if(game.tier === "RARE") { titleText.innerText = "✨ RARE ITEM ✨"; titleText.style.color = "#1f6aff"; }
+            else { titleText.innerText = "📦 DROP SECURED 📦"; titleText.style.color = "white"; }
+
+            document.getElementById('winOverlay').classList.add('show');
+            document.getElementById('spinBtn').innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹149)';
+            document.getElementById('spinBtn').style.pointerEvents = "auto";
+        }
+
+        window.claimToVault = async function() {
+            if(!currentUser || !window.wonGameData) return;
+            const btn = document.querySelector('.claim-vault-btn');
+            btn.innerText = "Saving to Vault..."; btn.disabled = true;
+
+            try {
+                await addDoc(collection(db, "bookings"), {
+                    userId: currentUser.uid, userEmail: currentUser.email,
+                    items: [{ title: `${window.wonGameData.title} (LootDrop Win)`, price: 149, qty: 1, img: window.wonGameData.img }], 
+                    totalAmount: 149, status: "Verified", createdAt: serverTimestamp()
+                });
+                alert("Game Added to your Digital Vault! You can view it in your Profile.");
+                window.location.href = "profile.html";
+            } catch (err) {
+                console.error(err); alert("Error claiming game.");
+                btn.innerText = "Claim to Digital Vault"; btn.disabled = false;
+            }
+        };
     </script>
 
     <script>
