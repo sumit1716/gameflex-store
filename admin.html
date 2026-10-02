@@ -192,7 +192,7 @@
                 <li class="active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> Dashboard</li>
                 <li onclick="switchTab('finance', this)"><i class="fa-solid fa-chart-line"></i> Manage Finance</li>
                 <li onclick="switchTab('customers', this)"><i class="fa-solid fa-users"></i> Access Tracker</li>
-                <li onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> Live Orders</li>
+                <li onclick="switchTab('orders', this)" style="color: #FFD700;"><i class="fa-solid fa-gift"></i> Live Orders & Drop</li>
                 <li onclick="switchTab('manage', this)"><i class="fa-solid fa-cloud-arrow-up"></i> Games DB</li>
                 <li onclick="switchTab('managepo', this)"><i class="fa-solid fa-calendar-plus"></i> Pre-Orders DB</li>
                 <li onclick="switchTab('reviews', this)"><i class="fa-solid fa-comments"></i> Reviews</li>
@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            <!-- 🚀 1.5 CUSTOMER ACCESS TRACKER (PERMANENT / RENTALS) 🚀 -->
+            <!-- CUSTOMER ACCESS TRACKER -->
             <div id="customersSection" class="section animate-fade-up" style="display: none;">
                 <div class="card">
                     <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
@@ -337,7 +337,7 @@
                 </div>
             </div>
 
-            <!-- 🚀 1.6 FINANCE MANAGER (3 INPUTS: SALES, AD SPEND, EXPENSES) 🚀 -->
+            <!-- FINANCE MANAGER -->
             <div id="financeSection" class="section animate-fade-up" style="display: none;">
                 <div class="card" id="financeFormCard">
                     <h3 style="text-align: center; margin-bottom: 25px; color:white; font-size:20px;">
@@ -356,7 +356,6 @@
                             </div>
                         </div>
 
-                        <!-- 🚀 NEW INCOME / EXPENSE BLOCKS 🚀 -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label style="color: #00e676;">Income / Money Added (+) ₹</label>
@@ -414,10 +413,26 @@
                 </div>
             </div>
 
-            <!-- 2. LIVE ORDERS -->
+            <!-- 🚀 2. LIVE ORDERS & LOOTDROP APPROVALS 🚀 -->
             <div id="ordersSection" class="section animate-fade-up" style="display: none;">
+                
+                <!-- NEW: LOOTDROP PENDING APPROVALS -->
+                <div class="card" style="border-color: #FFD700; box-shadow: 0 5px 20px rgba(255,215,0,0.1);">
+                    <h3 style="color:#FFD700;"><i class="fa-solid fa-gift" style="margin-right:8px;"></i> Live LootDrop Requests (Waiting for Games)</h3>
+                    <p style="font-size:12px; color:gray; margin-top:-5px; margin-bottom:15px;">Search your database and assign a game to the user. The user's screen is currently waiting for your drop!</p>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Time</th><th>Customer Details</th><th>Platform / Amount</th><th>Search & Select Game</th><th>Action</th></tr></thead>
+                            <tbody id="lootRequestsTable">
+                                <tr><td colspan="5" style="text-align: center; color: gray;">Scanning for requests...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Regular Store Orders -->
                 <div class="card">
-                    <h3><i class="fa-solid fa-receipt" style="color:var(--primary-red); margin-right:8px;"></i> All-Time Live Orders</h3>
+                    <h3><i class="fa-solid fa-receipt" style="color:var(--primary-red); margin-right:8px;"></i> All-Time Store Orders</h3>
                     <div class="table-responsive">
                         <table>
                             <thead><tr><th>Date</th><th>Customer</th><th>Items</th><th>Status</th><th>Total</th><th>Action</th></tr></thead>
@@ -798,7 +813,7 @@
     <!-- FIREBASE SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, increment, getDoc, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -891,7 +906,7 @@
                 'dashboard': 'Dashboard & Report', 
                 'finance': 'Manage Finance', 
                 'customers': 'Customer Access Tracker', 
-                'orders': 'Live Orders', 
+                'orders': 'Live Orders & LootDrop', 
                 'manage': 'Manage Games Database',
                 'managepo': 'Manage Pre-Orders DB',
                 'reviews': 'Manage Community Reviews',
@@ -982,6 +997,93 @@
                 document.getElementById('rentalEndDateGroup').style.display = 'none';
             }
         };
+
+        // 🚀 LIVE LOOTDROP DROPDOWN LOGIC 🚀
+        window.filterLootGames = function(queryStr, platform, dropId, selId, searchId) {
+            const dropBox = document.getElementById(dropId);
+            dropBox.innerHTML = '';
+            
+            if(!queryStr.trim()) { 
+                dropBox.style.display = 'none'; 
+                return; 
+            }
+            
+            const lowerQ = queryStr.toLowerCase();
+            const filtered = allGames.filter(g => 
+                g.title.toLowerCase().includes(lowerQ) && 
+                (platform.includes(g.platform) || g.platform.includes(platform) || g.platform === 'PS4/PS5')
+            );
+
+            if(filtered.length === 0) {
+                dropBox.innerHTML = '<div style="padding:10px; color:gray; font-size:12px; text-align:center;">No games found</div>';
+                dropBox.style.display = 'block';
+                return;
+            }
+
+            filtered.forEach(g => {
+                const price = g.platform === 'PC' ? (g.price || g.originalPrice || 0) : (g.rentalPrice || g.permanentPrice || g.originalPrice || 0);
+                
+                let tier = "COMMON";
+                if (price >= 2500) tier = "JACKPOT";
+                else if (price >= 1400) tier = "EPIC";
+                else if (price >= 800) tier = "RARE";
+
+                const gameObj = {
+                    title: g.title,
+                    img: g.image,
+                    storePrice: price,
+                    tier: tier
+                };
+
+                const div = document.createElement('div');
+                div.style.cssText = 'padding:10px; border-bottom:1px solid var(--border-dark); cursor:pointer; display:flex; align-items:center; gap:10px; font-size:12px; transition:0.3s;';
+                div.innerHTML = `<img src="${g.image}" style="width:30px; height:30px; object-fit:cover; border-radius:4px;"> 
+                                 <span style="color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">${g.title}</span> 
+                                 <span style="color:#00e676; margin-left:auto; font-weight:bold;">₹${price}</span>`;
+                
+                div.onclick = function() {
+                    document.getElementById(searchId).value = g.title;
+                    document.getElementById(selId).value = JSON.stringify(gameObj);
+                    dropBox.style.display = 'none';
+                };
+                
+                div.onmouseover = () => div.style.background = "rgba(255,255,255,0.05)";
+                div.onmouseout = () => div.style.background = "transparent";
+                
+                dropBox.appendChild(div);
+            });
+            dropBox.style.display = 'block';
+        };
+
+        window.sendLootGame = async function(reqId, selId) {
+            const selVal = document.getElementById(selId).value;
+            if(!selVal) {
+                alert("Please search and select a game from the dropdown first!");
+                return;
+            }
+            
+            if(!confirm("Send this game to the user's LootDrop screen?")) return;
+
+            const assignedGame = JSON.parse(selVal);
+
+            try {
+                await window.updateDoc(window.doc(window.db, "gacha_requests", reqId), {
+                    status: "completed",
+                    assignedGame: assignedGame,
+                    completedAt: window.serverTimestamp()
+                });
+                alert("Game sent successfully! The user's animation will now trigger.");
+            } catch(e) {
+                console.error(e);
+                alert("Error sending game.");
+            }
+        };
+
+        document.addEventListener('click', function(e) {
+            if(!e.target.closest('td[style*="position:relative"]')) {
+                document.querySelectorAll('div[id^="drop_"]').forEach(el => el.style.display = 'none');
+            }
+        });
 
         document.getElementById('customerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1178,6 +1280,44 @@
                 });
                 renderAllOrdersTable(); 
                 filterDashboardData();
+            });
+
+            // 🚀 LIVE LOOTDROP REQUESTS FETCH 🚀
+            onSnapshot(query(collection(db, "gacha_requests"), where("status", "==", "pending")), (snapshot) => {
+                const tbody = document.getElementById('lootRequestsTable');
+                if(!tbody) return;
+                tbody.innerHTML = '';
+                if(snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:gray;">No pending LootDrop requests.</td></tr>';
+                    return;
+                }
+                snapshot.forEach(docSnap => {
+                    const req = docSnap.data();
+                    const timeStr = req.createdAt ? req.createdAt.toDate().toLocaleTimeString() : 'Just now';
+                    
+                    const searchId = `search_${docSnap.id}`;
+                    const dropId = `drop_${docSnap.id}`;
+                    const selId = `sel_${docSnap.id}`;
+
+                    tbody.innerHTML += `
+                    <tr>
+                        <td style="font-size:11px;">${timeStr}</td>
+                        <td><strong>${req.userName}</strong><br><small style="color:gray;">${req.userEmail}</small></td>
+                        <td><span style="background:rgba(255,255,255,0.1); padding:4px 8px; border-radius:4px; font-size:11px; font-weight:bold; color: ${req.platform==='PC' ? 'var(--primary-red)' : 'var(--ps5-blue)'}">${req.platform} (₹${req.amountPaid})</span></td>
+                        <td style="position:relative; width: 300px;">
+                            <div style="position:relative;">
+                                <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:gray; font-size:12px;"></i>
+                                <input type="text" id="${searchId}" placeholder="Search games..." onfocus="filterLootGames(this.value, '${req.platform}', '${dropId}', '${selId}', '${searchId}')" oninput="filterLootGames(this.value, '${req.platform}', '${dropId}', '${selId}', '${searchId}')" style="width:100%; padding:10px 10px 10px 35px; border-radius:6px; background:rgba(0,0,0,0.5); color:white; border:1px solid var(--border-dark); outline:none;">
+                            </div>
+                            <div id="${dropId}" style="position:absolute; top:100%; left:0; width:100%; max-height:200px; overflow-y:auto; background:var(--card-bg); border:1px solid var(--border-dark); z-index:100; display:none; box-shadow: 0 10px 30px rgba(0,0,0,0.8);"></div>
+                            <input type="hidden" id="${selId}" value="">
+                        </td>
+                        <td>
+                            <button class="btn-approve" onclick="sendLootGame('${docSnap.id}', '${selId}')" style="background:#FFD700; color:black; font-weight:900; box-shadow: 0 0 15px rgba(255,215,0,0.4);"><i class="fa-solid fa-paper-plane"></i> Send Game</button>
+                        </td>
+                    </tr>
+                    `;
+                });
             });
 
             onSnapshot(query(collection(db, "finance_logs"), orderBy("createdAt", "desc")), (snapshot) => {
@@ -1908,36 +2048,26 @@
             }
         });
 
-        // 🚀 FIX: AUTO-REVERT PRICES ON BANNER DELETE 🚀
         window.deleteBanner = async function() {
             const slot = document.getElementById('obBannerSlot').value;
             if(confirm(`Remove all text, images, and data for "${slot}"? This will hide the banner from the frontend AND revert prices back to normal.`)) {
                 try { 
-                    // 1. PEECHLE SABHI GAMES KE PRICE WAPAS NORMAL KARO
                     if (window.currentFeaturedGames && window.currentFeaturedGames.length > 0) {
                         for (let gameId of window.currentFeaturedGames) {
                             const game = allGames.find(g => g.id === gameId);
                             if (game && game.originalPrice) {
                                 let revertData = {
-                                    discount: "", // Offer tag hata do
-                                    categories: game.categories ? game.categories.filter(c => c !== "Offer") : [] // Offer category hata do
+                                    discount: "",
+                                    categories: game.categories ? game.categories.filter(c => c !== "Offer") : []
                                 };
-                                
-                                if (game.platform === 'PC') {
-                                    revertData.price = game.originalPrice; // PC ka original price
-                                } else {
-                                    revertData.rentalPrice = game.originalPrice; // PS ka original rental price
-                                }
-                                
+                                if (game.platform === 'PC') { revertData.price = game.originalPrice; } 
+                                else { revertData.rentalPrice = game.originalPrice; }
                                 await window.updateDoc(window.doc(window.db, "games", gameId), revertData);
                             }
                         }
                     }
-
-                    // 2. BANNER KO DELETE KARO
                     await window.deleteDoc(window.doc(window.db, "settings", slot)); 
                     alert(`✅ Banner cleared and all featured game prices reverted to normal!`); 
-                    
                     document.getElementById('offerBannerForm').reset();
                     document.getElementById('obTimer').value = '';
                     window.currentFeaturedGames = [];

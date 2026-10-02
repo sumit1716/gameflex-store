@@ -292,6 +292,9 @@
         .won-value-label { font-size: 11px; color: var(--text-gray); font-weight: 700; text-transform: uppercase; }
         .won-value-amt { color: #00e676; font-weight: 900; font-size: 16px; text-shadow: 0 0 10px rgba(0, 230, 118, 0.4); }
         
+        /* 🚀 NEW BONUS TEXT ANIMATION 🚀 */
+        .won-bonus-text { color: #FFD700; font-weight: 900; font-size: 12px; margin-top: 12px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); animation: fadeInUp 0.5s 0.3s forwards; opacity: 0; }
+
         .claim-vault-btn { margin-top: 30px; background: linear-gradient(90deg, #00c853, #00e676); color: black; border: none; padding: 16px 40px; border-radius: 30px; font-weight: 900; font-size: 15px; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,230,118,0.4); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
         .claim-vault-btn:hover { background: linear-gradient(90deg, #00e676, #69f0ae); transform: scale(1.05) translateY(-3px); box-shadow: 0 15px 40px rgba(0,230,118,0.6); }
 
@@ -645,7 +648,6 @@
             <li class="active"><a href="index.html">Home</a></li>
             <li><a href="pc.html">PC Games</a></li>
             <li><a href="ps5.html">PlayStation</a></li>
-            <!-- REVERTED: Pre-Orders is back -->
             <li><a href="preorder.html">Pre-Orders</a></li>
             <li><a href="offer.html">Offers</a></li>
             <li><a href="reviews.html">Community Reviews</a></li>
@@ -698,8 +700,7 @@
             <p>Discover the biggest titles, instant digital delivery, exclusive bundles, and unbeatable prices on PC & PlayStation games.</p>
             <div class="hero-btns">
                 <a href="pc.html" class="btn-primary">Explore Games</a>
-                <!-- REVERTED: View Offers button is back -->
-                <a href="offer.html" class="btn-outline">View Offers</a>
+                <a href="#gachaZone" class="btn-primary" style="background: #FFD700; color: black; box-shadow: 0 0 15px rgba(255,215,0,0.5);">Try LootDrop</a>
             </div>
         </div>
     </header>
@@ -752,7 +753,7 @@
         </div>
     </section>
 
-    <!-- 🚀 THE LOOTDROP ZONE (NEW CARD ANIMATION) 🚀 -->
+    <!-- 🚀 THE LOOTDROP ZONE (NEW CARD ANIMATION + DYNAMIC PRICE) 🚀 -->
     <section class="gacha-section animate-fade-up delay-2" id="gachaZone">
         <!-- White flash overlay for boom effect -->
         <div class="white-flash" id="boomFlash"></div>
@@ -863,7 +864,7 @@
     <div class="gacha-payment-overlay" id="gachaPaymentOverlay">
         <div class="payment-modal" style="border-color: #FFD700;">
             <button class="close-payment" onclick="closeGachaPayment()"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color: white; margin-bottom: 10px; font-family:'Orbitron', sans-serif;">Pay ₹149</h2>
+            <h2 id="gachaPayTitle" style="color: white; margin-bottom: 10px; font-family:'Orbitron', sans-serif;">Pay ₹149</h2>
             <p style="color: gray; font-size:12px;">Scan to purchase LootDrop Token</p>
             <div class="qr-container" style="border-color: #FFD700;">
                 <img id="gachaDynamicQRCode" src="" alt="Scan & Pay UPI QR">
@@ -884,7 +885,9 @@
                 <div class="won-value-label">Store Price:</div>
                 <div class="won-value-amt" id="wonValue">₹2999</div>
             </div>
-
+            
+            <!-- 🚀 10 BONUS TOKENS TEXT 🚀 -->
+            <div class="won-bonus-text" id="wonBonusText"><i class="fa-solid fa-coins"></i> +10 GAMEFLEX-TOKENS EARNED!</div>
         </div>
         <button class="claim-vault-btn" onclick="claimToVault()">Claim to Digital Vault <i class="fa-solid fa-arrow-right"></i></button>
     </div>
@@ -927,37 +930,27 @@
             }
         };
 
-        // 🚀 EASILY EDITABLE GACHA LUCK DATABASE 🚀
-        // Yahan par "storePrice" aur "chance" edit kar sakta hai
-        window.lootDatabase = {
-            PC: [
-                { title: "Grand Theft Auto VI (PC)", storePrice: 3999, img: "https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=300&q=80", tier: "JACKPOT", chance: 1 },
-                { title: "Cyberpunk 2077: Ultimate", storePrice: 1499, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80", tier: "EPIC", chance: 9 },
-                { title: "Red Dead Redemption 2", storePrice: 999, img: "https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=300&q=80", tier: "RARE", chance: 30 },
-                { title: "Hollow Knight", storePrice: 450, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80", tier: "COMMON", chance: 60 }
-            ],
-            PS5: [
-                { title: "Spider-Man 2 (PS5)", storePrice: 3500, img: "https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=300&q=80", tier: "JACKPOT", chance: 1 },
-                { title: "God of War Ragnarok", storePrice: 1999, img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80", tier: "EPIC", chance: 9 },
-                { title: "Ghost of Tsushima", storePrice: 1200, img: "https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=300&q=80", tier: "RARE", chance: 30 },
-                { title: "Stray", storePrice: 500, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80", tier: "COMMON", chance: 60 }
-            ]
-        };
+        // 🚀 LIVE GACHA LUCK DATABASE (Waiting for Firebase fetch) 🚀
+        window.lootDatabase = { PC: [], PS5: [] };
         window.currentGachaPlatform = "PC";
         window.wonGameData = null;
 
+        // Switch platform & auto-update Button Price (PC=149, PS5=499)
         window.switchGachaPlatform = function(platform) {
             window.currentGachaPlatform = platform;
             const container = document.getElementById('gachaZone');
             const pcBtn = document.getElementById('pcBtn');
             const psBtn = document.getElementById('psBtn');
+            const spinBtn = document.getElementById('spinBtn');
 
             if(platform === 'PC') {
                 container.classList.remove('ps-mode');
                 pcBtn.classList.add('active-pc'); psBtn.classList.remove('active-ps');
+                spinBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹149)';
             } else {
                 container.classList.add('ps-mode');
                 psBtn.classList.add('active-ps'); pcBtn.classList.remove('active-pc');
+                spinBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹499)';
             }
         };
     </script>
@@ -1411,15 +1404,34 @@
         };
 
         // ==========================================
-        // 🚀 NEW GACHA (LOOTDROP) CARD SYSTEM LOGIC 🚀
+        // 🚀 LOOTDROP SYSTEM LOGIC 🚀
         // ==========================================
+
+        // 1. Fetch Real Games from Admin Database
+        onSnapshot(query(collection(db, "gacha_db")), (snapshot) => {
+            window.lootDatabase = { PC: [], PS5: [] };
+            snapshot.forEach(docSnap => {
+                const game = docSnap.data();
+                if(game.platform === 'PC') {
+                    window.lootDatabase.PC.push({ title: game.title, storePrice: game.storePrice, img: game.img, tier: game.tier, chance: game.chance });
+                } else {
+                    window.lootDatabase.PS5.push({ title: game.title, storePrice: game.storePrice, img: game.img, tier: game.tier, chance: game.chance });
+                }
+            });
+        });
+
         window.initiateGachaSpin = function() {
             if (!currentUser) {
                 alert("Please login first to play LootDrop!");
                 document.getElementById('authBtn').click();
                 return;
             }
-            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=149&cu=INR`;
+
+            // DYNAMIC PRICE LOGIC
+            const spinPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+            document.getElementById('gachaPayTitle').innerText = `Pay ₹${spinPrice}`;
+
+            const upiString = `upi://pay?pa=${MY_UPI_ID}&pn=GameFlexStore&am=${spinPrice}&cu=INR`;
             document.getElementById('gachaDynamicQRCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
             document.getElementById('gachaPaymentOverlay').style.display = 'flex';
         };
@@ -1428,15 +1440,32 @@
             document.getElementById('gachaPaymentOverlay').style.display = 'none';
         };
 
-        window.processGachaPayment = function() {
+        window.processGachaPayment = async function() {
             const btn = document.getElementById('confirmGachaPaymentBtn');
-            btn.innerText = "Verifying Transaction..."; btn.disabled = true;
+            btn.innerText = "Sending Request..."; btn.disabled = true;
 
-            setTimeout(() => {
+            const spinPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+
+            try {
+                // Creates a LIVE pending request for the Admin
+                await addDoc(collection(db, "gacha_requests"), {
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName,
+                    userEmail: currentUser.email,
+                    platform: window.currentGachaPlatform,
+                    amountPaid: spinPrice,
+                    status: "pending",
+                    createdAt: serverTimestamp()
+                });
+
                 window.closeGachaPayment();
                 btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> I HAVE PAID'; btn.disabled = false;
-                startGachaAnimation();
-            }, 1500);
+                startGachaAnimation(); // Card starts shaking immediately
+
+            } catch (err) {
+                alert("Failed to process. Please try again.");
+                btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> I HAVE PAID'; btn.disabled = false;
+            }
         };
 
         function startGachaAnimation() {
@@ -1445,44 +1474,40 @@
             const flash = document.getElementById('boomFlash');
             const btn = document.getElementById('spinBtn');
             
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> DECRYPTING...'; 
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> WAITING FOR GAME DROP...'; 
             btn.style.pointerEvents = "none";
             
             // Start Violent Shake & Overload Light
             premiumCard.classList.add('is-shaking');
             cardWrapper.classList.add('overloading');
 
-            // Wait 3.5 seconds for heavy suspense, then BOOM!
-            setTimeout(() => {
-                premiumCard.classList.remove('is-shaking');
-                cardWrapper.classList.remove('overloading');
-                
-                // FLASH WHITE LIGHT
-                flash.style.opacity = "1";
-                
-                setTimeout(() => {
-                    flash.style.opacity = "0";
-                    pickRandomGachaGame();
-                }, 150); // Flash duration
-                
-            }, 3500);
-        }
-
-        function pickRandomGachaGame() {
-            const pool = window.lootDatabase[window.currentGachaPlatform];
-            const rand = Math.random() * 100;
-            let cumulative = 0;
-            let selected = pool[pool.length - 1]; 
-
-            for(let i=0; i<pool.length; i++) {
-                cumulative += pool[i].chance;
-                if(rand <= cumulative) {
-                    selected = pool[i];
-                    break;
-                }
-            }
-            window.wonGameData = selected;
-            showWinScreen(selected);
+            // Set up a listener for when Admin approves the request and sends the game
+            const requestQuery = query(collection(db, "gacha_requests"), where("userId", "==", currentUser.uid), where("status", "==", "completed"), limit(1));
+            
+            const unsubscribe = onSnapshot(requestQuery, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added" || change.type === "modified") {
+                        const data = change.doc.data();
+                        
+                        if(data.status === "completed" && data.assignedGame) {
+                            unsubscribe(); // Stop listening
+                            window.wonGameData = data.assignedGame;
+                            
+                            // 💥 THE BOOM EFFECT 💥
+                            premiumCard.classList.remove('is-shaking');
+                            cardWrapper.classList.remove('overloading');
+                            flash.style.opacity = "1";
+                            
+                            setTimeout(() => {
+                                flash.style.opacity = "0";
+                                showWinScreen(window.wonGameData);
+                                // Delete the request doc to clear it out
+                                window.deleteDoc(doc(db, "gacha_requests", change.doc.id));
+                            }, 150);
+                        }
+                    }
+                });
+            });
         }
 
         function showWinScreen(game) {
@@ -1505,7 +1530,10 @@
             else { titleText.innerText = "📦 DROP SECURED 📦"; titleText.style.color = "white"; }
 
             document.getElementById('winOverlay').classList.add('show');
-            document.getElementById('spinBtn').innerHTML = '<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹149)';
+            
+            // Restore button
+            const btnPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
+            document.getElementById('spinBtn').innerHTML = `<i class="fa-solid fa-lock-open"></i> UNLOCK CRATE (₹${btnPrice})`;
             document.getElementById('spinBtn').style.pointerEvents = "auto";
         }
 
@@ -1514,17 +1542,24 @@
             const btn = document.querySelector('.claim-vault-btn');
             btn.innerText = "Saving to Vault..."; btn.disabled = true;
 
+            const paidAmount = window.currentGachaPlatform === 'PC' ? 149 : 499;
+
             try {
+                // 1. Add 10 Bonus Tokens
+                await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(10) }, { merge: true });
+
+                // 2. Add to User's Vault (Bookings)
                 await addDoc(collection(db, "bookings"), {
                     userId: currentUser.uid, userEmail: currentUser.email,
-                    items: [{ title: `${window.wonGameData.title} (LootDrop Win)`, price: 149, qty: 1, img: window.wonGameData.img }], 
-                    totalAmount: 149, status: "Verified", createdAt: serverTimestamp()
+                    items: [{ title: `${window.wonGameData.title} (LootDrop Win)`, price: paidAmount, qty: 1, img: window.wonGameData.img }], 
+                    totalAmount: paidAmount, status: "Verified", createdAt: serverTimestamp()
                 });
-                alert("Game Added to your Digital Vault! You can view it in your Profile.");
+
+                alert("Game Added to your Digital Vault! You also earned 10 Tokens.");
                 window.location.href = "profile.html";
             } catch (err) {
                 console.error(err); alert("Error claiming game.");
-                btn.innerText = "Claim to Digital Vault"; btn.disabled = false;
+                btn.innerHTML = 'Claim to Digital Vault <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false;
             }
         };
     </script>
