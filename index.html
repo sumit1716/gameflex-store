@@ -677,7 +677,9 @@
                 <span>TOTAL:</span>
                 <span id="cartTotalPrice">₹0</span>
             </div>
-            <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> CLAIM FREE GAME (500 Tokens)</button>
+            
+            <!-- 🚀 NEW TOKEN CLAIM BUTTON 🚀 -->
+            <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> PAY WITH TOKENS (500)</button>
             
             <button class="checkout-btn" id="checkoutBtn" onclick="proceedToPayment()">
                 PROCEED TO CHECKOUT <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
@@ -754,7 +756,6 @@
 
     <!-- 🚀 THE LOOTDROP ZONE 🚀 -->
     <section class="gacha-section animate-fade-up delay-2" id="gachaZone">
-        <!-- White flash overlay for boom effect -->
         <div class="white-flash" id="boomFlash"></div>
 
         <div class="gacha-header">
@@ -768,7 +769,6 @@
         </div>
 
         <div class="gacha-card-wrapper" id="gachaWrapper">
-            <!-- Overload light behind the card -->
             <div class="overload-light"></div>
             
             <div class="premium-card" id="premiumCard">
@@ -875,7 +875,6 @@
     </div>
 
     <div class="win-overlay" id="winOverlay">
-        <!-- 🚀 NEW CLOSE BUTTON TO PLAY AGAIN 🚀 -->
         <button onclick="closeWinOverlay()" style="position:absolute; top:30px; right:30px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:white; font-size:24px; width:45px; height:45px; border-radius:50%; cursor:pointer; transition:0.3s; z-index: 30000; box-shadow: 0 0 10px rgba(0,0,0,0.5);"><i class="fa-solid fa-xmark"></i></button>
         
         <div class="win-title" id="winTitleText">JACKPOT!</div>
@@ -888,7 +887,6 @@
                 <div class="won-value-amt" id="wonValue">₹2999</div>
             </div>
             
-            <!-- 🚀 10 BONUS TOKENS TEXT 🚀 -->
             <div class="won-bonus-text" id="wonBonusText"><i class="fa-solid fa-coins"></i> +10 GAMEFLEX-TOKENS EARNED!</div>
         </div>
         <button class="claim-vault-btn" onclick="claimToVault()">Claim to Digital Vault <i class="fa-solid fa-arrow-right"></i></button>
@@ -949,7 +947,7 @@
         window.showTokenInfo = function() {
             const needed = Math.max(0, 500 - window.currentTokens);
             if (window.currentTokens >= 500) {
-                alert("🎉 Awesome! You have 500+ tokens. Open your Cart sidebar to claim your Free Game!");
+                alert("🎉 Awesome! You have 500+ tokens. Open your Cart sidebar to claim a FREE Game!");
             } else {
                 alert(`🎮 GameFlex Tokens: You currently have ${window.currentTokens} tokens. Collect ${needed} more tokens to redeem a Brand New Free Game!`);
             }
@@ -963,7 +961,6 @@
         let isSpinning = false;
         let gachaUnsub = null;
 
-        // Switch platform & auto-update Button Price
         window.switchGachaPlatform = function(platform) {
             window.currentGachaPlatform = platform;
             const container = document.getElementById('gachaZone');
@@ -1086,28 +1083,36 @@
                 
                 let rent = game.rentalPrice || game.rentPrice || 0;
                 let perm = game.permanentPrice || game.permPrice || 0;
-                let searchPrice = game.platform === 'PC' ? `₹${game.price}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
+                
+                let isOffer = (game.categories && game.categories.includes("Offer"));
+
+                let finalPcPrice = game.price || 0;
+                let originalPcPrice = game.originalPrice || finalPcPrice;
+
+                let searchPrice = game.platform === 'PC' ? `₹${finalPcPrice}` : `₹${rent} (Rent) / ₹${perm} (Buy)`;
                 
                 window.regularGamesDB.push({
                     title: game.title, price: searchPrice, platform: game.platform, img: game.image, link: `game-details.html?id=${gameDoc.id}` 
                 });
 
-                let badgeHTML = game.discount ? `<span class="badge ${game.platform === 'PC' ? 'red-bg' : 'blue-bg'}">${game.discount}</span>` : '';
                 let escapedTitle = game.title.replace(/'/g, "\\'");
-                let isOffer = (game.categories && game.categories.includes("Offer")) || (game.discount && game.discount !== "0%" && game.discount !== "");
-
                 let genresText = game.categories ? game.categories.filter(c => c !== "Offer").join(' • ') : 'Action';
                 if(genresText === '') genresText = 'Action';
                 let platformBadge = `<div style="background:rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color:white; font-size:9px; font-weight:bold; padding:3px 6px; border-radius:4px;">${game.platform}</div>`;
+                
+                let badgeHTML = '';
 
                 if (game.platform === 'PC') {
-                    let finalPcPrice = game.price || 0;
-                    let originalPcPrice = game.originalPrice || finalPcPrice;
-                    let oldPcPriceHtml = (originalPcPrice > finalPcPrice) ? `<span class="old-price" style="margin-left:8px;">₹${originalPcPrice}</span>` : '';
+                    let oldPcPriceHtml = '';
+                    if (originalPcPrice > finalPcPrice) {
+                        oldPcPriceHtml = `<span class="old-price" style="margin-left:8px;">₹${originalPcPrice}</span>`;
+                        let pct = Math.round(((originalPcPrice - finalPcPrice) / originalPcPrice) * 100);
+                        badgeHTML = `<span class="badge red-bg">${pct}% OFF</span>`;
+                    }
 
                     let cardHtml = `
                     <div class="prod-card pc-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                        ${isOffer ? badgeHTML : ''}
+                        ${badgeHTML}
                         <div class="prod-img" style="background-image: url('${game.image}');"></div>
                         <div class="prod-info">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -1142,10 +1147,15 @@
                     let finalPsRent = rent || 0;
                     let originalPsRent = game.originalPrice || finalPsRent;
                     let oldPsRentHtml = (originalPsRent > finalPsRent) ? `<span class="old-price" style="margin-left:4px;">₹${originalPsRent}</span>` : '';
+                    
+                    if (originalPsRent > finalPsRent || isOffer) {
+                        let pct = Math.round(((originalPsRent - finalPsRent) / originalPsRent) * 100) || game.discount;
+                        badgeHTML = `<span class="badge blue-bg">${pct > 0 ? pct + '% OFF' : 'OFFER'}</span>`;
+                    }
 
                     let cardHtml = `
                     <div class="prod-card ps5-theme animate-fade-up" onclick="window.location.href='game-details.html?id=${gameDoc.id}'">
-                        ${isOffer ? badgeHTML : ''}
+                        ${badgeHTML}
                         <div class="prod-img" style="background-image: url('${game.image}');"></div>
                         <div class="prod-info">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -1361,15 +1371,60 @@
             finally { confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; }
         };
 
+        // 🚀 NEW TOKEN CLAIM LOGIC 🚀
         window.claimFreeGame = async function() {
             if (!currentUser) return;
-            if (window.currentTokens < 500) return alert("You need 500 tokens!");
-            if(confirm("Redeem 500 GameFlex-Tokens for a Free Mystery Game?")) {
+            if (window.currentTokens < 500) return alert("You need 500 tokens to claim a free game!");
+
+            if (window.cartArray.length === 0) {
+                alert("Cart khali hai! Pehle store se 1 PC Game ya PS5 (Rent) game cart mein add karo jisko free mein lena hai.");
+                return;
+            }
+
+            if (window.cartArray.length > 1) {
+                alert("500 Tokens mein sirf 1 game free milta hai! Kripya cart mein sirf 1 game rakhein aur baaki hata dein.");
+                return;
+            }
+
+            const itemToClaim = window.cartArray[0];
+
+            // ❌ STRICT BLOCK: Cannot use tokens for PS5 Permanent Buy
+            if (itemToClaim.title.includes('(Buy)')) {
+                alert("❌ Tokens se PlayStation ka 'Permanent Buy' nahi le sakte!\nAap tokens se sirf PC games ya PlayStation 'Rent' le sakte hain.");
+                return;
+            }
+
+            if(confirm(`Kya aap apne 500 Tokens use karke "${itemToClaim.title}" FREE mein claim karna chahte hain?`)) {
                 try {
                     await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(-500) }, { merge: true });
-                    await addDoc(collection(db, "bookings"), { userId: currentUser.uid, userEmail: currentUser.email, items: [{title: "🎁 Free Reward Game Claimed!", price: 0, qty: 1}], totalAmount: 0, status: "Reward Claimed", createdAt: serverTimestamp() });
+                    window.currentTokens -= 500; 
+
+                    const claimedItem = { ...itemToClaim, price: 0 };
+                    await addDoc(collection(db, "bookings"), { 
+                        userId: currentUser.uid, 
+                        userName: currentUser.displayName, 
+                        userEmail: currentUser.email, 
+                        items: [claimedItem], 
+                        totalAmount: 0, 
+                        discountApplied: itemToClaim.price,
+                        status: "Reward Claimed (Tokens)", 
+                        createdAt: serverTimestamp() 
+                    });
+
+                    window.cartArray = [];
+                    localStorage.removeItem('gf_cart');
+                    window.updateCartUI();
+
                     alert("🎉 Congratulations! Your Free Game has been claimed.");
-                } catch (e) { console.error("Reward error", e); }
+                    
+                    const message = `Hello Sumit, I just redeemed my 500 Tokens for a FREE Game!\n\n*Customer:* ${currentUser.displayName}\n*Game Claimed:* ${claimedItem.title}\n\nPlease verify and send my game credentials!`;
+                    const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+
+                } catch (e) { 
+                    console.error("Reward error", e); 
+                    alert("Error claiming game. Please try again.");
+                }
             }
         };
 
@@ -1413,7 +1468,7 @@
         // ==========================================
         // 🚀 NEW LOOTDROP SYSTEM (FRONTEND LOGIC) 🚀
         // ==========================================
-
+        
         window.initiateGachaSpin = function() {
             if (!currentUser) {
                 alert("Please login first to play LootDrop!");
@@ -1421,11 +1476,9 @@
                 return;
             }
 
-            // 🚀 ALLOW USER TO CANCEL REQUEST THEMSELVES IF STUCK 🚀
             if (isSpinning) {
                 if(confirm("Do you want to cancel the current waiting request?")) {
                     if(currentGachaRequestId) {
-                        // Mark as cancelled so admin sees it, and reset UI
                         setDoc(doc(db, "gacha_requests", currentGachaRequestId), { status: "cancelled" }, { merge: true }).catch(e => console.log(e));
                     }
                     resetSpinUI();
@@ -1452,7 +1505,6 @@
             const spinPrice = window.currentGachaPlatform === 'PC' ? 149 : 499;
 
             try {
-                // Creates a LIVE pending request for the Admin
                 const docRef = await addDoc(collection(db, "gacha_requests"), {
                     userId: currentUser.uid,
                     userName: currentUser.displayName,
@@ -1468,7 +1520,6 @@
                 window.closeGachaPayment();
                 btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> I HAVE PAID'; btn.disabled = false;
                 
-                // Start animation and listener
                 startGachaAnimation();
 
             } catch (err) {
@@ -1486,7 +1537,7 @@
             const btn = document.getElementById('spinBtn');
             
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> WAITING FOR DROP (CLICK TO CANCEL)'; 
-            btn.style.pointerEvents = "auto"; // KEEP AUTO SO USER CAN CLICK TO CANCEL
+            btn.style.pointerEvents = "auto"; 
             
             premiumCard.classList.add('is-shaking');
             cardWrapper.classList.add('overloading');
@@ -1495,7 +1546,6 @@
 
             gachaUnsub = onSnapshot(doc(db, "gacha_requests", currentGachaRequestId), (docSnap) => {
                 
-                // 🛑 FAILSAFE: If admin deleted the request directly without clicking Cancel
                 if(!docSnap.exists()) {
                     if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
                     premiumCard.classList.remove('is-shaking');
@@ -1512,13 +1562,11 @@
                 
                 const data = docSnap.data();
                 
-                // 1. If Admin APPROVES Payment
                 if (data.status === "approved") {
                     btn.innerHTML = '<i class="fa-solid fa-fingerprint"></i> PAYMENT VERIFIED. DROPPING GAME...';
                     btn.style.color = "#FFD700";
                     btn.style.borderColor = "#FFD700";
                 }
-                // 2. If Admin ASSIGNS Game
                 else if(data.status === "completed" && data.assignedGame) {
                     if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
                     window.wonGameData = data.assignedGame;
@@ -1536,7 +1584,6 @@
                         window.deleteDoc(doc(db, "gacha_requests", docSnap.id)).catch(e => console.log(e));
                     }, 150);
                 } 
-                // 3. 🛑 If Admin CANCELS payment 🛑
                 else if (data.status === "cancelled") {
                     if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
                     
@@ -1554,7 +1601,6 @@
             });
         }
 
-        // 🚀 FAILSAFE RESET FUNCTION 🚀
         window.resetSpinUI = function() {
             isSpinning = false;
             if(gachaUnsub) { gachaUnsub(); gachaUnsub = null; }
@@ -1571,7 +1617,6 @@
             btn.style.pointerEvents = "auto";
         };
 
-        // 🚀 CLOSE WIN OVERLAY 🚀
         window.closeWinOverlay = function() {
             document.getElementById('winOverlay').classList.remove('show');
             resetSpinUI();
@@ -1597,7 +1642,7 @@
             else { titleText.innerText = "📦 DROP SECURED 📦"; titleText.style.color = "white"; }
 
             document.getElementById('winOverlay').classList.add('show');
-            resetSpinUI(); // Automatically ready the background button for next play
+            resetSpinUI(); 
         }
 
         window.claimToVault = async function() {
@@ -1608,10 +1653,8 @@
             const paidAmount = window.currentGachaPlatform === 'PC' ? 149 : 499;
 
             try {
-                // 1. Add 10 Bonus Tokens
                 await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(10) }, { merge: true });
 
-                // 2. Add to User's Vault (Bookings)
                 await addDoc(collection(db, "bookings"), {
                     userId: currentUser.uid, userEmail: currentUser.email,
                     items: [{ title: `${window.wonGameData.title} (LootDrop Win)`, price: paidAmount, qty: 1, img: window.wonGameData.img }], 
@@ -1620,13 +1663,10 @@
 
                 alert("Game Added to your Digital Vault! You also earned 10 Tokens.");
                 
-                // 3. Open WhatsApp with Pre-filled Message
                 const message = `Hello Sumit, I just won a LootDrop!\n\n*Customer:* ${currentUser.displayName}\n*Game Won:* ${window.wonGameData.title} (${window.wonGameData.tier})\n*Platform:* ${window.currentGachaPlatform}\n\nPlease send me the game credentials!`;
                 const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
                 
                 window.open(whatsappUrl, '_blank');
-                
-                // Redirect to vault
                 window.location.href = "profile.html";
             } catch (err) {
                 console.error(err); alert("Error claiming game.");
@@ -1684,8 +1724,10 @@
             totalElement.innerText = '₹' + finalTotal.toLocaleString('en-IN');
             
             const earned = Math.floor(finalTotal / 100) * 10; document.getElementById('tokenEarnText').innerText = earned > 0 ? `+ Earn ${earned} GameFlex-Tokens` : '';
+            
+            // 🚀 SHOW PAY WITH TOKENS BUTTON IF TOKENS >= 500
             const claimBtn = document.getElementById('claimBtn');
-            if(typeof window.currentTokensGlobal === 'function' && window.currentTokensGlobal() >= 500) { claimBtn.style.display = "block"; } else { claimBtn.style.display = "none"; }
+            if(window.currentTokens >= 500) { claimBtn.style.display = "block"; } else { claimBtn.style.display = "none"; }
         };
 
         window.updateCartUI();

@@ -16,6 +16,7 @@
             --card-bg: #12141a;
             --border-dark: #2a2a30;
             --hover-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --theme-glow: 0 0 15px rgba(227, 24, 37, 0.4);
         }
 
         html { scroll-behavior: smooth; }
@@ -69,7 +70,10 @@
         .theme-ps5 .search-input:focus + .search-icon { color: var(--ps5-blue); }
 
         .search-dropdown { position: absolute; top: 115%; right: 0; width: 100%; min-width: 280px; background: rgba(18, 20, 26, 0.98); border: 1px solid var(--border-dark); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); overflow: hidden; display: none; z-index: 200; max-height: 350px; overflow-y: auto; backdrop-filter: blur(10px); }
+        .search-dropdown::-webkit-scrollbar { width: 5px; }
+        .search-dropdown::-webkit-scrollbar-thumb { background: var(--primary-red); border-radius: 5px; }
         .search-item { display: flex; align-items: center; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .search-item:last-child { border-bottom: none; }
         .theme-pc .search-item:hover { background: rgba(227, 24, 37, 0.1); padding-left: 20px; border-left: 3px solid var(--primary-red); }
         .theme-ps5 .search-item:hover { background: rgba(31, 106, 255, 0.1); padding-left: 20px; border-left: 3px solid var(--ps5-blue); }
         .search-item-img { width: 40px; height: 50px; background-size: cover; background-position: center; border-radius: 4px; border: 1px solid var(--border-dark); }
@@ -144,6 +148,9 @@
         .theme-pc .checkout-btn:hover { background: linear-gradient(90deg, var(--primary-red), #ff3333); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(227, 24, 37, 0.6); }
         .theme-ps5 .checkout-btn { background: linear-gradient(90deg, #0051ed, var(--ps5-blue)); }
         .theme-ps5 .checkout-btn:hover { background: linear-gradient(90deg, var(--ps5-blue), #3385ff); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(31, 106, 255, 0.6); }
+        
+        .claim-btn { display:none; width: 100%; background: linear-gradient(90deg, #FFD700, #ffb703); color: black; border: none; padding: 16px; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer; transition: 0.3s; margin-bottom: 15px; text-transform: uppercase; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); }
+        .claim-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6); }
 
         /* PDP Container */
         .pdp-container { max-width: 1200px; margin: 40px auto; padding: 0 5%; }
@@ -401,6 +408,9 @@
                 <span id="cartTotalPrice">₹0</span>
             </div>
             
+            <!-- 🚀 NEW TOKEN CLAIM BUTTON 🚀 -->
+            <button class="claim-btn" id="claimBtn" onclick="claimFreeGame()"><i class="fa-solid fa-gift"></i> PAY WITH TOKENS (500)</button>
+            
             <!-- Direct Checkout Button -->
             <button class="checkout-btn" onclick="proceedToPayment()">
                 PROCEED TO CHECKOUT <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
@@ -549,7 +559,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, getDocs, limit, query, onSnapshot, addDoc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, limit, query, onSnapshot, addDoc, serverTimestamp, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // REAL FIREBASE CONFIGURATION
         const firebaseConfig = {
@@ -575,8 +585,18 @@
                 const firstName = user.displayName.split(' ')[0];
                 authBtn.innerHTML = `<i class="fa-solid fa-circle-user"></i> <span class="hide-mobile">Hi, ${firstName}</span>`;
                 authBtn.onclick = () => { window.location.href = "profile.html"; };
+
+                // Get Realtime tokens for Cart check
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        window.currentTokens = docSnap.data().tokens || 0;
+                        window.updateCartUI(); 
+                    }
+                });
+
             } else {
                 currentUser = null;
+                window.currentTokens = 0;
                 authBtn.innerHTML = `<i class="fa-solid fa-user"></i> <span class="hide-mobile">Login</span>`;
                 authBtn.onclick = async () => {
                     try { await signInWithPopup(auth, provider); } catch (err) { alert("Login failed: " + err.message); }
@@ -593,6 +613,7 @@
         window.liveGamesDatabase = []; 
         window.appliedDiscount = 0; 
         window.activeCouponCode = "";
+        window.currentTokens = 0;
 
         // Fetch all games for Search Bar
         onSnapshot(collection(db, "games"), (snapshot) => {
@@ -827,10 +848,8 @@
             window.updateCartUI(); 
 
             if (redirectToPayment) {
-                // If user clicks BUY NOW -> Directly open QR Code Scanner (Bypass Cart Sidebar)
                 window.proceedToPayment(); 
             } else {
-                // If user clicks ADD TO CART -> Open Cart Sidebar so they can see items and apply coupons
                 window.toggleCart();
             }
         };
@@ -852,7 +871,6 @@
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
             document.getElementById('dynamicQRCode').src = qrApiUrl;
 
-            // Close Cart Sidebar and open Payment Modal
             document.getElementById('cartSidebar').classList.remove('open');
             document.getElementById('cartOverlay').classList.remove('active');
             document.getElementById('paymentOverlay').style.display = 'flex';
@@ -883,7 +901,6 @@
 
                 // Record Coupon Usage if applied
                 if (window.activeCouponCode && window.activeCouponCode !== "") {
-                    // We can't safely use increment in a transaction easily without a backend, but we do simple update
                     const cRef = doc(db, "coupons", window.activeCouponCode);
                     const cSnap = await getDoc(cRef);
                     if(cSnap.exists()) {
@@ -916,6 +933,64 @@
                 console.error("Booking Error: ", error); alert("Failed to save booking"); 
             } finally { 
                 confirmBtn.disabled = false; confirmBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> I HAVE PAID (Notify Us)'; 
+            }
+        };
+
+        // 🚀 NEW TOKEN CLAIM LOGIC 🚀
+        window.claimFreeGame = async function() {
+            if (!currentUser) return;
+            if (window.currentTokens < 500) return alert("You need 500 tokens to claim a free game!");
+
+            if (window.cartArray.length === 0) {
+                alert("Cart khali hai! Pehle store se 1 PC Game ya PS5 (Rent) game cart mein add karo jisko free mein lena hai.");
+                return;
+            }
+
+            if (window.cartArray.length > 1) {
+                alert("500 Tokens mein sirf 1 game free milta hai! Kripya cart mein sirf 1 game rakhein aur baaki hata dein.");
+                return;
+            }
+
+            const itemToClaim = window.cartArray[0];
+
+            // ❌ STRICT BLOCK: Cannot use tokens for PS5 Permanent Buy
+            if (itemToClaim.title.includes('(Buy)') || itemToClaim.title.includes('Permanent Buy')) {
+                alert("❌ Tokens se PlayStation ka 'Permanent Buy' nahi le sakte!\nAap tokens se sirf PC games ya PlayStation 'Rent' le sakte hain.");
+                return;
+            }
+
+            if(confirm(`Kya aap apne 500 Tokens use karke "${itemToClaim.title}" FREE mein claim karna chahte hain?`)) {
+                try {
+                    await setDoc(doc(db, "users", currentUser.uid), { tokens: increment(-500) }, { merge: true });
+                    window.currentTokens -= 500; 
+
+                    const claimedItem = { ...itemToClaim, price: 0 };
+                    await addDoc(collection(db, "bookings"), { 
+                        userId: currentUser.uid, 
+                        userName: currentUser.displayName, 
+                        userEmail: currentUser.email, 
+                        items: [claimedItem], 
+                        totalAmount: 0, 
+                        discountApplied: itemToClaim.price,
+                        status: "Reward Claimed (Tokens)", 
+                        createdAt: serverTimestamp() 
+                    });
+
+                    window.cartArray = [];
+                    localStorage.removeItem('gf_cart');
+                    window.updateCartUI();
+
+                    alert("🎉 Congratulations! Your Free Game has been claimed.");
+                    
+                    const MY_WHATSAPP_NUMBER = "919310885368";
+                    const message = `Hello Sumit, I just redeemed my 500 Tokens for a FREE Game!\n\n*Customer:* ${currentUser.displayName}\n*Game Claimed:* ${claimedItem.title}\n\nPlease verify and send my game credentials!`;
+                    const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+
+                } catch (e) { 
+                    console.error("Reward error", e); 
+                    alert("Error claiming game. Please try again.");
+                }
             }
         };
 
@@ -993,6 +1068,10 @@
             // Apply discount if any exists
             const finalTotal = Math.max(0, totalAmount - (window.appliedDiscount || 0));
             if(totalElement) totalElement.innerText = '₹' + finalTotal.toLocaleString('en-IN');
+            
+            // 🚀 SHOW PAY WITH TOKENS BUTTON IF TOKENS >= 500
+            const claimBtn = document.getElementById('claimBtn');
+            if(window.currentTokens >= 500) { claimBtn.style.display = "block"; } else { claimBtn.style.display = "none"; }
         };
 
     </script>
