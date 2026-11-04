@@ -939,9 +939,9 @@
             element.classList.add('pdf-mode');
 
             const opt = {
-                margin:       0.5,
-                filename:     `GameFlex_Report_${document.getElementById('monthPicker').value}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
+                margin:        0.5,
+                filename:      `GameFlex_Report_${document.getElementById('monthPicker').value}.pdf`,
+                image:         { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
@@ -1093,7 +1093,6 @@
             }
         };
 
-        // 🚀 NEW: CANCEL / APPROVE PAYMENT LOGIC 🚀
         window.approveGachaPayment = async function(reqId) {
             if(confirm("Confirm you received the payment for this LootDrop spin?")) {
                 try {
@@ -1288,18 +1287,26 @@
                 renderCustomerTable(customersArray);
             });
 
-            onSnapshot(collection(db, "users"), (snapshot) => {
-                window.allUsers = []; 
+            // 🚀 FIXED: LIVE VISITORS TRACKING FROM 'live_visitors' COLLECTION 🚀
+            onSnapshot(collection(db, "live_visitors"), (snapshot) => {
                 let liveCount = 0;
                 const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000); 
                 snapshot.forEach(doc => {
-                    const uData = doc.data();
-                    window.allUsers.push({ id: doc.id, ...uData });
-                    if (uData.lastActive && typeof uData.lastActive.toDate === 'function') {
-                        if (uData.lastActive.toDate() > fiveMinsAgo) liveCount++;
+                    const data = doc.data();
+                    if (data.timestamp && typeof data.timestamp.toDate === 'function') {
+                        if (data.timestamp.toDate() > fiveMinsAgo) liveCount++;
                     }
                 });
                 document.getElementById('statLiveUsers').innerHTML = `${liveCount} <span style="font-size: 12px; color: gray; font-weight:700; font-family:'Montserrat', sans-serif;">Online Now</span>`;
+            });
+
+            // Total registered users from 'users' collection
+            onSnapshot(collection(db, "users"), (snapshot) => {
+                window.allUsers = []; 
+                snapshot.forEach(doc => {
+                    window.allUsers.push({ id: doc.id, ...doc.data() });
+                });
+                document.getElementById('statTotalRegUsers').innerText = window.allUsers.length;
                 filterDashboardData(); 
             });
 
@@ -1339,7 +1346,7 @@
                 });
             });
 
-            // 🚀 STEP 2: LOOTDROP GAME ASSIGNMENT FETCH (status: approved) 🚀
+            // 🚀 STEP 2: LOOTDROP GAME ASSIGNMENTS FETCH (status: approved) 🚀
             onSnapshot(query(collection(db, "gacha_requests"), where("status", "==", "approved")), (snapshot) => {
                 const tbody = document.getElementById('lootRequestsTable');
                 if(!tbody) return;
@@ -1801,7 +1808,7 @@
                     if(file.size > 800 * 1024) { alert("❌ Error: Image > 800KB."); btn.disabled = false; return; }
                     imageUrl = await getBase64(file);
                 } else if (fallbackUrl !== "") { imageUrl = fallbackUrl; } 
-                else if (!editId) { alert("⚠️️ Provide an image!"); btn.disabled = false; return; }
+                else if (!editId) { alert("⚠ Provide an image!"); btn.disabled = false; return; }
 
                 const selectedCategories = [];
                 document.querySelectorAll('.cat-check:checked').forEach(chk => selectedCategories.push(chk.value));
